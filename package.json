@@ -1,0 +1,36 @@
+{
+	"name": "node-oauth2-server",
+	"description": "The only properly complient OAuth2 Server/Provider for node.js",
+	"version": "0.0.1",
+	"keywords": [
+		"oauth",
+		"oauth2"
+	],
+	"author": {
+		"name": "NightWorld",
+		"email": "code@nightworld.com"
+	},
+	"contributors": [
+		{
+			"name": "Thom Seddon",
+			"email": "thom@nightworld.com"
+		}
+	],
+	"main": "./oauth2server.js",
+	"dependencies": {},
+	"devDependencies": {
+		"express": "3.1.x",
+		"mocha": "1.8.x",
+		"should": "1.2.x",
+		"supertest": "0.5.x"
+	},
+	"licenses": [
+		{
+			"type": "Apache 2.0",
+    			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    		}
+    	],
+	"engines": {
+		"node": ">=1.0.0"
+	}
+}
