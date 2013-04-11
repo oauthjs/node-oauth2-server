@@ -7,7 +7,7 @@ var oauth2server = require('../');
 
 var bootstrap = function (oauthConfig) {
 	var app = express(),
-		oauth = new oauth2server(oauthConfig || {
+		oauth = oauth2server(oauthConfig || {
 			model: {},
 			grants: ['password', 'refresh_token']
 		});

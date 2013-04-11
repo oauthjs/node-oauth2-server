@@ -41,6 +41,11 @@ function OAuth2Error (code, error, description, err) {
  * @param {Object|Void} config Configuration object
  */
 function OAuth2Server (config) {
+
+	if (!(this instanceof OAuth2Server)) {
+		return new OAuth2Server(config);
+	}
+
 	config = config || {};
 
 	if (!config.model) throw new Error('No model supplied to OAuth2Server');

@@ -7,7 +7,7 @@ var oauth2server = require('../');
 
 var bootstrap = function (oauthConfig) {
 	var app = express(),
-		oauth = new oauth2server(oauthConfig || { model: {} });
+		oauth = oauth2server(oauthConfig || { model: {} });
 
 	app.use(express.bodyParser());
 	app.use(oauth.handler());
