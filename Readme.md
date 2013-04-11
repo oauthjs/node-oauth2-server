@@ -1,6 +1,6 @@
-# Node OAuth2 Server
+# Node OAuth2 Server [![Build Status](https://travis-ci.org/nightworld/node-oauth2-server.png?branch=master)](https://travis-ci.org/nightworld/node-oauth2-server)
 
-Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with [express](http://expressjs.com/) in [node.js](http://nodejs.org/) [![Build Status](https://travis-ci.org/nightworld/node-oauth2-server.png?branch=master)](https://travis-ci.org/nightworld/node-oauth2-server)
+Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with [express](http://expressjs.com/) in [node.js](http://nodejs.org/)
 
 ## Installation
 
