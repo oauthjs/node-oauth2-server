@@ -62,17 +62,18 @@ function OAuth2Server (config) {
 /**
  * Authorise incoming requests
  *
- * Passes oauth authorization/token requests to relevant
- * handlers or, if it isn't allowed, passes it on to the
+ * Provides main OAuth middleware that passes oauth
+ * authorization/token requests to relevant handlers or,
+ * if it isn't allowed, passes it on to the internal
  * authorization handler
  *
- * @return {Function} Main oauth handler function
+ * @return {Function} Main OAuth handling middleware
  */
-OAuth2Server.prototype.handle = function () {
+OAuth2Server.prototype.handler = function () {
 	var allowed = this.allow,
 		oauth = this;
 
-	var handler = function (req, res, next) {
+	return function (req, res, next) {
 		var allow = [],
 			method;
 
@@ -96,9 +97,21 @@ OAuth2Server.prototype.handle = function () {
 		req.oauth = {};
 
 		oauth[method].apply(oauth, arguments);
-	};
+	}
+}
 
-	var errorHandler = function (err, req, res, next) {
+/**
+ * Error Handler
+ *
+ * Provides OAuth error handling middleware to catch any errors
+ * and ensure an oauth complient response
+ *
+ * @return {Function} OAuth error handling middleware
+ */
+OAuth2Server.prototype.errorHandler = function () {
+	var oauth = this;
+
+	return function (err, req, res, next) {
 		if (!(err instanceof OAuth2Error)) {
 			err = new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err);
 		}
@@ -107,9 +120,7 @@ OAuth2Server.prototype.handle = function () {
 		delete err.stack;
 
 		res.send(err.code, err);
-	};
-
-	return [handler, errorHandler];
+	}
 }
 
 /**

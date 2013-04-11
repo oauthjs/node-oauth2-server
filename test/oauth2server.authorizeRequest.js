@@ -21,7 +21,8 @@ var bootstrap = function (oauthConfig) {
 		oauth = new oauth2server(oauthConfig || { model: {} });
 
 	app.use(express.bodyParser());
-	app.all('/*', oauth.handle());
+	app.use(oauth.handler());
+	app.use(oauth.errorHandler());
 
 	return app;
 };
