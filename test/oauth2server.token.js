@@ -105,8 +105,8 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, true);
 					},
-					grantTypeAllowed: function (id, secret) {
-						return false;
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, false); // Not allowed
 					}
 				},
 				grants: ['password']
@@ -128,8 +128,8 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret) {
-							return true;
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
 						}
 					},
 					grants: ['password']
@@ -149,8 +149,8 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret) {
-							return true;
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
 						},
 						getUser: function (uname, pword, callback) {
 							uname.should.equal('thomseddon');
@@ -176,8 +176,8 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, true);
 					},
-					grantTypeAllowed: function (id, secret) {
-						return true;
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
 					}
 				},
 				grants: ['password', 'implicit']
@@ -198,8 +198,8 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, { client_id: id });
 					},
-					grantTypeAllowed: function (id, secret) {
-						return true;
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
@@ -213,7 +213,7 @@ describe('OAuth2Server.token()', function() {
 							(+expires).should.be.within(10, (+new Date()) + 3600000);
 							callback();
 						} catch (e) {
-							done(e);
+							return callback(e);
 						}
 					}
 				},
@@ -234,8 +234,8 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, { client_id: id });
 					},
-					grantTypeAllowed: function (id, secret) {
-						return true;
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
@@ -252,7 +252,7 @@ describe('OAuth2Server.token()', function() {
 							(+expires).should.be.within(10, (+new Date()) + 1209600000);
 							callback();
 						} catch (e) {
-							done(e);
+							return callback(e);
 						}
 					}
 				},
@@ -275,8 +275,8 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, { client_id: id });
 					},
-					grantTypeAllowed: function (id, secret) {
-						return true;
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
@@ -313,8 +313,8 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, { client_id: id });
 					},
-					grantTypeAllowed: function (id, secret) {
-						return true;
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });

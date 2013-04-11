@@ -271,13 +271,15 @@ OAuth2Server.prototype.token = function (req, res, next) {
 
 		req.oauth.client = client;
 
-		if (!oauth.model.grantTypeAllowed(client.client_id, req.oauth.grantType)) {
-			return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_client',
-				'The grant type is unauthorised for this client_id'
-			));
-		}
+		oauth.model.grantTypeAllowed(client.client_id, req.oauth.grantType, function (err, allowed) {
+			if (!allowed) {
+				return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_client',
+					'The grant type is unauthorised for this client_id'
+				));
+			}
 
-		oauth.grant.call(oauth, req, res, next);
+			oauth.grant.call(oauth, req, res, next);
+		});
 	});
 };
 
