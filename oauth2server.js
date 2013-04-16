@@ -20,18 +20,6 @@ var crypto = require('crypto');
 // Expose
 module.exports = OAuth2Server;
 
-/**
- * HTTP response codes
- *
- * @type {Object}
- */
-var HTTP = {
-	BAD_REQUEST: 400,
-	UNAUTHORISED: 401,
-	FORBIDDEN: 403,
-	UNAVAILABLE: 503
-};
-
 var regex = {
 	clientId: /^[a-z0-9-_]{3,40}$/i,
 	grantType: null
@@ -44,8 +32,21 @@ var regex = {
  * @param {String} error       Error descripton
  * @param {String} description Full error description
  */
-function OAuth2Error (code, error, description, err) {
-	this.code = code;
+function OAuth2Error (error, description, err) {
+
+	switch (error) {
+		case 'invalid_client':
+		case 'invalid_grant':
+		case 'invalid_request':
+			this.code = 400;
+			break;
+		case 'server_error':
+			this.code = 503;
+			break;
+		default:
+			this.code = 500;
+	}
+
 	this.error = error;
 	this.error_description = description || error;
 	this.stack = (err && err.stack) || err;
@@ -134,7 +135,7 @@ OAuth2Server.prototype.errorHandler = function () {
 
 	return function (err, req, res, next) {
 		if (!(err instanceof OAuth2Error)) {
-			err = new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err);
+			err = new OAuth2Error('server_error', false, err);
 		}
 
 		if (oauth.debug) console.log(err.stack || err);
@@ -160,16 +161,12 @@ OAuth2Server.prototype.authorizeRequest = function (req, res, next) {
 
 	var validateAccessToken = function (token) {
 		if (!token) {
-			return next(new OAuth2Error(HTTP.UNAUTHORISED, 'invalid_grant',
-				'The access token provided is invalid.'
-			));
+			return next(new OAuth2Error('invalid_grant', 'The access token provided is invalid.'));
 		}
 
 		// Check it's valid
 		if (!token.expires || token.expires < this.now) {
-			return next(new OAuth2Error(HTTP.UNAUTHORISED, 'invalid_grant',
-				'The access token provided has expired.'
-			));
+			return next(new OAuth2Error('invalid_grant', 'The access token provided has expired.'));
 		}
 
 		// Expose params
@@ -185,7 +182,7 @@ OAuth2Server.prototype.authorizeRequest = function (req, res, next) {
 
 		oauth.model.getAccessToken(bearerToken, function (err, token) {
 			if (err) {
-				return next(new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err));
+				return next(new OAuth2Error('server_error', false, err));
 			}
 
 			validateAccessToken(token);
@@ -218,13 +215,10 @@ OAuth2Server.prototype.getBearerToken = function (req, next) {
 		+ (typeof postToken !== 'undefined');
 
 	if (methodsUsed > 1) {
-		return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-			'Only one method may be used to authenticate at a time (Auth header, GET or POST).'
-		));
+		return next(new OAuth2Error('invalid_request',
+			'Only one method may be used to authenticate at a time (Auth header, GET or POST).'));
 	} else if (methodsUsed === 0) {
-		return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-			'The access token was not found'
-		));
+		return next(new OAuth2Error('invalid_request', 'The access token was not found'));
 	}
 
 	// Header
@@ -232,9 +226,7 @@ OAuth2Server.prototype.getBearerToken = function (req, next) {
 		var matches = headerToken.match(/Bearer\s(\S+)/);
 
 		if (!matches) {
-			return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-				'Malformed auth header'
-			));
+			return next(new OAuth2Error('invalid_request', 'Malformed auth header'));
 		}
 
 		headerToken = matches[1];
@@ -243,9 +235,8 @@ OAuth2Server.prototype.getBearerToken = function (req, next) {
 	// POST
 	if (postToken) {
 		if (req.method !== 'POST') {
-			return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-				'When putting the token in the body, the method must be POST.'
-			));
+			return next(new OAuth2Error('invalid_request',
+				'When putting the token in the body, the method must be POST.'));
 		}
 
 		// Is json etc accepted in spec?
@@ -267,47 +258,39 @@ OAuth2Server.prototype.token = function (req, res, next) {
 	var contentType = (req.get('content-type') || ''),
 		mime = contentType.split(';')[0];
 	if (req.method !== 'POST' || mime !== 'application/x-www-form-urlencoded') {
-		return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-			'Method must be POST with application/x-www-form-urlencoded encoding'
-		));
+		return next(new OAuth2Error('invalid_request',
+			'Method must be POST with application/x-www-form-urlencoded encoding'));
 	}
 
 	// Grant type
 	req.oauth.grantType = req.body && req.body.grant_type;
 	if (!req.oauth.grantType || !req.oauth.grantType.match(regex.grantType)) {
-		return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-			'Invalid or missing grant_type parameter'
-		));
+		return next(new OAuth2Error('invalid_request', 'Invalid or missing grant_type parameter'));
 	}
 
 	// Extract credentials
 	var creds = this.getClientCredentials(req);
 	if (!creds.client_id || !creds.client_id.match(regex.clientId)) {
-		return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_client',
-			'Invalid or missing client_id parameter'
-		));
+		return next(new OAuth2Error('invalid_client', 'Invalid or missing client_id parameter'));
 	}
 
 	// Check credentials against model
 	var oauth = this;
 	this.model.getClient(creds.client_id, creds.client_secret, function (err, client) {
 		if (err) {
-			return next(new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err));
+			return next(new OAuth2Error('server_error', false, err));
 		}
 
 		if (!client) {
-			return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_client',
-				'The client credentials are invalid'
-			));
+			return next(new OAuth2Error('invalid_client', 'The client credentials are invalid'));
 		}
 
 		req.oauth.client = client;
 
 		oauth.model.grantTypeAllowed(client.client_id, req.oauth.grantType, function (err, allowed) {
 			if (!allowed) {
-				return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_client',
-					'The grant type is unauthorised for this client_id'
-				));
+				return next(new OAuth2Error('invalid_client',
+					'The grant type is unauthorised for this client_id'));
 			}
 
 			oauth.grant.call(oauth, req, res, next);
@@ -371,33 +354,29 @@ OAuth2Server.prototype.grant = function (req, res, next) {
 			var uname = req.body.username,
 				pword = req.body.password;
 			if (!uname || !pword) {
-				return next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_client',
-					'Missing parameters. "username" and "password" are required'
-				));
+				return next(new OAuth2Error('invalid_client',
+					'Missing parameters. "username" and "password" are required'));
 			}
 
 			var oauth = this;
 			return this.model.getUser(uname, pword, function (err, user) {
 				if (err) {
-					return next(new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err));
+					return next(new OAuth2Error('server_error', false, err));
 				}
 
 				if (user) {
 					req.user = user;
 					oauth.grantAccessToken.call(oauth, req, res, next);
 				} else {
-					next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_grant',
-						'User credentials are invalid'
-					));
+					next(new OAuth2Error('invalid_grant', 'User credentials are invalid'));
 				}
 			});
 
 			return;
 
 		default:
-			next(new OAuth2Error(HTTP.BAD_REQUEST, 'invalid_request',
-				'Invalid grant_type parameter or parameter missing'
-			));
+			next(new OAuth2Error('invalid_request',
+				'Invalid grant_type parameter or parameter missing'));
 
 	}
 };
@@ -425,7 +404,7 @@ OAuth2Server.prototype.grantAccessToken = function (req, res, next) {
 	this.model.saveAccessToken(req.oauth.accessToken.access_token, req.oauth.client.client_id,
 			req.user.id, expires, function (err) {
 		if (err) {
-			return next(new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err));
+			return next(new OAuth2Error('server_error', false, err));
 		}
 
 		// Are we issuing refresh tokens?
@@ -439,7 +418,7 @@ OAuth2Server.prototype.grantAccessToken = function (req, res, next) {
 			return oauth.model.saveRefreshToken(req.oauth.accessToken.refresh_token,
 					req.oauth.client.client_id, req.user.id, expires, function (err) {
 				if (err) {
-					return next(new OAuth2Error(HTTP.UNAVAILABLE, 'server_error', false, err));
+					return next(new OAuth2Error('server_error', false, err));
 				}
 
 				oauth.issueToken.call(oauth, req, res, next);
@@ -480,7 +459,7 @@ OAuth2Server.prototype.generateToken = function (next) {
 	try {
 		return crypto.createHash('sha1').update(crypto.randomBytes(256)).digest('hex');
 	} catch (e) {
-		next(new OAuth2Error(HTTP.UNAVAILABLE, 'server_error'));
+		next(new OAuth2Error('server_error'));
 		return false;
 	}
 };
