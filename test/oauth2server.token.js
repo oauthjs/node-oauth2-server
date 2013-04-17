@@ -187,6 +187,100 @@ describe('OAuth2Server.token()', function() {
 			});
 		});
 
+		describe('custom', function () {
+			it('should ignore if no extendedGrant method', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						}
+					},
+					grants: ['http://custom.com']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.expect(/invalid grant_type/i, 400, done);
+			});
+
+			it('should still detect unsupported grant_type', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						extendedGrant: function (req, callback) {
+							callback(false, false);
+						}
+					},
+					grants: ['http://custom.com']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.expect(/invalid grant_type/i, 400, done);
+			});
+
+			it('should require a user.id', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						extendedGrant: function (req, callback) {
+							callback(false, true, {}); // Fake empty user
+						}
+					},
+					grants: ['http://custom.com']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.expect(/invalid request/i, 400, done);
+			});
+
+			it('should passthrough valid request', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						extendedGrant: function (req, callback) {
+							callback(false, true, { id: 3 });
+						},
+						saveAccessToken: function () {
+							done(); // That's enough
+						}
+					},
+					grants: ['http://custom.com']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.end();
+			});
+		});
+
 		it('should detect unsupported grant_type', function (done) {
 			var app = bootstrap({
 				model: {

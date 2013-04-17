@@ -84,7 +84,7 @@ A model must provide the following methods:
 - `clientId`	`String`
 - `userId`	`Mixed`
 - `expires`	`Date`
-- `callback`	`Function`
+- `callback`	`Function` callback(error)
 	- `error`	`Mixed`	Truthy to indicate an error
 
 ### saveRefreshToken(refreshToken, clientId, userId, expires, callback)
@@ -92,15 +92,27 @@ A model must provide the following methods:
 - `clientId`	`String`
 - `userId`	`Mixed`
 - `expires`	`Date`
-- `callback`	`Function`
+- `callback`	`Function` callback(error)
 	- `error`	`Mixed`	Truthy to indicate an error
 
 ### getUser(username, password, callback)
 - `username`	`String`
 - `password`	`String`
-- `callback`	`Function`
+- `callback`	`Function` callback(error, user)
 	- `error`	`Mixed`	Truthy to indicate an error
 	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user (saved in req.user)
+
+### extendedGrant(req, callback)
+- `req`			`Object` The raw request
+- `callback`	`Function` callback(error, supported, user)
+	- `error`	`Mixed`	Truthy to indicate an error
+	- `supported`	`Boolean`	Whether the grant type is supported
+	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user (saved in req.user), must at least have an id
+
+## Extension Grants
+You can support extension/custom grants by implementing the extendedGrant method as outlined above.
+Any requests that begin with http(s):// (as [defined in the spec](http://tools.ietf.org/html/rfc6749#section-4.5)) will be passed to it for you to handle.
+You can access the grant type via req.oauth.grantType and you should pass back supported as `false` if you do not support it to ensure a consistent (and compliant) response.
 
 ## Credits
 
