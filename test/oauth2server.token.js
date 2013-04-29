@@ -364,7 +364,7 @@ describe('OAuth2Server.token()', function() {
 				.post('/oauth/token')
 				.set('Content-Type', 'application/x-www-form-urlencoded')
 				.send(validBody)
-				.expect(/thommy/, 200, done);
+				.expect(/"access_token": "thommy"/, 200, done);
 
 		});
 	});
