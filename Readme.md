@@ -55,6 +55,8 @@ The module requires a model object through which some aspects or storage, retrie
 The last parameter of all methods is a callback of which the first parameter is always used to indicate an error.
 A model must provide the following methods:
 
+### Required
+
 ### getAccessToken(bearerToken, callback)
 - `bearerToken`	`String`	The bearer token (access token) that has been provided
 - `callback`	`Function` callback(error, accessToken)
@@ -102,12 +104,21 @@ A model must provide the following methods:
 	- `error`	`Mixed`	Truthy to indicate an error
 	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user (saved in req.user)
 
+
+### Optional
+
 ### extendedGrant(req, callback)
 - `req`			`Object` The raw request
 - `callback`	`Function` callback(error, supported, user)
 	- `error`	`Mixed`	Truthy to indicate an error
 	- `supported`	`Boolean`	Whether the grant type is supported
 	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user (saved in req.user), must at least have an id
+
+### generateToken(type, callback)
+- `type`		`String` Token type, one of 'accessToken' or 'refreshToken'
+- `callback`	`Function` callback(error, token)
+	- `error`	`Mixed`	Truthy to indicate an error
+	- `token`	`String` The access token
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.

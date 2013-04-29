@@ -302,6 +302,43 @@ describe('OAuth2Server.token()', function() {
 		});
 	});
 
+	describe('generate access token', function () {
+		it('should allow override via model', function (done) {
+			var app = bootstrap({
+				model: {
+					getClient: function (id, secret, callback) {
+						callback(false, { client_id: id });
+					},
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
+					},
+					getUser: function (uname, pword, callback) {
+						callback(false, { id: 1 });
+					},
+					generateToken: function (type, callback) {
+						callback(false, 'thommy');
+					},
+					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+						try {
+							accessToken.should.equal('thommy');
+							callback();
+						} catch (e) {
+							return callback(e);
+						}
+					}
+				},
+				grants: ['password']
+			});
+
+			request(app)
+				.post('/oauth/token')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
+				.send(validBody)
+				.expect(/thommy/, 200, done);
+
+		});
+	});
+
 	describe('saving access token', function () {
 		it('should pass valid params to model.saveAccessToken', function (done) {
 			var app = bootstrap({
