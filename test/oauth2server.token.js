@@ -315,7 +315,7 @@ describe('OAuth2Server.token()', function() {
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
 					},
-					generateToken: function (type, callback) {
+					generateToken: function (type, req, callback) {
 						callback(false, 'thommy');
 					},
 					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
@@ -325,6 +325,36 @@ describe('OAuth2Server.token()', function() {
 						} catch (e) {
 							return callback(e);
 						}
+					}
+				},
+				grants: ['password']
+			});
+
+			request(app)
+				.post('/oauth/token')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
+				.send(validBody)
+				.expect(/thommy/, 200, done);
+
+		});
+
+		it('should reissue if model returns object', function (done) {
+			var app = bootstrap({
+				model: {
+					getClient: function (id, secret, callback) {
+						callback(false, { client_id: id });
+					},
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
+					},
+					getUser: function (uname, pword, callback) {
+						callback(false, { id: 1 });
+					},
+					generateToken: function (type, req, callback) {
+						callback(false, { access_token: 'thommy' });
+					},
+					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+						callback(new Error('Should not be saving'));
 					}
 				},
 				grants: ['password']

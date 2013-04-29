@@ -118,7 +118,7 @@ A model must provide the following methods:
 - `type`		`String` Token type, one of 'accessToken' or 'refreshToken'
 - `callback`	`Function` callback(error, token)
 	- `error`	`Mixed`	Truthy to indicate an error
-	- `token`	`String` The access token
+	- `token`	`String|Object|Null` String accessToken to indicate success, Object to indicate reissue (i.e. will not be passed on save*Token()) or Null to revert to the default token generator
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
