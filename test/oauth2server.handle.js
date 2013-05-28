@@ -65,7 +65,7 @@ describe('OAuth2Server.handle()', function() {
 			.expect(400)
 			.end(function (err, res) {
 				if (err) return done(err);
-				res.body.error_description.should.not.match(/the access token was not found/i)
+				res.body.error_description.should.not.match(/the access token was not found/i);
 				done();
 			});
 	});
