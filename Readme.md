@@ -38,6 +38,16 @@ After running with node, visting http://127.0.0.1:3000 should present you with a
 
 Note: As no model was actually implemented here, delving any deaper, i.e. passing an access token, will just cause a server error. See below for the specification of what's required from the model.
 
+## Features
+
+- Supports password and extension (custom) grant types
+- Implicitly supports any form of storage e.g. PostgreSQL, MySQL, Mongo, Redis...
+- Full test suite
+
+## Limitations
+
+- Does not yet support authorization code grant type
+
 ## Options
 
 - `model`	`Object`	Model object (see below)
@@ -73,6 +83,10 @@ A model must provide the following methods:
 - `callback`	`Function` callback(error, client)
 	- `error`	`Mixed`	Truthy to indicate an error
 	- `client`	`Object|Boolean`	The client retrieved from storage or falsey to indicate an invalid client (saved in req.client)
+
+`client` should, at least, take the form:
+
+- `client_id` `String` Client id
 
 ### grantTypeAllowed(clientId, grantType, callback)
 - `clientId`	`String`
