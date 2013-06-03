@@ -46,7 +46,7 @@ Note: As no model was actually implemented here, delving any deaper, i.e. passin
 
 ## Limitations
 
-- Does not yet support authorization code grant type
+- Does not yet support authorization code or refresh_token grant types
 
 ## Options
 
@@ -112,11 +112,12 @@ A model must provide the following methods:
 	- `error`	`Mixed`	Truthy to indicate an error
 
 ### getUser(username, password, callback)
+used only when granting tokens using password grant type
 - `username`	`String`
 - `password`	`String`
 - `callback`	`Function` callback(error, user)
 	- `error`	`Mixed`	Truthy to indicate an error
-	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user (saved in req.user)
+	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user
 
 
 ### Optional
