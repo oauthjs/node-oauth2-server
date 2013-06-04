@@ -12,8 +12,9 @@ model.getAccessToken = function (bearerToken, callback) {
 		client.query('SELECT access_token, client_id, expires, user_id FROM oauth_access_tokens ' +
 				'WHERE access_token = $1', [bearerToken], function (err, result) {
 			// This object will be exposed in req.oauth.token
-			// The user_id field will be exposed in req.user (req.user = { id: "..." }) however if an
-			// explicit user object is included (token.user) it will be exposed in req.user instead
+			// The user_id field will be exposed in req.user (req.user = { id: "..." }) however if
+			// an explicit user object is included (token.user, must include id) it will be exposed
+			// in req.user instead
 			callback(err, result.rowCount ? result.rows[0] : false);
 			done();
 		});
