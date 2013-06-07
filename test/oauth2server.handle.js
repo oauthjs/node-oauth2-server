@@ -102,6 +102,22 @@ describe('OAuth2Server.handle()', function() {
 				.expect(200, done);
 		});
 
+
+		it('should allow POST via array', function (done) {
+			var app = bootstrap({
+				allow: ['/thom', '/another'],
+				model: {}
+			});
+
+			app.post('/thom', function (req, res) {
+				res.jsonp({});
+			});
+
+			request(app)
+				.post('/thom')
+				.expect(200, done);
+		});
+
 		it('should allow via object', function (done) {
 			var app = bootstrap({
 				allow: {
@@ -117,6 +133,23 @@ describe('OAuth2Server.handle()', function() {
 			request(app)
 				.get('/thom')
 				.expect(200, done);
+		});
+
+		it('should only allow correct method via object', function (done) {
+			var app = bootstrap({
+				allow: {
+					get: ['/thom', '/another']
+				},
+				model: {}
+			});
+
+			app.get('/thom', function (req, res) {
+				res.jsonp({});
+			});
+
+			request(app)
+				.post('/thom')
+				.expect(400, done);
 		});
 	});
 });
