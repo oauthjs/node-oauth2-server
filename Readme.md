@@ -36,7 +36,9 @@ app.listen(3000);
 
 After running with node, visting http://127.0.0.1:3000 should present you with a json response saying your access token could not be found.
 
-Note: As no model was actually implemented here, delving any deaper, i.e. passing an access token, will just cause a server error. See below for the specification of what's required from the model.
+Note: As no model was actually implemented here, delving any deeper, i.e. passing an access token, will just cause a server error. See below for the specification of what's required from the model.
+
+See: https://github.com/nightworld/node-oauth2-server/tree/master/examples/postgresql for a full examply using postgres.
 
 ## Features
 
@@ -54,6 +56,7 @@ Note: As no model was actually implemented here, delving any deaper, i.e. passin
 - `allow`	`Array|Object`	Either an array (`['/path1', '/path2']`) or objects or arrays keyed by method (`{ get: ['/path1'], post: ['/path2'], all: ['/path3'] }`) of paths to allow to bypass authorisation. (Does not currently support regex)
 - `grants`	`Array`	grant types you wish to support, currently the module only supports `password`
 - `debug`	`Boolean` Whether to log errors to console
+- `passthroughErrors`	`Boolean`	If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
 - `accessTokenLifetime`	`Number`	Life of access tokens in seconds (defaults to 3600)
 - `refreshTokenLifetime` `Number`	Life of refresh tokens in seconds (defaults to 1209600)
 - `authCodeLifetime`	`Number`	Lfe of auth codes in seconds (defaults to 30)

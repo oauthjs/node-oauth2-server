@@ -33,30 +33,6 @@ var bootstrap = function (oauthConfig) {
 };
 
 describe('OAuth2Server.handler()', function() {
-	describe('error handler', function () {
-		it('should return an oauth conformat response', function (done) {
-			var app = bootstrap();
-
-			request(app)
-				.get('/')
-				.expect(400)
-				.end(function (err, res) {
-					if (err) return done(err);
-
-					res.body.should.have.keys('code', 'error', 'error_description');
-
-					res.body.code.should.be.a('number');
-					res.body.code.should.equal(res.statusCode);
-
-					res.body.error.should.be.a('string');
-
-					res.body.error_description.should.be.a('string');
-
-					done();
-				});
-		});
-	});
-
 	it('should passthrough /oauth/token', function (done) {
 		var app = bootstrap();
 
