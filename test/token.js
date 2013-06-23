@@ -91,6 +91,53 @@ describe('OAuth2Server.token()', function() {
 				.send({ grant_type: 'password' })
 				.expect(/invalid or missing client_id parameter/i, 400, done);
 		});
+
+		it('should extract credentials from body', function (done) {
+			var app = bootstrap({
+				model: {
+					getClient: function (id, secret, callback) {
+						try {
+							id.should.equal('thom');
+							secret.should.equal('nightworld');
+							callback(false, false);
+						} catch (e) {
+							return done(e);
+						}
+					}
+				},
+				grants: ['password']
+			});
+
+			request(app)
+				.post('/oauth/token')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
+				.send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+				.expect(400, done);
+		});
+
+		it('should extract credentials from header (Basic)', function (done) {
+			var app = bootstrap({
+				model: {
+					getClient: function (id, secret, callback) {
+						try {
+							id.should.equal('thom');
+							secret.should.equal('nightworld');
+							callback(false, false);
+						} catch (e) {
+							return done(e);
+						}
+					}
+				},
+				grants: ['password']
+			});
+
+			request(app)
+				.post('/oauth/token')
+				.set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxkCg==')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
+				.send({ grant_type: 'password' })
+				.expect(400, done);
+		});
 	});
 
 	describe('check client credentials against model', function () {
@@ -98,9 +145,6 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						id.should.equal('thom');
-						secret.should.equal('nightworld');
-
 						callback(false, false); // Fake invalid
 					}
 				},
