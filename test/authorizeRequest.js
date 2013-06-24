@@ -72,11 +72,22 @@ describe('OAuth2Server.authorizeRequest()', function() {
 				.expect(/malformed auth header/i, 400, done);
 		});
 
+		it('should require application/x-www-form-urlencoded when access token is in body',
+				function (done) {
+			var app = bootstrap('fakeInvalidToken');
+
+			request(app)
+				.post('/')
+				.send({ access_token: 'thom' })
+				.expect(/content type must be application\/x-www-form-urlencoded/i, 400, done);
+		});
+
 		it('should retrieve access token from body', function (done) {
 			var app = bootstrap('fakeInvalidToken');
 
 			request(app)
 				.post('/')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
 				.send({ access_token: 'thom' })
 				.expect(/the access token provided is invalid/i, 400, done);
 		});
