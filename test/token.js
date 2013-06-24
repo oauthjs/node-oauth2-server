@@ -38,6 +38,7 @@ var bootstrap = function (oauthConfig) {
 var validBody = {
 	grant_type: 'password',
 	client_id: 'thom',
+	client_secret: 'nightworld',
 	username: 'thomseddon',
 	password: 'nightworld'
 };
@@ -90,6 +91,16 @@ describe('OAuth2Server.token()', function() {
 				.set('Content-Type', 'application/x-www-form-urlencoded')
 				.send({ grant_type: 'password' })
 				.expect(/invalid or missing client_id parameter/i, 400, done);
+		});
+
+		it('should check client_secret exists', function (done) {
+			var app = bootstrap();
+
+			request(app)
+				.post('/oauth/token')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
+				.send({ grant_type: 'password', client_id: 'thom' })
+				.expect(/missing client_secret parameter/i, 400, done);
 		});
 
 		it('should extract credentials from body', function (done) {
@@ -176,7 +187,7 @@ describe('OAuth2Server.token()', function() {
 			request(app)
 				.post('/oauth/token')
 				.set('Content-Type', 'application/x-www-form-urlencoded')
-				.send({ grant_type: 'password', client_id: 'thom' })
+				.send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
 				.expect(/grant type is unauthorised for this client_id/i, 400, done);
 		});
 	});
@@ -199,7 +210,11 @@ describe('OAuth2Server.token()', function() {
 				request(app)
 					.post('/oauth/token')
 					.set('Content-Type', 'application/x-www-form-urlencoded')
-					.send({ grant_type: 'password', client_id: 'thom' })
+					.send({
+						grant_type: 'password',
+						client_id: 'thom',
+						client_secret: 'nightworld'
+					})
 					.expect(/missing parameters. \\"username\\" and \\"password\\"/i, 400, done);
 
 			});
@@ -248,7 +263,11 @@ describe('OAuth2Server.token()', function() {
 				request(app)
 					.post('/oauth/token')
 					.set('Content-Type', 'application/x-www-form-urlencoded')
-					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.send({
+						grant_type: 'http://custom.com',
+						client_id: 'thom',
+						client_secret: 'nightworld'
+					})
 					.expect(/invalid grant_type/i, 400, done);
 			});
 
@@ -271,7 +290,11 @@ describe('OAuth2Server.token()', function() {
 				request(app)
 					.post('/oauth/token')
 					.set('Content-Type', 'application/x-www-form-urlencoded')
-					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.send({
+						grant_type: 'http://custom.com',
+						client_id: 'thom',
+						client_secret: 'nightworld'
+					})
 					.expect(/invalid grant_type/i, 400, done);
 			});
 
@@ -294,7 +317,11 @@ describe('OAuth2Server.token()', function() {
 				request(app)
 					.post('/oauth/token')
 					.set('Content-Type', 'application/x-www-form-urlencoded')
-					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.send({
+						grant_type: 'http://custom.com',
+						client_id: 'thom',
+						client_secret: 'nightworld'
+					})
 					.expect(/invalid request/i, 400, done);
 			});
 
@@ -320,7 +347,11 @@ describe('OAuth2Server.token()', function() {
 				request(app)
 					.post('/oauth/token')
 					.set('Content-Type', 'application/x-www-form-urlencoded')
-					.send({ grant_type: 'http://custom.com', client_id: 'thom' })
+					.send({
+						grant_type: 'http://custom.com',
+						client_id: 'thom',
+						client_secret: 'nightworld'
+					})
 					.end();
 			});
 		});
@@ -341,7 +372,7 @@ describe('OAuth2Server.token()', function() {
 			request(app)
 				.post('/oauth/token')
 				.set('Content-Type', 'application/x-www-form-urlencoded')
-				.send({ grant_type: 'implicit', client_id: 'thom' })
+				.send({ grant_type: 'implicit', client_id: 'thom', client_secret: 'nightworld' })
 				.expect(/invalid grant_type/i, 400, done);
 		});
 	});
