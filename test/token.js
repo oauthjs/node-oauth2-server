@@ -246,6 +246,165 @@ describe('OAuth2Server.token()', function() {
 			});
 		});
 
+		describe('refresh_token', function () {
+			it('should detect missing refresh_token parameter', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						}
+					},
+					grants: ['password', 'refresh_token']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({
+						grant_type: 'refresh_token',
+						client_id: 'thom',
+						client_secret: 'nightworld'
+					})
+					.expect(/no \\"refresh_token\\" parameter/i, 400, done);
+
+			});
+
+			it('should detect invalid refresh_token', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						getRefreshToken: function (refreshToken, callback) {
+							callback(false, false);
+						}
+					},
+					grants: ['password', 'refresh_token']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({
+						grant_type: 'refresh_token',
+						client_id: 'thom',
+						client_secret: 'nightworld',
+						refresh_token: 'abc123'
+					})
+					.expect(/invalid refresh token/i, 400, done);
+
+			});
+
+			it('should detect wrong client id', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, true);
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						getRefreshToken: function (refreshToken, callback) {
+							callback(false, { client_id: 'kate' });
+						}
+					},
+					grants: ['password', 'refresh_token']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({
+						grant_type: 'refresh_token',
+						client_id: 'thom',
+						client_secret: 'nightworld',
+						refresh_token: 'abc123'
+					})
+					.expect(/invalid refresh token/i, 400, done);
+
+			});
+
+			it('should detect expired refresh token', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, { client_id: 'thom' });
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						getRefreshToken: function (refreshToken, callback) {
+							callback(false, {
+								client_id: 'thom',
+								expires: new Date(+new Date() - 60)
+							});
+						}
+					},
+					grants: ['password', 'refresh_token']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({
+						grant_type: 'refresh_token',
+						client_id: 'thom',
+						client_secret: 'nightworld',
+						refresh_token: 'abc123'
+					})
+					.expect(/refresh token has expired/i, 400, done);
+
+			});
+
+			it('should allow valid request', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, { client_id: 'thom' });
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						getRefreshToken: function (refreshToken, callback) {
+							callback(false, {
+								client_id: 'thom',
+								expires: new Date(),
+								user_id: '123'
+							});
+						},
+						saveAccessToken: function (accessToken, clientId, userId, expires, cb) {
+							cb();
+						},
+						saveRefreshToken: function (refreshToken, clientId, userId, expires, cb) {
+							cb();
+						},
+						expireRefreshToken: function (refreshToken, callback) {
+							callback();
+						}
+					},
+					grants: ['password', 'refresh_token']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({
+						grant_type: 'refresh_token',
+						client_id: 'thom',
+						client_secret: 'nightworld',
+						refresh_token: 'abc123'
+					})
+					.expect(/"access_token": "(.*)",\n\s+"refresh_token": "(.*)"/i, 400, done);
+
+			});
+		});
+
 		describe('custom', function () {
 			it('should ignore if no extendedGrant method', function (done) {
 				var app = bootstrap({
