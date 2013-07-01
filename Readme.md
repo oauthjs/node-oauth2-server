@@ -174,6 +174,43 @@ You can access the grant type via req.oauth.grantType and you should pass back s
 ### 1.4.0
  - Add support for refresh_token grant type
 
+### 1.3.1
+ - Fix client credentials extraction from Authorization header
+
+### 1.3.0
+ - Add passthroughErrors option
+ - Optimise oauth.handler() with regex caching
+ - Add PostgreSQL example
+ - Allow req.user to be set by setting token.user in getAccessToken
+
+### 1.2.5
+ - Expose the token passed back from getAccessToken in req.token
+
+### 1.2.4
+ - Pass through Bad Request errors from connect
+
+### 1.2.3
+ - Fix generateToken override
+ - Allow extended grant to pass back custom error
+
+### 1.2.2
+ - Fix reissuing
+
+### 1.2.1
+ - Allow token reissuing (Model can return an object to indicate a reissue, plain string (as in previous implementation) or null to revert to the default token generator)
+
+### 1.2.0
+ - Add optional generateToken method to model to allow custom token generation
+
+### 1.1.1
+ - Fix expired token checking
+
+### 1.1.0
+ - Add support for extension grants
+ - Use async crypto.randomBytes in token generation
+ - Refactor structure, break into more files
+
+
 ## Credits
 
 Copyright (c) 2013 NightWorld
