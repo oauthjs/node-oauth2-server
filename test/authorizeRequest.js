@@ -92,13 +92,13 @@ describe('OAuth2Server.authorizeRequest()', function() {
 				.expect(/the access token provided is invalid/i, 400, done);
 		});
 
-		it('should require post when access token in body', function (done) {
+		it('should not allow GET when access token in body', function (done) {
 			var app = bootstrap();
 
 			request(app)
 				.get('/')
 				.send({ access_token: 'thom' })
-				.expect(/method must be POST/i, 400, done);
+				.expect(/method cannot be GET/i, 400, done);
 		});
 
 		it('should retrieve token from query parameters', function (done) {
