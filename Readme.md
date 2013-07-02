@@ -38,138 +38,231 @@ After running with node, visting http://127.0.0.1:3000 should present you with a
 
 Note: As no model was actually implemented here, delving any deeper, i.e. passing an access token, will just cause a server error. See below for the specification of what's required from the model.
 
-See: https://github.com/nightworld/node-oauth2-server/tree/master/examples/postgresql for a full examply using postgres.
-
 ## Features
 
-- Supports password and extension (custom) grant types
+- Supports password, refresh_token and extension (custom) grant types
 - Implicitly supports any form of storage e.g. PostgreSQL, MySQL, Mongo, Redis...
 - Full test suite
 
 ## Limitations
 
-- Does not yet support authorization code or refresh_token grant types
+- Does not yet support authorization code grant type
 
 ## Options
 
-- `model`	`Object`	Model object (see below)
-- `allow`	`Array|Object`	Either an array (`['/path1', '/path2']`) or objects or arrays keyed by method (`{ get: ['/path1'], post: ['/path2'], all: ['/path3'] }`) of paths to allow to bypass authorisation. (Does not currently support regex)
-- `grants`	`Array`	grant types you wish to support, currently the module only supports `password`
-- `debug`	`Boolean` Whether to log errors to console
-- `passthroughErrors`	`Boolean`	If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
-- `accessTokenLifetime`	`Number`	Life of access tokens in seconds (defaults to 3600)
-- `refreshTokenLifetime` `Number`	Life of refresh tokens in seconds (defaults to 1209600)
-- `authCodeLifetime`	`Number`	Lfe of auth codes in seconds (defaults to 30)
-- `clientIdRegex`	`RegExp`	Regex to match auth codes against before checking model
+- *string* **model**
+ - Model object (see below)
+- *array|object* **allow**
+ - Paths to allow to bypass authorisation, can take either form:
+     - array, all methods allowed: `['/path1', '/path2']`
+     - object or arrays keyed by method: `{ get: ['/path1'], post: ['/path2'], all: ['/path3'] }`
+  - Default: `[]`
+- *array* **grants**
+ - grant types you wish to support, currently the module supports `password` and `refresh_token`
+  - Default: `[]`
+- *boolean* **debug**
+ - If true, errors are logged to console
+ - Default: `false`
+- *boolean* **passthroughErrors**
+ - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
+  - Default: `false`
+- *number* **accessTokenLifetime**
+ - Life of access tokens in seconds
+  - Default: 3600
+- *number* **refreshTokenLifetime**
+ - Life of refresh tokens in seconds
+  - Default: `1209600`
+- *number* **authCodeLifetime**
+ - Life of auth codes in seconds
+  - Default: `30`
+- *regexp* **clientIdRegex**
+ - Regex to match auth codes against before checking model
+ - Default: `/^[a-z0-9-_]{3,40}$/i`
 
 ## Model Specification
 
 The module requires a model object through which some aspects or storage, retrieval and custom validation are abstracted.
 The last parameter of all methods is a callback of which the first parameter is always used to indicate an error.
-A model must provide the following methods:
 
-### Required
+Note: see https://github.com/nightworld/node-oauth2-server/tree/master/examples/postgresql for a full model example using postgres.
 
-### getAccessToken(bearerToken, callback)
-- `bearerToken`	`String`	The bearer token (access token) that has been provided
-- `callback`	`Function` callback(error, accessToken)
-	- `error`	`Mixed`	Truthy to indicate an error
-	- `accessToken`	Object|Boolean	The access token retrieved form storage or falsey to indicate invalid access token
+### Always Required
 
-`accessToken` should, at least, take the form:
-- `expires` `Date`	The date when it expires
-- `user_id` `String|Number`	The user_id (saved in req.user.id)
+#### getAccessToken (bearerToken, callback)
+- *string* **bearerToken**
+ - The bearer token (access token) that has been provided
+- *function* **callback (error, accessToken)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **accessToken**
+     - The access token retrieved form storage or falsey to indicate invalid access token
+     - Must contain the following keys:
+         - *date* **expires**
+             - The date when it expires
+         - *string|number* **user_id**
+             - The user_id (saved in req.user.id)
 
-### getClient(clientId, clientSecret, callback)
-- `clientId`	`String`
-- `clientSecret`	`String`
-- `callback`	`Function` callback(error, client)
-	- `error`	`Mixed`	Truthy to indicate an error
-	- `client`	`Object|Boolean`	The client retrieved from storage or falsey to indicate an invalid client (saved in req.client)
+#### getClient (clientId, clientSecret, callback)
+- *string* **clientId**
+- *string* **clientSecret**
+- *function* **callback (error, client)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **client**
+     - The client retrieved from storage or falsey to indicate an invalid client
+     - Saved in `req.client`
+     - Must contain the following keys:
+         - *string* **client_id**
 
-`client` should, at least, take the form:
+#### grantTypeAllowed (clientId, grantType, callback)
+- *string* **clientId**
+- *string* **grantType**
+- *function* **callback (error, allowed)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *boolean* **allowed**
+     - Indicates whether the grantType is allowed for this clientId
 
-- `client_id` `String` Client id
+#### saveAccessToken (accessToken, clientId, userId, expires, callback)
+- *string* **accessToken**
+- *string* **clientId**
+- *string|number* **userId**
+- *date* **expires**
+- *function* **callback (error)**
+ - *mixed* **error**
+     - Truthy to indicate an error
 
-### grantTypeAllowed(clientId, grantType, callback)
-- `clientId`	`String`
-- `grantType`	`String`
-- `callback`	`Function` callback(error, allowed)
-	- `error`	`Mixed`	Truthy to indicate an error
-	- `allowed`	`Boolean`	Indicates whether the grantType is allowed for this clientId
 
-### saveAccessToken(accessToken, clientId, userId, expires, callback)
-- `accessToken` `String`
-- `clientId`	`String`
-- `userId`	`Mixed`
-- `expires`	`Date`
-- `callback`	`Function` callback(error)
-	- `error`	`Mixed`	Truthy to indicate an error
+### Required for `password` grant type
 
-### getUser(username, password, callback)
-used only when granting tokens using password grant type
-- `username`	`String`
-- `password`	`String`
-- `callback`	`Function` callback(error, user)
-	- `error`	`Mixed`	Truthy to indicate an error
-	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user
+#### getUser (username, password, callback)
+- *string* **username**
+- *string* **password**
+- *function* **callback (error, user)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **user**
+     - The user retrieved from storage or falsey to indicate an invalid user
+     - Saved in `req.user`
+     - Must contain the following keys:
+         - *string|number* **id**
 
+### Required for `refresh_token` grant type
+
+#### saveRefreshToken (refreshToken, clientId, userId, expires, callback)
+- *string* **refreshToken**
+- *string* **clientId**
+- *string|number* **userId**
+- *date* **expires**
+- *function* **callback (error)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+
+#### getRefreshToken (refreshToken, callback)
+- *string* **refreshToken**
+ - The bearer token (access token) that has been provided
+- *function* **callback (error, accessToken)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **refreshToken**
+     - The refresh token retrieved form storage or falsey to indicate invalid refresh token
+     - Must contain the following keys:
+         - *string|number* **client_id**
+             - client_id associated with this token
+         - *date* **expires**
+             - The date when it expires
+         - *string|number* **user_id**
+             - The user_id
+
+
+### Optional for Refresh Token grant type
+
+#### revokeRefreshToken (refreshToken, callback)
+The spec does not actually require that you revoke the old token - hence this is optional (Last paragraph: http://tools.ietf.org/html/rfc6749#section-6)
+- *string* **refreshToken**
+- *function* **callback (error)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+
+### Required for [extension grant](#extension-grants) grant type
+
+#### extendedGrant (req, callback)
+- *object* **req**
+ - The raw request
+- *function* **callback (error, supported, user)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *boolean* **supported**
+     - Whether you support the grant type
+ - *object* **user**
+     - The user retrieved from storage or falsey to indicate an invalid user
+     - Saved in `req.user`
+     - Must contain the following keys:
+         - *string|number* **id**
 
 ### Optional
 
-#### Required for Access Token grant type
-
-### saveRefreshToken(refreshToken, clientId, userId, expires, callback)
-- `refreshToken` `String`
-- `clientId`	`String`
-- `userId`	`Mixed`
-- `expires`	`Date`
-- `callback`	`Function` callback(error)
-	- `error`	`Mixed`	Truthy to indicate an error
-
-### getRefreshToken(bearerToken, callback)
-- `refreshToken`	`String`	The refresh token that has been provided
-- `callback`		`Function` callback(error, refreshToken)
-	- `error`		`Mixed`	Truthy to indicate an error
-	- `refreshToken`	Object|Boolean	The refresh token retrieved form storage or falsey to indicate invalid access token
-
-`refreshToken` should, at least, take the form:
-- `client_id` `String` The client id asscociated with
-- `expires` `Date`	The date when it expires
-- `user_id` `String|Number`	The user_id
-
-
-#### Optional for Access Token grant type
-
-### revokeRefreshToken(refreshToken, callback)
-The spec does not actually require that you revoke the old token (Last paragraph: http://tools.ietf.org/html/rfc6749#section-6)
-- `refreshToken` `String`
-- `callback`	`Function` callback(error)
-	- `error`	`Mixed`	Truthy to indicate an error
-
-#### Used for creating [extension grants](#extension-grants)
-
-### extendedGrant(req, callback)
-- `req`			`Object` The raw request
-- `callback`	`Function` callback(error, supported, user)
-	- `error`	`Mixed`	Truthy to indicate an error
-	- `supported`	`Boolean`	Whether the grant type is supported
-	- `user`	`Object|Boolean`	The user retrieved from storage or falsey to indicate an invalid user (saved in req.user), must at least have an id
-
-#### Used if you want to generate your own tokens
-
-### generateToken(type, callback)
-- `type`		`String` Token type, one of 'accessToken' or 'refreshToken'
-- `callback`	`Function` callback(error, token)
-	- `error`	`Mixed`	Truthy to indicate an error
-	- `token`	`String|Object|Null` String accessToken to indicate success, Object to indicate reissue (i.e. will not be passed on save*Token()) or Null to revert to the default token generator
+#### generateToken (type, callback)
+- *string* **type**
+ - `accessToken` or `refreshToken`
+- *function* **callback (error, token)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *string|object|null* **token**
+     - *string* indicates success
+     - *null* indicates to revert to the default token generator
+     - *object* indicates a reissue (i.e. will not be passed to saveAccessToken/saveRefreshToken)
+         - Must contain the following keys (if object):
+           - *string* **access_token** OR **refresh_token** dependant on type
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
 Any requests that begin with http(s):// (as [defined in the spec](http://tools.ietf.org/html/rfc6749#section-4.5)) will be passed to it for you to handle.
 You can access the grant type via req.oauth.grantType and you should pass back supported as `false` if you do not support it to ensure a consistent (and compliant) response.
 
+## Example using the `password` grant type
+
+First you must insert client id/secret and user into storage. This is out of the scope of this example.
+
+To obtain a token you should POST to `/oauth/token`. You should include your client credentials in
+the Authorization header ("Basic " + client_id:client_secret base4'd), and then grant_type ("password"),
+username and password in the request body, for example:
+
+```
+POST /oauth/token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username=johndoe&password=A3ddj3w
+```
+This will then call the following on your model (in this order):
+ - getClient (clientId, clientSecret, callback)
+ - grantTypeAllowed (clientId, grantType, callback)
+ - getUser (username, password, callback)
+ - saveAccessToken (accessToken, clientId, userId, expires, callback)
+ - saveRefreshToken (refreshToken, clientId, userId, expires, callback) **(if using)**
+
+Provided there weren't any errors, this will return the following (excluding the `refresh_token` if you've not enabled the refresh_token grant type):
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+	"access_token":"2YotnFZFEjr1zCsicMWpAA",
+	"token_type":"bearer",
+	"expires_in":3600,
+	"refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA"
+}
+```
+
 ## Changelog
+
+### 1.4.1
+ - Allow access token in body when not POST (only deny GET)
 
 ### 1.4.0
  - Add support for refresh_token grant type
