@@ -68,9 +68,11 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
   - Default: `false`
 - *number* **accessTokenLifetime**
  - Life of access tokens in seconds
-  - Default: 3600
+ - If `null`, tokens will considered to never expire
+  - Default: `3600`
 - *number* **refreshTokenLifetime**
  - Life of refresh tokens in seconds
+ - If `null`, tokens will considered to never expire
   - Default: `1209600`
 - *number* **authCodeLifetime**
  - Life of auth codes in seconds
@@ -99,6 +101,7 @@ Note: see https://github.com/nightworld/node-oauth2-server/tree/master/examples/
      - Must contain the following keys:
          - *date* **expires**
              - The date when it expires
+             - `null` to indicate the token **never expires**
          - *string|number* **user_id**
              - The user_id (saved in req.user.id)
 
@@ -171,6 +174,7 @@ Note: see https://github.com/nightworld/node-oauth2-server/tree/master/examples/
              - client_id associated with this token
          - *date* **expires**
              - The date when it expires
+             - `null` to indicate the token **never expires**
          - *string|number* **user_id**
              - The user_id
 

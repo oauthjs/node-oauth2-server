@@ -403,6 +403,48 @@ describe('OAuth2Server.token()', function() {
 					.expect(/"access_token": "(.*)",\n\s+"refresh_token": "(.*)"/i, 400, done);
 
 			});
+
+			it('should allow valid request with non-expiring token (token= null)', function (done) {
+				var app = bootstrap({
+					model: {
+						getClient: function (id, secret, callback) {
+							callback(false, { client_id: 'thom' });
+						},
+						grantTypeAllowed: function (id, secret, callback) {
+							callback(false, true);
+						},
+						getRefreshToken: function (refreshToken, callback) {
+							callback(false, {
+								client_id: 'thom',
+								expires: null,
+								user_id: '123'
+							});
+						},
+						saveAccessToken: function (accessToken, clientId, userId, expires, cb) {
+							cb();
+						},
+						saveRefreshToken: function (refreshToken, clientId, userId, expires, cb) {
+							cb();
+						},
+						expireRefreshToken: function (refreshToken, callback) {
+							callback();
+						}
+					},
+					grants: ['password', 'refresh_token']
+				});
+
+				request(app)
+					.post('/oauth/token')
+					.set('Content-Type', 'application/x-www-form-urlencoded')
+					.send({
+						grant_type: 'refresh_token',
+						client_id: 'thom',
+						client_secret: 'nightworld',
+						refresh_token: 'abc123'
+					})
+					.expect(/"access_token": "(.*)",\n\s+"refresh_token": "(.*)"/i, 400, done);
+
+			});
 		});
 
 		describe('custom', function () {
@@ -757,6 +799,52 @@ describe('OAuth2Server.token()', function() {
 					res.body.refresh_token.should.have.length(40);
 					res.body.token_type.should.equal('bearer');
 					res.body.expires_in.should.equal(3600);
+
+					done();
+				});
+
+		});
+
+		it('should exclude expires_in if accessTokenLifetime = null', function (done) {
+			var app = bootstrap({
+				model: {
+					getClient: function (id, secret, callback) {
+						callback(false, { client_id: id });
+					},
+					grantTypeAllowed: function (id, secret, callback) {
+						callback(false, true);
+					},
+					getUser: function (uname, pword, callback) {
+						callback(false, { id: 1 });
+					},
+					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+						should.strictEqual(null, expires);
+						callback();
+					},
+					saveRefreshToken: function (refreshToken, clientId, userId, expires, callback) {
+						should.strictEqual(null, expires);
+						callback();
+					}
+				},
+				grants: ['password', 'refresh_token'],
+				accessTokenLifetime: null,
+				refreshTokenLifetime: null
+			});
+
+			request(app)
+				.post('/oauth/token')
+				.set('Content-Type', 'application/x-www-form-urlencoded')
+				.send(validBody)
+				.expect(200)
+				.end(function (err, res) {
+					if (err) return done(err);
+
+					res.body.should.have.keys(['access_token', 'refresh_token', 'token_type']);
+					res.body.access_token.should.be.a('string');
+					res.body.access_token.should.have.length(40);
+					res.body.refresh_token.should.be.a('string');
+					res.body.refresh_token.should.have.length(40);
+					res.body.token_type.should.equal('bearer');
 
 					done();
 				});

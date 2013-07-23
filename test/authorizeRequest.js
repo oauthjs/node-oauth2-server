@@ -169,6 +169,24 @@ describe('OAuth2Server.authorizeRequest()', function() {
 				.get('/?access_token=thom')
 				.expect(/nightworld/, 200, done);
 		});
+
+		it('should passthrough with valid, non-expiring token (token = null)', function (done) {
+			var app = bootstrap({
+				model: {
+					getAccessToken: function (token, callback) {
+						callback(false, { expires: null });
+					}
+				}
+			});
+
+			app.get('/', function (req, res) {
+				res.send('nightworld');
+			});
+
+			request(app)
+				.get('/?access_token=thom')
+				.expect(/nightworld/, 200, done);
+		});
 	});
 
 	it('should expose the user_id', function (done) {
