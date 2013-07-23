@@ -2,6 +2,10 @@
 
 This is currently a backup, see: https://github.com/nightworld/node-oauth2-server/releases
 
+### 1.5.0
+ - Add support for non-expiring tokens (set accessTokenLifetime/refreshTokenLifetime = null)
+ - Passthrough debug errors from custom generateToken
+
 ### 1.4.1
  - Allow access token in body when not POST (only deny GET)
 
