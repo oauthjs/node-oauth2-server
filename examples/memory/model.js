@@ -1,49 +1,38 @@
 var model = module.exports;
 
 // In-memory datastores:
-var _oauth_access_tokens = [],
-    _oauth_refresh_tokens = [],
-    _oauth_clients = [
-        {
-            client_id : "demo_client",
-            client_secret : "0000deadbeef0000",
-            redirect_uri : "http://www.demowebservice.com/landingpage"
-        },
-        {
-            client_id : "johndoes_pc",
-            client_secret : "ffff0000dddd",
-            redirect_uri : null
-        }
-    ],
-    _authorizedClientIds = {
-        password: [
-            "demo_client", 
-            "johndoes_pc"
-        ],
-        refresh_token: [
-            "demo_client"
-        ]
-    },
-    _users = [
-        {
-            id : "1337",
-            username: "johndoe123",
-            password: "johni5C00L"
-        },
-        {
-            id: "1234",
-            username: "apiuser@someclient.com",
-            password: "client123"
-        }
-    ];
+var oauthAccessTokens = [],
+	oauthRefreshTokens = [],
+	oauthClients = [
+		{
+			client_id : 'thom',
+			client_secret : 'nightworld',
+			redirect_uri : ''
+		}
+	],
+	authorizedClientIds = {
+		password: [
+			'thom' 
+		],
+		refresh_token: [
+			'thom'
+		]
+	},
+	users = [
+		{
+			id : '123',
+			username: 'thomseddon',
+			password: 'nightworld'
+		}
+	];
 
 // Debug function to dump the state of the data stores
 model.dump = function() {
-    console.log("_oauth_access_tokens", _oauth_access_tokens);
-    console.log("_oauth_clients", _oauth_clients);
-    console.log("_authorizedClientIds", _authorizedClientIds);
-    console.log("_oauth_refresh_tokens", _oauth_refresh_tokens);
-    console.log("_users", _users);
+	console.log('oauthAccessTokens', oauthAccessTokens);
+	console.log('oauthClients', oauthClients);
+	console.log('authorizedClientIds', authorizedClientIds);
+	console.log('oauthRefreshTokens', oauthRefreshTokens);
+	console.log('users', users);
 };
 
 /*
@@ -51,89 +40,73 @@ model.dump = function() {
  */
 
 model.getAccessToken = function (bearerToken, callback) {
-    var found = _oauth_access_tokens.some(function(o,i,a) {
-        if(o.access_token === bearerToken) {
-            callback(null, o);
-            return true;
-        }
-        return false;
-    });
-    
-    if(!found) {
-        callback(null, found);
-    }
+	for(var i = 0, len = oauthAccessTokens.length; i < len; i++) {
+		var elem = oauthAccessTokens[i];
+		if(elem.access_token === bearerToken) { 
+			return callback(false, elem); 
+		}
+	}
+	callback(false, false);
 };
 
 model.getRefreshToken = function (bearerToken, callback) {
-    var found = _oauth_refresh_tokens.some(function(o,i,a) {
-        if(o.refresh_token === bearerToken) {
-            callback(null, o);
-            return true;
-        }
-        return false;
-    });
-    
-    if(!found) {
-        callback(null, found);
-    }
+	for(var i = 0, len = oauthRefreshTokens.length; i < len; i++) {
+		var elem = oauthRefreshTokens[i];
+		if(elem.refresh_token === bearerToken) { 
+			return callback(false, elem); 
+		}
+	}
+	callback(false, false);
 };
 
 model.getClient = function (clientId, clientSecret, callback) {
-    var found = _oauth_clients.some(function(o,i,a) {
-        if(o.client_id === clientId && o.client_secret === clientSecret) {
-            callback(null, o);
-            return true;
-        }
-        return false;
-    });
-    
-    if(!found) {
-        callback(null, found);
-    }
+	for(var i = 0, len = oauthClients.length; i < len; i++) {
+		var elem = oauthClients[i];
+		if(elem.client_id === clientId && elem.client_secret === clientSecret) { 
+			return callback(false, elem); 
+		}
+	}
+	callback(false, false);
 };
 
 model.grantTypeAllowed = function (clientId, grantType, callback) {
-    callback(false, 
-             _authorizedClientIds[grantType] && 
-             _authorizedClientIds[grantType].indexOf(clientId.toLowerCase()) >= 0
-            );
+	callback(false, 
+			 authorizedClientIds[grantType] && 
+			 authorizedClientIds[grantType].indexOf(clientId.toLowerCase()) >= 0
+			);
 };
 
 model.saveAccessToken = function (accessToken, clientId, userId, expires, callback) {
-    _oauth_access_tokens.unshift({
-        access_token: accessToken,
-        client_id: clientId,
-        user_id: userId,
-        expires: expires
-    });
+	oauthAccessTokens.unshift({
+		access_token: accessToken,
+		client_id: clientId,
+		user_id: userId,
+		expires: expires
+	});
 
-    callback(false);
+	callback(false);
 };
 
 model.saveRefreshToken = function (refreshToken, clientId, userId, expires, callback) {
-    _oauth_refresh_tokens.unshift({
-        refresh_token: refreshToken,
-        client_id: clientId,
-        user_id: userId,
-        expires: expires
-    });
+	oauthRefreshTokens.unshift({
+		refresh_token: refreshToken,
+		client_id: clientId,
+		user_id: userId,
+		expires: expires
+	});
 
-    callback(false);
+	callback(false);
 };
 
 /*
  * Required to support password grant type
  */
 model.getUser = function (username, password, callback) {
-    var found = _users.some(function(o,i,a) {
-        if(o.username === username && o.password === password) {
-            callback(null, o);
-            return true;
-        }
-        return false;
-    });
-    
-    if(!found) {
-        callback(null, found);
-    }
+	for(var i = 0, len = users.length; i < len; i++) {
+		var elem = users[i];
+		if(elem.username === username && elem.password === password) { 
+			return callback(false, elem); 
+		}
+	}
+	callback(false, false);
 };
