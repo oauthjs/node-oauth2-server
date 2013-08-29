@@ -7,7 +7,7 @@ Version is under active development, for a preview see the 2.0 branch: https://g
 
 ## Installation
 
-	$ npm install node-oauth2-server
+  $ npm install node-oauth2-server
 
 ## Quick Start
 
@@ -15,23 +15,23 @@ The module provides two middlewares, one for authorization and routing, another 
 
 ```js
 var express = require('express'),
-	oauthserver = require('node-oauth2-server');
+  oauthserver = require('node-oauth2-server');
 
 var app = express();
 
 app.configure(function() {
-	var oauth = oauthserver({
-		model: {}, // See below for specification
-		grants: ['password'],
-		debug: true
-	});
-	app.use(express.bodyParser()); // REQUIRED
-	app.use(oauth.handler());
-	app.use(oauth.errorHandler());
+  var oauth = oauthserver({
+    model: {}, // See below for specification
+    grants: ['password'],
+    debug: true
+  });
+  app.use(express.bodyParser()); // REQUIRED
+  app.use(oauth.handler());
+  app.use(oauth.errorHandler());
 });
 
 app.get('/', function (req, res) {
-	res.send('Secret area');
+  res.send('Secret area');
 });
 
 app.listen(3000);
@@ -259,10 +259,10 @@ Cache-Control: no-store
 Pragma: no-cache
 
 {
-	"access_token":"2YotnFZFEjr1zCsicMWpAA",
-	"token_type":"bearer",
-	"expires_in":3600,
-	"refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA"
+  "access_token":"2YotnFZFEjr1zCsicMWpAA",
+  "token_type":"bearer",
+  "expires_in":3600,
+  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA"
 }
 ```
 
