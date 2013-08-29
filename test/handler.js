@@ -15,117 +15,117 @@
  */
 
 var assert = require('assert'),
-	express = require('express'),
-	request = require('supertest'),
-	should = require('should');
+  express = require('express'),
+  request = require('supertest'),
+  should = require('should');
 
 var oauth2server = require('../');
 
 var bootstrap = function (oauthConfig) {
-	var app = express(),
-		oauth = oauth2server(oauthConfig || { model: {} });
+  var app = express(),
+    oauth = oauth2server(oauthConfig || { model: {} });
 
-	app.use(express.bodyParser());
-	app.use(oauth.handler());
-	app.use(oauth.errorHandler());
+  app.use(express.bodyParser());
+  app.use(oauth.handler());
+  app.use(oauth.errorHandler());
 
-	return app;
+  return app;
 };
 
 describe('OAuth2Server.handler()', function() {
-	it('should passthrough /oauth/token', function (done) {
-		var app = bootstrap();
+  it('should passthrough /oauth/token', function (done) {
+    var app = bootstrap();
 
-		request(app)
-			.get('/oauth/token')
-			.expect(400)
-			.end(function (err, res) {
-				if (err) return done(err);
-				res.body.error_description.should.not.match(/the access token was not found/i);
-				done();
-			});
-	});
+    request(app)
+      .get('/oauth/token')
+      .expect(400)
+      .end(function (err, res) {
+        if (err) return done(err);
+        res.body.error_description.should.not.match(/the access token was not found/i);
+        done();
+      });
+  });
 
-	describe('when determining what\'s allowed', function () {
-		it('should authorize (disallow) root by default', function (done) {
-			var app = bootstrap();
+  describe('when determining what\'s allowed', function () {
+    it('should authorize (disallow) root by default', function (done) {
+      var app = bootstrap();
 
-			request(app)
-				.get('/')
-				.expect(400, done);
-		});
+      request(app)
+        .get('/')
+        .expect(400, done);
+    });
 
-		it('should authorize (disallow) paths by default', function (done) {
-			var app = bootstrap();
+    it('should authorize (disallow) paths by default', function (done) {
+      var app = bootstrap();
 
-			request(app)
-				.get('/thom')
-				.expect(400, done);
-		});
+      request(app)
+        .get('/thom')
+        .expect(400, done);
+    });
 
-		it('should allow via array', function (done) {
-			var app = bootstrap({
-				allow: ['/thom', '/another'],
-				model: {}
-			});
+    it('should allow via array', function (done) {
+      var app = bootstrap({
+        allow: ['/thom', '/another'],
+        model: {}
+      });
 
-			app.get('/thom', function (req, res) {
-				res.jsonp({});
-			});
+      app.get('/thom', function (req, res) {
+        res.jsonp({});
+      });
 
-			request(app)
-				.get('/thom')
-				.expect(200, done);
-		});
+      request(app)
+        .get('/thom')
+        .expect(200, done);
+    });
 
 
-		it('should allow POST via array', function (done) {
-			var app = bootstrap({
-				allow: ['/thom', '/another'],
-				model: {}
-			});
+    it('should allow POST via array', function (done) {
+      var app = bootstrap({
+        allow: ['/thom', '/another'],
+        model: {}
+      });
 
-			app.post('/thom', function (req, res) {
-				res.jsonp({});
-			});
+      app.post('/thom', function (req, res) {
+        res.jsonp({});
+      });
 
-			request(app)
-				.post('/thom')
-				.expect(200, done);
-		});
+      request(app)
+        .post('/thom')
+        .expect(200, done);
+    });
 
-		it('should allow via object', function (done) {
-			var app = bootstrap({
-				allow: {
-					get: ['/thom', '/another']
-				},
-				model: {}
-			});
+    it('should allow via object', function (done) {
+      var app = bootstrap({
+        allow: {
+          get: ['/thom', '/another']
+        },
+        model: {}
+      });
 
-			app.get('/thom', function (req, res) {
-				res.jsonp({});
-			});
+      app.get('/thom', function (req, res) {
+        res.jsonp({});
+      });
 
-			request(app)
-				.get('/thom')
-				.expect(200, done);
-		});
+      request(app)
+        .get('/thom')
+        .expect(200, done);
+    });
 
-		it('should only allow correct method via object', function (done) {
-			var app = bootstrap({
-				allow: {
-					get: ['/thom', '/another']
-				},
-				model: {}
-			});
+    it('should only allow correct method via object', function (done) {
+      var app = bootstrap({
+        allow: {
+          get: ['/thom', '/another']
+        },
+        model: {}
+      });
 
-			app.get('/thom', function (req, res) {
-				res.jsonp({});
-			});
+      app.get('/thom', function (req, res) {
+        res.jsonp({});
+      });
 
-			request(app)
-				.post('/thom')
-				.expect(400, done);
-		});
-	});
+      request(app)
+        .post('/thom')
+        .expect(400, done);
+    });
+  });
 });

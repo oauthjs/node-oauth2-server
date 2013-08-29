@@ -15,71 +15,71 @@
  */
 
 var assert = require('assert'),
-	express = require('express'),
-	request = require('supertest'),
-	should = require('should');
+  express = require('express'),
+  request = require('supertest'),
+  should = require('should');
 
 var oauth2server = require('../');
 
 var bootstrap = function (oauthConfig) {
-	var app = express(),
-		oauth = oauth2server(oauthConfig || { model: {} });
+  var app = express(),
+    oauth = oauth2server(oauthConfig || { model: {} });
 
-	app.use(express.bodyParser());
-	app.use(oauth.handler());
-	app.use(oauth.errorHandler());
+  app.use(express.bodyParser());
+  app.use(oauth.handler());
+  app.use(oauth.errorHandler());
 
-	if (oauthConfig && oauthConfig.passthroughErrors) {
-		app.use(function (err, req, res, next) {
-			res.send('passthrough');
-		});
-	}
+  if (oauthConfig && oauthConfig.passthroughErrors) {
+    app.use(function (err, req, res, next) {
+      res.send('passthrough');
+    });
+  }
 
-	return app;
+  return app;
 };
 
 describe('OAuth2Server.errorHandler()', function() {
-	it('should return an oauth conformat response', function (done) {
-		var app = bootstrap();
+  it('should return an oauth conformat response', function (done) {
+    var app = bootstrap();
 
-		request(app)
-			.get('/')
-			.expect(400)
-			.end(function (err, res) {
-				if (err) return done(err);
+    request(app)
+      .get('/')
+      .expect(400)
+      .end(function (err, res) {
+        if (err) return done(err);
 
-				res.body.should.have.keys('code', 'error', 'error_description');
+        res.body.should.have.keys('code', 'error', 'error_description');
 
-				res.body.code.should.be.a('number');
-				res.body.code.should.equal(res.statusCode);
+        res.body.code.should.be.a('number');
+        res.body.code.should.equal(res.statusCode);
 
-				res.body.error.should.be.a('string');
+        res.body.error.should.be.a('string');
 
-				res.body.error_description.should.be.a('string');
+        res.body.error_description.should.be.a('string');
 
-				done();
-			});
-	});
+        done();
+      });
+  });
 
-	it('should passthrough non grant errors if requested', function (done) {
-		var app = bootstrap({
-			passthroughErrors: true,
-			model: {}
-		});
+  it('should passthrough non grant errors if requested', function (done) {
+    var app = bootstrap({
+      passthroughErrors: true,
+      model: {}
+    });
 
-		request(app)
-			.get('/')
-			.expect(200, /^passthrough$/, done);
-	});
+    request(app)
+      .get('/')
+      .expect(200, /^passthrough$/, done);
+  });
 
-	it('should never passthrough grant errors', function (done) {
-		var app = bootstrap({
-			passthroughErrors: true,
-			model: {}
-		});
+  it('should never passthrough grant errors', function (done) {
+    var app = bootstrap({
+      passthroughErrors: true,
+      model: {}
+    });
 
-		request(app)
-			.post('/oauth/token')
-			.expect(400, done);
-	});
+    request(app)
+      .post('/oauth/token')
+      .expect(400, done);
+  });
 });
