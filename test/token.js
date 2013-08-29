@@ -107,13 +107,9 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						try {
-							id.should.equal('thom');
-							secret.should.equal('nightworld');
-							callback(false, false);
-						} catch (e) {
-							return done(e);
-						}
+						id.should.equal('thom');
+						secret.should.equal('nightworld');
+						callback(false, false);
 					}
 				},
 				grants: ['password']
@@ -130,13 +126,9 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						try {
-							id.should.equal('thom');
-							secret.should.equal('nightworld');
-							callback(false, false);
-						} catch (e) {
-							return done(e);
-						}
+						id.should.equal('thom');
+						secret.should.equal('nightworld');
+						callback(false, false);
 					}
 				},
 				grants: ['password']
@@ -177,7 +169,7 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, true);
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, false); // Not allowed
 					}
 				},
@@ -200,7 +192,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						}
 					},
@@ -225,7 +217,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
 						getUser: function (uname, pword, callback) {
@@ -253,7 +245,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						}
 					},
@@ -278,10 +270,10 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
-						getRefreshToken: function (refreshToken, callback) {
+						getRefreshToken: function (data, callback) {
 							callback(false, false);
 						}
 					},
@@ -307,10 +299,10 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
-						getRefreshToken: function (refreshToken, callback) {
+						getRefreshToken: function (data, callback) {
 							callback(false, { client_id: 'kate' });
 						}
 					},
@@ -336,10 +328,10 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, { client_id: 'thom' });
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
-						getRefreshToken: function (refreshToken, callback) {
+						getRefreshToken: function (data, callback) {
 							callback(false, {
 								client_id: 'thom',
 								expires: new Date(+new Date() - 60)
@@ -368,20 +360,21 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, { client_id: 'thom' });
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
 						getRefreshToken: function (refreshToken, callback) {
+							refreshToken.should.equal('abc123');
 							callback(false, {
 								client_id: 'thom',
 								expires: new Date(),
 								user_id: '123'
 							});
 						},
-						saveAccessToken: function (accessToken, clientId, userId, expires, cb) {
+						saveAccessToken: function (data, cb) {
 							cb();
 						},
-						saveRefreshToken: function (refreshToken, clientId, userId, expires, cb) {
+						saveRefreshToken: function (data, cb) {
 							cb();
 						},
 						expireRefreshToken: function (refreshToken, callback) {
@@ -410,20 +403,20 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, { client_id: 'thom' });
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
-						getRefreshToken: function (refreshToken, callback) {
+						getRefreshToken: function (data, callback) {
 							callback(false, {
 								client_id: 'thom',
 								expires: null,
 								user_id: '123'
 							});
 						},
-						saveAccessToken: function (accessToken, clientId, userId, expires, cb) {
+						saveAccessToken: function (data, cb) {
 							cb();
 						},
-						saveRefreshToken: function (refreshToken, clientId, userId, expires, cb) {
+						saveRefreshToken: function (data, cb) {
 							cb();
 						},
 						expireRefreshToken: function (refreshToken, callback) {
@@ -454,7 +447,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						}
 					},
@@ -478,7 +471,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
 						extendedGrant: function (req, callback) {
@@ -505,7 +498,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
 						extendedGrant: function (req, callback) {
@@ -532,7 +525,7 @@ describe('OAuth2Server.token()', function() {
 						getClient: function (id, secret, callback) {
 							callback(false, true);
 						},
-						grantTypeAllowed: function (id, secret, callback) {
+						grantTypeAllowed: function (clientId, grantType, callback) {
 							callback(false, true);
 						},
 						extendedGrant: function (req, callback) {
@@ -563,7 +556,7 @@ describe('OAuth2Server.token()', function() {
 					getClient: function (id, secret, callback) {
 						callback(false, true);
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					}
 				},
@@ -583,9 +576,9 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, true);
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
@@ -594,13 +587,9 @@ describe('OAuth2Server.token()', function() {
 					generateToken: function (type, req, callback) {
 						callback(false, 'thommy');
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
-						try {
-							accessToken.should.equal('thommy');
-							callback();
-						} catch (e) {
-							return callback(e);
-						}
+					saveAccessToken: function (data, callback) {
+						data.access_token.should.equal('thommy');
+						callback();
 					}
 				},
 				grants: ['password']
@@ -618,9 +607,9 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, true);
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
@@ -629,7 +618,7 @@ describe('OAuth2Server.token()', function() {
 					generateToken: function (type, req, callback) {
 						callback(false, { access_token: 'thommy' });
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+					saveAccessToken: function (data, callback) {
 						callback(new Error('Should not be saving'));
 					}
 				},
@@ -650,25 +639,21 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, { client_id: 'thom' });
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
-						try {
-							accessToken.should.be.a('string');
-							accessToken.should.have.length(40);
-							clientId.should.equal('thom');
-							userId.should.equal(1);
-							(+expires).should.be.within(10, (+new Date()) + 3600000);
-							callback();
-						} catch (e) {
-							return callback(e);
-						}
+					saveAccessToken: function (data, callback) {
+						data.access_token.should.be.a('string');
+						data.access_token.should.have.length(40);
+						data.client_id.should.equal('thom');
+						data.user_id.should.equal(1);
+						(+data.expires).should.be.within(10, (+new Date()) + 3600000);
+						callback();
 					}
 				},
 				grants: ['password']
@@ -686,28 +671,24 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, { client_id: 'thom' });
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+					saveAccessToken: function (data, callback) {
 						callback();
 					},
-					saveRefreshToken: function (refreshToken, clientId, userId, expires, callback) {
-						try {
-							refreshToken.should.be.a('string');
-							refreshToken.should.have.length(40);
-							clientId.should.equal('thom');
-							userId.should.equal(1);
-							(+expires).should.be.within(10, (+new Date()) + 1209600000);
-							callback();
-						} catch (e) {
-							return callback(e);
-						}
+					saveRefreshToken: function (data, callback) {
+						data.refresh_token.should.be.a('string');
+						data.refresh_token.should.have.length(40);
+						data.client_id.should.equal('thom');
+						data.user_id.should.equal(1);
+						(+data.expires).should.be.within(10, (+new Date()) + 1209600000);
+						callback();
 					}
 				},
 				grants: ['password', 'refresh_token']
@@ -727,15 +708,15 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, { client_id: 'thom' });
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+					saveAccessToken: function (data, callback) {
 						callback();
 					}
 				},
@@ -765,18 +746,18 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, { client_id: 'thom' });
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
+					saveAccessToken: function (data, callback) {
 						callback();
 					},
-					saveRefreshToken: function (refreshToken, clientId, userId, expires, callback) {
+					saveRefreshToken: function (data, callback) {
 						callback();
 					}
 				},
@@ -809,20 +790,20 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						callback(false, { client_id: id });
+						callback(false, { client_id: 'thom' });
 					},
-					grantTypeAllowed: function (id, secret, callback) {
+					grantTypeAllowed: function (clientId, grantType, callback) {
 						callback(false, true);
 					},
 					getUser: function (uname, pword, callback) {
 						callback(false, { id: 1 });
 					},
-					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
-						should.strictEqual(null, expires);
+					saveAccessToken: function (data, callback) {
+						should.strictEqual(null, data.expires);
 						callback();
 					},
-					saveRefreshToken: function (refreshToken, clientId, userId, expires, callback) {
-						should.strictEqual(null, expires);
+					saveRefreshToken: function (data, callback) {
+						should.strictEqual(null, data.expires);
 						callback();
 					}
 				},
