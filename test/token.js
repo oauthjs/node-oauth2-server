@@ -393,7 +393,7 @@ describe('OAuth2Server.token()', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/"access_token": "(.*)",\n\s+"refresh_token": "(.*)"/i, 400, done);
+          .expect(/"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, 400, done);
 
       });
 
@@ -435,7 +435,7 @@ describe('OAuth2Server.token()', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/"access_token": "(.*)",\n\s+"refresh_token": "(.*)"/i, 400, done);
+          .expect(/"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, 400, done);
 
       });
     });
@@ -546,7 +546,7 @@ describe('OAuth2Server.token()', function() {
             client_id: 'thom',
             client_secret: 'nightworld'
           })
-          .end();
+          .expect(200, done);
       });
     });
 
