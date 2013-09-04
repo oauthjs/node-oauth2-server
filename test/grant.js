@@ -29,7 +29,9 @@ var bootstrap = function (oauthConfig) {
     });
 
   app.use(express.bodyParser());
-  app.use(oauth.handler());
+
+  app.all('/oauth/token', oauth.grant());
+
   app.use(oauth.errorHandler());
 
   return app;
