@@ -2,11 +2,10 @@
 
 This is currently a backup, see: https://github.com/nightworld/node-oauth2-server/releases
 
-### 1.5.2
- - Fix expiration checking. (Previously the current time was mistakenly cached up instantiation)
-
-### 1.5.1
- - Add repository to package.json
+### 3.0 (in progress)
+ - Huge refactor
+ - Switch from internal router to exposing explit middleware to be added to individual routes
+ - Switch all model save* functions to take two params, data and callback
 
 ### 1.5.0
  - Add support for non-expiring tokens (set accessTokenLifetime/refreshTokenLifetime = null)

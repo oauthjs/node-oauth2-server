@@ -20,19 +20,21 @@ var express = require('express'),
 var app = express();
 
 app.configure(function() {
-  var oauth = oauthserver({
+  app.oauth = oauthserver({
     model: {}, // See below for specification
     grants: ['password'],
     debug: true
   });
   app.use(express.bodyParser()); // REQUIRED
-  app.use(oauth.handler());
-  app.use(oauth.errorHandler());
 });
 
-app.get('/', function (req, res) {
+app.all('/oauth/token', app.oauth.grant());
+
+app.get('/', app.oauth.authorise(), function (req, res) {
   res.send('Secret area');
 });
+
+app.use(app.oauth.errorHandler());
 
 app.listen(3000);
 ```
@@ -55,11 +57,6 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 
 - *string* **model**
  - Model object (see below)
-- *array|object* **allow**
- - Paths to allow to bypass authorisation, can take either form:
-     - array, all methods allowed: `['/path1', '/path2']`
-     - object or arrays keyed by method: `{ get: ['/path1'], post: ['/path2'], all: ['/path3'] }`
-  - Default: `[]`
 - *array* **grants**
  - grant types you wish to support, currently the module supports `password` and `refresh_token`
   - Default: `[]`
@@ -129,11 +126,12 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *boolean* **allowed**
      - Indicates whether the grantType is allowed for this clientId
 
-#### saveAccessToken (accessToken, clientId, userId, expires, callback)
-- *string* **accessToken**
-- *string* **clientId**
-- *string|number* **userId**
-- *date* **expires**
+#### saveAccessToken (accessToken, callback)
+- *object* **accessToken**
+  - *string* **accessToken**
+  - *string* **clientId**
+  - *string|number* **userId**
+  - *date* **expires**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -155,11 +153,12 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 
 ### Required for `refresh_token` grant type
 
-#### saveRefreshToken (refreshToken, clientId, userId, expires, callback)
-- *string* **refreshToken**
-- *string* **clientId**
-- *string|number* **userId**
-- *date* **expires**
+#### saveRefreshToken (refreshToken, callback)
+- *object* **refreshToken**
+  - *string* **refreshToken**
+  - *string* **clientId**
+  - *string|number* **userId**
+  - *date* **expires**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
