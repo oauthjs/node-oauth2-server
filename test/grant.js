@@ -52,7 +52,7 @@ describe('Grant', function() {
 
       request(app)
         .get('/oauth/token')
-        .expect(/method must be POST/i, 400, done);
+        .expect(400, /method must be POST/i, done);
     });
 
     it('should only allow application/x-www-form-urlencoded', function (done) {
@@ -62,7 +62,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/json')
         .send({}) // Required to be valid JSON
-        .expect(/application\/x-www-form-urlencoded/i, 400, done);
+        .expect(400, /application\/x-www-form-urlencoded/i, done);
     });
 
     it('should check grant_type exists', function (done) {
@@ -71,7 +71,7 @@ describe('Grant', function() {
       request(app)
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
-        .expect(/invalid or missing grant_type parameter/i, 400, done);
+        .expect(400, /invalid or missing grant_type parameter/i, done);
     });
 
     it('should ensure grant_type is allowed', function (done) {
@@ -81,7 +81,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password' })
-        .expect(/invalid or missing grant_type parameter/i, 400, done);
+        .expect(400, /invalid or missing grant_type parameter/i, done);
     });
 
     it('should check client_id exists', function (done) {
@@ -91,7 +91,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password' })
-        .expect(/invalid or missing client_id parameter/i, 400, done);
+        .expect(400, /invalid or missing client_id parameter/i, done);
     });
 
     it('should check client_secret exists', function (done) {
@@ -101,7 +101,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom' })
-        .expect(/missing client_secret parameter/i, 400, done);
+        .expect(400, /missing client_secret parameter/i, done);
     });
 
     it('should extract credentials from body', function (done) {
@@ -159,7 +159,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
-        .expect(/client credentials are invalid/i, 400, done);
+        .expect(400, /client credentials are invalid/i, done);
     });
   });
 
@@ -181,7 +181,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
-        .expect(/grant type is unauthorised for this client_id/i, 400, done);
+        .expect(400, /grant type is unauthorised for this client_id/i, done);
     });
   });
 
@@ -208,7 +208,7 @@ describe('Grant', function() {
             client_id: 'thom',
             client_secret: 'nightworld'
           })
-          .expect(/missing parameters. \\"username\\" and \\"password\\"/i, 400, done);
+          .expect(400, /missing parameters. \\"username\\" and \\"password\\"/i, done);
 
       });
 
@@ -234,7 +234,7 @@ describe('Grant', function() {
           .post('/oauth/token')
           .set('Content-Type', 'application/x-www-form-urlencoded')
           .send(validBody)
-          .expect(/user credentials are invalid/i, 400, done);
+          .expect(400, /user credentials are invalid/i, done);
 
       });
     });
@@ -261,7 +261,7 @@ describe('Grant', function() {
             client_id: 'thom',
             client_secret: 'nightworld'
           })
-          .expect(/no \\"refresh_token\\" parameter/i, 400, done);
+          .expect(400, /no \\"refresh_token\\" parameter/i, done);
 
       });
 
@@ -290,7 +290,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/invalid refresh token/i, 400, done);
+          .expect(400, /invalid refresh token/i, done);
 
       });
 
@@ -319,7 +319,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/invalid refresh token/i, 400, done);
+          .expect(400, /invalid refresh token/i, done);
 
       });
 
@@ -351,7 +351,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/refresh token has expired/i, 400, done);
+          .expect(400, /refresh token has expired/i, done);
 
       });
 
@@ -394,7 +394,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, 400, done);
+          .expect(200, /"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, done);
 
       });
 
@@ -436,7 +436,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(/"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, 400, done);
+          .expect(200, /"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, done);
 
       });
     });
@@ -463,7 +463,7 @@ describe('Grant', function() {
             client_id: 'thom',
             client_secret: 'nightworld'
           })
-          .expect(/invalid grant_type/i, 400, done);
+          .expect(400, /invalid grant_type/i, done);
       });
 
       it('should still detect unsupported grant_type', function (done) {
@@ -490,7 +490,7 @@ describe('Grant', function() {
             client_id: 'thom',
             client_secret: 'nightworld'
           })
-          .expect(/invalid grant_type/i, 400, done);
+          .expect(400, /invalid grant_type/i, done);
       });
 
       it('should require a user.id', function (done) {
@@ -517,7 +517,7 @@ describe('Grant', function() {
             client_id: 'thom',
             client_secret: 'nightworld'
           })
-          .expect(/invalid request/i, 400, done);
+          .expect(400, /invalid request/i, done);
       });
 
       it('should passthrough valid request', function (done) {
@@ -568,7 +568,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'implicit', client_id: 'thom', client_secret: 'nightworld' })
-        .expect(/invalid grant_type/i, 400, done);
+        .expect(400, /invalid grant_type/i, done);
     });
   });
 
