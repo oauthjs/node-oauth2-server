@@ -2,6 +2,11 @@
 
 This is currently a backup, see: https://github.com/nightworld/node-oauth2-server/releases
 
+### 3.0 (in progress)
+ - Huge refactor
+ - Switch from internal router to exposing explit middleware to be added to individual routes
+ - Switch all model save* functions to take two params, data and callback
+
 ### 1.5.0
  - Add support for non-expiring tokens (set accessTokenLifetime/refreshTokenLifetime = null)
  - Passthrough debug errors from custom generateToken
