@@ -475,7 +475,7 @@ describe('Grant', function() {
             grantTypeAllowed: function (clientId, grantType, callback) {
               callback(false, true);
             },
-            extendedGrant: function (req, callback) {
+            extendedGrant: function (grantType, req, callback) {
               callback(false, false);
             }
           },
@@ -502,7 +502,7 @@ describe('Grant', function() {
             grantTypeAllowed: function (clientId, grantType, callback) {
               callback(false, true);
             },
-            extendedGrant: function (req, callback) {
+            extendedGrant: function (grantType, req, callback) {
               callback(false, true, {}); // Fake empty user
             }
           },
@@ -529,7 +529,7 @@ describe('Grant', function() {
             grantTypeAllowed: function (clientId, grantType, callback) {
               callback(false, true);
             },
-            extendedGrant: function (req, callback) {
+            extendedGrant: function (grantType, req, callback) {
               callback(false, true, { id: 3 });
             },
             saveAccessToken: function () {
