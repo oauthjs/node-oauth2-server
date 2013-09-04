@@ -41,7 +41,7 @@ var bootstrap = function (oauthConfig) {
   return app;
 };
 
-describe('OAuth2Server.errorHandler()', function() {
+describe('Error Handler', function() {
   it('should return an oauth conformat response', function (done) {
     var app = bootstrap();
 
