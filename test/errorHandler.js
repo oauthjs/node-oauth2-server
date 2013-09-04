@@ -26,9 +26,13 @@ var bootstrap = function (oauthConfig) {
     oauth = oauth2server(oauthConfig || { model: {} });
 
   app.use(express.bodyParser());
-  app.use(oauth.handler());
-  app.use(oauth.errorHandler());
 
+  app.all('/oauth/token', oauth.grant());
+  app.all('/', oauth.authorise(), function (req, res) {
+    res.send('Hello World');
+  });
+
+  app.use(oauth.errorHandler());
   if (oauthConfig && oauthConfig.passthroughErrors) {
     app.use(function (err, req, res, next) {
       res.send('passthrough');

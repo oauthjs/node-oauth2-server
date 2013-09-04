@@ -21,7 +21,7 @@ var assert = require('assert'),
 
 var oauth2server = require('../');
 
-var bootstrap = function (oauthConfig) {
+var bootstrap = function (oauthConfig, bindErrorHandler) {
   if (oauthConfig === 'fakeInvalidToken') {
     oauthConfig = {
       model: {
@@ -33,12 +33,15 @@ var bootstrap = function (oauthConfig) {
     };
   }
 
-  var app = express(),
-    oauth = oauth2server(oauthConfig || { model: {} });
+  var app = express();
+  app.oauth = oauth2server(oauthConfig || { model: {} });
 
   app.use(express.bodyParser());
-  app.use(oauth.handler());
-  app.use(oauth.errorHandler());
+  app.all('/', app.oauth.authorise());
+
+  if (bindErrorHandler === undefined || bindErrorHandler) {
+    app.use(app.oauth.errorHandler());
+  }
 
   return app;
 };
@@ -177,11 +180,13 @@ describe('OAuth2Server.authorizeRequest()', function() {
             callback(false, { expires: null });
           }
         }
-      });
+      }, false);
 
-      app.get('/', function (req, res) {
+      app.get('/', app.oauth.authorise(), function (req, res) {
         res.send('nightworld');
       });
+
+      app.use(app.oauth.errorHandler());
 
       request(app)
         .get('/?access_token=thom')
@@ -196,14 +201,16 @@ describe('OAuth2Server.authorizeRequest()', function() {
           callback(false, { expires: new Date(), user_id: 1 });
         }
       }
-    });
+    }, false);
 
-    app.get('/', function (req, res) {
+    app.get('/', app.oauth.authorise(), function (req, res) {
       req.should.have.property('user');
       req.user.should.have.property('id');
       req.user.id.should.equal(1);
       res.send('nightworld');
     });
+
+    app.use(app.oauth.errorHandler());
 
     request(app)
       .get('/?access_token=thom')
