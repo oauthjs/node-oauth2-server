@@ -44,7 +44,7 @@ var validBody = {
   password: 'nightworld'
 };
 
-describe('OAuth2Server.token()', function() {
+describe('Grant', function() {
 
   describe('when parsing request', function () {
     it('should only allow post', function (done) {

@@ -45,7 +45,7 @@ var bootstrap = function (oauthConfig, bindErrorHandler) {
   return app;
 };
 
-describe('OAuth2Server.authorizeRequest()', function() {
+describe('Authorise', function() {
 
   describe('getBearerToken', function () {
     it('should detect no access token', function (done) {
