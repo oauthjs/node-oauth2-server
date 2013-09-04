@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-var assert = require('assert'),
-  express = require('express'),
+var express = require('express'),
   request = require('supertest'),
   should = require('should');
 
