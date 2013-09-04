@@ -17,9 +17,7 @@
     }
   ],
   "main": "lib/oauth2server.js",
-  "dependencies": {
-    "async": "~0.2.9"
-  },
+  "dependencies": {},
   "devDependencies": {
     "express": "3.1.x",
     "mocha": "1.8.x",
