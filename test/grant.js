@@ -652,7 +652,7 @@ describe('Grant', function() {
             data.access_token.should.be.a('string');
             data.access_token.should.have.length(40);
             data.client_id.should.equal('thom');
-            data.user_id.should.equal(1);
+            data.user.id.should.equal(1);
             (+data.expires).should.be.within(10, (+new Date()) + 3600000);
             callback();
           }
