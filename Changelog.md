@@ -2,6 +2,12 @@
 
 This is currently a backup, see: https://github.com/nightworld/node-oauth2-server/releases
 
+### 1.5.2
+ - Fix expiration checking. (Previously the current time was mistakenly cached up instantiation)
+
+### 1.5.1
+ - Add repository to package.json
+
 ### 1.5.0
  - Add support for non-expiring tokens (set accessTokenLifetime/refreshTokenLifetime = null)
  - Passthrough debug errors from custom generateToken
