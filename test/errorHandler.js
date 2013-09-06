@@ -64,7 +64,7 @@ describe('Error Handler', function() {
       });
   });
 
-  it('should passthrough non grant errors if requested', function (done) {
+  it('should passthrough authorise errors', function (done) {
     var app = bootstrap({
       passthroughErrors: true,
       model: {}
@@ -75,7 +75,7 @@ describe('Error Handler', function() {
       .expect(200, /^passthrough$/, done);
   });
 
-  it('should never passthrough grant errors', function (done) {
+  it('should passthrough grant errors', function (done) {
     var app = bootstrap({
       passthroughErrors: true,
       model: {}
@@ -83,6 +83,6 @@ describe('Error Handler', function() {
 
     request(app)
       .post('/oauth/token')
-      .expect(400, done);
+      .expect(200, /^passthrough$/, done);
   });
 });
