@@ -27,6 +27,7 @@ var bootstrap = function (oauthConfig) {
       grants: ['password', 'refresh_token']
     });
 
+  app.set('json spaces', 0);
   app.use(express.bodyParser());
 
   app.all('/oauth/token', oauth.grant());
@@ -394,7 +395,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(200, /"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, done);
+          .expect(200, /"access_token":"(.*)",(.*)"refresh_token":"(.*)"/i, done);
 
       });
 
@@ -436,7 +437,7 @@ describe('Grant', function() {
             client_secret: 'nightworld',
             refresh_token: 'abc123'
           })
-          .expect(200, /"access_token": "(.*)",\n\s+(.*)\n\s+"refresh_token": "(.*)"/i, done);
+          .expect(200, /"access_token":"(.*)",(.*)"refresh_token":"(.*)"/i, done);
 
       });
     });
@@ -630,7 +631,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send(validBody)
-        .expect(/"access_token": "thommy"/, 200, done);
+        .expect(/"access_token":"thommy"/, 200, done);
 
     });
   });
