@@ -154,14 +154,14 @@ describe('Grant', function() {
             callback(false, true);
           }
         },
-        grants: ['password', 'implicit']
+        grants: ['refresh_token']
       });
 
       request(app)
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
-        .send({ grant_type: 'implicit', client_id: 'thom', client_secret: 'nightworld' })
-        .expect(400, /invalid grant_type/i, done);
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+        .expect(400, /invalid or missing grant_type/i, done);
     });
   });
 

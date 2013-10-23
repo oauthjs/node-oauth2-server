@@ -45,13 +45,9 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 
 ## Features
 
-- Supports password, refresh_token and extension (custom) grant types
+- Supports authorization_code, password, refresh_token and extension (custom) grant types
 - Implicitly supports any form of storage e.g. PostgreSQL, MySQL, Mongo, Redis...
 - Full test suite
-
-## Limitations
-
-- Does not yet support authorization code grant type (NOTE: this has landed in the [https://github.com/thomseddon/node-oauth2-server/tree/2.0](2.0 branch) (still unstable))
 
 ## Options
 
@@ -63,8 +59,6 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 - *boolean* **debug**
  - If true, errors are logged to console
  - Default: `false`
-- *boolean* **passthroughErrors**
- - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
   - Default: `false`
 - *number* **accessTokenLifetime**
  - Life of access tokens in seconds
@@ -80,6 +74,8 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 - *regexp* **clientIdRegex**
  - Regex to match auth codes against before checking model
  - Default: `/^[a-z0-9-_]{3,40}$/i`
+- *boolean* **passthroughErrors**
+ - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
 
 ## Model Specification
 
@@ -132,6 +128,35 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
   - *string* **clientId**
   - *string|number* **userId**
   - *date* **expires**
+- *function* **callback (error)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+
+
+### Required for `authorization_code` grant type
+
+#### getAuthCode (authCode, callback)
+- *string* **authCode**
+- *function* **callback (error, authCode)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **authCode**
+     - The authorization code retrieved form storage or falsey to indicate invalid code
+     - Must contain the following keys:
+         - *string|number* **client_id**
+             - client_id associated with this auth code
+         - *date* **expires**
+             - The date when it expires
+         - *string|number* **user_id**
+             - The user_id
+
+#### saveAuthCode (authCode, callback)
+- *object* **authCode**
+  - *string* **auth_code**
+  - *string* **client_id**
+  - *date* **expires**
+  - *mixed* **user**
+     - Whatever was passed as `user` to the codeGrant function (see example)
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
