@@ -49,7 +49,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 
 ## Limitations
 
-- Does not yet support authorization code grant type
+- Does not yet support authorization code grant type (NOTE: this has landed in the [https://github.com/nightworld/node-oauth2-server/tree/2.0](2.0 branch) (still unstable))
 
 ## Options
 
