@@ -108,13 +108,9 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						try {
-							id.should.equal('thom');
-							secret.should.equal('nightworld');
-							callback(false, false);
-						} catch (e) {
-							return done(e);
-						}
+						id.should.equal('thom');
+						secret.should.equal('nightworld');
+						callback(false, false);
 					}
 				},
 				grants: ['password']
@@ -131,13 +127,9 @@ describe('OAuth2Server.token()', function() {
 			var app = bootstrap({
 				model: {
 					getClient: function (id, secret, callback) {
-						try {
-							id.should.equal('thom');
-							secret.should.equal('nightworld');
-							callback(false, false);
-						} catch (e) {
-							return done(e);
-						}
+						id.should.equal('thom');
+						secret.should.equal('nightworld');
+						callback(false, false);
 					}
 				},
 				grants: ['password']
@@ -596,12 +588,8 @@ describe('OAuth2Server.token()', function() {
 						callback(false, 'thommy');
 					},
 					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
-						try {
-							accessToken.should.equal('thommy');
-							callback();
-						} catch (e) {
-							return callback(e);
-						}
+						accessToken.should.equal('thommy');
+						callback();
 					}
 				},
 				grants: ['password']
@@ -660,16 +648,14 @@ describe('OAuth2Server.token()', function() {
 						callback(false, { id: 1 });
 					},
 					saveAccessToken: function (accessToken, clientId, userId, expires, callback) {
-						try {
-							accessToken.should.be.a('string');
-							accessToken.should.have.length(40);
-							clientId.should.equal('thom');
-							userId.should.equal(1);
-							(+expires).should.be.within(10, (+new Date()) + 3600000);
-							callback();
-						} catch (e) {
-							return callback(e);
-						}
+						accessToken.should.be.a('string');
+						accessToken.should.have.length(40);
+						clientId.should.equal('thom');
+						userId.should.equal(1);
+						var d = new Date;
+						d.setSeconds(d.getSeconds() + 3600);
+						(+expires).should.be.approximately(+d, 1);
+						callback();
 					}
 				},
 				grants: ['password']
@@ -699,16 +685,14 @@ describe('OAuth2Server.token()', function() {
 						callback();
 					},
 					saveRefreshToken: function (refreshToken, clientId, userId, expires, callback) {
-						try {
-							refreshToken.should.be.a('string');
-							refreshToken.should.have.length(40);
-							clientId.should.equal('thom');
-							userId.should.equal(1);
-							(+expires).should.be.within(10, (+new Date()) + 1209600000);
-							callback();
-						} catch (e) {
-							return callback(e);
-						}
+						refreshToken.should.be.a('string');
+						refreshToken.should.have.length(40);
+						clientId.should.equal('thom');
+						userId.should.equal(1);
+						var d = new Date;
+						d.setSeconds(d.getSeconds() + 1209600);
+						(+expires).should.be.approximately(+d, 1);
+						callback();
 					}
 				},
 				grants: ['password', 'refresh_token']
