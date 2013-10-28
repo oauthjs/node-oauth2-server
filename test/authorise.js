@@ -158,7 +158,7 @@ describe('Authorise', function() {
       var app = bootstrap({
         model: {
           getAccessToken: function (token, callback) {
-            var expires = new Date;
+            var expires = new Date();
             expires.setSeconds(expires.getSeconds() + 20);
             callback(false, { expires: expires });
           }
@@ -199,7 +199,7 @@ describe('Authorise', function() {
     var app = bootstrap({
       model: {
         getAccessToken: function (token, callback) {
-          var expires = new Date;
+          var expires = new Date();
           expires.setSeconds(expires.getSeconds() + 20);
           callback(false, { expires: expires , user_id: 1 });
         }
