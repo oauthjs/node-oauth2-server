@@ -652,7 +652,7 @@ describe('OAuth2Server.token()', function() {
 						accessToken.should.have.length(40);
 						clientId.should.equal('thom');
 						userId.should.equal(1);
-						var d = new Date;
+						var d = new Date();
 						d.setSeconds(d.getSeconds() + 3600);
 						(+expires).should.be.approximately(+d, 1);
 						callback();
@@ -689,7 +689,7 @@ describe('OAuth2Server.token()', function() {
 						refreshToken.should.have.length(40);
 						clientId.should.equal('thom');
 						userId.should.equal(1);
-						var d = new Date;
+						var d = new Date();
 						d.setSeconds(d.getSeconds() + 1209600);
 						(+expires).should.be.approximately(+d, 1);
 						callback();
