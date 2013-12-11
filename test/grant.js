@@ -95,6 +95,20 @@ describe('Grant', function() {
         .expect(400, /invalid or missing client_id parameter/i, done);
     });
 
+    it('should check client_id matches regex', function (done) {
+      var app = bootstrap({
+        clientIdRegex: /match/,
+        model: {},
+        grants: ['password', 'refresh_token']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom' })
+        .expect(400, /invalid or missing client_id parameter/i, done);
+    });
+
     it('should check client_secret exists', function (done) {
       var app = bootstrap();
 
