@@ -57,23 +57,13 @@ var OAuthAccessTokensModel = mongoose.model('OAuthAccessTokens'),
 model.getAccessToken = function (bearerToken, callback) {
 	console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
 
-	OAuthAccessTokensModel.findOne({ access_token: bearerToken }, function (err, accessToken) {
-		if (err) {
-			return callback(err);
-		}
-		callback(null, accessToken);
-	});
+	OAuthAccessTokensModel.findOne({ access_token: bearerToken }, callback);
 };
 
 model.getClient = function (clientId, clientSecret, callback) {
 	console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
 
-	OAuthClientsModel.findOne({ client_id: clientId, client_secret: clientSecret }, function (err, client) {
-		if (err) {
-			return callback(err);
-		}
-		callback(null, client);
-	});
+	OAuthClientsModel.findOne({ client_id: clientId, client_secret: clientSecret }, callback);
 };
 
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
@@ -99,13 +89,7 @@ model.saveAccessToken = function (accessToken, clientId, userId, expires, callba
 		expires: expires
 	});
 
-	accessToken.save(accessToken, function (err, token) {
-		if (err) {
-			return callback(err);
-		}
-	});
-
-	return callback(null);
+	accessToken.save(callback);
 };
 
 /*
@@ -114,10 +98,5 @@ model.saveAccessToken = function (accessToken, clientId, userId, expires, callba
 model.getUser = function (username, password, callback) {
 	console.log('in getUser (username: ' + username + ', password: ' + password + ')');
 
-	OAuthUsersModel.findOne({ username: username, password: password }, function (err, user) {
-		if (err) {
-			return callback(err);
-		}
-		return callback(null, user);
-	});
+	OAuthUsersModel.findOne({ username: username, password: password }, callback);
 };
