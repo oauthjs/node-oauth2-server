@@ -130,7 +130,7 @@ describe('Granting with authorization_code grant type', function () {
         },
         getAuthCode: function (data, callback) {
           callback(false, {
-            client_id: 'thom',
+            clientId: 'thom',
             expires: new Date(+new Date() - 60)
           });
         }
@@ -161,7 +161,7 @@ describe('Granting with authorization_code grant type', function () {
         },
         getAuthCode: function (data, callback) {
           callback(false, {
-            client_id: 'thom',
+            clientId: 'thom',
             expires: null // This is invalid
           });
         }
@@ -194,12 +194,12 @@ describe('Granting with authorization_code grant type', function () {
         getAuthCode: function (refreshToken, callback) {
           refreshToken.should.equal('abc123');
           callback(false, {
-            client_id: 'thom',
+            clientId: 'thom',
             expires: new Date(),
-            user_id: '123'
+            userId: '123'
           });
         },
-        saveAccessToken: function (data, cb) {
+        saveAccessToken: function (token, clientId, expires, user, cb) {
           cb();
         },
         saveRefreshToken: function (data, cb) {

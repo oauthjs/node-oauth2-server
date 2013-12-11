@@ -27,11 +27,18 @@ model.getAccessToken = function (bearerToken, callback) {
 		if (err) return callback(err);
 		client.query('SELECT access_token, client_id, expires, user_id FROM oauth_access_tokens ' +
 				'WHERE access_token = $1', [bearerToken], function (err, result) {
+			if (err || !result.rowCount) return callback(err);
 			// This object will be exposed in req.oauth.token
 			// The user_id field will be exposed in req.user (req.user = { id: "..." }) however if
 			// an explicit user object is included (token.user, must include id) it will be exposed
 			// in req.user instead
-			callback(err, result.rowCount ? result.rows[0] : false);
+			var token = result.rows[0];
+			callback(null, {
+				accessToken: token.access_token,
+				clientId: token.client_id,
+				expires: token.expires,
+				userId: token.userId
+			});
 			done();
 		});
 	});
@@ -43,8 +50,14 @@ model.getClient = function (clientId, clientSecret, callback) {
 		client.query('SELECT client_id, client_secret, redirect_uri FROM oauth_clients WHERE ' +
 				'client_id = $1 AND client_secret = $2', [clientId, clientSecret],
 				function (err, result) {
+			if (err || !result.rowCount) return callback(err);
+
 			// This object will be exposed in req.oauth.client
-			callback(err, result.rowCount ? result.rows[0] : false);
+			var client = result.rows[0];
+			callback(null, {
+				clientId: client.client_id,
+				clientSecret: client.client_secret
+			});
 			done();
 		});
 	});

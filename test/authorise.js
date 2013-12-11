@@ -201,7 +201,7 @@ describe('Authorise', function() {
         getAccessToken: function (token, callback) {
           var expires = new Date();
           expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires , user_id: 1 });
+          callback(false, { expires: expires , userId: 1 });
         }
       }
     }, false);
