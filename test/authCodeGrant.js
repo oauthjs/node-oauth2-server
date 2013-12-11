@@ -97,8 +97,8 @@ describe('AuthCodeGrant', function() {
     var app = bootstrap({
       getClient: function (clientId, callback) {
         callback(false, {
-          client_id: 'thom',
-          redirect_uri: 'http://nightworld.com'
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
         });
       }
     });
@@ -117,8 +117,8 @@ describe('AuthCodeGrant', function() {
     var app = bootstrap({
       getClient: function (clientId, callback) {
         callback(false, {
-          client_id: 'thom',
-          redirect_uri: 'http://nightworld.com'
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
         });
       }
     }, [false, false]);
@@ -138,15 +138,15 @@ describe('AuthCodeGrant', function() {
     var app = bootstrap({
       getClient: function (clientId, callback) {
         callback(false, {
-          client_id: 'thom',
-          redirect_uri: 'http://nightworld.com'
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (data, callback) {
-        should.exist(data.auth_code);
-        data.auth_code.should.have.lengthOf(40);
-        data.client_id.should.equal('thom');
-        (+data.expires).should.be.within(2, (+new Date()) + 30000);
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        authCode.should.have.lengthOf(40);
+        clientId.should.equal('thom');
+        (+expires).should.be.within(2, (+new Date()) + 30000);
         done();
       }
     }, [false, true]);
@@ -167,13 +167,13 @@ describe('AuthCodeGrant', function() {
     var app = bootstrap({
       getClient: function (clientId, callback) {
         callback(false, {
-          client_id: 'thom',
-          redirect_uri: 'http://nightworld.com'
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (data, callback) {
-        should.exist(data.auth_code);
-        code = data.auth_code;
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        code = authCode;
         callback();
       }
     }, [false, true]);

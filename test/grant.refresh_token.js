@@ -125,14 +125,14 @@ describe('Granting with refresh_token grant type', function () {
     var app = bootstrap({
       model: {
         getClient: function (id, secret, callback) {
-          callback(false, { client_id: 'thom' });
+          callback(false, { clientId: 'thom' });
         },
         grantTypeAllowed: function (clientId, grantType, callback) {
           callback(false, true);
         },
         getRefreshToken: function (data, callback) {
           callback(false, {
-            client_id: 'thom',
+            clientId: 'thom',
             expires: new Date(+new Date() - 60)
           });
         }
@@ -157,7 +157,7 @@ describe('Granting with refresh_token grant type', function () {
     var app = bootstrap({
       model: {
         getClient: function (id, secret, callback) {
-          callback(false, { client_id: 'thom' });
+          callback(false, { clientId: 'thom' });
         },
         grantTypeAllowed: function (clientId, grantType, callback) {
           callback(false, true);
@@ -165,15 +165,15 @@ describe('Granting with refresh_token grant type', function () {
         getRefreshToken: function (refreshToken, callback) {
           refreshToken.should.equal('abc123');
           callback(false, {
-            client_id: 'thom',
+            clientId: 'thom',
             expires: new Date(),
-            user_id: '123'
+            userId: '123'
           });
         },
-        saveAccessToken: function (data, cb) {
+        saveAccessToken: function (token, clientId, expires, user, cb) {
           cb();
         },
-        saveRefreshToken: function (data, cb) {
+        saveRefreshToken: function (token, clientId, expires, user, cb) {
           cb();
         },
         expireRefreshToken: function (refreshToken, callback) {
@@ -200,22 +200,22 @@ describe('Granting with refresh_token grant type', function () {
     var app = bootstrap({
       model: {
         getClient: function (id, secret, callback) {
-          callback(false, { client_id: 'thom' });
+          callback(false, { clientId: 'thom' });
         },
         grantTypeAllowed: function (clientId, grantType, callback) {
           callback(false, true);
         },
         getRefreshToken: function (data, callback) {
           callback(false, {
-            client_id: 'thom',
+            clientId: 'thom',
             expires: null,
-            user_id: '123'
+            userId: '123'
           });
         },
-        saveAccessToken: function (data, cb) {
+        saveAccessToken: function (token, clientId, expires, user, cb) {
           cb();
         },
-        saveRefreshToken: function (data, cb) {
+        saveRefreshToken: function (token, clientId, expires, user, cb) {
           cb();
         },
         expireRefreshToken: function (refreshToken, callback) {

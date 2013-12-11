@@ -236,9 +236,9 @@ describe('Grant', function() {
           generateToken: function (type, req, callback) {
             callback(false, 'thommy');
           },
-          saveAccessToken: function (data, callback) {
-            data.access_token.should.equal('thommy');
-            callback();
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.equal('thommy');
+            cb();
           }
         },
         grants: ['password']
@@ -265,10 +265,10 @@ describe('Grant', function() {
             callback(false, { id: 1 });
           },
           generateToken: function (type, req, callback) {
-            callback(false, { access_token: 'thommy' });
+            callback(false, { accessToken: 'thommy' });
           },
-          saveAccessToken: function (data, callback) {
-            callback(new Error('Should not be saving'));
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb(new Error('Should not be saving'));
           }
         },
         grants: ['password']
@@ -296,13 +296,13 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (data, callback) {
-            data.access_token.should.be.a('string');
-            data.access_token.should.have.length(40);
-            data.client_id.should.equal('thom');
-            data.user.id.should.equal(1);
-            (+data.expires).should.be.within(10, (+new Date()) + 3600000);
-            callback();
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.be.a('string');
+            token.should.have.length(40);
+            clientId.should.equal('thom');
+            user.id.should.equal(1);
+            (+expires).should.be.within(10, (+new Date()) + 3600000);
+            cb();
           }
         },
         grants: ['password']
@@ -328,16 +328,16 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (data, callback) {
-            callback();
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb();
           },
-          saveRefreshToken: function (data, callback) {
-            data.refresh_token.should.be.a('string');
-            data.refresh_token.should.have.length(40);
-            data.client_id.should.equal('thom');
-            data.user.id.should.equal(1);
-            (+data.expires).should.be.within(10, (+new Date()) + 1209600000);
-            callback();
+          saveRefreshToken: function (token, clientId, expires, user, cb) {
+            token.should.be.a('string');
+            token.should.have.length(40);
+            clientId.should.equal('thom');
+            user.id.should.equal(1);
+            (+expires).should.be.within(10, (+new Date()) + 1209600000);
+            cb();
           }
         },
         grants: ['password', 'refresh_token']
@@ -357,7 +357,7 @@ describe('Grant', function() {
       var app = bootstrap({
         model: {
           getClient: function (id, secret, callback) {
-            callback(false, { client_id: 'thom' });
+            callback(false, { clientId: 'thom' });
           },
           grantTypeAllowed: function (clientId, grantType, callback) {
             callback(false, true);
@@ -365,8 +365,8 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (data, callback) {
-            callback();
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb();
           }
         },
         grants: ['password']
@@ -403,11 +403,11 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (data, callback) {
-            callback();
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb();
           },
-          saveRefreshToken: function (data, callback) {
-            callback();
+          saveRefreshToken: function (token, clientId, expires, user, cb) {
+            cb();
           }
         },
         grants: ['password', 'refresh_token']
@@ -439,7 +439,7 @@ describe('Grant', function() {
       var app = bootstrap({
         model: {
           getClient: function (id, secret, callback) {
-            callback(false, { client_id: 'thom' });
+            callback(false, { clientId: 'thom' });
           },
           grantTypeAllowed: function (clientId, grantType, callback) {
             callback(false, true);
@@ -447,13 +447,13 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (data, callback) {
-            should.strictEqual(null, data.expires);
-            callback();
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            should.strictEqual(null, expires);
+            cb();
           },
-          saveRefreshToken: function (data, callback) {
-            should.strictEqual(null, data.expires);
-            callback();
+          saveRefreshToken: function (token, clientId, expires, user, cb) {
+            should.strictEqual(null, expires);
+            cb();
           }
         },
         grants: ['password', 'refresh_token'],

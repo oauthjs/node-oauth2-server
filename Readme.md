@@ -98,8 +98,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
          - *date* **expires**
              - The date when it expires
              - `null` to indicate the token **never expires**
-         - *string|number* **user_id**
-             - The user_id (saved in req.user.id)
+         - *string|number* **userId**
+             - The user id (saved in req.user.id)
 
 #### getClient (clientId, clientSecret, callback)
 - *string* **clientId**
@@ -111,7 +111,7 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
      - The client retrieved from storage or falsey to indicate an invalid client
      - Saved in `req.client`
      - Must contain the following keys:
-         - *string* **client_id**
+         - *string* **clientId**
 
 #### grantTypeAllowed (clientId, grantType, callback)
 - *string* **clientId**
@@ -122,12 +122,11 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *boolean* **allowed**
      - Indicates whether the grantType is allowed for this clientId
 
-#### saveAccessToken (accessToken, callback)
-- *object* **accessToken**
-  - *string* **accessToken**
-  - *string* **clientId**
-  - *string|number* **userId**
-  - *date* **expires**
+#### saveAccessToken (accessToken, clientId, expires, user, callback)
+- *string* **accessToken**
+- *string* **clientId**
+- *string|number* **userId**
+- *date* **expires**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -143,20 +142,19 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *object* **authCode**
      - The authorization code retrieved form storage or falsey to indicate invalid code
      - Must contain the following keys:
-         - *string|number* **client_id**
-             - client_id associated with this auth code
+         - *string|number* **clientId**
+             - client id associated with this auth code
          - *date* **expires**
              - The date when it expires
-         - *string|number* **user_id**
-             - The user_id
+         - *string|number* **userId**
+             - The userId
 
-#### saveAuthCode (authCode, callback)
-- *object* **authCode**
-  - *string* **auth_code**
-  - *string* **client_id**
-  - *date* **expires**
-  - *mixed* **user**
-     - Whatever was passed as `user` to the codeGrant function (see example)
+#### saveAuthCode (authCode, clientId, expires, user, callback)
+- *string* **authCode**
+- *string* **clientId**
+- *date* **expires**
+- *mixed* **user**
+   - Whatever was passed as `user` to the codeGrant function (see example)
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -178,12 +176,11 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 
 ### Required for `refresh_token` grant type
 
-#### saveRefreshToken (refreshToken, callback)
-- *object* **refreshToken**
-  - *string* **refreshToken**
-  - *string* **clientId**
-  - *string|number* **userId**
-  - *date* **expires**
+#### saveRefreshToken (refreshToken, clientId, expires, user, callback)
+- *string* **refreshToken**
+- *string* **clientId**
+- *string|number* **userId**
+- *date* **expires**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -197,13 +194,13 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *object* **refreshToken**
      - The refresh token retrieved form storage or falsey to indicate invalid refresh token
      - Must contain the following keys:
-         - *string|number* **client_id**
-             - client_id associated with this token
+         - *string|number* **clientId**
+             - client id associated with this token
          - *date* **expires**
              - The date when it expires
              - `null` to indicate the token **never expires**
-         - *string|number* **user_id**
-             - The user_id
+         - *string|number* **userId**
+             - The userId
 
 
 ### Optional for Refresh Token grant type
@@ -244,7 +241,7 @@ The spec does not actually require that you revoke the old token - hence this is
      - *null* indicates to revert to the default token generator
      - *object* indicates a reissue (i.e. will not be passed to saveAccessToken/saveRefreshToken)
          - Must contain the following keys (if object):
-           - *string* **access_token** OR **refresh_token** dependant on type
+           - *string* **accessToken** OR **refreshToken** dependant on type
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
