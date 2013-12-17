@@ -50,6 +50,18 @@ model.getClient = function (clientId, clientSecret, callback) {
 	});
 };
 
+model.getRefreshToken = function (bearerToken, callback) {
+	pg.connect(connString, function (err, client, done) {
+		if (err) return callback(err);
+		client.query('SELECT refresh_token, client_id, expires, user_id FROM oauth_refresh_tokens ' +
+				'WHERE refresh_token = $1', [bearerToken], function (err, result) {
+			// The returned user_id will be exposed in req.user.id	
+			callback(err, result.rowCount ? result.rows[0] : false);
+			done();
+		});
+	});
+};
+
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
 // it gives an example of how to use the method to resrict certain grant types
 var authorizedClientIds = ['abc1', 'def2'];
