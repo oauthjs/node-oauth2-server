@@ -18,6 +18,7 @@ var dal = require('./dal.js');
 model = module.exports;
 
 var OAuthAccessTokenTable = "oauth2accesstoken";
+var OAuthAuthCodeTable = "oauth2authcode";
 var OAuthRefreshTokenTable = "oauth2refreshtoken";
 var OAuthClientTable = "oauth2client";
 var OAuthUserTable = "userid_map";
@@ -104,6 +105,33 @@ model.revokeRefreshToken = function(bearerToken, callback) {
     dal.doDelete(OAuthRefreshTokenTable,
         {"refreshToken": {"S": bearerToken}}, callback);
 };
+
+model.getAuthCode = function (bearerCode, callback) {
+    console.log("in getAuthCode (bearerCode: " + bearerCode + ")");
+
+    dal.doGet(OAuthAuthCodeTable,
+        {"authCode": {"S": bearerCode}}, true, function(err, data) {
+            if (data && data.expires) {
+                data.expires = new Date(data.expires * 1000);
+            }
+            callback(err, data);
+        });
+};
+
+model.saveAuthCode = function (authCode, clientId, expires, user, callback) {
+    console.log('in saveAuthCode (authCode: ' + authCode + ', clientId: ' + clientId + ', userId: ' + user.id + ', expires: ' + expires + ')');
+
+    var token = {};
+    token.authCode = authCode;
+    token.clientId = clientId;
+    token.userId = user.id;
+    if (expires)
+        token.expires = parseInt(expires.getTime()/1000);
+    console.log("saving", token);
+
+    dal.doSet(token, OAuthAuthCodeTable, {"authCode": {"S": authCode}}, callback);
+};
+
 
 /*
  * Required to support password grant type
