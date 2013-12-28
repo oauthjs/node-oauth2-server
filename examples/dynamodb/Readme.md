@@ -77,6 +77,27 @@ var OAuth2RefreshToken =
     }
 };
 
+var OAuth2AuthCode =
+{
+    AttributeDefinitions: [
+        {
+            AttributeName: "authCode",
+            AttributeType: "S"
+        }
+    ],
+    TableName: "oauth2authcode",
+    KeySchema: [
+        {
+            AttributeName: "authCode",
+            KeyType: "HASH"
+        }
+    ],
+    ProvisionedThroughput: {
+        ReadCapacityUnits: 6,
+        WriteCapacityUnits: 6
+    }
+};
+
 var OAuth2Client =
 {
     AttributeDefinitions: [
