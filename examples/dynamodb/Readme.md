@@ -7,7 +7,7 @@ http://aws.amazon.com/sdkfornodejs/
 
 You will need to create the required tables (see below):
 
-The object exposed in model.js could be directly passed into the model paramater of the config
+The object exposed in model.js could be directly passed into the model parameter of the config
 object when initiating.
 
 For example:
@@ -15,15 +15,14 @@ For example:
 ```js
 ...
 
+
 app.configure(function() {
-	var oauth = oauthserver({
-		model: require('./model'),
-		grants: ['password'],
-		debug: true
-	});
-	app.use(express.bodyParser());
-	app.use(oauth.handler());
-	app.use(oauth.errorHandler());
+  app.oauth = oauthserver({
+    model: require('./model'),
+    grants: ['password', 'refresh_token'],
+    debug: true
+  });
+  app.use(express.bodyParser());
 });
 
 ...
@@ -40,14 +39,14 @@ var OAuth2AccessToken =
 {
     AttributeDefinitions: [
         {
-            AttributeName: "access_token",
+            AttributeName: "accessToken",
             AttributeType: "S"
         }
     ],
     TableName: "oauth2accesstoken",
     KeySchema: [
         {
-            AttributeName: "access_token",
+            AttributeName: "accessToken",
             KeyType: "HASH"
         }
     ],
@@ -57,26 +56,47 @@ var OAuth2AccessToken =
     }
 };
 
+var OAuth2RefreshToken =
+{
+    AttributeDefinitions: [
+        {
+            AttributeName: "refreshToken",
+            AttributeType: "S"
+        }
+    ],
+    TableName: "oauth2refreshtoken",
+    KeySchema: [
+        {
+            AttributeName: "refreshToken",
+            KeyType: "HASH"
+        }
+    ],
+    ProvisionedThroughput: {
+        ReadCapacityUnits: 6,
+        WriteCapacityUnits: 6
+    }
+};
+
 var OAuth2Client =
 {
     AttributeDefinitions: [
         {
-            AttributeName: "client_id",
+            AttributeName: "clientId",
             AttributeType: "S"
         },
         {
-            AttributeName: "client_secret",
+            AttributeName: "clientSecret",
             AttributeType: "S"
         }
     ],
     TableName: "oauth2client",
     KeySchema: [
         {
-            AttributeName: "client_id",
+            AttributeName: "clientId",
             KeyType: "HASH"
         },
         {
-            AttributeName: "client_secret",
+            AttributeName: "clientSecret",
             KeyType: "RANGE"
         }
     ],

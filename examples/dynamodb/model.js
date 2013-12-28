@@ -18,62 +18,106 @@ var dal = require('./dal.js');
 model = module.exports;
 
 var OAuthAccessTokenTable = "oauth2accesstoken";
+var OAuthRefreshTokenTable = "oauth2refreshtoken";
 var OAuthClientTable = "oauth2client";
-var OAuthUserTable = "oauth2user";
+var OAuthUserTable = "userid_map";
 
 //
 // node-oauth2-server callbacks
 //
 model.getAccessToken = function (bearerToken, callback) {
-	console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
+    console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
 
-	dal.doGet(OAuthAccessTokenTable, { access_token: { S: bearerToken }}, true, callback);
+    dal.doGet(OAuthAccessTokenTable,
+        {"accessToken": {"S": bearerToken}}, true, function(err, data) {
+            if (data && data.expires) {
+                data.expires = new Date(data.expires * 1000);
+            }
+            callback(err, data);
+        });
 };
 
 model.getClient = function (clientId, clientSecret, callback) {
-	console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
-
-	dal.doGet(OAuthClientTable, { client_id: { S: clientId }, client_secret: { S: clientSecret }},
-		true, callback);
+    console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
+    dal.doGet(OAuthClientTable,
+        {"clientId": {"S": clientId}, "clientSecret": {"S": clientSecret}},
+        true, callback);
 };
 
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
 // it gives an example of how to use the method to restrict certain grant types
 var authorizedClientIds = ['abc1', 'def2'];
 model.grantTypeAllowed = function (clientId, grantType, callback) {
-	console.log('in grantTypeAllowed (clientId: ' + clientId + ', grantType: ' + grantType + ')');
+    console.log('in grantTypeAllowed (clientId: ' + clientId + ', grantType: ' + grantType + ')');
 
-	if (grantType === 'password') {
-		return callback(false, authorizedClientIds.indexOf(clientId) >= 0);
-	}
+    if (grantType === 'password') {
+        callback(false, authorizedClientIds.indexOf(clientId) >= 0);
+        return;
+    }
 
-	callback(false, true);
+    callback(false, true);
 };
 
-model.saveAccessToken = function (accessToken, clientId, userId, expires, callback) {
-	console.log('in saveAccessToken (accessToken: ' + accessToken + ', clientId: ' + clientId +
-		', userId: ' + userId + ', expires: ' + expires + ')');
+model.saveAccessToken = function (accessToken, clientId, expires, user, callback) {
+    console.log('in saveAccessToken (accessToken: ' + accessToken + ', clientId: ' + clientId + ', userId: ' + user.id + ', expires: ' + expires + ')');
 
-	var token = {
-		access_token: accessToken,
-		client_id: clientId,
-		user_id: userId,
-		expires: parseInt(expires / 1000, 10) // store as a unix timestamp
-	};
+    var token = {};
+    token.accessToken = accessToken;
+    token.clientId = clientId;
+    token.userId = user.id;
+    if (expires)
+        token.expires = parseInt(expires.getTime()/1000);
+    console.log("saving", token);
 
-	dal.doSet(token, OAuthAccessTokenTable, { access_token: { S: accessToken }}, callback);
+    dal.doSet(token, OAuthAccessTokenTable, {"accessToken": {"S": accessToken}}, callback);
+};
+
+model.saveRefreshToken = function (refreshToken, clientId, expires, user, callback) {
+    console.log('in saveRefreshToken (refreshToken: ' + refreshToken + ', clientId: ' + clientId + ', userId: ' + user.id + ', expires: ' + expires + ')');
+
+    var token = {};
+    token.refreshToken = refreshToken;
+    token.clientId = clientId;
+    token.userId = user.id;
+    if (expires)
+        token.expires = parseInt(expires.getTime()/1000);
+    console.log("saving", token);
+
+    dal.doSet(token, OAuthRefreshTokenTable, {"refreshToken": {"S": refreshToken}}, callback);
+};
+
+model.getRefreshToken = function (bearerToken, callback) {
+    console.log("in getRefreshToken (bearerToken: " + bearerToken + ")");
+
+    dal.doGet(OAuthRefreshTokenTable,
+        {"refreshToken": {"S": bearerToken}}, true, function(err, data) {
+            if (data && data.expires) {
+                data.expires = new Date(data.expires * 1000);
+            }
+            callback(err, data);
+        });
+};
+
+model.revokeRefreshToken = function(bearerToken, callback) {
+    console.log("in revokeRefreshToken (bearerToken: " + bearerToken + ")");
+    
+    dal.doDelete(OAuthRefreshTokenTable,
+        {"refreshToken": {"S": bearerToken}}, callback);
 };
 
 /*
  * Required to support password grant type
  */
-//This will probably just be a hook into your existing user database but
-//must return an object with a numeric or string `id` property
 model.getUser = function (username, password, callback) {
-	console.log('in getUser (username: ' + username + ', password: ' + password + ')');
+    console.log('in getUser (username: ' + username + ', password: ' + password + ')');
 
-	dal.doGet(OAuthUserTable, { username: { S: username }, password: { S: password }}, true,
-			function(err, data) {
-		callback(err, data && { id: data.username });
-	});
+    dal.doGet(OAuthUserTable,
+        {"id": {"S": "email:" + username}}, true, function(err, data) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            var userId = data.userId;
+            callback(null, {id: userId});
+        });
 };
