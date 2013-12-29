@@ -40,9 +40,30 @@ model.getAccessToken = function (bearerToken, callback) {
 
 model.getClient = function (clientId, clientSecret, callback) {
     console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
+    if (typeof clientSecret == "function")
+    {
+        callback = clientSecret;
+        clientSecret = null;
+    }
     dal.doGet(OAuthClientTable,
-        {"clientId": {"S": clientId}, "clientSecret": {"S": clientSecret}},
-        true, callback);
+        {"clientId": {"S": clientId}},
+        true, function(err, data) {
+            if (err || !data) {
+                callback(err, data);
+                return;
+            }
+            
+            if (!clientSecret) {
+                callback(err, data);
+            } else {
+                if (!data.clientSecret || !data.clientSecret == clientSecret) {
+                    callback(err, null);
+                    return;
+                }
+                callback(err, data);
+            }
+            
+        });
 };
 
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
