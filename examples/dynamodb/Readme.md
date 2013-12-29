@@ -104,10 +104,6 @@ var OAuth2Client =
         {
             AttributeName: "clientId",
             AttributeType: "S"
-        },
-        {
-            AttributeName: "clientSecret",
-            AttributeType: "S"
         }
     ],
     TableName: "oauth2client",
@@ -115,10 +111,6 @@ var OAuth2Client =
         {
             AttributeName: "clientId",
             KeyType: "HASH"
-        },
-        {
-            AttributeName: "clientSecret",
-            KeyType: "RANGE"
         }
     ],
     ProvisionedThroughput: {
