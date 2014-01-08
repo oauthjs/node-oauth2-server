@@ -50,6 +50,21 @@ model.getClient = function (clientId, clientSecret, callback) {
 	});
 };
 
+model.getRefreshToken = function (bearerToken, callback) {
+	pg.connect(connString, function (err, client, done) {
+		if (err) return callback(err);
+		client.query('SELECT refresh_token, client_id, expires, user_id FROM oauth_refresh_tokens ' +
+				'WHERE refresh_token = $1', [bearerToken], function (err, result) {
+			// This object will be exposed in req.oauth.token
+			// The user_id field will be exposed in req.user (req.user = { id: "..." }) however if
+			// an explicit user object is included (token.user, must include id) it will be exposed
+			// in req.user instead
+			callback(err, result.rowCount ? result.rows[0] : false);
+			done();
+		});
+	});
+};
+
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
 // it gives an example of how to use the method to resrict certain grant types
 var authorizedClientIds = ['abc1', 'def2'];
