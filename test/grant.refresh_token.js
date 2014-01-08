@@ -196,6 +196,51 @@ describe('Granting with refresh_token grant type', function () {
 
   });
 
+  it('should allow valid request with user object', function (done) {
+    var app = bootstrap({
+      model: {
+        getClient: function (id, secret, callback) {
+          callback(false, { clientId: 'thom' });
+        },
+        grantTypeAllowed: function (clientId, grantType, callback) {
+          callback(false, true);
+        },
+        getRefreshToken: function (refreshToken, callback) {
+          refreshToken.should.equal('abc123');
+          callback(false, {
+            clientId: 'thom',
+            expires: new Date(),
+            user: {
+              id: '123'
+            }
+          });
+        },
+        saveAccessToken: function (token, clientId, expires, user, cb) {
+          cb();
+        },
+        saveRefreshToken: function (token, clientId, expires, user, cb) {
+          cb();
+        },
+        expireRefreshToken: function (refreshToken, callback) {
+          callback();
+        }
+      },
+      grants: ['password', 'refresh_token']
+    });
+
+    request(app)
+      .post('/oauth/token')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .send({
+        grant_type: 'refresh_token',
+        client_id: 'thom',
+        client_secret: 'nightworld',
+        refresh_token: 'abc123'
+      })
+      .expect(200, /"access_token":"(.*)",(.*)"refresh_token":"(.*)"/i, done);
+
+  });
+
   it('should allow valid request with non-expiring token (token= null)', function (done) {
     var app = bootstrap({
       model: {
