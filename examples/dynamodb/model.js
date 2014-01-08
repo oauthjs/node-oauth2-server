@@ -40,11 +40,6 @@ model.getAccessToken = function (bearerToken, callback) {
 
 model.getClient = function (clientId, clientSecret, callback) {
     console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
-    if (typeof clientSecret == "function")
-    {
-        callback = clientSecret;
-        clientSecret = null;
-    }
     dal.doGet(OAuthClientTable,
         {"clientId": {"S": clientId}},
         true, function(err, data) {
@@ -53,15 +48,11 @@ model.getClient = function (clientId, clientSecret, callback) {
                 return;
             }
             
-            if (!clientSecret) {
-                callback(err, data);
-            } else {
-                if (!data.clientSecret || !data.clientSecret == clientSecret) {
-                    callback(err, null);
-                    return;
-                }
-                callback(err, data);
+            if (data.clientSecret != clientSecret) {
+                callback(err, null);
+                return;
             }
+            callback(err, data);
             
         });
 };
