@@ -25,43 +25,43 @@ var OAuthUserTable = "oauth2user";
 // node-oauth2-server callbacks
 //
 model.getAccessToken = function (bearerToken, callback) {
-    console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
+	console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
 
-    dal.doGet(OAuthAccessTokenTable,
-        {"access_token": {"S": bearerToken}}, true, callback);
+	dal.doGet(OAuthAccessTokenTable, { access_token: { S: bearerToken }}, true, callback);
 };
 
 model.getClient = function (clientId, clientSecret, callback) {
-    console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
-    dal.doGet(OAuthClientTable,
-        {"client_id": {"S": clientId}, "client_secret": {"S": clientSecret}},
-        true, callback);
+	console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
+
+	dal.doGet(OAuthClientTable, { client_id: { S: clientId }, client_secret: { S: clientSecret }},
+		true, callback);
 };
 
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
 // it gives an example of how to use the method to restrict certain grant types
 var authorizedClientIds = ['abc1', 'def2'];
 model.grantTypeAllowed = function (clientId, grantType, callback) {
-    console.log('in grantTypeAllowed (clientId: ' + clientId + ', grantType: ' + grantType + ')');
+	console.log('in grantTypeAllowed (clientId: ' + clientId + ', grantType: ' + grantType + ')');
 
-    if (grantType === 'password') {
-        callback(false, authorizedClientIds.indexOf(clientId) >= 0);
-        return;
-    }
+	if (grantType === 'password') {
+		return callback(false, authorizedClientIds.indexOf(clientId) >= 0);
+	}
 
-    callback(false, true);
+	callback(false, true);
 };
 
 model.saveAccessToken = function (accessToken, clientId, userId, expires, callback) {
-    console.log('in saveAccessToken (accessToken: ' + accessToken + ', clientId: ' + clientId + ', userId: ' + userId + ', expires: ' + expires + ')');
+	console.log('in saveAccessToken (accessToken: ' + accessToken + ', clientId: ' + clientId +
+		', userId: ' + userId + ', expires: ' + expires + ')');
 
-    var token = {};
-    token.access_token = accessToken;
-    token.client_id = clientId;
-    token.user_id = userId;
-    token.expires = expires.getTime()/1000; // store as a unix timestamp
+	var token = {
+		access_token: accessToken,
+		client_id: clientId,
+		user_id: userId,
+		expires: parseInt(expires / 1000, 10) // store as a unix timestamp
+	};
 
-    dal.doSet(token, OAuthAccessTokenTable, {"access_token": {"S": accessToken}}, callback);
+	dal.doSet(token, OAuthAccessTokenTable, { access_token: { S: accessToken }}, callback);
 };
 
 /*
@@ -70,15 +70,10 @@ model.saveAccessToken = function (accessToken, clientId, userId, expires, callba
 //This will probably just be a hook into your existing user database but
 //must return an object with a numeric or string `id` property
 model.getUser = function (username, password, callback) {
-    console.log('in getUser (username: ' + username + ', password: ' + password + ')');
+	console.log('in getUser (username: ' + username + ', password: ' + password + ')');
 
-    dal.doGet(OAuthUserTable,
-        {"username": {"S": username}, "password": {"S": password}}, true, function(err, data) {
-            if (err) {
-                callback(err);
-                return;
-            }
-            
-            callback({id: data.username});
-        });
+	dal.doGet(OAuthUserTable, { username: { S: username }, password: { S: password }}, true,
+			function(err, data) {
+		callback(err, data && { id: data.username });
+	});
 };
