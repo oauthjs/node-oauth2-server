@@ -78,7 +78,7 @@ describe('AuthCodeGrant', function() {
 
   it('should detect invalid client', function (done) {
     var app = bootstrap({
-      getClient: function (clientId, callback) {
+      getClient: function (clientId, clientSecret, callback) {
         callback(); // Fake invalid
       }
     });
@@ -95,7 +95,7 @@ describe('AuthCodeGrant', function() {
 
   it('should detect mismatching redirect_uri', function (done) {
     var app = bootstrap({
-      getClient: function (clientId, callback) {
+      getClient: function (clientId, clientSecret, callback) {
         callback(false, {
           clientId: 'thom',
           redirectUri: 'http://nightworld.com'
@@ -115,7 +115,7 @@ describe('AuthCodeGrant', function() {
 
   it('should detect user access denied', function (done) {
     var app = bootstrap({
-      getClient: function (clientId, callback) {
+      getClient: function (clientId, clientSecret, callback) {
         callback(false, {
           clientId: 'thom',
           redirectUri: 'http://nightworld.com'
@@ -136,7 +136,7 @@ describe('AuthCodeGrant', function() {
 
   it('should try to save auth code', function (done) {
     var app = bootstrap({
-      getClient: function (clientId, callback) {
+      getClient: function (clientId, clientSecret, callback) {
         callback(false, {
           clientId: 'thom',
           redirectUri: 'http://nightworld.com'
@@ -165,7 +165,7 @@ describe('AuthCodeGrant', function() {
     var code;
 
     var app = bootstrap({
-      getClient: function (clientId, callback) {
+      getClient: function (clientId, clientSecret, callback) {
         callback(false, {
           clientId: 'thom',
           redirectUri: 'http://nightworld.com'
