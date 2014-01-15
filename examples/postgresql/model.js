@@ -47,13 +47,16 @@ model.getAccessToken = function (bearerToken, callback) {
 model.getClient = function (clientId, clientSecret, callback) {
 	pg.connect(connString, function (err, client, done) {
 		if (err) return callback(err);
+
 		client.query('SELECT client_id, client_secret, redirect_uri FROM oauth_clients WHERE ' +
-				'client_id = $1 AND client_secret = $2', [clientId, clientSecret],
-				function (err, result) {
+			'client_id = $1', [clientId], function (err, result) {
 			if (err || !result.rowCount) return callback(err);
 
-			// This object will be exposed in req.oauth.client
 			var client = result.rows[0];
+
+			if (clientSecret !== null && client.client_secret !== clientSecret) return callback();
+
+			// This object will be exposed in req.oauth.client
 			callback(null, {
 				clientId: client.client_id,
 				clientSecret: client.client_secret

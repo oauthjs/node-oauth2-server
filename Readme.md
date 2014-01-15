@@ -103,7 +103,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 
 #### getClient (clientId, clientSecret, callback)
 - *string* **clientId**
-- *string* **clientSecret**
+- *string|null* **clientSecret**
+ - If null, omit from search query (only search by clientId)
 - *function* **callback (error, client)**
  - *mixed* **error**
      - Truthy to indicate an error
