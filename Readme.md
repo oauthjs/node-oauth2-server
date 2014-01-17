@@ -1,4 +1,4 @@
-# Node OAuth2 Server [![Build Status](https://travis-ci.org/nightworld/node-oauth2-server.png?branch=master)](https://travis-ci.org/nightworld/node-oauth2-server)
+# Node OAuth2 Server [![Build Status](https://travis-ci.org/thomseddon/node-oauth2-server.png?branch=2.0)](https://travis-ci.org/thomseddon/node-oauth2-server)
 
 Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with [express](http://expressjs.com/) in [node.js](http://nodejs.org/)
 
@@ -79,7 +79,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 The module requires a model object through which some aspects or storage, retrieval and custom validation are abstracted.
 The last parameter of all methods is a callback of which the first parameter is always used to indicate an error.
 
-Note: see https://github.com/nightworld/node-oauth2-server/tree/master/examples/postgresql for a full model example using postgres.
+Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/postgresql for a full model example using postgres.
 
 ### Always Required
 
@@ -287,14 +287,12 @@ Pragma: no-cache
 
 ## Changelog
 
-See: https://github.com/nightworld/node-oauth2-server/releases
+See: https://github.com/thomseddon/node-oauth2-server/releases
 
 ## Credits
 
-Copyright (c) 2013 NightWorld
-
-Created by Thom Seddon
+Copyright (c) 2013 Thom Seddon
 
 ## License
 
-[Apache, Version 2.0](https://github.com/nightworld/node-oauth2-server/blob/master/LICENSE)
+[Apache, Version 2.0](https://github.com/thomseddon/node-oauth2-server/blob/master/LICENSE)
