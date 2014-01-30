@@ -2,7 +2,7 @@
 
 See schema.sql for the tables referred to in this example
 
-The object exposed in model.js could be directly passed into the model paramater of the config
+The object exposed in model.js could be directly passed into the model parameter of the config
 object when initiating.
 
 For example:
