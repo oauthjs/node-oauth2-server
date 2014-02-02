@@ -152,9 +152,8 @@ describe('Grant', function() {
 
       request(app)
         .post('/oauth/token')
-        .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxkCg==')
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .send({ grant_type: 'password' })
+        .send('grant_type=password&username=test&password=invalid')
+        .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
         .expect(400, done);
     });
 
