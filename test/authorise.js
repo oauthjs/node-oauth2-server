@@ -20,13 +20,15 @@ var express = require('express'),
 
 var oauth2server = require('../');
 
-var bootstrap = function (oauthConfig, bindErrorHandler) {
-  if (oauthConfig === 'fakeInvalidToken') {
+var bootstrap = function (oauthConfig) {
+  if (oauthConfig === 'mockValid') {
     oauthConfig = {
       model: {
         getAccessToken: function (token, callback) {
           token.should.equal('thom');
-          callback(false, false); // Fake invalid token
+          var expires = new Date();
+          expires.setSeconds(expires.getSeconds() + 20);
+          callback(false, { expires: expires });
         }
       }
     };
@@ -38,164 +40,138 @@ var bootstrap = function (oauthConfig, bindErrorHandler) {
   app.use(express.bodyParser());
   app.all('/', app.oauth.authorise());
 
-  if (bindErrorHandler === undefined || bindErrorHandler) {
-    app.use(app.oauth.errorHandler());
-  }
+
+  app.all('/', function (req, res) {
+    res.send('nightworld');
+  });
+
+  app.use(app.oauth.errorHandler());
 
   return app;
 };
 
 describe('Authorise', function() {
 
-  describe('getBearerToken', function () {
-    it('should detect no access token', function (done) {
-      var app = bootstrap();
+  it('should detect no access token', function (done) {
+    var app = bootstrap('mockValid');
 
-      request(app)
-        .get('/')
-        .expect(400, /the access token was not found/i, done);
-    });
-
-    it('should retrieve access token from header', function (done) {
-      var app = bootstrap('fakeInvalidToken');
-
-      request(app)
-        .get('/')
-        .set('Authorization', 'Bearer thom')
-        .expect(401, /the access token provided is invalid/i, done);
-    });
-
-    it('should detect malformed header', function (done) {
-      var app = bootstrap();
-
-      request(app)
-        .get('/')
-        .set('Authorization', 'Invalid')
-        .expect(400, /malformed auth header/i, done);
-    });
-
-    it('should require application/x-www-form-urlencoded when access token is in body',
-        function (done) {
-      var app = bootstrap('fakeInvalidToken');
-
-      request(app)
-        .post('/')
-        .send({ access_token: 'thom' })
-        .expect(400, /content type must be application\/x-www-form-urlencoded/i, done);
-    });
-
-    it('should retrieve access token from body', function (done) {
-      var app = bootstrap('fakeInvalidToken');
-
-      request(app)
-        .post('/')
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .send({ access_token: 'thom' })
-        .expect(401, /the access token provided is invalid/i, done);
-    });
-
-    it('should not allow GET when access token in body', function (done) {
-      var app = bootstrap();
-
-      request(app)
-        .get('/')
-        .send({ access_token: 'thom' })
-        .expect(400, /method cannot be GET/i, done);
-    });
-
-    it('should retrieve token from query parameters', function (done) {
-      var app = bootstrap('fakeInvalidToken');
-
-      request(app)
-        .get('/?access_token=thom')
-        .expect(401, /the access token provided is invalid/i, done);
-    });
-
-    it('should allow exactly one method (get: query + auth)', function (done) {
-      var app = bootstrap();
-
-      request(app)
-        .get('/?access_token=thom')
-        .set('Authorization', 'Invalid')
-        .expect(400, /only one method may be used/i, done);
-    });
-
-    it('should allow exactly one method (post: query + body)', function (done) {
-      var app = bootstrap();
-
-      request(app)
-        .post('/?access_token=thom')
-        .set('Authorization', 'Invalid')
-        .expect(400, /only one method may be used/i, done);
-    });
+    request(app)
+      .get('/')
+      .expect(400, /the access token was not found/i, done);
   });
 
-  describe('validate access token', function () {
+  it('should allow valid token as query param', function (done){
+    var app = bootstrap('mockValid');
 
-    it('should detect invalid token', function (done){
-      var app = bootstrap('fakeInvalidToken');
-
-      request(app)
-        .get('/?access_token=thom')
-        .expect(401, /the access token provided is invalid/i, done);
-    });
-
-    it('should detect invalid token', function (done){
-      var app = bootstrap({
-        model: {
-          getAccessToken: function (token, callback) {
-            callback(false, { expires: 0 }); // Fake expires
-          }
-        }
-      });
-
-      request(app)
-        .get('/?access_token=thom')
-        .expect(401, /the access token provided has expired/i, done);
-    });
-
-    it('should passthrough with a valid token', function (done){
-      var app = bootstrap({
-        model: {
-          getAccessToken: function (token, callback) {
-            var expires = new Date();
-            expires.setSeconds(expires.getSeconds() + 20);
-            callback(false, { expires: expires });
-          }
-        }
-      });
-
-      app.get('/', function (req, res) {
-        res.send('nightworld');
-      });
-
-      request(app)
-        .get('/?access_token=thom')
-        .expect(/nightworld/, 200, done);
-    });
-
-    it('should passthrough with valid, non-expiring token (token = null)', function (done) {
-      var app = bootstrap({
-        model: {
-          getAccessToken: function (token, callback) {
-            callback(false, { expires: null });
-          }
-        }
-      }, false);
-
-      app.get('/', app.oauth.authorise(), function (req, res) {
-        res.send('nightworld');
-      });
-
-      app.use(app.oauth.errorHandler());
-
-      request(app)
-        .get('/?access_token=thom')
-        .expect(/nightworld/, 200, done);
-    });
+    request(app)
+      .get('/?access_token=thom')
+      .expect(/nightworld/, 200, done);
   });
 
-  it('should expose the user_id', function (done) {
+  it('should require application/x-www-form-urlencoded when access token is ' +
+      'in body', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .post('/')
+      .send({ access_token: 'thom' })
+      .expect(400, /content type must be application\/x-www-form-urlencoded/i,
+        done);
+  });
+
+  it('should not allow GET when access token in body', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .get('/')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .send({ access_token: 'thom' })
+      .expect(400, /method cannot be GET/i, done);
+  });
+
+  it('should allow valid token in body', function (done){
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .post('/')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .send({ access_token: 'thom' })
+      .expect(/nightworld/, 200, done);
+  });
+
+  it('should detect malformed header', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .get('/')
+      .set('Authorization', 'Invalid')
+      .expect(400, /malformed auth header/i, done);
+  });
+
+  it('should allow valid token in header', function (done){
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .get('/')
+      .set('Authorization', 'Bearer thom')
+      .expect(/nightworld/, 200, done);
+  });
+
+  it('should allow exactly one method (get: query + auth)', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .get('/?access_token=thom')
+      .set('Authorization', 'Invalid')
+      .expect(400, /only one method may be used/i, done);
+  });
+
+  it('should allow exactly one method (post: query + body)', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .post('/?access_token=thom')
+      .set('Authorization', 'Invalid')
+      .expect(400, /only one method may be used/i, done);
+  });
+
+  it('should detect expired token', function (done){
+    var app = bootstrap({
+      model: {
+        getAccessToken: function (token, callback) {
+          callback(false, { expires: 0 }); // Fake expires
+        }
+      }
+    });
+
+    request(app)
+      .get('/?access_token=thom')
+      .expect(401, /the access token provided has expired/i, done);
+  });
+
+  it('should passthrough with valid, non-expiring token (token = null)',
+      function (done) {
+    var app = bootstrap({
+      model: {
+        getAccessToken: function (token, callback) {
+          token.should.equal('thom');
+          callback(false, { expires: null });
+        }
+      }
+    }, false);
+
+    app.get('/', app.oauth.authorise(), function (req, res) {
+      res.send('nightworld');
+    });
+
+    app.use(app.oauth.errorHandler());
+
+    request(app)
+      .get('/?access_token=thom')
+      .expect(/nightworld/, 200, done);
+  });
+
+  it('should expose the user id when setting userId', function (done) {
     var app = bootstrap({
       model: {
         getAccessToken: function (token, callback) {
@@ -210,6 +186,33 @@ describe('Authorise', function() {
       req.should.have.property('user');
       req.user.should.have.property('id');
       req.user.id.should.equal(1);
+      res.send('nightworld');
+    });
+
+    app.use(app.oauth.errorHandler());
+
+    request(app)
+      .get('/?access_token=thom')
+      .expect(/nightworld/, 200, done);
+  });
+
+  it('should expose the user id when setting user object', function (done) {
+    var app = bootstrap({
+      model: {
+        getAccessToken: function (token, callback) {
+          var expires = new Date();
+          expires.setSeconds(expires.getSeconds() + 20);
+          callback(false, { expires: expires , user: { id: 1, name: 'thom' }});
+        }
+      }
+    }, false);
+
+    app.get('/', app.oauth.authorise(), function (req, res) {
+      req.should.have.property('user');
+      req.user.should.have.property('id');
+      req.user.id.should.equal(1);
+      req.user.should.have.property('name');
+      req.user.name.should.equal('thom');
       res.send('nightworld');
     });
 
