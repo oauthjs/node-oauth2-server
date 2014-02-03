@@ -76,6 +76,8 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
  - Default: `/^[a-z0-9-_]{3,40}$/i`
 - *boolean* **passthroughErrors**
  - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
+- *boolean* **continueAfterResponse**
+ - If true, `next` will be called even if a reponse has been sent (you probably don't want this)
 
 ## Model Specification
 
