@@ -77,7 +77,7 @@ model.grantTypeAllowed = function (clientId, grantType, callback) {
 	callback(false, true);
 };
 
-model.saveAccessToken = function (accessToken, clientId, userId, expires, callback) {
+model.saveAccessToken = function (accessToken, clientId, expires, userId, callback) {
 	pg.connect(connString, function (err, client, done) {
 		if (err) return callback(err);
 		client.query('INSERT INTO oauth_access_tokens(access_token, client_id, user_id, expires) ' +
