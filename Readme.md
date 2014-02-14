@@ -2,12 +2,11 @@
 
 Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with [express](http://expressjs.com/) in [node.js](http://nodejs.org/)
 
-## 2.0
-Version is under active development, for a preview see the 2.0 branch: https://github.com/thomseddon/node-oauth2-server/tree/2.0
-
 ## Installation
 
-  $ npm install node-oauth2-server
+```
+npm install node-oauth2-server
+```
 
 ## Quick Start
 
