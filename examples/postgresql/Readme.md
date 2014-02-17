@@ -11,14 +11,14 @@ For example:
 ...
 
 app.configure(function() {
-	var oauth = oauthserver({
-		model: require('./model'),
-		grants: ['password'],
-		debug: true
-	});
-	app.use(express.bodyParser());
-	app.use(oauth.handler());
-	app.use(oauth.errorHandler());
+  var oauth = oauthserver({
+    model: require('./model'),
+    grants: ['password'],
+    debug: true
+  });
+  app.use(express.bodyParser());
+  app.use(oauth.handler());
+  app.use(oauth.errorHandler());
 });
 
 ...

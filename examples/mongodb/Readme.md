@@ -14,11 +14,11 @@ var uristring = 'mongodb://localhost/test';
 // Makes connection asynchronously. Mongoose will queue up database
 // operations and release them when the connection is complete.
 mongoose.connect(uristring, function (err, res) {
-	if (err) { 
-		console.log ('ERROR connecting to: ' + uristring + '. ' + err);
-	} else {
-		console.log ('Succeeded connected to: ' + uristring);
-	}
+  if (err) { 
+    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+    console.log ('Succeeded connected to: ' + uristring);
+  }
 });
 
 ...
@@ -33,14 +33,14 @@ For example:
 ...
 
 app.configure(function() {
-	var oauth = oauthserver({
-		model: require('./model'),
-		grants: ['password'],
-		debug: true
-	});
-	app.use(express.bodyParser());
-	app.use(oauth.handler());
-	app.use(oauth.errorHandler());
+  var oauth = oauthserver({
+    model: require('./model'),
+    grants: ['password'],
+    debug: true
+  });
+  app.use(express.bodyParser());
+  app.use(oauth.handler());
+  app.use(oauth.errorHandler());
 });
 
 ...
