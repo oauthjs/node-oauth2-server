@@ -74,7 +74,7 @@ model.grantTypeAllowed = function (clientId, grantType, callback) {
     authorizedClientIds[grantType].indexOf(clientId.toLowerCase()) >= 0);
 };
 
-model.saveAccessToken = function (accessToken, clientId, userId, expires, callback) {
+model.saveAccessToken = function (accessToken, clientId, expires, userId, callback) {
   oauthAccessTokens.unshift({
     access_token: accessToken,
     client_id: clientId,
@@ -85,7 +85,7 @@ model.saveAccessToken = function (accessToken, clientId, userId, expires, callba
   callback(false);
 };
 
-model.saveRefreshToken = function (refreshToken, clientId, userId, expires, callback) {
+model.saveRefreshToken = function (refreshToken, clientId, expires, userId, callback) {
   oauthRefreshTokens.unshift({
     refresh_token: refreshToken,
     client_id: clientId,

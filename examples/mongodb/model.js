@@ -87,7 +87,7 @@ model.grantTypeAllowed = function (clientId, grantType, callback) {
   callback(false, true);
 };
 
-model.saveAccessToken = function (token, clientId, userId, expires, callback) {
+model.saveAccessToken = function (token, clientId, expires, userId, callback) {
   console.log('in saveAccessToken (token: ' + token + ', clientId: ' + clientId + ', userId: ' + userId + ', expires: ' + expires + ')');
 
   var accessToken = new OAuthAccessTokensModel({
@@ -112,7 +112,7 @@ model.getUser = function (username, password, callback) {
 /*
  * Required to support refresh_token grant type
  */
-model.saveRefreshToken = function (token, clientId, userId, expires, callback) {
+model.saveRefreshToken = function (token, clientId, expires, userId, callback) {
   console.log('in saveRefreshToken (token: ' + token + ', clientId: ' + clientId +', userId: ' + userId + ', expires: ' + expires + ')');
 
   var refreshToken = new OAuthRefreshTokensModel({
