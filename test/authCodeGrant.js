@@ -90,6 +90,7 @@ describe('AuthCodeGrant', function() {
         client_id: 'thom',
         redirect_uri: 'http://nightworld.com'
       })
+      .expect('WWW-Authenticate', 'Basic realm="Service"')
       .expect(400, /invalid client credentials/i, done);
   });
 
