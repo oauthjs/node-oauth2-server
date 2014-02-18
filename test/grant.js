@@ -92,7 +92,6 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password' })
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /invalid or missing client_id parameter/i, done);
     });
 
@@ -107,7 +106,6 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom' })
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /invalid or missing client_id parameter/i, done);
     });
 
@@ -118,7 +116,6 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom' })
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /missing client_secret parameter/i, done);
     });
 
@@ -157,7 +154,6 @@ describe('Grant', function() {
         .post('/oauth/token')
         .send('grant_type=password&username=test&password=invalid')
         .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, done);
     });
 
@@ -197,7 +193,6 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /client credentials are invalid/i, done);
     });
   });
@@ -220,7 +215,6 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /grant type is unauthorised for this client_id/i, done);
     });
   });
@@ -481,44 +475,6 @@ describe('Grant', function() {
           res.body.refresh_token.should.have.length(40);
           res.body.token_type.should.equal('bearer');
 
-          done();
-        });
-
-    });
-
-    it('should continue after response if continueAfterResponse = true', function (done) {
-      var app = bootstrap({
-        model: {
-          getClient: function (id, secret, callback) {
-            callback(false, { clientId: 'thom' });
-          },
-          grantTypeAllowed: function (clientId, grantType, callback) {
-            callback(false, true);
-          },
-          getUser: function (uname, pword, callback) {
-            callback(false, { id: 1 });
-          },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
-            cb();
-          }
-        },
-        grants: ['password'],
-        continueAfterResponse: true
-      });
-
-      var hit = false;
-      app.all('*', function (req, res, next) {
-        hit = true;
-      });
-
-      request(app)
-        .post('/oauth/token')
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .send(validBody)
-        .expect(200)
-        .end(function (err, res) {
-          if (err) return done(err);
-          hit.should.equal(true);
           done();
         });
 
