@@ -92,6 +92,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password' })
+        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /invalid or missing client_id parameter/i, done);
     });
 
@@ -106,6 +107,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom' })
+        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /invalid or missing client_id parameter/i, done);
     });
 
@@ -116,6 +118,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom' })
+        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /missing client_secret parameter/i, done);
     });
 
@@ -154,6 +157,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .send('grant_type=password&username=test&password=invalid')
         .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
+        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, done);
     });
 
@@ -193,6 +197,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /client credentials are invalid/i, done);
     });
   });
@@ -215,6 +220,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+        .expect('WWW-Authenticate', 'Basic realm="Service"')
         .expect(400, /grant type is unauthorised for this client_id/i, done);
     });
   });
