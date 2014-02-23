@@ -60,7 +60,7 @@ describe('Granting with extended grant type', function () {
         client_id: 'thom',
         client_secret: 'nightworld'
       })
-      .expect(400, /invalid grant_type/i, done);
+      .expect(400, /unsupported grant type/i, done);
   });
 
   it('should still detect unsupported grant_type', function (done) {
