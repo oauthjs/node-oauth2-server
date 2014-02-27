@@ -5,16 +5,16 @@ var oauthAccessTokens = [],
   oauthRefreshTokens = [],
   oauthClients = [
     {
-      client_id : 'thom',
-      client_secret : 'nightworld',
-      redirect_uri : ''
+      clientId : 'thom',
+      clientSecret : 'nightworld',
+      redirectUri : ''
     }
   ],
   authorizedClientIds = {
     password: [
       'thom'
     ],
-    refresh_token: [
+    refreshToken: [
       'thom'
     ]
   },
@@ -42,7 +42,7 @@ model.dump = function() {
 model.getAccessToken = function (bearerToken, callback) {
   for(var i = 0, len = oauthAccessTokens.length; i < len; i++) {
     var elem = oauthAccessTokens[i];
-    if(elem.access_token === bearerToken) {
+    if(elem.accessToken === bearerToken) {
       return callback(false, elem);
     }
   }
@@ -52,7 +52,7 @@ model.getAccessToken = function (bearerToken, callback) {
 model.getRefreshToken = function (bearerToken, callback) {
   for(var i = 0, len = oauthRefreshTokens.length; i < len; i++) {
     var elem = oauthRefreshTokens[i];
-    if(elem.refresh_token === bearerToken) {
+    if(elem.refreshToken === bearerToken) {
       return callback(false, elem);
     }
   }
@@ -62,7 +62,7 @@ model.getRefreshToken = function (bearerToken, callback) {
 model.getClient = function (clientId, clientSecret, callback) {
   for(var i = 0, len = oauthClients.length; i < len; i++) {
     var elem = oauthClients[i];
-    if(elem.client_id === clientId && elem.client_secret === clientSecret) {
+    if(elem.clientId === clientId && elem.clientSecret === clientSecret) {
       return callback(false, elem);
     }
   }
@@ -76,9 +76,9 @@ model.grantTypeAllowed = function (clientId, grantType, callback) {
 
 model.saveAccessToken = function (accessToken, clientId, expires, userId, callback) {
   oauthAccessTokens.unshift({
-    access_token: accessToken,
-    client_id: clientId,
-    user_id: userId,
+    accessToken: accessToken,
+    clientId: clientId,
+    userId: userId,
     expires: expires
   });
 
@@ -87,9 +87,9 @@ model.saveAccessToken = function (accessToken, clientId, expires, userId, callba
 
 model.saveRefreshToken = function (refreshToken, clientId, expires, userId, callback) {
   oauthRefreshTokens.unshift({
-    refresh_token: refreshToken,
-    client_id: clientId,
-    user_id: userId,
+    refreshToken: refreshToken,
+    clientId: clientId,
+    userId: userId,
     expires: expires
   });
 
