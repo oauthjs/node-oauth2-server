@@ -20,10 +20,13 @@ var express = require('express'),
 
 var oauth2server = require('../');
 
-var bootstrap = function (model, params) {
+var bootstrap = function (model, params, continueAfterResponse) {
 
   var app = express();
-  app.oauth = oauth2server({ model: model || {} });
+  app.oauth = oauth2server({
+    model: model || {},
+    continueAfterResponse: continueAfterResponse
+  });
 
   app.use(express.bodyParser());
 
@@ -191,4 +194,70 @@ describe('AuthCodeGrant', function() {
         done();
       });
   });
+
+  it('should continue after success response if continueAfterResponse = true', function (done) {
+    var code;
+
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        code = authCode;
+        callback();
+      }
+    }, [false, true], true);
+
+    var hit = false;
+    app.all('*', function (req, res, done) {
+      hit = true;
+    });
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .end(function (err, res) {
+        if (err) return done(err);
+        hit.should.equal(true);
+        done();
+      });
+  });
+
+  it('should continue after redirect response if continueAfterResponse = true', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      }
+    }, [false, false], true);
+
+    var hit = false;
+    app.all('*', function (req, res, done) {
+      hit = true;
+    });
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .end(function (err, res) {
+        if (err) return done(err);
+        hit.should.equal(true);
+        done();
+      });
+  });
+
 });
