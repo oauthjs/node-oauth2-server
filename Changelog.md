@@ -1,11 +1,27 @@
 ## Changelog
 
-This is currently a backup, see: https://github.com/nightworld/node-oauth2-server/releases
+### 2.0.2
+ - Fix continueAfterResponse option
 
-### 3.0 (in progress)
- - Huge refactor
- - Switch from internal router to exposing explit middleware to be added to individual routes
- - Switch all model save* functions to take two params, data and callback
+### 2.0.1
+ - Add "WWW-Authenticate" header for invalid_client
+
+### 2.0
+ - Huge intrenal refactor
+ - Switch from internal router ("allow" property) to exposing explit authorisation middleware to be added to individual routes
+ - Expose grant middleware to be attached to a route of your choosing
+ - Switch all model variables to camelCasing
+ - Add support for `authorization_code` grant type (i.e. traditional "allow", "deny" with redirects etc.)
+ - Some, previously wrong, error codes fixed
+
+### 1.5.3
+ - Fix tests for daylight saving
+
+### 1.5.2
+ - Fix expiration token checking (previously expires was wrongly checked against boot time)
+
+### 1.5.1
+ - Add repository field to package
 
 ### 1.5.0
  - Add support for non-expiring tokens (set accessTokenLifetime/refreshTokenLifetime = null)
