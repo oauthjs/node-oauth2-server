@@ -70,9 +70,9 @@ describe('Granting with client_credentials grant type', function () {
         grantTypeAllowed: function (clientId, grantType, callback) {
           callback(false, true);
         },
-        getUser: function (uname, pword, callback) {
-          uname.should.equal('thom');
-          pword.should.equal('nightworld');
+        getUserFromClient: function (clientId, clientSecret, callback) {
+          clientId.should.equal('thom');
+          clientSecret.should.equal('nightworld');
           callback(false, false); // Fake invalid user
         }
       },

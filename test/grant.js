@@ -290,7 +290,7 @@ describe('Grant', function() {
           grantTypeAllowed: function (clientId, grantType, callback) {
             callback(false, true);
           },
-          getUser: function (uname, pword, callback) {
+          getUserFromClient: function (clientId, clientSecret, callback) {
             callback(false, { id: 1 });
           },
           generateToken: function (type, req, callback) {
