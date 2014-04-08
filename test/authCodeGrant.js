@@ -34,6 +34,10 @@ var bootstrap = function (model, params, continueAfterResponse) {
     next.apply(null, params || []);
   }));
 
+  app.get('/authorise', app.oauth.authCodeGrant(function (req, next) {
+    next.apply(null, params || []);
+  }));
+
   app.use(app.oauth.errorHandler());
 
   return app;
@@ -165,7 +169,7 @@ describe('AuthCodeGrant', function() {
       .end();
   });
 
-  it('should accept valid request and return code', function (done) {
+  it('should accept valid request and return code using POST', function (done) {
     var code;
 
     var app = bootstrap({
@@ -185,6 +189,36 @@ describe('AuthCodeGrant', function() {
     request(app)
       .post('/authorise')
       .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(302, function (err, res) {
+        res.header.location.should.equal('http://nightworld.com?code=' + code);
+        done();
+      });
+  });
+
+  it('should accept valid request and return code using GET', function (done) {
+    var code;
+
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        code = authCode;
+        callback();
+      }
+    }, [false, true]);
+
+    request(app)
+      .get('/authorise')
+      .query({
         response_type: 'code',
         client_id: 'thom',
         redirect_uri: 'http://nightworld.com'
