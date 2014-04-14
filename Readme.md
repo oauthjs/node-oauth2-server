@@ -44,7 +44,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 
 ## Features
 
-- Supports authorization_code, password, refresh_token and extension (custom) grant types
+- Supports authorization_code, password, refresh_token, client_credentials and extension (custom) grant types
 - Implicitly supports any form of storage e.g. PostgreSQL, MySQL, Mongo, Redis...
 - Full test suite
 
