@@ -286,6 +286,38 @@ describe('Grant', function() {
         .expect(/"access_token":"thommy"/, 200, done);
 
     });
+
+    it('should accept the client_credentials grant type', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, true);
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUserFromClient: function (clientId, clientSecret, callback) {
+            callback(false, { id: 1 });
+          },
+          generateToken: function (type, req, callback) {
+            callback(false, 'thommy');
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.equal('thommy');
+            cb();
+          }
+        },
+        grants: ['client_credentials']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'client_credentials' })
+        .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
+        .expect(/thommy/, 200, done);
+
+    });
   });
 
   describe('saving access token', function () {
