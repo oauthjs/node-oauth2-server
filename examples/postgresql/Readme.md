@@ -23,3 +23,22 @@ app.configure(function() {
 
 ...
 ```
+
+
+## Load Schema
+
+To load the schema 
+
+```bash 
+$ brew install postgres
+$ postgres -D /usr/local/var/postgres
+$ createuser -P -s -e admin # http://www.postgresql.org/docs/9.3/static/app-createuser.html
+$ createdb myoauthdbname # http://www.postgresql.org/docs/9.3/static/manage-ag-createdb.html
+$ psql myoauthdbname < schema.sql 
+```
+
+## Start Service
+
+```bash
+$ DATABASE_URL=postgres://admin:none@localhost/myoauthdbname  node index.js  # postgres://YOURUSER:YOURPASSWORD@YOURHOST/YOURDBNAME 
+```
