@@ -221,8 +221,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
-        .expect('WWW-Authenticate', 'Basic realm="Service"')
-        .expect(401, /grant type is unauthorised for this client_id/i, done);
+        .expect(400, /grant type is unauthorised for this client_id/i, done);
     });
   });
 
