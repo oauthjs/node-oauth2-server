@@ -255,7 +255,7 @@ You can access the grant type via req.oauth.grantType and you should pass back s
 First you must insert client id/secret and user into storage. This is out of the scope of this example.
 
 To obtain a token you should POST to `/oauth/token`. You should include your client credentials in
-the Authorization header ("Basic " + client_id:client_secret base4'd), and then grant_type ("password"),
+the Authorization header ("Basic " + client_id:client_secret base64'd), and then grant_type ("password"),
 username and password in the request body, for example:
 
 ```
