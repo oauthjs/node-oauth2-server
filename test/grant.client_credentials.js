@@ -50,9 +50,10 @@ describe('Granting with client_credentials grant type', function () {
         grantTypeAllowed: function (clientId, grantType, callback) {
           callback(false, true);
         },
-        getUserFromClient: function (clientId, clientSecret, callback) {
+        getUserFromClient: function (clientId, clientSecret, username, callback) {
           clientId.should.equal('thom');
           clientSecret.should.equal('nightworld');
+          username.should.equal('dexter');
           callback(false, false); // Fake invalid user
         }
       },
@@ -63,7 +64,8 @@ describe('Granting with client_credentials grant type', function () {
       .post('/oauth/token')
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send({
-        grant_type: 'client_credentials'
+        grant_type: 'client_credentials',
+        username: 'dexter'
       })
       .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
       .expect(400, /client credentials are invalid/i, done);
