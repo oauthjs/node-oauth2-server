@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.1.0
+ - Add support for client_credentials grant type (@lucknerjb)
+ - Support Authorization grant via GET request (@mjsalinger)
+
 ### 2.0.2
  - Fix continueAfterResponse option
 

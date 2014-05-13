@@ -34,10 +34,6 @@ var bootstrap = function (model, params, continueAfterResponse) {
     next.apply(null, params || []);
   }));
 
-  app.get('/authorise', app.oauth.authCodeGrant(function (req, next) {
-    next.apply(null, params || []);
-  }));
-
   app.use(app.oauth.errorHandler());
 
   return app;
@@ -45,7 +41,7 @@ var bootstrap = function (model, params, continueAfterResponse) {
 
 describe('AuthCodeGrant', function() {
 
-  it('should detect no response type for POST', function (done) {
+  it('should detect no response type', function (done) {
     var app = bootstrap();
 
     request(app)
@@ -53,15 +49,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid response_type parameter/i, done);
   });
 
-  it('should detect no response type for GET', function (done) {
-     var app = bootstrap();
-
-    request(app)
-      .get('/authorise')
-      .expect(400, /invalid response_type parameter/i, done);
-  });
-
-  it('should detect invalid response type for POST', function (done) {
+  it('should detect invalid response type', function (done) {
     var app = bootstrap();
 
     request(app)
@@ -70,15 +58,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid response_type parameter/i, done);
   });
 
-  it('should detect invalid response type for GET', function (done) {
-    var app = bootstrap();
-
-    request(app)
-      .get('/authorise')
-      .expect(400, /invalid response_type parameter/i, done);
-  });
-
-  it('should detect no client_id for POST', function (done) {
+  it('should detect no client_id', function (done) {
     var app = bootstrap();
 
     request(app)
@@ -87,16 +67,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid or missing client_id parameter/i, done);
   });
 
-  it('should detect no client_id for GET', function (done) {
-    var app = bootstrap();
-
-    request(app)
-      .get('/authorise?response_type=code')
-      .send({ response_type: 'code' })
-      .expect(400, /invalid or missing client_id parameter/i, done);
-  });
-
-  it('should detect no redirect_uri for POST', function (done) {
+  it('should detect no redirect_uri', function (done) {
     var app = bootstrap();
 
     request(app)
@@ -108,16 +79,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid or missing redirect_uri parameter/i, done);
   });
 
-  it('should detect no redirect_uri for GET', function (done) {
-    var app = bootstrap();
-
-    request(app)
-      .get('/authorise?response_type=code&client_id=thom')
-      .send({ response_type: 'code' })
-      .expect(400, /invalid or missing redirect_uri parameter/i, done);
-  });
-
-  it('should detect invalid client for POST', function (done) {
+  it('should detect invalid client', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(); // Fake invalid
@@ -135,20 +97,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid client credentials/i, done);
   });
 
-  it('should detect invalid client for GET', function (done) {
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(); // Fake invalid
-      }
-    });
-
-    request(app)
-      .get('/authorise?response_type=code&client_id=thom&redirect_uri=http://nightworld.com')
-      .expect('WWW-Authenticate', 'Basic realm="Service"')
-      .expect(400, /invalid client credentials/i, done);
-  });
-
-  it('should detect mismatching redirect_uri for POST', function (done) {
+  it('should detect mismatching redirect_uri', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -168,22 +117,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /redirect_uri does not match/i, done);
   });
 
-  it('should detect mismatching redirect_uri for GET', function (done) {
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(false, {
-          clientId: 'thom',
-          redirectUri: 'http://nightworld.com'
-        });
-      }
-    });
-
-    request(app)
-      .get('/authorise?response_type=code&client_id=thom&redirect_uri=http://wrong.com')
-      .expect(400, /redirect_uri does not match/i, done);
-  });
-
-  it('should detect user access denied for POST', function (done) {
+  it('should detect user access denied', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -204,23 +138,7 @@ describe('AuthCodeGrant', function() {
         /Redirecting to http:\/\/nightworld.com\?error=access_denied/i, done);
   });
 
-  it('should detect user access denied for GET', function (done) {
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(false, {
-          clientId: 'thom',
-          redirectUri: 'http://nightworld.com'
-        });
-      }
-    }, [false, false]);
-
-    request(app)
-      .get('/authorise?response_type=code&client_id=thom&redirect_uri=http://nightworld.com')
-      .expect(302,
-        /Redirecting to http:\/\/nightworld.com\?error=access_denied/i, done);
-  });
-
-  it('should try to save auth code for POST', function (done) {
+  it('should try to save auth code', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -247,34 +165,7 @@ describe('AuthCodeGrant', function() {
       .end();
   });
 
-  it('should try to save auth code for GET', function (done) {
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(false, {
-          clientId: 'thom',
-          redirectUri: 'http://nightworld.com'
-        });
-      },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
-        should.exist(authCode);
-        authCode.should.have.lengthOf(40);
-        clientId.should.equal('thom');
-        (+expires).should.be.within(2, (+new Date()) + 30000);
-        done();
-      }
-    }, [false, true]);
-
-    request(app)
-      .post('/authorise?response_type=code&client_id=thom&redirect_uri=http://nightworld.com')
-      .send({
-        response_type: 'code',
-        client_id: 'thom',
-        redirect_uri: 'http://nightworld.com'
-      })
-      .end();
-  });
-
-  it('should accept valid request and return code for POST', function (done) {
+  it('should accept valid request and return code using POST', function (done) {
     var code;
 
     var app = bootstrap({
@@ -304,7 +195,7 @@ describe('AuthCodeGrant', function() {
       });
   });
 
-  it('should accept valid request and return code for GET', function (done) {
+  it('should accept valid request and return code using GET', function (done) {
     var code;
 
     var app = bootstrap({
@@ -322,14 +213,19 @@ describe('AuthCodeGrant', function() {
     }, [false, true]);
 
     request(app)
-      .get('/authorise?response_type=code&client_id=thom&redirect_uri=http://nightworld.com')
+      .get('/authorise')
+      .query({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
       .expect(302, function (err, res) {
         res.header.location.should.equal('http://nightworld.com?code=' + code);
         done();
       });
   });
 
-  it('should continue after success response if continueAfterResponse = true for POST', function (done) {
+  it('should continue after success response if continueAfterResponse = true', function (done) {
     var code;
 
     var app = bootstrap({
@@ -365,38 +261,7 @@ describe('AuthCodeGrant', function() {
       });
   });
 
-  it('should continue after success response if continueAfterResponse = true for GET', function (done) {
-    var code;
-
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(false, {
-          clientId: 'thom',
-          redirectUri: 'http://nightworld.com'
-        });
-      },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
-        should.exist(authCode);
-        code = authCode;
-        callback();
-      }
-    }, [false, true], true);
-
-    var hit = false;
-    app.all('*', function (req, res, done) {
-      hit = true;
-    });
-
-    request(app)
-      .get('/authorise?response_type=code&client_id=thom&redirect_uri=http://nightworld.com')
-      .end(function (err, res) {
-        if (err) return done(err);
-        hit.should.equal(true);
-        done();
-      });
-  });
-
-  it('should continue after redirect response if continueAfterResponse = true for POST', function (done) {
+  it('should continue after redirect response if continueAfterResponse = true', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -413,35 +278,6 @@ describe('AuthCodeGrant', function() {
 
     request(app)
       .post('/authorise')
-      .send({
-        response_type: 'code',
-        client_id: 'thom',
-        redirect_uri: 'http://nightworld.com'
-      })
-      .end(function (err, res) {
-        if (err) return done(err);
-        hit.should.equal(true);
-        done();
-      });
-  });
-
-  it('should continue after redirect response if continueAfterResponse = true for GET', function (done) {
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(false, {
-          clientId: 'thom',
-          redirectUri: 'http://nightworld.com'
-        });
-      }
-    }, [false, false], true);
-
-    var hit = false;
-    app.all('*', function (req, res, done) {
-      hit = true;
-    });
-
-    request(app)
-      .post('/authorise?response_type=code&client_id=thom&redirect_uri=http://nightworld.com')
       .send({
         response_type: 'code',
         client_id: 'thom',
