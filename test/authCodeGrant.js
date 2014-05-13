@@ -101,7 +101,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid client credentials/i, done);
   });
 
-  it('should detect mismatching redirect_uri', function (done) {
+  it('should detect mismatching redirect_uri with a string', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -119,6 +119,66 @@ describe('AuthCodeGrant', function() {
         redirect_uri: 'http://wrong.com'
       })
       .expect(400, /redirect_uri does not match/i, done);
+  });
+
+  it('should detect mismatching redirect_uri within an array', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: ['http://nightworld.com','http://dayworld.com']
+        });
+      }
+    });
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://wrong.com'
+      })
+      .expect(400, /redirect_uri does not match/i, done);
+  });
+
+  it('should accept a valid redirect_uri within an array', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: ['http://nightworld.com','http://dayworld.com']
+        });
+      }
+    });
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(302, /Moved temporarily/i, done);
+  });
+
+  it('should accept a valid redirect_uri with a string', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      }
+    });
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(302, /Moved temporarily/i, done);
   });
 
   it('should detect user access denied', function (done) {
