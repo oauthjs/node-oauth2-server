@@ -101,7 +101,7 @@ describe('AuthCodeGrant', function() {
       .expect(400, /invalid client credentials/i, done);
   });
 
-  it('should detect mismatching redirect_uri', function (done) {
+  it('should detect mismatching redirect_uri with a string', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -161,7 +161,7 @@ describe('AuthCodeGrant', function() {
       .expect(302, /Moved temporarily/i, done);
   });
 
-  it('should accept a valid redirect_uri stringy', function (done) {
+  it('should accept a valid redirect_uri with a string', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
