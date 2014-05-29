@@ -290,8 +290,6 @@ describe('AuthCodeGrant', function() {
   });
 
   it('should continue after success response if continueAfterResponse = true', function (done) {
-    var code;
-
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
         callback(false, {
@@ -300,8 +298,6 @@ describe('AuthCodeGrant', function() {
         });
       },
       saveAuthCode: function (authCode, clientId, expires, user, callback) {
-        should.exist(authCode);
-        code = authCode;
         callback();
       }
     }, [false, true], true);
