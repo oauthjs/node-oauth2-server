@@ -1,19 +1,19 @@
 {
   "name": "node-oauth2-server",
   "description": "Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with express in node.js",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "keywords": [
     "oauth",
     "oauth2"
   ],
   "author": {
-    "name": "NightWorld",
-    "email": "code@nightworld.com"
+    "name": "Thom Seddon",
+    "email": "thom@seddonmedia.co.uk"
   },
   "contributors": [
     {
       "name": "Thom Seddon",
-      "email": "thom@nightworld.com"
+      "email": "thom@seddonmedia.co.uk"
     }
   ],
   "main": "lib/oauth2server.js",
