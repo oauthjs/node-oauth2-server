@@ -137,6 +137,17 @@ describe('Authorise', function() {
       .expect(400, /only one method may be used/i, done);
   });
 
+  it('should allow exactly one method (post: query + empty body)', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .post('/?access_token=thom')
+      .send({
+        access_token: ''
+      })
+      .expect(400, /only one method may be used/i, done);
+  });
+
   it('should detect expired token', function (done){
     var app = bootstrap({
       model: {
