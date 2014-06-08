@@ -131,7 +131,9 @@ describe('Authorise', function() {
 
     request(app)
       .post('/?access_token=thom')
-      .set('Authorization', 'Invalid')
+      .send({
+        access_token: 'thom'
+      })
       .expect(400, /only one method may be used/i, done);
   });
 
