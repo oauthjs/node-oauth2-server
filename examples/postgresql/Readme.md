@@ -9,16 +9,15 @@ For example:
 ```js
 ...
 
-app.configure(function() {
-  var oauth = oauthserver({
-    model: require('./model'),
-    grants: ['password'],
-    debug: true
-  });
-  app.use(express.bodyParser());
-  app.use(oauth.handler());
-  app.use(oauth.errorHandler());
+app.use(bodyParser());
+
+var oauth = oauthserver({
+  model: require('./model'),
+  grants: ['password'],
+  debug: true
 });
+app.use(oauth.handler());
+app.use(oauth.errorHandler());
 
 ...
 ```

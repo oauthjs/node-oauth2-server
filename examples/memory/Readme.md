@@ -12,20 +12,21 @@ For example:
 
 var express = require('express'),
     oauthserver = require('node-oauth2-server'),
-    memorystore = require("./model");
+    bodyParser = require('body-parser'),
+    memorystore = require('./model');
 
 var app = express();
 
-app.configure(function() {
-    var oauth = oauthserver({
-        model: memorystore,
-        grants: ['password','refresh_token'],
-        debug: true
-    });
-    app.use(express.bodyParser()); // REQUIRED
-    app.use(oauth.handler());
-    app.use(oauth.errorHandler());
+app.use(bodyParser()); // REQUIRED
+
+var oauth = oauthserver({
+    model: memorystore,
+    grants: ['password','refresh_token'],
+    debug: true
 });
+app.use(oauth.handler());
+app.use(oauth.errorHandler());
+
 
 app.get('/', function (req, res) {
     // outputs datastores to the console

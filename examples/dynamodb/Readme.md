@@ -15,14 +15,12 @@ For example:
 ```js
 ...
 
+app.use(bodyParser());
 
-app.configure(function() {
-  app.oauth = oauthserver({
-    model: require('./model'),
-    grants: ['password', 'refresh_token'],
-    debug: true
-  });
-  app.use(express.bodyParser());
+app.oauth = oauthserver({
+  model: require('./model'),
+  grants: ['password', 'refresh_token'],
+  debug: true
 });
 
 ...
