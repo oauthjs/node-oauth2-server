@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.2.1
+
+ - Fix node 0.8.x (well npm 1.2.x) support
+
 ### 2.2.0
 
  - Support custom loggers via `debug` param
