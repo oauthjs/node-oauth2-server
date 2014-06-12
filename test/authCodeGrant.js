@@ -15,6 +15,7 @@
  */
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
   request = require('supertest'),
   should = require('should');
 
@@ -28,7 +29,7 @@ var bootstrap = function (model, params, continueAfterResponse) {
     continueAfterResponse: continueAfterResponse
   });
 
-  app.use(express.bodyParser());
+  app.use(bodyParser());
 
   app.post('/authorise', app.oauth.authCodeGrant(function (req, next) {
     next.apply(null, params || []);

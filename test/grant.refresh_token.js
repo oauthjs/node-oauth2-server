@@ -15,6 +15,7 @@
  */
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
   request = require('supertest'),
   should = require('should');
 
@@ -28,7 +29,7 @@ var bootstrap = function (oauthConfig) {
     });
 
   app.set('json spaces', 0);
-  app.use(express.bodyParser());
+  app.use(bodyParser());
 
   app.all('/oauth/token', oauth.grant());
 
