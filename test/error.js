@@ -19,7 +19,7 @@ describe('OAuth2Error', function() {
   it('should expose the `stack`', function () {
     var error = new OAuth2Error('invalid_request', 'The access token was not found');
 
-    error.stack.should.not.be.undefined;
+    error.stack.should.not.equal(undefined);
   });
 
   it('should expose a custom `name`', function () {
@@ -37,7 +37,7 @@ describe('OAuth2Error', function() {
   it('should expose a status `code`', function () {
     var error = new OAuth2Error('invalid_client');
 
-    error.code.should.be.a.Number;
+    error.code.should.be.a('number');
   });
 
   it('should expose the `error`', function () {
