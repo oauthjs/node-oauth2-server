@@ -15,6 +15,7 @@
  */
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
   request = require('supertest'),
   should = require('should');
 
@@ -37,7 +38,7 @@ var bootstrap = function (oauthConfig) {
   var app = express();
   app.oauth = oauth2server(oauthConfig || { model: {} });
 
-  app.use(express.bodyParser());
+  app.use(bodyParser());
   app.all('/', app.oauth.authorise());
 
 
@@ -65,7 +66,7 @@ describe('Authorise', function() {
 
     request(app)
       .get('/?access_token=thom')
-      .expect(/nightworld/, 200, done);
+      .expect(200, /nightworld/, done);
   });
 
   it('should require application/x-www-form-urlencoded when access token is ' +
@@ -96,7 +97,7 @@ describe('Authorise', function() {
       .post('/')
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send({ access_token: 'thom' })
-      .expect(/nightworld/, 200, done);
+      .expect(200, /nightworld/, done);
   });
 
   it('should detect malformed header', function (done) {
@@ -114,7 +115,7 @@ describe('Authorise', function() {
     request(app)
       .get('/')
       .set('Authorization', 'Bearer thom')
-      .expect(/nightworld/, 200, done);
+      .expect(200, /nightworld/, done);
   });
 
   it('should allow exactly one method (get: query + auth)', function (done) {
@@ -131,7 +132,20 @@ describe('Authorise', function() {
 
     request(app)
       .post('/?access_token=thom')
-      .set('Authorization', 'Invalid')
+      .send({
+        access_token: 'thom'
+      })
+      .expect(400, /only one method may be used/i, done);
+  });
+
+  it('should allow exactly one method (post: query + empty body)', function (done) {
+    var app = bootstrap('mockValid');
+
+    request(app)
+      .post('/?access_token=thom')
+      .send({
+        access_token: ''
+      })
       .expect(400, /only one method may be used/i, done);
   });
 
@@ -168,7 +182,7 @@ describe('Authorise', function() {
 
     request(app)
       .get('/?access_token=thom')
-      .expect(/nightworld/, 200, done);
+      .expect(200, /nightworld/, done);
   });
 
   it('should expose the user id when setting userId', function (done) {
@@ -193,7 +207,7 @@ describe('Authorise', function() {
 
     request(app)
       .get('/?access_token=thom')
-      .expect(/nightworld/, 200, done);
+      .expect(200, /nightworld/, done);
   });
 
   it('should expose the user id when setting user object', function (done) {
@@ -220,7 +234,7 @@ describe('Authorise', function() {
 
     request(app)
       .get('/?access_token=thom')
-      .expect(/nightworld/, 200, done);
+      .expect(200, /nightworld/, done);
   });
 
 });

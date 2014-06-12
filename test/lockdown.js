@@ -15,6 +15,7 @@
  */
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
   request = require('supertest'),
   should = require('should');
 
@@ -26,7 +27,7 @@ var bootstrap = function (oauthConfig) {
       model: {}
     });
 
-  app.use(express.bodyParser());
+  app.use(bodyParser());
 
   app.all('/oauth/token', app.oauth.grant);
 

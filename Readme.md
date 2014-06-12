@@ -14,17 +14,17 @@ The module provides two middlewares, one for authorization and routing, another 
 
 ```js
 var express = require('express'),
-  oauthserver = require('node-oauth2-server');
+    bodyParser = require('body-parser'),
+    oauthserver = require('node-oauth2-server');
 
 var app = express();
 
-app.configure(function() {
-  app.oauth = oauthserver({
-    model: {}, // See below for specification
-    grants: ['password'],
-    debug: true
-  });
-  app.use(express.bodyParser()); // REQUIRED
+app.use(bodyParser()); // REQUIRED
+
+app.oauth = oauthserver({
+  model: {}, // See below for specification
+  grants: ['password'],
+  debug: true
 });
 
 app.all('/oauth/token', app.oauth.grant());
@@ -55,9 +55,8 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 - *array* **grants**
  - grant types you wish to support, currently the module supports `password` and `refresh_token`
   - Default: `[]`
-- *boolean* **debug**
- - If true, errors are logged to console
- - Default: `false`
+- *function|boolean* **debug**
+ - If `true` errors will be  logged to console. You may also pass a custom function, in which case that function will be called with the error as it's first argument
   - Default: `false`
 - *number* **accessTokenLifetime**
  - Life of access tokens in seconds
@@ -291,7 +290,7 @@ Pragma: no-cache
 
 ## Changelog
 
-See: https://github.com/thomseddon/node-oauth2-server/releases
+See: https://github.com/thomseddon/node-oauth2-server/blob/master/Changelog.md
 
 ## Credits
 
