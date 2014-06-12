@@ -1,5 +1,19 @@
 ## Changelog
 
+### 2.2.0
+
+ - Support custom loggers via `debug` param
+ - Make OAuth2Error inherit from Error for fun and profit
+ - Don't go crazy when body is `null`
+ - Update tests and examples to express 4
+ - Fix lockdown pattern for express 4
+ - Update dev dependencies (mocha, should and supertest)
+
+### 2.1.1
+
+ - Allow client to return an array of multiple valid redirect URI's
+ - Fix continueAfterResponse when granting
+
 ### 2.1.0
  - Add support for client_credentials grant type (@lucknerjb)
  - Support Authorization grant via GET request (@mjsalinger)
