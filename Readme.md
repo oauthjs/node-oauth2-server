@@ -14,17 +14,17 @@ The module provides two middlewares, one for authorization and routing, another 
 
 ```js
 var express = require('express'),
-  oauthserver = require('node-oauth2-server');
+    bodyParser = require('body-parser'),
+    oauthserver = require('node-oauth2-server');
 
 var app = express();
 
-app.configure(function() {
-  app.oauth = oauthserver({
-    model: {}, // See below for specification
-    grants: ['password'],
-    debug: true
-  });
-  app.use(express.bodyParser()); // REQUIRED
+app.use(bodyParser()); // REQUIRED
+
+app.oauth = oauthserver({
+  model: {}, // See below for specification
+  grants: ['password'],
+  debug: true
 });
 
 app.all('/oauth/token', app.oauth.grant());
