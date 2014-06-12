@@ -297,7 +297,7 @@ describe('Grant', function() {
             callback(false, { id: 1 });
           },
           saveAccessToken: function (token, clientId, expires, user, cb) {
-            token.should.be.a('string');
+            token.should.be.instanceOf(String);
             token.should.have.length(40);
             clientId.should.equal('thom');
             user.id.should.equal(1);
@@ -332,7 +332,7 @@ describe('Grant', function() {
             cb();
           },
           saveRefreshToken: function (token, clientId, expires, user, cb) {
-            token.should.be.a('string');
+            token.should.be.instanceOf(String);
             token.should.have.length(40);
             clientId.should.equal('thom');
             user.id.should.equal(1);
@@ -381,7 +381,7 @@ describe('Grant', function() {
           if (err) return done(err);
 
           res.body.should.have.keys(['access_token', 'token_type', 'expires_in']);
-          res.body.access_token.should.be.a('string');
+          res.body.access_token.should.be.instanceOf(String);
           res.body.access_token.should.have.length(40);
           res.body.token_type.should.equal('bearer');
           res.body.expires_in.should.equal(3600);
@@ -423,9 +423,9 @@ describe('Grant', function() {
 
           res.body.should.have.keys(['access_token', 'token_type', 'expires_in',
             'refresh_token']);
-          res.body.access_token.should.be.a('string');
+          res.body.access_token.should.be.instanceOf(String);
           res.body.access_token.should.have.length(40);
-          res.body.refresh_token.should.be.a('string');
+          res.body.refresh_token.should.be.instanceOf(String);
           res.body.refresh_token.should.have.length(40);
           res.body.token_type.should.equal('bearer');
           res.body.expires_in.should.equal(3600);
@@ -470,9 +470,9 @@ describe('Grant', function() {
           if (err) return done(err);
 
           res.body.should.have.keys(['access_token', 'refresh_token', 'token_type']);
-          res.body.access_token.should.be.a('string');
+          res.body.access_token.should.be.instanceOf(String);
           res.body.access_token.should.have.length(40);
-          res.body.refresh_token.should.be.a('string');
+          res.body.refresh_token.should.be.instanceOf(String);
           res.body.refresh_token.should.have.length(40);
           res.body.token_type.should.equal('bearer');
 

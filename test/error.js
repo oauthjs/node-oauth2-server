@@ -37,7 +37,7 @@ describe('OAuth2Error', function() {
   it('should expose a status `code`', function () {
     var error = new OAuth2Error('invalid_client');
 
-    error.code.should.be.a('number');
+    error.code.should.be.instanceOf(Number);
   });
 
   it('should expose the `error`', function () {
