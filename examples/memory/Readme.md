@@ -2,42 +2,28 @@
 
 ## DO NOT USE THIS EXAMPLE IN PRODUCTION
 
-The object exposed in model.js could be directly passed into the model paramater of the config
-object when initiating.
+The object exposed in model.js could be directly passed into the model parameter of the config object when initiating.
 
 For example:
 
 ```js
-...
 
-var express = require('express'),
-    oauthserver = require('node-oauth2-server'),
-    bodyParser = require('body-parser'),
-    memorystore = require('./model');
+var memorystore = require('model.js');
 
-var app = express();
-
-app.use(bodyParser()); // REQUIRED
-
-var oauth = oauthserver({
-    model: memorystore,
-    grants: ['password','refresh_token'],
-    debug: true
-});
-app.use(oauth.handler());
-app.use(oauth.errorHandler());
-
-
-app.get('/', function (req, res) {
-    // outputs datastores to the console
-    memorystore.dump();
-
-    // respond
-    res.end('Secret area');
+app.oauth = oauthserver({
+  model: memorystore,
+  grants: ['password','refresh_token'],
+  debug: true
 });
 
-app.listen(3000);
+```
 
+# Dump
 
-...
+You can also dump the contents of the memory store (for debugging) like so:
+
+```js
+
+memorystore.dump();
+
 ```
