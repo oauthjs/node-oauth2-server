@@ -248,7 +248,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send(validBody)
-        .expect(/thommy/, 200, done);
+        .expect(200, /thommy/, done);
 
     });
 
@@ -278,7 +278,7 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send(validBody)
-        .expect(/"access_token":"thommy"/, 200, done);
+        .expect(200, /"access_token":"thommy"/, done);
 
     });
   });

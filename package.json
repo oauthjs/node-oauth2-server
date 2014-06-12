@@ -25,7 +25,7 @@
     "express": "^4.4.3",
     "mocha": "^1.20.1",
     "should": "^4.0.4",
-    "supertest": "0.5.x"
+    "supertest": "^0.13.0"
   },
   "licenses": [
     {
