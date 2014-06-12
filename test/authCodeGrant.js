@@ -21,17 +21,22 @@ var express = require('express'),
 
 var oauth2server = require('../');
 
-var bootstrap = function (model, params, continueAfterResponse) {
+var bootstrap = function (model, params, continueAfterResponse, requireAuthGrantCredentials) {
 
   var app = express();
   app.oauth = oauth2server({
     model: model || {},
-    continueAfterResponse: continueAfterResponse
+    continueAfterResponse: continueAfterResponse,
+    requireAuthGrantCredentials: requireAuthGrantCredentials
   });
 
   app.use(bodyParser());
 
   app.post('/authorise', app.oauth.authCodeGrant(function (req, next) {
+    next.apply(null, params || []);
+  }));
+
+  app.get('/authorise', app.oauth.authCodeGrant(function (req, next) {
     next.apply(null, params || []);
   }));
 
@@ -199,6 +204,129 @@ describe('AuthCodeGrant', function() {
         /Redirecting to http:\/\/nightworld.com\?error=access_denied/i, done);
   });
 
+  it('should detect user access denied if credentials are required but not included', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      }
+    }, [false, true], false, true);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(400,
+        /Invalid or missing client credentials/, done);
+  });
+
+  it('should detect user access denied if credentials are required and incorrect in the auth header', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        clientId.should.equal('thom');
+        clientSecret.should.eql('nightworld');
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      }
+    }, [false, false], false, true);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .set('Authorization', 'Basic dGhvbPpuaWdodHdvcmxk')
+      .expect(400,
+        /Invalid or missing client credentials/, done);
+  });
+
+  it('should try to save the auth code if credentials are required and correct in the auth header', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        clientId.should.equal('thom');
+        clientSecret.should.eql('nightworld');
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        callback(false, true);
+       },
+    }, [false, true], false, true);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
+      .expect(302,
+        /Moved Temporarily/, done);
+  });
+
+  it('should detect user access denied if credentials are required and incorrect in the body', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        clientId.should.equal('thom');
+        clientSecret.should.eql('abcd123');
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      }
+    }, [false, false], false, true);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com',
+        client_secret: 'abcd123'
+      })
+      .expect(302,
+        /Redirecting to http:\/\/nightworld.com\?error=access_denied/i, done);
+  });
+
+  it('should try to save the auth code if credentials are required and correct in the body', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        clientId.should.equal('thom');
+        clientSecret.should.eql('abcd123');
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        callback(false, true);
+      },
+    }, [false, true], false, true);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com',
+        client_secret: 'abcd123'
+      })
+      .expect(302,
+        /Moved Temporarily/, done);
+  });
+
   it('should try to save auth code', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {
@@ -281,6 +409,7 @@ describe('AuthCodeGrant', function() {
         redirect_uri: 'http://nightworld.com'
       })
       .expect(302, function (err, res) {
+        console.log(res.statusCode);
         res.header.location.should.equal('http://nightworld.com?code=' + code);
         done();
       });
