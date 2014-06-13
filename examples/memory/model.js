@@ -14,7 +14,7 @@ var oauthAccessTokens = [],
     password: [
       'thom'
     ],
-    refreshToken: [
+    refresh_token: [
       'thom'
     ]
   },
