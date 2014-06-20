@@ -126,8 +126,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 #### saveAccessToken (accessToken, clientId, expires, user, callback)
 - *string* **accessToken**
 - *string* **clientId**
-- *string|number* **userId**
 - *date* **expires**
+- *object* **user**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -180,8 +180,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 #### saveRefreshToken (refreshToken, clientId, expires, user, callback)
 - *string* **refreshToken**
 - *string* **clientId**
-- *string|number* **userId**
 - *date* **expires**
+- *object* **user**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -269,8 +269,8 @@ This will then call the following on your model (in this order):
  - getClient (clientId, clientSecret, callback)
  - grantTypeAllowed (clientId, grantType, callback)
  - getUser (username, password, callback)
- - saveAccessToken (accessToken, clientId, userId, expires, callback)
- - saveRefreshToken (refreshToken, clientId, userId, expires, callback) **(if using)**
+ - saveAccessToken (accessToken, clientId, expires, user, callback)
+ - saveRefreshToken (refreshToken, clientId, expires, user, callback) **(if using)**
 
 Provided there weren't any errors, this will return the following (excluding the `refresh_token` if you've not enabled the refresh_token grant type):
 
