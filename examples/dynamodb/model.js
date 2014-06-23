@@ -21,7 +21,7 @@ var OAuthAccessTokenTable = "oauth2accesstoken";
 var OAuthAuthCodeTable = "oauth2authcode";
 var OAuthRefreshTokenTable = "oauth2refreshtoken";
 var OAuthClientTable = "oauth2client";
-var OAuthUserTable = "userid_map";
+var OAuthUserTable = "oauth2user";
 
 //
 // node-oauth2-server callbacks
