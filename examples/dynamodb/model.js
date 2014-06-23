@@ -148,3 +148,20 @@ model.getUser = function (username, password, callback) {
       callback(null, { id: data.userId });
     });
 };
+
+/*
+ * Required to support client_credentials and implicit grant type
+ */
+model.getUserFromClient = function (clientId, clientSecret, callback) {
+    if(typeof clientSecret === 'function' && arguments.length < 3) {
+        callback = clientSecret;
+        clientSecret = undefined;
+    }
+
+    console.log('in getUserFromClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
+
+    dal.doGet(OAuthClientTable, { clientId: { S: clientId }}, true, function(err, data) {
+        if (err) return callback(err);
+        callback(null, { id: data.userId });
+    });
+}
