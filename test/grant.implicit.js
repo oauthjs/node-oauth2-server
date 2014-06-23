@@ -65,7 +65,7 @@ describe('Granting with implicit grant type', function () {
             .send({
                 grant_type: 'implicit'
             })
-            .set('Authorization', 'Basic dGhvbQ==')
+            .set('Authorization', 'Basic dGhvbTog')
             .expect(400, /client credentials are invalid/i, done);
 
     });
