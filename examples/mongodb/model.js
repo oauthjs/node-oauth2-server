@@ -70,7 +70,9 @@ model.getAccessToken = function (bearerToken, callback) {
 
 model.getClient = function (clientId, clientSecret, callback) {
   console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
-
+  if (clientSecret === null) {
+    return OAuthClientsModel.findOne({ clientId: clientId }, callback);
+  }
   OAuthClientsModel.findOne({ clientId: clientId, clientSecret: clientSecret }, callback);
 };
 

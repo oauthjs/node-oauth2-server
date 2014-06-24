@@ -62,7 +62,8 @@ model.getRefreshToken = function (bearerToken, callback) {
 model.getClient = function (clientId, clientSecret, callback) {
   for(var i = 0, len = oauthClients.length; i < len; i++) {
     var elem = oauthClients[i];
-    if(elem.clientId === clientId && elem.clientSecret === clientSecret) {
+    if(elem.clientId === clientId &&
+      (clientSecret === null || elem.client_secret === clientSecret)) {
       return callback(false, elem);
     }
   }

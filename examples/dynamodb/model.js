@@ -44,7 +44,9 @@ model.getClient = function (clientId, clientSecret, callback) {
       function(err, data) {
     if (err || !data) return callback(err, data);
 
-    if (data.clientSecret !== clientSecret) return callback();
+    if (clientSecret !== null && data.clientSecret !== clientSecret) {
+      return callback();
+    }
 
     callback(null, data);
   });
