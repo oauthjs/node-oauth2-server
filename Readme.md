@@ -1,4 +1,4 @@
-# Node OAuth2 Server [![Build Status](https://travis-ci.org/thomseddon/node-oauth2-server.png?branch=2.0)](https://travis-ci.org/thomseddon/node-oauth2-server)
+# Node OAuth2 Server [![Build Status](https://travis-ci.org/vagmi/node-oauth2-server.png?branch=master)](https://travis-ci.org/vagmi/node-oauth2-server)
 
 Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with [express](http://expressjs.com/) in [node.js](http://nodejs.org/)
 
