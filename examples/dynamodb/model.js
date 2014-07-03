@@ -131,9 +131,9 @@ model.saveAuthCode = function (authCode, clientId, expires, user, callback) {
   };
 
   if (expires) code.expires = parseInt(expires / 1000, 10);
-  console.log("saving", token);
+  console.log("saving", code);
 
-  dal.doSet(token, OAuthAuthCodeTable, { authCode: { S: authCode }}, callback);
+  dal.doSet(code, OAuthAuthCodeTable, { authCode: { S: authCode }}, callback);
 };
 
 
