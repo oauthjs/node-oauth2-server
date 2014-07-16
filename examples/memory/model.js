@@ -63,7 +63,7 @@ model.getClient = function (clientId, clientSecret, callback) {
   for(var i = 0, len = oauthClients.length; i < len; i++) {
     var elem = oauthClients[i];
     if(elem.clientId === clientId &&
-      (clientSecret === null || elem.client_secret === clientSecret)) {
+      (clientSecret === null || elem.clientSecret === clientSecret)) {
       return callback(false, elem);
     }
   }
