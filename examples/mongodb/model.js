@@ -108,7 +108,10 @@ model.saveAccessToken = function (token, clientId, expires, userId, callback) {
 model.getUser = function (username, password, callback) {
   console.log('in getUser (username: ' + username + ', password: ' + password + ')');
 
-  OAuthUsersModel.findOne({ username: username, password: password }, callback);
+  OAuthUsersModel.findOne({ username: username, password: password }, function(err, user) {
+    if(err) return callback(err);
+    callback(null, user._id);
+  });
 };
 
 /*
