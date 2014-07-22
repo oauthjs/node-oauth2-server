@@ -213,6 +213,21 @@ The spec does not actually require that you revoke the old token - hence this is
  - *mixed* **error**
      - Truthy to indicate an error
 
+### Required for `client_credentials` grant type
+
+#### getUserFromClient (clientId, clientSecret, callback)
+- *string* **clientId**
+- *string* **clientSecret**
+- *function* **callback (error, user)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **user**
+     - The user retrieved from storage or falsey to indicate an invalid user
+     - Saved in `req.user`
+     - Must contain the following keys:
+         - *string|number* **id**
+
+
 ### Required for [extension grant](#extension-grants) grant type
 
 #### extendedGrant (req, callback)
