@@ -15,6 +15,7 @@
  */
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
   request = require('supertest'),
   should = require('should');
 
@@ -28,7 +29,7 @@ var bootstrap = function (oauthConfig) {
     });
 
   app.set('json spaces', 0);
-  app.use(express.bodyParser());
+  app.use(bodyParser());
 
   app.all('/oauth/token', oauth.grant());
 
@@ -38,28 +39,8 @@ var bootstrap = function (oauthConfig) {
 };
 
 describe('Granting with client_credentials grant type', function () {
-  it('should detect missing parameters', function (done) {
-    var app = bootstrap({
-      model: {
-        getClient: function (id, secret, callback) {
-          callback(false, true);
-        },
-        grantTypeAllowed: function (clientId, grantType, callback) {
-          callback(false, true);
-        }
-      },
-      grants: ['client_credentials']
-    });
 
-    request(app)
-      .post('/oauth/token')
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .send({
-        grant_type: 'client_credentials'
-      })
-      .expect(400, /or missing client_id parameter/i, done);
-
-  });
+  // N.B. Client is authenticated earlier in request
 
   it('should detect invalid user', function (done) {
     var app = bootstrap({
@@ -86,7 +67,7 @@ describe('Granting with client_credentials grant type', function () {
         grant_type: 'client_credentials'
       })
       .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
-      .expect(400, /user credentials are invalid/i, done);
+      .expect(400, /client credentials are invalid/i, done);
 
   });
 });

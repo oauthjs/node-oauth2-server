@@ -1,11 +1,53 @@
 ## Changelog
 
-This is currently a backup, see: https://github.com/nightworld/node-oauth2-server/releases
+### 2.2.2
 
-### 3.0 (in progress)
- - Huge refactor
- - Switch from internal router to exposing explit middleware to be added to individual routes
- - Switch all model save* functions to take two params, data and callback
+ - Fix bug when client has multiple redirect_uri's (#84)
+
+### 2.2.1
+
+ - Fix node 0.8.x (well npm 1.2.x) support
+
+### 2.2.0
+
+ - Support custom loggers via `debug` param
+ - Make OAuth2Error inherit from Error for fun and profit
+ - Don't go crazy when body is `null`
+ - Update tests and examples to express 4
+ - Fix lockdown pattern for express 4
+ - Update dev dependencies (mocha, should and supertest)
+
+### 2.1.1
+
+ - Allow client to return an array of multiple valid redirect URI's
+ - Fix continueAfterResponse when granting
+
+### 2.1.0
+ - Add support for client_credentials grant type (@lucknerjb)
+ - Support Authorization grant via GET request (@mjsalinger)
+
+### 2.0.2
+ - Fix continueAfterResponse option
+
+### 2.0.1
+ - Add "WWW-Authenticate" header for invalid_client
+
+### 2.0
+ - Huge intrenal refactor
+ - Switch from internal router ("allow" property) to exposing explit authorisation middleware to be added to individual routes
+ - Expose grant middleware to be attached to a route of your choosing
+ - Switch all model variables to camelCasing
+ - Add support for `authorization_code` grant type (i.e. traditional "allow", "deny" with redirects etc.)
+ - Some, previously wrong, error codes fixed
+
+### 1.5.3
+ - Fix tests for daylight saving
+
+### 1.5.2
+ - Fix expiration token checking (previously expires was wrongly checked against boot time)
+
+### 1.5.1
+ - Add repository field to package
 
 ### 1.5.0
  - Add support for non-expiring tokens (set accessTokenLifetime/refreshTokenLifetime = null)

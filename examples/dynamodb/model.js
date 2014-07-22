@@ -44,7 +44,9 @@ model.getClient = function (clientId, clientSecret, callback) {
       function(err, data) {
     if (err || !data) return callback(err, data);
 
-    if (data.clientSecret !== clientSecret) return callback();
+    if (clientSecret !== null && data.clientSecret !== clientSecret) {
+      return callback();
+    }
 
     callback(null, data);
   });
@@ -131,9 +133,9 @@ model.saveAuthCode = function (authCode, clientId, expires, user, callback) {
   };
 
   if (expires) code.expires = parseInt(expires / 1000, 10);
-  console.log("saving", token);
+  console.log("saving", code);
 
-  dal.doSet(token, OAuthAuthCodeTable, { authCode: { S: authCode }}, callback);
+  dal.doSet(code, OAuthAuthCodeTable, { authCode: { S: authCode }}, callback);
 };
 
 

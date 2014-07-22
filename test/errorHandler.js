@@ -15,6 +15,7 @@
  */
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
   request = require('supertest'),
   should = require('should');
 
@@ -24,7 +25,7 @@ var bootstrap = function (oauthConfig) {
   var app = express(),
     oauth = oauth2server(oauthConfig || { model: {} });
 
-  app.use(express.bodyParser());
+  app.use(bodyParser());
 
   app.all('/oauth/token', oauth.grant());
   app.all('/', oauth.authorise(), function (req, res) {
@@ -53,12 +54,12 @@ describe('Error Handler', function() {
 
         res.body.should.have.keys('code', 'error', 'error_description');
 
-        res.body.code.should.be.a('number');
+        res.body.code.should.be.instanceOf(Number);
         res.body.code.should.equal(res.statusCode);
 
-        res.body.error.should.be.a('string');
+        res.body.error.should.be.instanceOf(String);
 
-        res.body.error_description.should.be.a('string');
+        res.body.error_description.should.be.instanceOf(String);
 
         done();
       });

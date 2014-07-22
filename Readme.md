@@ -14,17 +14,17 @@ The module provides two middlewares, one for authorization and routing, another 
 
 ```js
 var express = require('express'),
-  oauthserver = require('node-oauth2-server');
+    bodyParser = require('body-parser'),
+    oauthserver = require('node-oauth2-server');
 
 var app = express();
 
-app.configure(function() {
-  app.oauth = oauthserver({
-    model: {}, // See below for specification
-    grants: ['password'],
-    debug: true
-  });
-  app.use(express.bodyParser()); // REQUIRED
+app.use(bodyParser()); // REQUIRED
+
+app.oauth = oauthserver({
+  model: {}, // See below for specification
+  grants: ['password'],
+  debug: true
 });
 
 app.all('/oauth/token', app.oauth.grant());
@@ -44,7 +44,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 
 ## Features
 
-- Supports authorization_code, password, refresh_token and extension (custom) grant types
+- Supports authorization_code, password, refresh_token, client_credentials and extension (custom) grant types
 - Implicitly supports any form of storage e.g. PostgreSQL, MySQL, Mongo, Redis...
 - Full test suite
 
@@ -55,9 +55,8 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 - *array* **grants**
  - grant types you wish to support, currently the module supports `password` and `refresh_token`
   - Default: `[]`
-- *boolean* **debug**
- - If true, errors are logged to console
- - Default: `false`
+- *function|boolean* **debug**
+ - If `true` errors will be  logged to console. You may also pass a custom function, in which case that function will be called with the error as it's first argument
   - Default: `false`
 - *number* **accessTokenLifetime**
  - Life of access tokens in seconds
@@ -76,7 +75,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 - *boolean* **passthroughErrors**
  - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
 - *boolean* **continueAfterResponse**
- - If true, `next` will be called even if a reponse has been sent (you probably don't want this)
+ - If true, `next` will be called even if a response has been sent (you probably don't want this)
 
 ## Model Specification
 
@@ -127,8 +126,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 #### saveAccessToken (accessToken, clientId, expires, user, callback)
 - *string* **accessToken**
 - *string* **clientId**
-- *string|number* **userId**
 - *date* **expires**
+- *object* **user**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -181,8 +180,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 #### saveRefreshToken (refreshToken, clientId, expires, user, callback)
 - *string* **refreshToken**
 - *string* **clientId**
-- *string|number* **userId**
 - *date* **expires**
+- *object* **user**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -255,7 +254,7 @@ You can access the grant type via req.oauth.grantType and you should pass back s
 First you must insert client id/secret and user into storage. This is out of the scope of this example.
 
 To obtain a token you should POST to `/oauth/token`. You should include your client credentials in
-the Authorization header ("Basic " + client_id:client_secret base4'd), and then grant_type ("password"),
+the Authorization header ("Basic " + client_id:client_secret base64'd), and then grant_type ("password"),
 username and password in the request body, for example:
 
 ```
@@ -270,8 +269,8 @@ This will then call the following on your model (in this order):
  - getClient (clientId, clientSecret, callback)
  - grantTypeAllowed (clientId, grantType, callback)
  - getUser (username, password, callback)
- - saveAccessToken (accessToken, clientId, userId, expires, callback)
- - saveRefreshToken (refreshToken, clientId, userId, expires, callback) **(if using)**
+ - saveAccessToken (accessToken, clientId, expires, user, callback)
+ - saveRefreshToken (refreshToken, clientId, expires, user, callback) **(if using)**
 
 Provided there weren't any errors, this will return the following (excluding the `refresh_token` if you've not enabled the refresh_token grant type):
 
@@ -291,7 +290,7 @@ Pragma: no-cache
 
 ## Changelog
 
-See: https://github.com/thomseddon/node-oauth2-server/releases
+See: https://github.com/thomseddon/node-oauth2-server/blob/master/Changelog.md
 
 ## Credits
 
