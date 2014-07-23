@@ -24,7 +24,7 @@ var OAuthClientTable = "oauth2client";
 var OAuthUserTable = "userid_map";
 
 //
-// node-oauth2-server callbacks
+// oauth2-server callbacks
 //
 model.getAccessToken = function (bearerToken, callback) {
   console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');

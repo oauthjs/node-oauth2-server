@@ -60,7 +60,7 @@ var OAuthAccessTokensModel = mongoose.model('OAuthAccessTokens'),
   OAuthUsersModel = mongoose.model('OAuthUsers');
 
 //
-// node-oauth2-server callbacks
+// oauth2-server callbacks
 //
 model.getAccessToken = function (bearerToken, callback) {
   console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');

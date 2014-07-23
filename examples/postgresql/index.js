@@ -1,6 +1,6 @@
 var express = require('express'),
   bodyParser = require('body-parser'),
-  oauthserver = require('../../'); // Would be: 'node-oauth2-server'
+  oauthserver = require('../../'); // Would be: 'oauth2-server'
 
 var app = express();
 

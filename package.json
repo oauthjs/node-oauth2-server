@@ -1,5 +1,5 @@
 {
-  "name": "node-oauth2-server",
+  "name": "oauth2-server",
   "description": "Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with express in node.js",
   "version": "2.2.2",
   "keywords": [
@@ -41,6 +41,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nightworld/node-oauth2-server.git"
+    "url": "https://github.com/thomseddon/node-oauth2-server.git"
   }
 }
