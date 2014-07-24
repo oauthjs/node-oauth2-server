@@ -255,7 +255,7 @@ describe('AuthCodeGrant', function() {
         redirect_uri: 'http://nightworld.com'
       })
       .expect(302, function (err, res) {
-        res.header.location.should.equal('http://nightworld.com?code=' + code);
+        res.header.location.should.equal('http://nightworld.com/?code=' + code);
         done();
       });
   });
@@ -285,7 +285,7 @@ describe('AuthCodeGrant', function() {
         redirect_uri: 'http://nightworld.com'
       })
       .expect(302, function (err, res) {
-        res.header.location.should.equal('http://nightworld.com?code=' + code);
+        res.header.location.should.equal('http://nightworld.com/?code=' + code);
         done();
       });
   });
