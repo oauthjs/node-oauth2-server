@@ -367,6 +367,37 @@ describe('AuthCodeGrant', function() {
       });
   });
 
+  it('should accept valid request and return code and state using GET', function (done) {
+    var code;
+
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        code = authCode;
+        callback();
+      }
+    }, [false, true]);
+
+    request(app)
+      .get('/authorise')
+      .query({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com',
+        state: 'some_state'
+      })
+      .expect(302, function (err, res) {
+        res.header.location.should.equal('http://nightworld.com?code=' + code  + '&state=some_state');
+        done();
+      });
+  });
+
   it('should continue after success response if continueAfterResponse = true', function (done) {
     var app = bootstrap({
       getClient: function (clientId, clientSecret, callback) {

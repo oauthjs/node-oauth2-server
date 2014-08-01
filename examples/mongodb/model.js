@@ -60,7 +60,7 @@ var OAuthAccessTokensModel = mongoose.model('OAuthAccessTokens'),
   OAuthUsersModel = mongoose.model('OAuthUsers');
 
 //
-// node-oauth2-server callbacks
+// oauth2-server callbacks
 //
 model.getAccessToken = function (bearerToken, callback) {
   console.log('in getAccessToken (bearerToken: ' + bearerToken + ')');
@@ -70,7 +70,9 @@ model.getAccessToken = function (bearerToken, callback) {
 
 model.getClient = function (clientId, clientSecret, callback) {
   console.log('in getClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
-
+  if (clientSecret === null) {
+    return OAuthClientsModel.findOne({ clientId: clientId }, callback);
+  }
   OAuthClientsModel.findOne({ clientId: clientId, clientSecret: clientSecret }, callback);
 };
 
@@ -106,7 +108,10 @@ model.saveAccessToken = function (token, clientId, expires, userId, callback) {
 model.getUser = function (username, password, callback) {
   console.log('in getUser (username: ' + username + ', password: ' + password + ')');
 
-  OAuthUsersModel.findOne({ username: username, password: password }, callback);
+  OAuthUsersModel.findOne({ username: username, password: password }, function(err, user) {
+    if(err) return callback(err);
+    callback(null, user._id);
+  });
 };
 
 /*

@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.2.2
+
+ - Fix bug when client has multiple redirect_uri's (#84)
+
 ### 2.2.1
 
  - Fix node 0.8.x (well npm 1.2.x) support

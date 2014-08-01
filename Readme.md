@@ -5,7 +5,7 @@ Complete, compliant and well tested module for implementing an OAuth2 Server/Pro
 ## Installation
 
 ```
-npm install node-oauth2-server
+npm install oauth2-server
 ```
 
 ## Quick Start
@@ -15,7 +15,7 @@ The module provides two middlewares, one for authorization and routing, another 
 ```js
 var express = require('express'),
     bodyParser = require('body-parser'),
-    oauthserver = require('node-oauth2-server');
+    oauthserver = require('oauth2-server');
 
 var app = express();
 
@@ -215,7 +215,9 @@ The spec does not actually require that you revoke the old token - hence this is
 
 ### Required for [extension grant](#extension-grants) grant type
 
-#### extendedGrant (req, callback)
+#### extendedGrant (grantType, req, callback)
+- *string* **grantType**
+ - The (custom) grant type
 - *object* **req**
  - The raw request
 - *function* **callback (error, supported, user)**
@@ -228,6 +230,21 @@ The spec does not actually require that you revoke the old token - hence this is
      - Saved in `req.user`
      - Must contain the following keys:
          - *string|number* **id**
+
+### Required for `client_credentials` grant type
+
+#### getUserFromClient (clientId, clientSecret, callback)
+- *string* **clientId**
+- *string* **clientSecret**
+- *function* **callback (error, user)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *object* **user**
+     - The user retrieved from storage or falsey to indicate an invalid user
+     - Saved in `req.user`
+     - Must contain the following keys:
+         - *string|number* **id**
+
 
 ### Optional
 
@@ -247,7 +264,7 @@ The spec does not actually require that you revoke the old token - hence this is
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
 Any requests that begin with http(s):// (as [defined in the spec](http://tools.ietf.org/html/rfc6749#section-4.5)) will be passed to it for you to handle.
-You can access the grant type via req.oauth.grantType and you should pass back supported as `false` if you do not support it to ensure a consistent (and compliant) response.
+You can access the grant type via the first argument and you should pass back supported as `false` if you do not support it to ensure a consistent (and compliant) response.
 
 ## Example using the `password` grant type
 
