@@ -121,26 +121,6 @@ describe('AuthCodeGrant', function() {
       })
       .expect(400, /redirect_uri does not match/i, done);
   });
-  it('should detect mismatching redirect_uri with referer during token auth', function (done) {
-    var app = bootstrap({
-      getClient: function (clientId, clientSecret, callback) {
-        callback(false, {
-          clientId: 'thom',
-          redirectUri: 'http://nightworld.com'
-        });
-      }
-    });
-
-    request(app)
-      .post('/authorise')
-      .send({
-        response_type: 'token',
-        client_id: 'thom',
-        referer: 'http://www.wrongurl.com',
-        redirect_uri: 'http://nightworld.com'
-      })
-      .expect(400, /redirect_uri does not match http referer/i, done);
-  });
 
   it('should detect mismatching redirect_uri within an array', function (done) {
     var app = bootstrap({
@@ -382,7 +362,7 @@ describe('AuthCodeGrant', function() {
         redirect_uri: 'http://nightworld.com'
       })
       .expect(302, function (err, res) {
-        res.header.location.should.equal('http://nightworld.com#code=' + code);
+        res.header.location.should.equal('http://nightworld.com#access_token=' + code);
         done();
       });
   });
