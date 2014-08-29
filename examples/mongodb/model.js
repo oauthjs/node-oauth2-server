@@ -78,7 +78,7 @@ model.getClient = function (clientId, clientSecret, callback) {
 
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
 // it gives an example of how to use the method to resrict certain grant types
-var authorizedClientIds = ['s6BhdRkqt3', 'toto'];
+var authorizedClientIds = ['s6BhdRkqt3', 'toto', 'testuser'];
 model.grantTypeAllowed = function (clientId, grantType, callback) {
   console.log('in grantTypeAllowed (clientId: ' + clientId + ', grantType: ' + grantType + ')');
 
