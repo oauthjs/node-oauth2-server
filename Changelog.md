@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.3.0
+
+ - Support "state" param for auth_code grant type
+ - Docs for client_credentials grant type
+ - Fix `getRefreshToken` in postgres model example
+
 ### 2.2.2
 
  - Fix bug when client has multiple redirect_uri's (#84)
