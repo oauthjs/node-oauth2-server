@@ -49,10 +49,10 @@ var OAuthUsersSchema = new Schema({
   email: { type: String, default: '' }
 });
 
-mongoose.model('OAuthAccessTokens', OAuthAccessTokensSchema);
-mongoose.model('OAuthRefreshTokens', OAuthRefreshTokensSchema);
-mongoose.model('OAuthClients', OAuthClientsSchema);
-mongoose.model('OAuthUsers', OAuthUsersSchema);
+mongoose.model('OAuthAccessTokens', OAuthAccessTokensSchema,'OAuthAccessTokens');
+mongoose.model('OAuthRefreshTokens', OAuthRefreshTokensSchema,'OAuthRefreshTokens');
+mongoose.model('OAuthClients', OAuthClientsSchema,'OAuthClients');
+mongoose.model('OAuthUsers', OAuthUsersSchema,'OAuthUsers');
 
 var OAuthAccessTokensModel = mongoose.model('OAuthAccessTokens'),
   OAuthRefreshTokensModel = mongoose.model('OAuthRefreshTokens'),
