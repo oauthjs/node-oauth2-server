@@ -188,8 +188,8 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 
 #### getRefreshToken (refreshToken, callback)
 - *string* **refreshToken**
- - The bearer token (access token) that has been provided
-- *function* **callback (error, accessToken)**
+ - The bearer token (refresh token) that has been provided
+- *function* **callback (error, refreshToken)**
  - *mixed* **error**
      - Truthy to indicate an error
  - *object* **refreshToken**
