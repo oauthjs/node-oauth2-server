@@ -96,14 +96,11 @@ describe('Lockdown pattern', function() {
 
       // mock express 3 app
       app = {
-        routes: {
-          get: [
-            { callbacks: [ privateAction ] }
-          ]
-        }
+        routes: { get: [] }
       };
 
       app.oauth = oauth2server({ model: {} });
+      app.routes.get.push({ callbacks: [ privateAction ] });
       app.routes.get.push({ callbacks: [ app.oauth.bypass, publicAction ] })
       app.oauth.lockdown(app);
     });
