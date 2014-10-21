@@ -86,4 +86,34 @@ describe('Lockdown pattern', function() {
       .get('/public')
       .expect(200, /hello/i, done);
   });
+
+  describe('in express 3', function () {
+    var app, privateAction, publicAction;
+
+    beforeEach(function () {
+      privateAction = function () {};
+      publicAction = function () {};
+
+      // mock express 3 app
+      app = {
+        routes: {
+          get: [
+            { callbacks: [ privateAction ] }
+          ]
+        }
+      };
+
+      app.oauth = oauth2server({ model: {} });
+      app.routes.get.push({ callbacks: [ app.oauth.bypass, publicAction ] })
+      app.oauth.lockdown(app);
+    });
+
+    it('adds authorise to non-bypassed routes', function () {
+      app.routes.get[0].callbacks[1].should.equal(privateAction);
+    });
+
+    it('removes oauth.bypass from bypassed routes', function () {
+      app.routes.get[1].callbacks[0].should.equal(publicAction);
+    });
+  });
 });
