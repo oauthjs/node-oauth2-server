@@ -391,6 +391,47 @@ describe('Grant', function() {
 
     });
 
+    describe('include extra data', function () {
+      it('should return an oauth response with an extra_data key', function (done) {
+        var app = bootstrap({
+          model: {
+            getClient: function (id, secret, callback) {
+              callback(false, { clientId: 'thom' });
+            },
+            grantTypeAllowed: function (clientId, grantType, callback) {
+              callback(false, true);
+            },
+            getUser: function (uname, pword, callback) {
+              callback(false, { id: 1 });
+            },
+            saveAccessToken: function (token, clientId, expires, user, cb) {
+              cb();
+            },
+            getExtraData: function (user, client, callback) {
+              callback(false, 'extraValue');
+            }
+          },
+          grants: ['password']
+        });
+
+        request(app)
+            .post('/oauth/token')
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .send(validBody)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+
+              res.body.should.have.keys(['access_token', 'token_type', 'expires_in',
+                'extra_data']);
+              res.body.extra_data.should.be.instanceOf(String);
+              res.body.extra_data.should.equal('extraValue');
+
+              done();
+            });
+      });
+    });
+
     it('should return an oauth compatible response with refresh_token', function (done) {
       var app = bootstrap({
         model: {
