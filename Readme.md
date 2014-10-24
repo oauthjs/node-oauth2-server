@@ -270,7 +270,7 @@ The spec does not actually require that you revoke the old token - hence this is
  - *mixed* **error**
    - Truthy to indicate an error
  - *mixed* **data**
-   - object or primitive to be placed into the response's `extra_data` field.
+   - object to merge into the grant response.
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
