@@ -408,7 +408,7 @@ describe('Grant', function() {
               cb();
             },
             getExtraData: function (user, client, callback) {
-              callback(false, 'extraValue');
+              callback(false, {extraKey: 'extraValue'});
             }
           },
           grants: ['password']
@@ -423,9 +423,9 @@ describe('Grant', function() {
               if (err) return done(err);
 
               res.body.should.have.keys(['access_token', 'token_type', 'expires_in',
-                'extra_data']);
-              res.body.extra_data.should.be.instanceOf(String);
-              res.body.extra_data.should.equal('extraValue');
+                'extraKey']);
+              res.body.extraKey.should.be.instanceOf(String);
+              res.body.extraKey.should.equal('extraValue');
 
               done();
             });
