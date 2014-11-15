@@ -20,6 +20,7 @@ var express = require('express'),
   should = require('should');
 
 var oauth2server = require('../');
+var Authorise = require('../lib/authorise');
 
 var bootstrap = function (oauthConfig) {
   var app = express();
@@ -105,7 +106,24 @@ describe('Lockdown pattern', function() {
       app.oauth.lockdown(app);
     });
 
+    function mockRequest(authoriseFactory) {
+      var req = {
+        get: function () {},
+        query: { access_token: { expires: null } }
+      };
+      var next = function () {};
+
+      app.oauth.model.getAccessToken = function (t, c) { c(null, t); };
+
+      return authoriseFactory(req, null, next);
+    }
+
     it('adds authorise to non-bypassed routes', function () {
+      var authorise = mockRequest(app.routes.get[0].callbacks[0]);
+      authorise.should.be.an.instanceOf(Authorise);
+    });
+
+    it('runs non-bypassed routes after authorise', function () {
       app.routes.get[0].callbacks[1].should.equal(privateAction);
     });
 
