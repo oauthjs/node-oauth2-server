@@ -56,7 +56,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
  - grant types you wish to support, currently the module supports `password` and `refresh_token`
   - Default: `[]`
 - *function|boolean* **debug**
- - If `true` errors will be  logged to console. You may also pass a custom function, in which case that function will be called with the error as it's first argument
+ - If `true` errors will be  logged to console. You may also pass a custom function, in which case that function will be called with the error as its first argument
   - Default: `false`
 - *number* **accessTokenLifetime**
  - Life of access tokens in seconds
