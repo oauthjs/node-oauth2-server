@@ -95,4 +95,46 @@ describe('Granting with password grant type', function () {
       .expect(400, /user credentials are invalid/i, done);
 
   });
+
+  it('should put user and client in request object for token generation', function (done) {
+    var client = { id : "someRandomTestClientId" };
+    var user = { id : "someRandomTestUserId" };
+    var token  = 'someBogusToken';
+
+    var app = bootstrap({
+      model: {
+        getClient: function (id, secret, callback) {
+          callback(null, client);
+        },
+        grantTypeAllowed: function (clientId, grantType, callback) {
+          callback(null, true);
+        },
+        getUser: function (uname, pword, callback) {
+          callback(null, user);
+        },
+        saveAccessToken : function(accessToken, clientId, expires, userId, callback) {
+          callback();
+        },
+        generateToken : function(type, req, callback) {
+          req.user.should.equal(user);
+          req.oauth.client.should.equal(client);
+          callback(null, token);
+        }
+      },
+      grants: ['password']
+    });
+
+    request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          grant_type: 'password',
+          client_id: 'thom',
+          client_secret: 'nightworld',
+          username: 'thomseddon',
+          password: 'nightworld'
+        })
+        .expect(200, /someBogusToken/i, done);
+
+  });
 });
