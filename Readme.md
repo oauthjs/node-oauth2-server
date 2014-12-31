@@ -248,9 +248,11 @@ The spec does not actually require that you revoke the old token - hence this is
 
 ### Optional
 
-#### generateToken (type, callback)
+#### generateToken (type, req, callback)
 - *string* **type**
  - `accessToken` or `refreshToken`
+- *object* **req**
+ - The current express request
 - *function* **callback (error, token)**
  - *mixed* **error**
      - Truthy to indicate an error
