@@ -252,6 +252,40 @@ describe('Grant', function() {
 
     });
 
+    it('should include client and user in request', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, true);
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          generateToken: function (type, req, callback) {
+            req.oauth.client.id.should.equal('thom');
+            req.oauth.client.secret.should.equal('nightworld');
+            req.user.id.should.equal(1);
+            callback(false, 'thommy');
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.equal('thommy');
+            cb();
+          }
+        },
+        grants: ['password']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send(validBody)
+        .expect(200, /thommy/, done);
+
+    });
+
     it('should reissue if model returns object', function (done) {
       var app = bootstrap({
         model: {
