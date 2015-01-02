@@ -98,8 +98,9 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
          - *date* **expires**
              - The date when it expires
              - `null` to indicate the token **never expires**
-         - *string|number* **userId**
-             - The user id (saved in req.user.id)
+         - *mixed* **user** *or* *string|number* **userId**
+             - If a `user` key exists, this is saved as `req.user`
+             - Otherwise a `userId` key must exist, which is saved in `req.user.id`
 
 #### getClient (clientId, clientSecret, callback)
 - *string* **clientId**
