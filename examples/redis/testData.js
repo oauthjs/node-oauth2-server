@@ -8,11 +8,11 @@ db.multi()
     username: 'username',
     password: 'password'
   })
-  .hmset('clients:clientId', {
+  .hmset('clients:client', {
     clientId: 'client',
     clientSecret: 'secret'
   })
-  .sadd('clients:clientId:grant_types', [
+  .sadd('clients:client:grant_types', [
     'password',
     'refresh_token'
   ])
