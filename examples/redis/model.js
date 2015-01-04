@@ -22,7 +22,7 @@ model.getAccessToken = function (bearerToken, callback) {
     callback(null, {
       accessToken: token.accessToken,
       clientId: token.clientId,
-      expires: new Date(token.expires),
+      expires: token.expires ? new Date(token.expires) : null,
       userId: token.userId
     });
   });
@@ -54,7 +54,7 @@ model.getRefreshToken = function (bearerToken, callback) {
     callback(null, {
       refreshToken: token.accessToken,
       clientId: token.clientId,
-      expires: new Date(token.expires),
+      expires: token.expires ? new Date(token.expires) : null,
       userId: token.userId
     });
   });
@@ -68,7 +68,7 @@ model.saveAccessToken = function (accessToken, clientId, expires, user, callback
   db.hmset(util.format(keys.token, accessToken), {
     accessToken: accessToken,
     clientId: clientId,
-    expires: expires.toISOString(),
+    expires: expires ? expires.toISOString() : null,
     userId: user.id
   }, callback);
 };
@@ -77,7 +77,7 @@ model.saveRefreshToken = function (refreshToken, clientId, expires, user, callba
   db.hmset(util.format(keys.refreshToken, refreshToken), {
     refreshToken: refreshToken,
     clientId: clientId,
-    expires: expires.toISOString(),
+    expires: expires ? expires.toISOString() : null,
     userId: user.id
   }, callback);
 };
