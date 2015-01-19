@@ -132,6 +132,23 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *mixed* **error**
      - Truthy to indicate an error
 
+#### authoriseScope (accessToken, scope, callback)
+- *string* **accessToken**
+- *mixed* **scope**
+- *function* **callback (error, allowed)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *boolean* **allowed**
+     - Indicates whether the scope is allowed
+
+#### saveScope (accessToken, scope, callback)
+- *object* **accessToken**
+- *string* **scope**
+- *function* **callback (error, scope)**
+ - *mixed* **error**
+     - Truthy to indicate an error
+ - *mixed* **scope**
+     - The accepted scope, or falsy to indicate an invalid scope.
 
 ### Required for `authorization_code` grant type
 
@@ -150,12 +167,13 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
          - *string|number* **userId**
              - The userId
 
-#### saveAuthCode (authCode, clientId, expires, user, callback)
+#### saveAuthCode (authCode, clientId, expires, user, scope, callback)
 - *string* **authCode**
 - *string* **clientId**
 - *date* **expires**
 - *mixed* **user**
    - Whatever was passed as `user` to the codeGrant function (see example)
+- *string* **scope**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -272,7 +290,7 @@ First you must insert client id/secret and user into storage. This is out of the
 
 To obtain a token you should POST to `/oauth/token`. You should include your client credentials in
 the Authorization header ("Basic " + client_id:client_secret base64'd), and then grant_type ("password"),
-username and password in the request body, for example:
+username, password, and optionally a scope in the request body, for example:
 
 ```
 POST /oauth/token HTTP/1.1
@@ -280,7 +298,7 @@ Host: server.example.com
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=password&username=johndoe&password=A3ddj3w
+grant_type=password&username=johndoe&password=A3ddj3w&scope=readonly
 ```
 This will then call the following on your model (in this order):
  - getClient (clientId, clientSecret, callback)
@@ -288,6 +306,7 @@ This will then call the following on your model (in this order):
  - getUser (username, password, callback)
  - saveAccessToken (accessToken, clientId, expires, user, callback)
  - saveRefreshToken (refreshToken, clientId, expires, user, callback) **(if using)**
+ - saveScope (scope, accessToken, callback)
 
 Provided there weren't any errors, this will return the following (excluding the `refresh_token` if you've not enabled the refresh_token grant type):
 
@@ -301,7 +320,8 @@ Pragma: no-cache
   "access_token":"2YotnFZFEjr1zCsicMWpAA",
   "token_type":"bearer",
   "expires_in":3600,
-  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA"
+  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+  "scope": "readonly"
 }
 ```
 

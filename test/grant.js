@@ -435,6 +435,53 @@ describe('Grant', function() {
 
     });
 
+    it('should return an oauth compatible response with scope', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { client_id: 'thom' });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb();
+          },
+          saveRefreshToken: function (token, clientId, expires, user, cb) {
+            cb();
+          },
+          saveScope: function (accessToken, scope, cb) {
+            cb(false, 'foobar');
+          }
+        },
+        grants: ['password', 'refresh_token']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld', username: 'thomseddon', password: 'nightworld', scope: 'foobar' })
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.keys(['access_token', 'token_type', 'expires_in',
+            'refresh_token', 'scope']);
+          res.body.access_token.should.be.instanceOf(String);
+          res.body.access_token.should.have.length(40);
+          res.body.expires_in.should.equal(3600);
+          res.body.refresh_token.should.be.instanceOf(String);
+          res.body.refresh_token.should.have.length(40);
+          res.body.scope.should.equal('foobar');
+          res.body.token_type.should.equal('bearer');
+
+          done();
+        });
+    });
+
     it('should exclude expires_in if accessTokenLifetime = null', function (done) {
       var app = bootstrap({
         model: {
@@ -518,6 +565,77 @@ describe('Grant', function() {
         });
     });
 
+  });
+
+  describe('saving scope', function () {
+    it('should not allow invalid scopes', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { client_id: 'thom' });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.be.instanceOf(String);
+            token.should.have.length(40);
+            clientId.should.equal('thom');
+            user.id.should.equal(1);
+            (+expires).should.be.within(10, (+new Date()) + 3600000);
+            cb();
+          },
+          saveScope: function(accessToken, scope, cb) {
+            cb(false, false);
+          }
+        },
+        grants: ['password']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld', username: 'thomseddon', password: 'nightworld', scope: 'foo bar' })
+        .expect(400, /invalid_scope/, done);
+
+    });
+
+    it('should allow valid scopes', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { client_id: 'thom' });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.be.instanceOf(String);
+            token.should.have.length(40);
+            clientId.should.equal('thom');
+            user.id.should.equal(1);
+            (+expires).should.be.within(10, (+new Date()) + 3600000);
+            cb();
+          },
+          saveScope: function(accessToken, scope, cb) {
+            cb(false, 'foo bar');
+          }
+        },
+        grants: ['password']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld', username: 'thomseddon', password: 'nightworld', scope: 'foo bar' })
+        .expect(200, /foo bar/, done);
+    });
   });
 
 });
