@@ -237,4 +237,35 @@ describe('Authorise', function() {
       .expect(200, /nightworld/, done);
   });
 
+  it('should pass additional options for model to consider in token validation', function (done) {
+    var app = bootstrap({
+      model: {
+        getAccessToken: function (token, callback, options) {
+          var expires = new Date();
+          expires.setSeconds(expires.getSeconds() + 20);
+
+          if (options.role === currentuserrole) {
+            callback(false, {expires: expires, userId: 1});
+          } else {
+            callback(false, null);
+          }
+        }
+      }
+    }, false),
+        currentuserrole = "ADMIN";
+
+    app.get('/admin', app.oauth.authorise({role: "ADMIN"}), function (req, res) {
+      req.should.have.property('user');
+      req.user.should.have.property('id');
+      req.user.id.should.equal(1);
+      res.send('nightworld');
+    });
+
+    app.use(app.oauth.errorHandler());
+
+    request(app)
+        .get('/admin?access_token=thom')
+        .expect(200, /nightworld/, done);
+  });
+
 });
