@@ -256,7 +256,7 @@ describe('Grant', function() {
       var app = bootstrap({
         model: {
           getClient: function (id, secret, callback) {
-            callback(false, true);
+            callback(false, { clientId: 'thom', clientSecret: 'nightworld' });
           },
           grantTypeAllowed: function (clientId, grantType, callback) {
             callback(false, true);
@@ -265,8 +265,8 @@ describe('Grant', function() {
             callback(false, { id: 1 });
           },
           generateToken: function (type, req, callback) {
-            req.oauth.client.id.should.equal('thom');
-            req.oauth.client.secret.should.equal('nightworld');
+            req.oauth.client.clientId.should.equal('thom');
+            req.oauth.client.clientSecret.should.equal('nightworld');
             req.user.id.should.equal(1);
             callback(false, 'thommy');
           },
