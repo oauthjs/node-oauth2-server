@@ -69,7 +69,8 @@ describe('AuthCodeGrant', function() {
     request(app)
       .post('/authorise')
       .send({ response_type: 'code' })
-      .expect(400, /invalid or missing client_id parameter/i, done);
+      .expect('WWW-Authenticate', 'Basic realm="Service"')
+      .expect(401, /invalid or missing client_id parameter/i, done);
   });
 
   it('should detect no redirect_uri', function (done) {
@@ -99,7 +100,7 @@ describe('AuthCodeGrant', function() {
         redirect_uri: 'http://nightworld.com'
       })
       .expect('WWW-Authenticate', 'Basic realm="Service"')
-      .expect(400, /invalid client credentials/i, done);
+      .expect(401, /invalid client credentials/i, done);
   });
 
   it('should detect mismatching redirect_uri with a string', function (done) {
