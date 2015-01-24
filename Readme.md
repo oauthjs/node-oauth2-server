@@ -114,6 +114,7 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
      - Saved in `req.client`
      - Must contain the following keys:
          - *string* **clientId**
+         - *string* **redirectUri** (`authorization_code` grant type only)
 
 #### grantTypeAllowed (clientId, grantType, callback)
 - *string* **clientId**
