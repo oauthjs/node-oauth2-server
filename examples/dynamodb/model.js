@@ -21,7 +21,7 @@ var OAuthAccessTokenTable = "oauth2accesstoken";
 var OAuthAuthCodeTable = "oauth2authcode";
 var OAuthRefreshTokenTable = "oauth2refreshtoken";
 var OAuthClientTable = "oauth2client";
-var OAuthUserTable = "userid_map";
+var OAuthUserTable = "oauth2user";
 
 //
 // oauth2-server callbacks
@@ -150,3 +150,20 @@ model.getUser = function (username, password, callback) {
       callback(null, { id: data.userId });
     });
 };
+
+/*
+ * Required to support client_credentials and implicit grant type
+ */
+model.getUserFromClient = function (clientId, clientSecret, callback) {
+    if(typeof clientSecret === 'function' && arguments.length < 3) {
+        callback = clientSecret;
+        clientSecret = undefined;
+    }
+
+    console.log('in getUserFromClient (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ')');
+
+    dal.doGet(OAuthClientTable, { clientId: { S: clientId }}, true, function(err, data) {
+        if (err) return callback(err);
+        callback(null, { id: data.userId });
+    });
+}
