@@ -93,7 +93,26 @@ describe('Grant', function() {
         .post('/oauth/token')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password' })
-        .expect(400, /invalid or missing client_id parameter/i, done);
+        .expect(400, /missing client credentials/i, done);
+    });
+
+    it('should not check client_id exists', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            id.should.equal('thom');
+            secret.should.equal('nightworld');
+            callback(false, false);
+          }
+        },
+        allowPublicClients: true
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password' })
+        .expect(400, done);
     });
 
     it('should check client_id matches regex', function (done) {
@@ -101,6 +120,21 @@ describe('Grant', function() {
         clientIdRegex: /match/,
         model: {},
         grants: ['password', 'refresh_token']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom' })
+        .expect(400, /invalid or missing client_id parameter/i, done);
+    });
+
+    it('should check client_id matches regex', function (done) {
+      var app = bootstrap({
+        clientIdRegex: /match/,
+        model: {},
+        grants: ['password', 'refresh_token'],
+        allowPublicClients: true
       });
 
       request(app)
@@ -118,6 +152,25 @@ describe('Grant', function() {
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({ grant_type: 'password', client_id: 'thom' })
         .expect(400, /missing client_secret parameter/i, done);
+    });
+
+    it('should not check client_secret exists', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            id.should.equal('thom');
+            secret.should.equal('nightworld');
+            callback(false, false);
+          }
+        },
+        allowPublicClients: true
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom' })
+        .expect(400, done);
     });
 
     it('should extract credentials from body', function (done) {
@@ -139,6 +192,26 @@ describe('Grant', function() {
         .expect(400, done);
     });
 
+    it('should extract credentials from body', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            id.should.equal('thom');
+            secret.should.equal('nightworld');
+            callback(false, false);
+          }
+        },
+        grants: ['password'],
+        allowPublicClients: true
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+        .expect(400, done);
+    });
+
     it('should extract credentials from header (Basic)', function (done) {
       var app = bootstrap({
         model: {
@@ -149,6 +222,26 @@ describe('Grant', function() {
           }
         },
         grants: ['password']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .send('grant_type=password&username=test&password=invalid')
+        .set('Authorization', 'Basic dGhvbTpuaWdodHdvcmxk')
+        .expect(400, done);
+    });
+
+    it('should extract credentials from header (Basic)', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            id.should.equal('thom');
+            secret.should.equal('nightworld');
+            callback(false, false);
+          }
+        },
+        grants: ['password'],
+        allowPublicClients: true
       });
 
       request(app)
@@ -198,6 +291,26 @@ describe('Grant', function() {
     });
   });
 
+  describe('check client credentials against model', function () {
+    it('should detect invalid client', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, false); // Fake invalid
+          }
+        },
+        grants: ['password'],
+        allowPublicClients: true
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+        .expect(400, /client credentials are invalid/i, done);
+    });
+  });
+
   describe('check grant type allowed for client (via model)', function () {
     it('should detect grant type not allowed', function (done) {
       var app = bootstrap({
@@ -210,6 +323,29 @@ describe('Grant', function() {
           }
         },
         grants: ['password']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({ grant_type: 'password', client_id: 'thom', client_secret: 'nightworld' })
+        .expect(400, /grant type is unauthorised for this client_id/i, done);
+    });
+  });
+
+  describe('check grant type allowed for client (via model)', function () {
+    it('should detect grant type not allowed', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, true);
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, false); // Not allowed
+          }
+        },
+        grants: ['password'],
+        allowPublicClients: true
       });
 
       request(app)
