@@ -266,7 +266,7 @@ The spec does not actually require that you revoke the old token - hence this is
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
-Any requests that begin with http(s):// (as [defined in the spec](http://tools.ietf.org/html/rfc6749#section-4.5)) will be passed to it for you to handle.
+Any grant type that is a valid URI will be passed to it for you to handle (as [defined in the spec](http://tools.ietf.org/html/rfc6749#section-4.5)).
 You can access the grant type via the first argument and you should pass back supported as `false` if you do not support it to ensure a consistent (and compliant) response.
 
 ## Example using the `password` grant type

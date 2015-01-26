@@ -20,6 +20,7 @@ var express = require('express'),
   should = require('should');
 
 var oauth2server = require('../');
+var Authorise = require('../lib/authorise');
 
 var bootstrap = function (oauthConfig) {
   var app = express();
@@ -85,5 +86,49 @@ describe('Lockdown pattern', function() {
     request(app)
       .get('/public')
       .expect(200, /hello/i, done);
+  });
+
+  describe('in express 3', function () {
+    var app, privateAction, publicAction;
+
+    beforeEach(function () {
+      privateAction = function () {};
+      publicAction = function () {};
+
+      // mock express 3 app
+      app = {
+        routes: { get: [] }
+      };
+
+      app.oauth = oauth2server({ model: {} });
+      app.routes.get.push({ callbacks: [ privateAction ] });
+      app.routes.get.push({ callbacks: [ app.oauth.bypass, publicAction ] })
+      app.oauth.lockdown(app);
+    });
+
+    function mockRequest(authoriseFactory) {
+      var req = {
+        get: function () {},
+        query: { access_token: { expires: null } }
+      };
+      var next = function () {};
+
+      app.oauth.model.getAccessToken = function (t, c) { c(null, t); };
+
+      return authoriseFactory(req, null, next);
+    }
+
+    it('adds authorise to non-bypassed routes', function () {
+      var authorise = mockRequest(app.routes.get[0].callbacks[0]);
+      authorise.should.be.an.instanceOf(Authorise);
+    });
+
+    it('runs non-bypassed routes after authorise', function () {
+      app.routes.get[0].callbacks[1].should.equal(privateAction);
+    });
+
+    it('removes oauth.bypass from bypassed routes', function () {
+      app.routes.get[1].callbacks[0].should.equal(publicAction);
+    });
   });
 });

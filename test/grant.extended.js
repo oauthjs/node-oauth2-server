@@ -129,9 +129,9 @@ describe('Granting with extended grant type', function () {
         extendedGrant: function (grantType, req, callback) {
           callback(false, true, { id: 3 });
         },
-        saveAccessToken: function () {
-          done(); // That's enough
-        }
+        saveAccessToken: function (token, clientId, expires, user, cb) {
+          cb();
+        },
       },
       grants: ['http://custom.com']
     });
@@ -141,6 +141,36 @@ describe('Granting with extended grant type', function () {
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send({
         grant_type: 'http://custom.com',
+        client_id: 'thom',
+        client_secret: 'nightworld'
+      })
+      .expect(200, done);
+  });
+
+  it('should allow any valid URI valid request', function (done) {
+    var app = bootstrap({
+      model: {
+        getClient: function (id, secret, callback) {
+          callback(false, true);
+        },
+        grantTypeAllowed: function (clientId, grantType, callback) {
+          callback(false, true);
+        },
+        extendedGrant: function (grantType, req, callback) {
+          callback(false, true, { id: 3 });
+        },
+        saveAccessToken: function (token, clientId, expires, user, cb) {
+          cb();
+        },
+      },
+      grants: ['urn:custom:grant']
+    });
+
+    request(app)
+      .post('/oauth/token')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .send({
+        grant_type: 'urn:custom:grant',
         client_id: 'thom',
         client_secret: 'nightworld'
       })
