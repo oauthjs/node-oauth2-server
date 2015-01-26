@@ -1,6 +1,6 @@
 var should = require('should');
 
-var OAuth2Error = require('../lib/error');
+var OAuth2Error = require('../lib/error')('test');
 
 describe('OAuth2Error', function() {
 
@@ -32,6 +32,15 @@ describe('OAuth2Error', function() {
     var error = new OAuth2Error('invalid_client');
 
     error.headers.should.eql({ 'WWW-Authenticate': 'Basic realm="Service"' });
+  });
+
+  it('should expose `headers` if type is `authorise`', function () {
+    var OAuth2Error = require('../lib/error')('authorise');
+    var error = new OAuth2Error('invalid_request', 'Invalid Request');
+
+    error.headers.should.eql({
+      'WWW-Authenticate': 'Bearer realm="Service",error="invalid_request",error_description="Invalid Request"'
+    });
   });
 
   it('should expose a status `code`', function () {

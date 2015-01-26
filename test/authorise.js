@@ -58,7 +58,8 @@ describe('Authorise', function() {
 
     request(app)
       .get('/')
-      .expect(400, /the access token was not found/i, done);
+      .expect('WWW-Authenticate', 'Bearer realm="Service"')
+      .expect(401, '', done);
   });
 
   it('should allow valid token as query param', function (done){
