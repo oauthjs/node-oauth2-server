@@ -266,6 +266,17 @@ The spec does not actually require that you revoke the old token - hence this is
      - *object* indicates a reissue (i.e. will not be passed to saveAccessToken/saveRefreshToken)
          - Must contain the following keys (if object):
            - *string* **accessToken** OR **refreshToken** dependant on type
+           
+#### getExtraData (user, client, callback)
+- *object* **user**
+ - the `user` object set by `getUser`
+- *object* **client**
+ - the `client` object set by `getClient`
+- *function* **callback (error, data)**
+ - *mixed* **error**
+   - Truthy to indicate an error
+ - *mixed* **data**
+   - object to merge into the grant response.
 
 ## Extension Grants
 You can support extension/custom grants by implementing the extendedGrant method as outlined above.
