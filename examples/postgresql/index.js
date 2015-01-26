@@ -4,7 +4,9 @@ var express = require('express'),
 
 var app = express();
 
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
 
 app.oauth = oauthserver({
   model: require('./model'),
