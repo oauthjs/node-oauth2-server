@@ -121,12 +121,14 @@ describe('Granting with extended grant type', function () {
     var app = bootstrap({
       model: {
         getClient: function (id, secret, callback) {
-          callback(false, true);
+          callback(false, { clientId: 'thom', clientSecret: 'nightworld' });
         },
         grantTypeAllowed: function (clientId, grantType, callback) {
           callback(false, true);
         },
         extendedGrant: function (grantType, req, callback) {
+          req.oauth.client.clientId.should.equal('thom');
+          req.oauth.client.clientSecret.should.equal('nightworld');
           callback(false, true, { id: 3 });
         },
         saveAccessToken: function () {
