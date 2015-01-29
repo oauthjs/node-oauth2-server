@@ -119,7 +119,7 @@ model.saveRefreshToken = function (refreshToken, clientId, expires, userId, call
 model.saveScope = function (scope, accessToken, callback) {
   // Here you will want to validate that what the client is soliciting
   // makes sense. You might then proceed by storing the validated scope.
-  // In this example, the scope is simly stored as a string in the
+  // In this example, the scope is simply stored as a string in the
   // oauth_access_tokens table, but you could also handle them as entries
   // in a connection table.
   var acceptedScope = scope;

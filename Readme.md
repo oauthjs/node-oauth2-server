@@ -133,10 +133,10 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *mixed* **error**
      - Truthy to indicate an error
 
-#### checkScope (accessToken, requiredScope, callback)
-- *string* **accessToken**
-- *mixed* **requiredScope**
+#### checkScope (scope, accessToken, callback)
+- *mixed* **scope**
   - String, array, or object indicating which scope(s) a token must possess
+- *string* **accessToken**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -306,7 +306,7 @@ This will then call the following on your model (in this order):
  - getUser (username, password, callback)
  - saveAccessToken (accessToken, clientId, expires, user, callback)
  - saveRefreshToken (refreshToken, clientId, expires, user, callback) **(if using)**
- - saveScope (scopeString, accessToken, callback)
+ - saveScope (scope, accessToken, callback)
 
 Provided there weren't any errors, this will return the following (excluding the `refresh_token` if you've not enabled the refresh_token grant type):
 
