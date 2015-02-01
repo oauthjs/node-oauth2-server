@@ -411,6 +411,8 @@ describe('Grant', function() {
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send(validBody)
         .expect(200)
+        .expect('Cache-Control', 'no-store')
+        .expect('Pragma', 'no-cache')
         .end(function (err, res) {
           if (err) return done(err);
 
@@ -452,6 +454,8 @@ describe('Grant', function() {
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send(validBody)
         .expect(200)
+        .expect('Cache-Control', 'no-store')
+        .expect('Pragma', 'no-cache')
         .end(function (err, res) {
           if (err) return done(err);
 

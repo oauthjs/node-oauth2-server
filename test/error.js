@@ -28,10 +28,23 @@ describe('OAuth2Error', function() {
     error.name.should.equal('OAuth2Error');
   });
 
-  it('should expose `headers` if error is `invalid_client`', function () {
+  it('should set cache `headers`', function () {
+    var error = new OAuth2Error('invalid_request');
+
+    error.headers.should.eql({
+      'Cache-Control': 'no-store',
+      'Pragma': 'no-cache'
+    });
+  });
+
+  it('should include WWW-Authenticate `header` if error is `invalid_client`', function () {
     var error = new OAuth2Error('invalid_client');
 
-    error.headers.should.eql({ 'WWW-Authenticate': 'Basic realm="Service"' });
+    error.headers.should.eql({
+      'Cache-Control': 'no-store',
+      'Pragma': 'no-cache',
+      'WWW-Authenticate': 'Basic realm="Service"'
+    });
   });
 
   it('should expose a status `code`', function () {
