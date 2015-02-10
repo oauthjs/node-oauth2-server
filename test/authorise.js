@@ -21,28 +21,32 @@ var express = require('express'),
 
 var oauth2server = require('../');
 
-var bootstrap = function (oauthConfig) {
-  if (oauthConfig === 'mockValid') {
-    oauthConfig = {
-      model: {
-        getAccessToken: function (token, callback) {
-          token.should.equal('thom');
-          var expires = new Date();
-          expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires });
-        }
-      }
-    };
-  }
-
+var bootstrap = function (model, options, continueAfterResponse) {
   var app = express();
-  app.oauth = oauth2server(oauthConfig || { model: {} });
+
+  model = model || {
+    getAccessToken: function (token, callback) {
+      var expires = new Date(Date.now() * 2);
+
+      callback(false, { expires: expires });
+    },
+    authoriseScope: function (accessToken, scope, cb) {
+      cb(false, true);
+    }
+  };
+
+  app.oauth = oauth2server({
+    model: model || {},
+    continueAfterResponse: continueAfterResponse
+  });
 
   app.use(bodyParser());
-  app.all('/', app.oauth.authorise());
 
+  app.get('/', app.oauth.authorise(options), function (req, res) {
+    res.send('nightworld');
+  });
 
-  app.all('/', function (req, res) {
+  app.post('/', app.oauth.authorise(options), function (req, res) {
     res.send('nightworld');
   });
 
@@ -51,10 +55,10 @@ var bootstrap = function (oauthConfig) {
   return app;
 };
 
-describe('Authorise', function() {
+describe('Authorise', function () {
 
   it('should detect no access token', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .get('/')
@@ -62,7 +66,7 @@ describe('Authorise', function() {
   });
 
   it('should allow valid token as query param', function (done){
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .get('/?access_token=thom')
@@ -71,7 +75,7 @@ describe('Authorise', function() {
 
   it('should require application/x-www-form-urlencoded when access token is ' +
       'in body', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .post('/')
@@ -81,7 +85,7 @@ describe('Authorise', function() {
   });
 
   it('should not allow GET when access token in body', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .get('/')
@@ -91,7 +95,7 @@ describe('Authorise', function() {
   });
 
   it('should allow valid token in body', function (done){
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .post('/')
@@ -100,8 +104,33 @@ describe('Authorise', function() {
       .expect(200, /nightworld/, done);
   });
 
+  it('should allow if scope is valid for the token', function (done) {
+    var app = bootstrap(null, { scope: 'foobar' });
+
+    request(app)
+      .get('/?access_token=thom')
+      .expect(200, /nightworld/, done);
+  });
+
+  it('should not allow if scope is invalid for the token', function (done) {
+    var app = bootstrap({
+      getAccessToken: function (token, callback) {
+        callback(false, { expires: null });
+      },
+      authoriseScope: function (accessToken, scope, cb) {
+        cb(false, false);
+      }
+    }, { scope: 'foobar' });
+
+    app.use(app.oauth.errorHandler());
+
+    request(app)
+      .get('/?access_token=thom')
+      .expect(400, /invalid_scope/, done);
+  });
+
   it('should detect malformed header', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .get('/')
@@ -110,7 +139,7 @@ describe('Authorise', function() {
   });
 
   it('should allow valid token in header', function (done){
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .get('/')
@@ -119,7 +148,7 @@ describe('Authorise', function() {
   });
 
   it('should allow exactly one method (get: query + auth)', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .get('/?access_token=thom')
@@ -128,7 +157,7 @@ describe('Authorise', function() {
   });
 
   it('should allow exactly one method (post: query + body)', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .post('/?access_token=thom')
@@ -139,7 +168,7 @@ describe('Authorise', function() {
   });
 
   it('should allow exactly one method (post: query + empty body)', function (done) {
-    var app = bootstrap('mockValid');
+    var app = bootstrap();
 
     request(app)
       .post('/?access_token=thom')
@@ -151,10 +180,8 @@ describe('Authorise', function() {
 
   it('should detect expired token', function (done){
     var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          callback(false, { expires: 0 }); // Fake expires
-        }
+      getAccessToken: function (token, callback) {
+        callback(false, { expires: 0 }); // Fake expires
       }
     });
 
@@ -163,22 +190,12 @@ describe('Authorise', function() {
       .expect(401, /the access token provided has expired/i, done);
   });
 
-  it('should passthrough with valid, non-expiring token (token = null)',
-      function (done) {
+  it('should passthrough with valid, non-expiring token (token = null)', function (done) {
     var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          token.should.equal('thom');
-          callback(false, { expires: null });
-        }
+      getAccessToken: function (token, callback) {
+        callback(false, { expires: null });
       }
     }, false);
-
-    app.get('/', app.oauth.authorise(), function (req, res) {
-      res.send('nightworld');
-    });
-
-    app.use(app.oauth.errorHandler());
 
     request(app)
       .get('/?access_token=thom')
@@ -187,23 +204,18 @@ describe('Authorise', function() {
 
   it('should expose the user id when setting userId', function (done) {
     var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          var expires = new Date();
-          expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires , userId: 1 });
-        }
-      }
-    }, false);
+      getAccessToken: function (token, callback) {
+        var expires = new Date(Date.now() * 2);
 
-    app.get('/', app.oauth.authorise(), function (req, res) {
+        callback(false, { expires: expires , userId: 1 });
+      }
+    });
+
+    app.get('/', function (req, res) {
       req.should.have.property('user');
       req.user.should.have.property('id');
       req.user.id.should.equal(1);
-      res.send('nightworld');
     });
-
-    app.use(app.oauth.errorHandler());
 
     request(app)
       .get('/?access_token=thom')
@@ -212,25 +224,20 @@ describe('Authorise', function() {
 
   it('should expose the user id when setting user object', function (done) {
     var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          var expires = new Date();
-          expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires , user: { id: 1, name: 'thom' }});
-        }
-      }
-    }, false);
+      getAccessToken: function (token, callback) {
+        var expires = new Date(Date.now() * 2);
 
-    app.get('/', app.oauth.authorise(), function (req, res) {
+        callback(false, { expires: expires, user: { id: 1, name: 'thom' }});
+      }
+    });
+
+    app.get('/', function (req, res) {
       req.should.have.property('user');
       req.user.should.have.property('id');
       req.user.id.should.equal(1);
       req.user.should.have.property('name');
       req.user.name.should.equal('thom');
-      res.send('nightworld');
     });
-
-    app.use(app.oauth.errorHandler());
 
     request(app)
       .get('/?access_token=thom')

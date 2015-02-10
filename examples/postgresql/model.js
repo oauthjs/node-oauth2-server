@@ -133,14 +133,13 @@ model.saveScope = function (scope, accessToken, callback) {
   });
 };
 
-model.checkScope = function (scope, accessToken, callback)
+model.authoriseScope = function (accessToken, scope, callback)
+  var allowed = accessToken.scope.indexOf(scope) !== -1;
+
   // You may pass anything from a simple string, as this example illustrates,
   // to representations including scopes and subscopes such as
   // { "account": [ "edit" ] }
-  if(accessToken.scope.indexOf(scope) === -1) {
-    return callback('Required scope: ' + scope);
-  }
-  callback();
+  return callback(false, allowed);
 };
 
 /*

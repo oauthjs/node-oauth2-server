@@ -133,13 +133,14 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *mixed* **error**
      - Truthy to indicate an error
 
-#### checkScope (scope, accessToken, callback)
-- *mixed* **scope**
-  - String, array, or object indicating which scope(s) a token must possess
+#### authoriseScope (accessToken, scope, callback)
 - *string* **accessToken**
-- *function* **callback (error)**
+- *mixed* **scope**
+- *function* **callback (error, allowed)**
  - *mixed* **error**
      - Truthy to indicate an error
+ - *boolean* **allowed**
+     - Indicates whether the scope is allowed
 
 #### saveScope (scope, accessToken, callback)
 - *string* **scope**
