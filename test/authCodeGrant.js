@@ -211,7 +211,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, scope, callback) {
         should.exist(authCode);
         authCode.should.have.lengthOf(40);
         clientId.should.equal('thom');
@@ -219,6 +219,30 @@ describe('AuthCodeGrant', function() {
         done();
       }
     }, [false, true]);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .end();
+  });
+
+  it('should return a scope', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, scope, callback) {
+        scope.should.equal('foobar');
+        done();
+      }
+    }, [false, true, false, 'foobar']);
 
     request(app)
       .post('/authorise')
@@ -240,7 +264,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, scope, callback) {
         should.exist(authCode);
         code = authCode;
         callback();
@@ -270,7 +294,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, scope, callback) {
         should.exist(authCode);
         code = authCode;
         callback();
@@ -300,7 +324,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, scope, callback) {
         should.exist(authCode);
         code = authCode;
         callback();
@@ -329,7 +353,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, scope, callback) {
         callback();
       }
     }, [false, true], true);

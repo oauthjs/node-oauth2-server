@@ -142,12 +142,14 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *boolean* **allowed**
      - Indicates whether the scope is allowed
 
-#### saveScope (scope, accessToken, callback)
-- *string* **scope**
+#### saveScope (accessToken, scope, callback)
 - *object* **accessToken**
-- *function* **callback (error)**
+- *string* **scope**
+- *function* **callback (error, scope)**
  - *mixed* **error**
      - Truthy to indicate an error
+ - *mixed* **scope**
+     - The accepted scope, or falsy to indicate an invalid scope.
 
 ### Required for `authorization_code` grant type
 
