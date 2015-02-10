@@ -133,13 +133,12 @@ model.saveScope = function (scope, accessToken, callback) {
   });
 };
 
-model.checkScope = function (accessToken, requiredScope, callback)
-  // requiredScope is set through the scope middleware.
+model.checkScope = function (scope, accessToken, callback)
   // You may pass anything from a simple string, as this example illustrates,
   // to representations including scopes and subscopes such as
   // { "account": [ "edit" ] }
-  if(accessToken.scope.indexOf(requiredScope) === -1) {
-    return callback('Required scope: ' + requiredScope);
+  if(accessToken.scope.indexOf(scope) === -1) {
+    return callback('Required scope: ' + scope);
   }
   callback();
 };
