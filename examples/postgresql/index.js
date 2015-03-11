@@ -77,6 +77,12 @@ app.get('/secret', app.oauth.authorise(), function (req, res) {
   res.send('Secret area');
 });
 
+app.get('/scoped', app.oauth.authorise(), app.oauth.scope('demo'),
+    function (req, res) {
+  // Will require that the access_token possesses the 'demo' scope key
+  res.send('Secret and scope-controlled area');
+});
+
 app.get('/public', function (req, res) {
   // Does not require an access_token
   res.send('Public area');

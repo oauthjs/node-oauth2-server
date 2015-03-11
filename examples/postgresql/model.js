@@ -25,7 +25,7 @@ var pg = require('pg'),
 model.getAccessToken = function (bearerToken, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-    client.query('SELECT access_token, client_id, expires, user_id FROM oauth_access_tokens ' +
+    client.query('SELECT access_token, scope, client_id, expires, user_id FROM oauth_access_tokens ' +
         'WHERE access_token = $1', [bearerToken], function (err, result) {
       if (err || !result.rowCount) return callback(err);
       // This object will be exposed in req.oauth.token
@@ -37,7 +37,8 @@ model.getAccessToken = function (bearerToken, callback) {
         accessToken: token.access_token,
         clientId: token.client_id,
         expires: token.expires,
-        userId: token.userId
+        userId: token.userId,
+		scope: token.scope.split(' ') // Assumes a flat, space-separated scope string 
       });
       done();
     });
@@ -69,12 +70,14 @@ model.getClient = function (clientId, clientSecret, callback) {
 model.getRefreshToken = function (bearerToken, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-    client.query('SELECT refresh_token, client_id, expires, user_id FROM oauth_refresh_tokens ' +
-        'WHERE refresh_token = $1', [bearerToken], function (err, result) {
-      // The returned user_id will be exposed in req.user.id
-      callback(err, result.rowCount ? result.rows[0] : false);
-      done();
-    });
+	// Note: To avoid replicating the scope string in both token tables, the old
+	// access token's scope string must be retrieved and passed along from here.
+	client.query('SELECT rt.refresh_token, rt.client_id, rt.expires, rt.user_id, at.scope FROM ' +
+        'oauth_refresh_tokens AS rt, oauth_access_tokens AS at WHERE rt.user_id = ' +
+		'at.user_id AND rt.client_id = at.client_id AND rt.refresh_token = $',
+		[bearerToken], function (err, result) {
+	  callback(err, result.rowCount ? result.rows[0] : false);
+	});
   });
 };
 
@@ -111,6 +114,34 @@ model.saveRefreshToken = function (refreshToken, clientId, expires, userId, call
       done();
     });
   });
+};
+
+model.saveScope = function (scope, accessToken, callback) {
+  // Here you will want to validate that what the client is soliciting
+  // makes sense. You might then proceed by storing the validated scope.
+  // In this example, the scope is simply stored as a string in the
+  // oauth_access_tokens table, but you could also handle them as entries
+  // in a connection table.
+  var acceptedScope = scope;
+
+  pg.connect(connString, function (err, client, done) {
+    if (err) return callback(err);
+	client.query('UPDATE oauth_access_tokens SET scope=$1 WHERE access_token = $2',
+        [acceptedScope, accessToken], function (err, result) {
+     callback(err, acceptedScope); 
+	 done();
+  });
+};
+
+model.checkScope = function (accessToken, requiredScope, callback)
+  // requiredScope is set through the scope middleware.
+  // You may pass anything from a simple string, as this example illustrates,
+  // to representations including scopes and subscopes such as
+  // { "account": [ "edit" ] }
+  if(accessToken.scope.indexOf(requiredScope) === -1) {
+    return callback('Required scope: ' + requiredScope);
+  }
+  callback();
 };
 
 /*

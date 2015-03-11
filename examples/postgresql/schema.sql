@@ -34,6 +34,7 @@ SET default_with_oids = false;
 
 CREATE TABLE oauth_access_tokens (
     access_token text NOT NULL,
+    scope text NOT NULL,
     client_id text NOT NULL,
     user_id uuid NOT NULL,
     expires timestamp without time zone NOT NULL
