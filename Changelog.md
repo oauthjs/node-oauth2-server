@@ -1,5 +1,22 @@
 ## Changelog
 
+### 2.4.0
+
+- Set Cache-Control and Pragma headers
+- Allow any valid URI for extension grants
+- Expose `client` to `extendedGrant` and after via `req.oauth.client`
+- Fix express depreciation warning for `res.send()`
+- Expose `user` to `generateToken` and after via `req.user`
+- Fix lockdown pattern for express 3
+
+- Add redis example
+- Fix docs to use new express bodyParser module
+- Fix docs for `redirect_uri`
+- Clarify docs for `clientIdRegex`
+- Fix docs for missing `req` argument in `generateToken`
+- Fix docs for `user`/`userId` `getAccessToken`
+- Fix docs for argument order in `getRefreshToken`
+
 ### 2.3.0
 
  - Support "state" param for auth_code grant type
