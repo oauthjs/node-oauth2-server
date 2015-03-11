@@ -230,6 +230,34 @@ describe('AuthCodeGrant', function() {
       .end();
   });
 
+  it('should try to save auth code with a client-specific timeout', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com',
+          authCodeLifetime: 3600
+        });
+      },
+      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        authCode.should.have.lengthOf(40);
+        clientId.should.equal('thom');
+        (+expires).should.be.approximately((+new Date()) + (3600 * 1000), 100);
+        done();
+      }
+    }, [false, true]);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'code',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .end();
+  });
+
   it('should accept valid request and return code using POST', function (done) {
     var code;
 

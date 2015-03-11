@@ -384,6 +384,74 @@ describe('Grant', function() {
         .expect(200, done);
 
     });
+
+    it('should pass a client-specific token expiration to model.saveAccessToken', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { client_id: 'thom', accessTokenLifetime: 86400 });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            token.should.be.instanceOf(String);
+            token.should.have.length(40);
+            clientId.should.equal('thom');
+            user.id.should.equal(1);
+            (+expires).should.be.approximately((+new Date()) + 86400000, 100);
+            cb();
+          }
+        },
+        grants: ['password']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send(validBody)
+        .expect(200, done);
+
+    });
+
+    it('should pass a client-specific refresh token expiration to model.saveRefreshToken', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { client_id: 'thom', refreshTokenLifetime: 129600 });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb();
+          },
+          saveRefreshToken: function (token, clientId, expires, user, cb) {
+            token.should.be.instanceOf(String);
+            token.should.have.length(40);
+            clientId.should.equal('thom');
+            user.id.should.equal(1);
+            (+expires).should.be.within(10, (+new Date()) + 129600000);
+            cb();
+          }
+        },
+        grants: ['password', 'refresh_token']
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send(validBody)
+        .expect(200, done);
+
+    });
+
   });
 
   describe('issue access token', function () {
