@@ -38,7 +38,7 @@ model.getAccessToken = function (bearerToken, callback) {
         clientId: token.client_id,
         expires: token.expires,
         userId: token.userId,
-		scope: token.scope.split(' ') // Assumes a flat, space-separated scope string 
+        scope: token.scope.split(' ') // Assumes a flat, space-delimited scope string
       });
       done();
     });
@@ -116,7 +116,7 @@ model.saveRefreshToken = function (refreshToken, clientId, expires, userId, call
   });
 };
 
-model.saveScope = function (scope, accessToken, callback) {
+model.saveScope = function (accessToken, scope, callback) {
   // Here you will want to validate that what the client is soliciting
   // makes sense. You might then proceed by storing the validated scope.
   // In this example, the scope is simply stored as a string in the
@@ -133,15 +133,13 @@ model.saveScope = function (scope, accessToken, callback) {
   });
 };
 
-model.checkScope = function (accessToken, requiredScope, callback)
-  // requiredScope is set through the scope middleware.
+model.authoriseScope = function (accessToken, scope, callback)
+  var allowed = accessToken.scope.indexOf(scope) !== -1;
+
   // You may pass anything from a simple string, as this example illustrates,
   // to representations including scopes and subscopes such as
   // { "account": [ "edit" ] }
-  if(accessToken.scope.indexOf(requiredScope) === -1) {
-    return callback('Required scope: ' + requiredScope);
-  }
-  callback();
+  return callback(false, allowed);
 };
 
 /*
