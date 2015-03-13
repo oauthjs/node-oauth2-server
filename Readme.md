@@ -124,11 +124,12 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *boolean* **allowed**
      - Indicates whether the grantType is allowed for this clientId
 
-#### saveAccessToken (accessToken, clientId, expires, user, callback)
+#### saveAccessToken (accessToken, clientId, expires, user, scope, callback)
 - *string* **accessToken**
 - *string* **clientId**
 - *date* **expires**
 - *object* **user**
+- *string* **scope**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error
@@ -139,17 +140,19 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 - *function* **callback (error, allowed)**
  - *mixed* **error**
      - Truthy to indicate an error
- - *boolean* **allowed**
-     - Indicates whether the scope is allowed
+ - *boolean|string* **invalid**
+     - Falsey to indicate token possesses required scope; truthy (boolean or string) as invalid scope error message
 
-#### saveScope (accessToken, scope, callback)
-- *object* **accessToken**
+### validateScope (scope, clientId, callback)
 - *string* **scope**
-- *function* **callback (error, scope)**
+- *string* **clientId**
+- *function* **callback (error, validScope, invalid)**
  - *mixed* **error**
      - Truthy to indicate an error
- - *mixed* **scope**
-     - The accepted scope, or falsy to indicate an invalid scope.
+ - *mixed* **validScope**
+     - Validated/sanitized scope string
+ - *boolean|string* **invalid**
+     - Falsey to indicate solicited scope was granted; truthy (boolean or string) as invalid scope error message
 
 ### Required for `authorization_code` grant type
 
