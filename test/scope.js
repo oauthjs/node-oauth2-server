@@ -31,8 +31,8 @@ var bootstrap = function (options) {
 
         callback(false, { expires: expires });
       },
-      checkScope: function (accessToken, scope, cb) {
-        cb(false, 'my-scope' === scope);
+      authoriseScope: function (accessToken, scope, cb) {
+        cb(false, 'my-scope' !== scope);
       }
     }
   });

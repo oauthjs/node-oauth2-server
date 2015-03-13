@@ -131,6 +131,9 @@ describe('Granting with extended grant type', function () {
         },
         saveAccessToken: function () {
           done(); // That's enough
+        },
+        validateScope: function (scope, clientId, cb) {
+          cb(false, '', false);
         }
       },
       grants: ['http://custom.com']

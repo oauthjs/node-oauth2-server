@@ -171,7 +171,7 @@ describe('Granting with refresh_token grant type', function () {
             userId: '123'
           });
         },
-        saveAccessToken: function (token, clientId, expires, user, cb) {
+        saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         saveRefreshToken: function (token, clientId, expires, user, cb) {
@@ -179,6 +179,9 @@ describe('Granting with refresh_token grant type', function () {
         },
         expireRefreshToken: function (refreshToken, callback) {
           callback();
+        },
+        validateScope: function (scope, clientId, cb) {
+          cb(false, '', false);
         }
       },
       grants: ['password', 'refresh_token']
@@ -216,7 +219,7 @@ describe('Granting with refresh_token grant type', function () {
             }
           });
         },
-        saveAccessToken: function (token, clientId, expires, user, cb) {
+        saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         saveRefreshToken: function (token, clientId, expires, user, cb) {
@@ -224,6 +227,9 @@ describe('Granting with refresh_token grant type', function () {
         },
         expireRefreshToken: function (refreshToken, callback) {
           callback();
+        },
+        validateScope: function (scope, clientId, cb) {
+          cb(false, '', false);
         }
       },
       grants: ['password', 'refresh_token']
@@ -258,7 +264,7 @@ describe('Granting with refresh_token grant type', function () {
             userId: '123'
           });
         },
-        saveAccessToken: function (token, clientId, expires, user, cb) {
+        saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         saveRefreshToken: function (token, clientId, expires, user, cb) {
@@ -266,6 +272,9 @@ describe('Granting with refresh_token grant type', function () {
         },
         expireRefreshToken: function (refreshToken, callback) {
           callback();
+        },
+        validateScope: function (scope, clientId, cb) {
+          cb(false, '', false);
         }
       },
       grants: ['password', 'refresh_token']

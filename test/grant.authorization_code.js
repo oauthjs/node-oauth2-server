@@ -197,10 +197,11 @@ describe('Granting with authorization_code grant type', function () {
           callback(false, {
             clientId: 'thom',
             expires: new Date(),
-            userId: '123'
+            userId: '123',
+            scope: 'foobar'
           });
         },
-        saveAccessToken: function (token, clientId, expires, user, cb) {
+        saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         saveRefreshToken: function (data, cb) {
@@ -208,6 +209,9 @@ describe('Granting with authorization_code grant type', function () {
         },
         expireRefreshToken: function (refreshToken, callback) {
           callback();
+        },
+        validateScope: function (scope, clientId, cb) {
+          cb(null, 'foobar', false);
         }
       },
       grants: ['authorization_code']

@@ -31,7 +31,7 @@ var bootstrap = function (model, options, continueAfterResponse) {
       callback(false, { expires: expires });
     },
     authoriseScope: function (accessToken, scope, cb) {
-      cb(false, true);
+      cb(false, false);
     }
   };
 
@@ -118,7 +118,7 @@ describe('Authorise', function () {
         callback(false, { expires: null });
       },
       authoriseScope: function (accessToken, scope, cb) {
-        cb(false, false);
+        cb(false, true);
       }
     }, { scope: 'foobar' });
 
