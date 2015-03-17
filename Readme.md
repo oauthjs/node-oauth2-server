@@ -1,4 +1,4 @@
-# Node OAuth2 Server [![Build Status](https://travis-ci.org/thomseddon/node-oauth2-server.png?branch=2.0)](https://travis-ci.org/thomseddon/node-oauth2-server)
+# Node OAuth2 Server [![Build Status](https://travis-ci.org/thomseddon/node-oauth2-server.png)](https://travis-ci.org/thomseddon/node-oauth2-server)
 
 Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with [express](http://expressjs.com/) in [node.js](http://nodejs.org/)
 
@@ -72,7 +72,7 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
  - Life of auth codes in seconds
   - Default: `30`
 - *regexp* **clientIdRegex**
- - Regex to sanity check client id against before checking model. Note: the default just matches common `client_id` structures, change as needed 
+ - Regex to sanity check client id against before checking model. Note: the default just matches common `client_id` structures, change as needed
   - Default: `/^[a-z0-9-_]{3,40}$/i`
 - *boolean* **passthroughErrors**
  - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)

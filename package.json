@@ -1,6 +1,6 @@
 {
   "name": "oauth2-server",
-  "description": "Complete, compliant and well tested module for implementing an OAuth2 Server/Provider with express in node.js",
+  "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
   "version": "2.4.1",
   "keywords": [
     "oauth",
@@ -16,28 +16,25 @@
       "email": "thom@seddonmedia.co.uk"
     }
   ],
-  "main": "lib/oauth2server.js",
+  "main": "index.js",
   "dependencies": {
-    "basic-auth": "~0.0.1"
+    "basic-auth": "^1.0.0",
+    "bluebird": "^2.9.13",
+    "lodash": "^3.3.1",
+    "standard-error": "^1.1.0",
+    "type-is": "^1.6.0"
   },
   "devDependencies": {
-    "body-parser": "~1.3.1",
-    "express": "~4.4.3",
-    "mocha": "~1.20.1",
-    "should": "~4.0.4",
-    "supertest": "~0.13.0"
+    "mocha": "^2.2.1",
+    "should": "^5.0.1",
+    "sinon": "^1.13.0"
   },
-  "licenses": [
-    {
-      "type": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    }
-  ],
+  "license": "MIT",
   "engines": {
     "node": ">=0.8"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'"
   },
   "repository": {
     "type": "git",

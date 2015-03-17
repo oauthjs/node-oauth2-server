@@ -1,0 +1,91 @@
+
+/**
+ * Module dependencies.
+ */
+
+var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
+var Request = require('../../../lib/request');
+var sinon = require('sinon');
+
+/**
+ * Test `AuthenticateHandler`.
+ */
+
+describe('AuthenticateHandler', function() {
+  describe('getToken()', function() {
+    describe('with bearer token in the request authorization header', function() {
+      it('should call `getTokenFromRequestHeader()`', function() {
+        var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+        var request = new Request({
+          body: {},
+          headers: { 'Authorization': 'Bearer foo' },
+          method: {},
+          query: {}
+        });
+
+        sinon.stub(handler, 'getTokenFromRequestHeader');
+
+        handler.getToken(request);
+
+        handler.getTokenFromRequestHeader.callCount.should.equal(1);
+        handler.getTokenFromRequestHeader.firstCall.args[0].should.equal(request);
+        handler.getTokenFromRequestHeader.restore();
+      });
+    });
+
+    describe('with bearer token in the request query', function() {
+      it('should call `getTokenFromRequestQuery()`', function() {
+        var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+        var request = new Request({
+          body: {},
+          headers: {},
+          method: {},
+          query: { access_token: 'foo' }
+        });
+
+        sinon.stub(handler, 'getTokenFromRequestQuery');
+
+        handler.getToken(request);
+
+        handler.getTokenFromRequestQuery.callCount.should.equal(1);
+        handler.getTokenFromRequestQuery.firstCall.args[0].should.equal(request);
+        handler.getTokenFromRequestQuery.restore();
+      });
+    });
+
+    describe('with bearer token in the request body', function() {
+      it('should call `getTokenFromRequestBody()`', function() {
+        var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+        var request = new Request({
+          body: { access_token: 'foo' },
+          headers: {},
+          method: {},
+          query: {}
+        });
+
+        sinon.stub(handler, 'getTokenFromRequestBody');
+
+        handler.getToken(request);
+
+        handler.getTokenFromRequestBody.callCount.should.equal(1);
+        handler.getTokenFromRequestBody.firstCall.args[0].should.equal(request);
+        handler.getTokenFromRequestBody.restore();
+      });
+    });
+  });
+
+  describe('getAccessToken()', function() {
+    it('should call `model.getAccessToken()`', function() {
+      var model = {
+        getAccessToken: sinon.stub().returns({ user: {} })
+      };
+      var handler = new AuthenticateHandler({ model: model });
+
+      return handler.getAccessToken('foo').then(function() {
+        model.getAccessToken.callCount.should.equal(1);
+        model.getAccessToken.firstCall.args.should.have.length(1);
+        model.getAccessToken.firstCall.args[0].should.equal('foo');
+      });
+    });
+  });
+});
