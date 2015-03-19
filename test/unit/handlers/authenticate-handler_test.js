@@ -88,4 +88,32 @@ describe('AuthenticateHandler', function() {
       });
     });
   });
+
+  describe('validateScope()', function() {
+    it('should not call `validateScope` if scope is not defined', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: sinon.stub()
+      };
+      var handler = new AuthenticateHandler({ model: model });
+
+      return handler.validateScope('foo').then(function() {
+        model.validateScope.callCount.should.equal(0);
+      });
+    });
+
+    it('should call `model.getAccessToken()` if scope is defined', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: sinon.stub().returns(true)
+      };
+      var handler = new AuthenticateHandler({ model: model, scope: 'bar' });
+
+      return handler.validateScope('foo').then(function() {
+        model.validateScope.callCount.should.equal(1);
+        model.validateScope.firstCall.args.should.have.length(2);
+        model.validateScope.firstCall.args[0].should.equal('foo', 'bar');
+      });
+    });
+  });
 });

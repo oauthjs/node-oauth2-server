@@ -76,7 +76,7 @@ describe('Server', function() {
       var server = new Server({ model: model });
       var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
 
-      server.authenticate(request, next);
+      server.authenticate(request, null, next);
     });
   });
 
@@ -117,7 +117,7 @@ describe('Server', function() {
       var request = new Request({ body: { client_id: 1234, client_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
       var response = new Response({ body: {}, headers: {} });
 
-      server.authorize(request, response, next);
+      server.authorize(request, response, null, next);
     });
   });
 
@@ -158,7 +158,7 @@ describe('Server', function() {
       var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
       var response = new Response({ body: {}, headers: {} });
 
-      server.token(request, response, next);
+      server.token(request, response, null, next);
     });
   });
 });

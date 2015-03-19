@@ -342,6 +342,22 @@ describe('AuthorizeHandler', function() {
     });
   });
 
+  describe('getScope()', function() {
+    it('should return the scope', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
+
+      return handler.getScope(request).then(function(scope) {
+        scope.should.equal('foo');
+      });
+    });
+  });
+
   describe('getClient()', function() {
     it('should throw an error if `client_id` is missing', function() {
       var model = {

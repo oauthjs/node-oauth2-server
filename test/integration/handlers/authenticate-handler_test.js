@@ -6,6 +6,7 @@
 var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
+var InvalidScopeError = require('../../../lib/errors/invalid-scope-error');
 var InvalidTokenError = require('../../../lib/errors/invalid-token-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
@@ -57,6 +58,16 @@ describe('AuthenticateHandler', function() {
 
       grantType.model.should.equal(model);
     });
+
+    it('should set the `scope`', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: function() {}
+      };
+      var grantType = new AuthenticateHandler({ model: model, scope: 'foobar' });
+
+      grantType.scope.should.equal('foobar');
+    });
   });
 
   describe('handle()', function() {
@@ -78,9 +89,12 @@ describe('AuthenticateHandler', function() {
       var model = {
         getAccessToken: function() {
           return accessToken;
+        },
+        validateScope: function() {
+          return true;
         }
       };
-      var handler = new AuthenticateHandler({ model: model });
+      var handler = new AuthenticateHandler({ model: model, scope: 'foo' });
       var request = new Request({
         body: {},
         headers: { 'Authorization': 'Bearer foo' },
@@ -238,21 +252,6 @@ describe('AuthenticateHandler', function() {
         });
     });
 
-    it('should throw an error if `accessToken` is expired', function() {
-      var accessToken = { expires: new Date() / 10 };
-      var model = {
-        getAccessToken: function() {
-          return accessToken;
-        }
-      };
-      var handler = new AuthenticateHandler({ model: model });
-
-      return handler.getAccessToken('foo').catch(function(e) {
-        e.should.be.an.instanceOf(InvalidTokenError);
-        e.message.should.equal('Invalid token: access token has expired');
-      });
-    });
-
     it('should throw an error if `accessToken.user` is missing', function() {
       var model = {
         getAccessToken: function() {
@@ -303,6 +302,84 @@ describe('AuthenticateHandler', function() {
       var handler = new AuthenticateHandler({ model: model });
 
       handler.getAccessToken('foo').should.be.an.instanceOf(Promise);
+    });
+  });
+
+  describe('validateAccessToken()', function() {
+    it('should throw an error if `accessToken` is expired', function() {
+      var accessToken = { expires: new Date() / 10 };
+      var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+
+      return handler.validateAccessToken(accessToken)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: access token has expired');
+        });
+    });
+
+    it('should return an access token', function() {
+      var accessToken = { user: {} };
+      var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+
+      return handler.validateAccessToken(accessToken).then(function(data) {
+        data.should.equal(accessToken);
+      });
+    });
+
+    it('should support promises', function() {
+      var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+
+      handler.validateAccessToken('foo').should.be.an.instanceOf(Promise);
+    });
+
+    it('should support non-promises', function() {
+      var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
+
+      handler.validateAccessToken('foo').should.be.an.instanceOf(Promise);
+    });
+  });
+
+  describe('validateScope()', function() {
+    it('should throw an error if `scope` is invalid', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: function() {
+          return false;
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model, scope: 'foo' });
+
+      return handler.validateScope('foo')
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidScopeError);
+          e.message.should.equal('Invalid scope: scope is invalid');
+        });
+    });
+
+    it('should support promises', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: function() {
+          return true;
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model, scope: 'foo' });
+
+      handler.validateScope('foo').should.be.an.instanceOf(Promise);
+    });
+
+    it('should support non-promises', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: function() {
+          return true;
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model, scope: 'foo' });
+
+      handler.validateScope('foo').should.be.an.instanceOf(Promise);
     });
   });
 });

@@ -56,10 +56,10 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
 
-      return handler.saveAuthCode('foo', 'bar', 'biz', 'baz').then(function() {
+      return handler.saveAuthCode('foo', 'bar', 'qux', 'biz', 'baz').then(function() {
         model.saveAuthCode.callCount.should.equal(1);
         model.saveAuthCode.firstCall.args.should.have.length(3);
-        model.saveAuthCode.firstCall.args[0].should.eql({ authCode: 'foo', expiresOn: 'bar' });
+        model.saveAuthCode.firstCall.args[0].should.eql({ authCode: 'foo', expiresOn: 'bar', scope: 'qux' });
         model.saveAuthCode.firstCall.args[1].should.equal('biz');
         model.saveAuthCode.firstCall.args[2].should.equal('baz');
       });

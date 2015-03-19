@@ -284,7 +284,7 @@ describe('TokenHandler', function() {
     });
 
     it('should return a bearer token if successful', function() {
-      var token = { accessToken: 'foo', refreshToken: 'bar', accessTokenLifetime: 120 };
+      var token = { accessToken: 'foo', refreshToken: 'bar', accessTokenLifetime: 120, scope: 'foobar' };
       var model = {
         getClient: function() {
           return {};
@@ -395,6 +395,21 @@ describe('TokenHandler', function() {
 
       return handler.getRefreshTokenLifetime().then(function(data) {
         data.should.be.an.instanceOf(Date);
+      });
+    });
+  });
+
+  describe('getScope()', function() {
+    it('should return the scope', function() {
+      var model = {
+        getClient: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
+
+      return handler.getScope(request).then(function(scope) {
+        scope.should.equal('foo');
       });
     });
   });
@@ -795,9 +810,9 @@ describe('TokenHandler', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar' });
+      var tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar', scope: 'foobar' });
 
-      tokenType.should.eql({ accessToken: 'foo', accessTokenLifetime: 120, refreshToken: 'bar' });
+      tokenType.should.eql({ accessToken: 'foo', accessTokenLifetime: 120, refreshToken: 'bar', scope: 'foobar' });
     });
   });
 

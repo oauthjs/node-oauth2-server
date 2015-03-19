@@ -70,10 +70,10 @@ describe('TokenHandler', function() {
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
-      return handler.saveToken('foo', 'bar', 'biz', 'baz', 'qux', 'fuz').then(function() {
+      return handler.saveToken('foo', 'bar', 'biz', 'baz', 'fiz', 'qux', 'fuz').then(function() {
         model.saveToken.callCount.should.equal(1);
         model.saveToken.firstCall.args.should.have.length(3);
-        model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresOn: 'biz', refreshToken: 'bar', refreshTokenExpiresOn: 'baz' });
+        model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresOn: 'biz', refreshToken: 'bar', refreshTokenExpiresOn: 'baz', scope: 'fiz' });
         model.saveToken.firstCall.args[1].should.equal('qux');
         model.saveToken.firstCall.args[2].should.equal('fuz');
       });
