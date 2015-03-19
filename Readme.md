@@ -137,7 +137,7 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 #### authoriseScope (accessToken, scope, callback)
 - *string* **accessToken**
 - *mixed* **scope**
-- *function* **callback (error, allowed)**
+- *function* **callback (error, invalid)**
  - *mixed* **error**
      - Truthy to indicate an error
  - *boolean|string* **invalid**

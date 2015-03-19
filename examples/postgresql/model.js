@@ -132,12 +132,13 @@ model.authoriseScope = function (accessToken, scope, callback) {
 model.validateScope = function (scope, clientId, callback) {
   // Sanitize the requested scope string, possibly
   // against a client-specific set of valid scope keys
+  // You could choose to strip invalid keys, or return an error message
   var validKeys = ['readonly', 'edit', 'admin'];
   var isValid = scope.split(' ').every(function(key) {
     return valid.indexOf(key) !== -1;
   });
 
-  return callback(false, isValid ? false : 'Invalid scope request');
+  return callback(false, scope, isValid ? false : 'Invalid scope request');
 };
 
 /*
