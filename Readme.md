@@ -310,9 +310,8 @@ This will then call the following on your model (in this order):
  - getClient (clientId, clientSecret, callback)
  - grantTypeAllowed (clientId, grantType, callback)
  - getUser (username, password, callback)
- - saveAccessToken (accessToken, clientId, expires, user, callback)
+ - saveAccessToken (accessToken, clientId, expires, user, scope, callback)
  - saveRefreshToken (refreshToken, clientId, expires, user, callback) **(if using)**
- - saveScope (scope, accessToken, callback)
 
 Provided there weren't any errors, this will return the following (excluding the `refresh_token` if you've not enabled the refresh_token grant type):
 

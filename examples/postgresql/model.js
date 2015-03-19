@@ -70,13 +70,10 @@ model.getClient = function (clientId, clientSecret, callback) {
 model.getRefreshToken = function (bearerToken, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-	// Note: To avoid replicating the scope string in both token tables, the old
-	// access token's scope string must be retrieved and passed along from here.
-	client.query('SELECT rt.refresh_token, rt.client_id, rt.expires, rt.user_id, at.scope FROM ' +
-        'oauth_refresh_tokens AS rt, oauth_access_tokens AS at WHERE rt.user_id = ' +
-		'at.user_id AND rt.client_id = at.client_id AND rt.refresh_token = $',
-		[bearerToken], function (err, result) {
+    client.query('SELECT refresh_token, scope, client_id, expires, user_id FROM oauth_refresh_tokens ' +
+      'WHERE refresh_token = $1', [bearerToken], function(err, result) {
 	  callback(err, result.rowCount ? result.rows[0] : false);
+      done();
 	});
   });
 };
@@ -92,11 +89,11 @@ model.grantTypeAllowed = function (clientId, grantType, callback) {
   callback(false, true);
 };
 
-model.saveAccessToken = function (accessToken, clientId, expires, userId, callback) {
+model.saveAccessToken = function (accessToken, clientId, expires, userId, scope, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-    client.query('INSERT INTO oauth_access_tokens(access_token, client_id, user_id, expires) ' +
-        'VALUES ($1, $2, $3, $4)', [accessToken, clientId, userId, expires],
+    client.query('INSERT INTO oauth_access_tokens(access_token, client_id, user_id, scope, expires) ' +
+        'VALUES ($1, $2, $3, $4, $5)', [accessToken, clientId, userId, scope, expires],
         function (err, result) {
       callback(err);
       done();
@@ -107,8 +104,15 @@ model.saveAccessToken = function (accessToken, clientId, expires, userId, callba
 model.saveRefreshToken = function (refreshToken, clientId, expires, userId, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-    client.query('INSERT INTO oauth_refresh_tokens(refresh_token, client_id, user_id, ' +
-        'expires) VALUES ($1, $2, $3, $4)', [refreshToken, clientId, userId, expires],
+    // Retrieve the scope string from the access token entry
+    client.query('SELECT scope FROM oauth_access_tokens WHERE client_id = $1 AND user_id = $2',
+        [clientId, userId], function (err, result) {
+      if (err) return callback(err);
+	  if (!result.rowCount) return callback('Could not retrieve access token scope string');
+      
+      client.query('INSERT INTO oauth_refresh_tokens(refresh_token, client_id, ' +
+        'user_id, scope, expires) VALUES ($1, $2, $3, $4, $5)',
+        [refreshToken, clientId, userId, result.rows[0].scope, expires],
         function (err, result) {
       callback(err);
       done();
@@ -116,30 +120,24 @@ model.saveRefreshToken = function (refreshToken, clientId, expires, userId, call
   });
 };
 
-model.saveScope = function (accessToken, scope, callback) {
-  // Here you will want to validate that what the client is soliciting
-  // makes sense. You might then proceed by storing the validated scope.
-  // In this example, the scope is simply stored as a string in the
-  // oauth_access_tokens table, but you could also handle them as entries
-  // in a connection table.
-  var acceptedScope = scope;
-
-  pg.connect(connString, function (err, client, done) {
-    if (err) return callback(err);
-	client.query('UPDATE oauth_access_tokens SET scope=$1 WHERE access_token = $2',
-        [acceptedScope, accessToken], function (err, result) {
-     callback(err, acceptedScope); 
-	 done();
-  });
-};
-
-model.authoriseScope = function (accessToken, scope, callback)
-  var allowed = accessToken.scope.indexOf(scope) !== -1;
+model.authoriseScope = function (accessToken, scope, callback) {
+  var hasScope = accessToken.scope.indexOf(scope) !== -1;
 
   // You may pass anything from a simple string, as this example illustrates,
   // to representations including scopes and subscopes such as
   // { "account": [ "edit" ] }
-  return callback(false, allowed);
+  return callback(false, hasScope ? false : 'Missing scope: ' + scope);
+};
+
+model.validateScope = function (scope, clientId, callback) {
+  // Sanitize the requested scope string, possibly
+  // against a client-specific set of valid scope keys
+  var validKeys = ['readonly', 'edit', 'admin'];
+  var isValid = scope.split(' ').every(function(key) {
+    return valid.indexOf(key) !== -1;
+  });
+
+  return callback(false, isValid ? false : 'Invalid scope request');
 };
 
 /*
