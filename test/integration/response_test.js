@@ -18,9 +18,9 @@ describe('Response', function() {
     });
 
     it('should set the `headers`', function() {
-      var response = new Response({ body: {}, headers: 'bar' });
+      var response = new Response({ body: {}, headers: { foo: 'bar', QuX: 'biz' } });
 
-      response.headers.should.equal('bar');
+      response.headers.should.eql({ foo: 'bar', qux: 'biz' });
     });
 
     it('should set the `status` to 200', function() {
@@ -36,7 +36,7 @@ describe('Response', function() {
 
       response.redirect('http://example.com');
 
-      response.headers.should.eql({ Location: 'http://example.com' });
+      response.get('Location').should.equal('http://example.com');
     });
 
     it('should set the `status` to 302', function() {
@@ -45,6 +45,20 @@ describe('Response', function() {
       response.redirect('http://example.com');
 
       response.status.should.equal(302);
+    });
+  });
+
+  describe('get()', function() {
+    it('should return `undefined` if the field does not exist', function() {
+      var response = new Response({ body: {}, headers: {} });
+
+      (undefined === response.get('content-type')).should.be.true;
+    });
+
+    it('should return the value if the field exists', function() {
+      var response = new Response({ body: {}, headers: { 'content-type': 'text/html; charset=utf-8' } });
+
+      response.get('Content-Type').should.equal('text/html; charset=utf-8');
     });
   });
 

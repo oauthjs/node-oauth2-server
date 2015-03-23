@@ -78,6 +78,30 @@ describe('ClientCredentialsGrantType', function() {
       }
     });
 
+    it('should throw an error if `client_id` is invalid', function() {
+      var grantType = new ClientCredentialsGrantType({ getUserFromClient: function() {} });
+      var request = new Request({ body: { client_id: 'øå€£‰', client_secret: 'foobar' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `client_id`');
+        });
+    });
+
+    it('should throw an error if `client_secret` is invalid', function() {
+      var grantType = new ClientCredentialsGrantType({ getUserFromClient: function() {} });
+      var request = new Request({ body: { client_id: 'foobar', client_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `client_secret`');
+        });
+    });
+
     it('should throw an error if `user` is missing', function() {
       var model = {
         getUserFromClient: function() {}

@@ -96,6 +96,19 @@ describe('AuthorizationCodeGrantType', function() {
         });
     });
 
+    it('should throw an error if `code` is invalid', function() {
+      var client = {};
+      var grantType = new AuthorizationCodeGrantType({ getAuthCode: function() {} });
+      var request = new Request({ body: { code: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `code`');
+        });
+    });
+
     it('should throw an error if `authCode` is missing', function() {
       var client = {};
       var model = {
@@ -170,9 +183,10 @@ describe('AuthorizationCodeGrantType', function() {
 
     it('should throw an error if the auth code is expired', function() {
       var client = { id: 123 };
+      var date = new Date(new Date() / 2);
       var model = {
         getAuthCode: function() {
-          return Promise.resolve({ client: { id: 123 }, expires: new Date() / 10, user: {} });
+          return Promise.resolve({ client: { id: 123 }, expiresOn: date, user: {} });
         }
       };
       var grantType = new AuthorizationCodeGrantType(model);
@@ -187,22 +201,24 @@ describe('AuthorizationCodeGrantType', function() {
     });
 
     it('should return an auth code', function() {
-      var authCode = { authCode: 12345, client: {}, user: {} };
-      var client = {};
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, user: {} };
+      var client = { id: 'foobar' };
       var model = {
         getAuthCode: sinon.stub().returns(authCode)
       };
       var grantType = new AuthorizationCodeGrantType(model);
       var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request, client).then(function(data) {
-        data.should.equal(authCode);
-      });
+      return grantType.handle(request, client)
+        .then(function(data) {
+          data.should.equal(authCode);
+        })
+        .catch(should.fail);
     });
 
     it('should support promises', function() {
-      var authCode = { authCode: 12345, client: {}, user: {} };
-      var client = {};
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, user: {} };
+      var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() {
           return Promise.resolve(authCode);
@@ -215,8 +231,8 @@ describe('AuthorizationCodeGrantType', function() {
     });
 
     it('should support non-promises', function() {
-      var authCode = { authCode: 12345, client: {}, user: {} };
-      var client = {};
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, user: {} };
+      var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() {
           return authCode;

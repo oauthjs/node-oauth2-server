@@ -6,6 +6,7 @@
 var AuthorizeHandler = require('../../../lib/handlers/authorize-handler');
 var Request = require('../../../lib/request');
 var sinon = require('sinon');
+var should = require('should');
 
 /**
  * Test `AuthorizeHandler`.
@@ -22,10 +23,12 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
 
-      return handler.generateAuthCode().then(function() {
-        model.generateAuthCode.callCount.should.equal(1);
-        model.generateAuthCode.firstCall.args.should.have.length(0);
-      });
+      return handler.generateAuthCode()
+        .then(function() {
+          model.generateAuthCode.callCount.should.equal(1);
+          model.generateAuthCode.firstCall.args.should.have.length(0);
+        })
+        .catch(should.fail);
     });
   });
 
@@ -39,11 +42,13 @@ describe('AuthorizeHandler', function() {
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
-      return handler.getClient(request).then(function() {
-        model.getClient.callCount.should.equal(1);
-        model.getClient.firstCall.args.should.have.length(1);
-        model.getClient.firstCall.args[0].should.equal(12345);
-      });
+      return handler.getClient(request)
+        .then(function() {
+          model.getClient.callCount.should.equal(1);
+          model.getClient.firstCall.args.should.have.length(1);
+          model.getClient.firstCall.args[0].should.equal(12345);
+        })
+        .catch(should.fail);
     });
   });
 
@@ -56,13 +61,15 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
 
-      return handler.saveAuthCode('foo', 'bar', 'qux', 'biz', 'baz').then(function() {
-        model.saveAuthCode.callCount.should.equal(1);
-        model.saveAuthCode.firstCall.args.should.have.length(3);
-        model.saveAuthCode.firstCall.args[0].should.eql({ authCode: 'foo', expiresOn: 'bar', scope: 'qux' });
-        model.saveAuthCode.firstCall.args[1].should.equal('biz');
-        model.saveAuthCode.firstCall.args[2].should.equal('baz');
-      });
+      return handler.saveAuthCode('foo', 'bar', 'qux', 'biz', 'baz')
+        .then(function() {
+          model.saveAuthCode.callCount.should.equal(1);
+          model.saveAuthCode.firstCall.args.should.have.length(3);
+          model.saveAuthCode.firstCall.args[0].should.eql({ authCode: 'foo', expiresOn: 'bar', scope: 'qux' });
+          model.saveAuthCode.firstCall.args[1].should.equal('biz');
+          model.saveAuthCode.firstCall.args[2].should.equal('baz');
+        })
+        .catch(should.fail);
     });
   });
 });

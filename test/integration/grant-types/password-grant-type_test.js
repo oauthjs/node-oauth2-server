@@ -87,6 +87,30 @@ describe('PasswordGrantType', function() {
         });
     });
 
+    it('should throw an error if `username` is invalid', function() {
+      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var request = new Request({ body: { username: 'øå€£‰', password: 'foobar' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `username`');
+        });
+    });
+
+    it('should throw an error if `password` is invalid', function() {
+      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var request = new Request({ body: { username: 'foobar', password: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `password`');
+        });
+    });
+
     it('should throw an error if `user` is missing', function() {
       var model = {
         getUser: function() {
@@ -112,9 +136,11 @@ describe('PasswordGrantType', function() {
       var grantType = new PasswordGrantType(model);
       var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request).then(function(data) {
-        data.should.equal(user);
-      });
+      return grantType.handle(request)
+        .then(function(data) {
+          data.should.equal(user);
+        })
+        .catch(should.fail);
     });
 
     it('should support promises when calling `model.getUser()`', function() {

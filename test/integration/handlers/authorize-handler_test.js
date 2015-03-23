@@ -293,9 +293,11 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
 
-      return handler.generateAuthCode().then(function(data) {
-        data.should.be.a.sha1;
-      });
+      return handler.generateAuthCode()
+        .then(function(data) {
+          data.should.be.a.sha1;
+        })
+        .catch(should.fail);
     });
 
     it('should support promises', function() {
@@ -336,13 +338,32 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
 
-      return handler.getAuthCodeLifetime().then(function(data) {
-        data.should.be.an.instanceOf(Date);
-      });
+      return handler.getAuthCodeLifetime()
+        .then(function(data) {
+          data.should.be.an.instanceOf(Date);
+        })
+        .catch(should.fail);
     });
   });
 
   describe('getScope()', function() {
+    it('should throw an error if `scope` is invalid', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { scope: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+
+      return handler.getScope(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidArgumentError);
+          e.message.should.equal('Invalid parameter: `scope`');
+        });
+    });
+
     it('should return the scope', function() {
       var model = {
         getAccessToken: function() {},
@@ -352,9 +373,11 @@ describe('AuthorizeHandler', function() {
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
       var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
 
-      return handler.getScope(request).then(function(scope) {
-        scope.should.equal('foo');
-      });
+      return handler.getScope(request)
+        .then(function(scope) {
+          scope.should.equal('foo');
+        })
+        .catch(should.fail);
     });
   });
 
@@ -373,6 +396,23 @@ describe('AuthorizeHandler', function() {
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal('Missing parameter: `client_id`');
+        });
+    });
+
+    it('should throw an error if `client_id` is invalid', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { client_id: 'øå€£‰', response_type: 'code' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `client_id`');
         });
     });
 
@@ -396,7 +436,7 @@ describe('AuthorizeHandler', function() {
     it('should throw an error if `client.redirectUri` is missing', function() {
       var model = {
         getAccessToken: function() {},
-        getClient: function() { return {} },
+        getClient: function() { return {}; },
         saveAuthCode: function() {}
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
@@ -407,6 +447,23 @@ describe('AuthorizeHandler', function() {
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: missing client `redirectUri`');
+        });
+    });
+
+    it('should throw an error if `client.redirectUri` is invalid', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() { return { redirectUri: 'foobar' }; },
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { client_id: 12345, response_type: 'code' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidClientError);
+          e.message.should.equal('Invalid client: `redirectUri` is not a valid URI');
         });
     });
 
@@ -461,9 +518,11 @@ describe('AuthorizeHandler', function() {
         var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
         var request = new Request({ body: { client_id: 12345, response_type: 'code' }, headers: {}, method: {}, query: {} });
 
-        return handler.getClient(request).then(function(data) {
-          data.should.equal(client);
-        });
+        return handler.getClient(request)
+          .then(function(data) {
+            data.should.equal(client);
+          })
+          .catch(should.fail);
       });
     });
 
@@ -480,9 +539,11 @@ describe('AuthorizeHandler', function() {
         var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
         var request = new Request({ body: { response_type: 'code' }, headers: {}, method: {}, query: { client_id: 12345 } });
 
-        return handler.getClient(request).then(function(data) {
-          data.should.equal(client);
-        });
+        return handler.getClient(request)
+          .then(function(data) {
+            data.should.equal(client);
+          })
+          .catch(should.fail);
       });
     });
   });
@@ -497,10 +558,12 @@ describe('AuthorizeHandler', function() {
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      return handler.getState(request).catch(function(e) {
-        e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Missing parameter: `state`');
-      });
+      return handler.getState(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Missing parameter: `state`');
+        });
     });
 
     it('should throw an error if `state` is invalid', function() {
@@ -512,13 +575,15 @@ describe('AuthorizeHandler', function() {
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: { state: 'øå€£‰' } });
 
-      return handler.getState(request).catch(function(e) {
-        e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Invalid parameter: `state`');
-      });
+      return handler.getState(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `state`');
+        });
     });
 
-    describe('with `response_type` in the request body', function() {
+    describe('with `state` in the request body', function() {
       it('should return the state', function() {
         var model = {
           getAccessToken: function() {},
@@ -528,13 +593,15 @@ describe('AuthorizeHandler', function() {
         var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
         var request = new Request({ body: { state: 'foobar' }, headers: {}, method: {}, query: {} });
 
-        return handler.getState(request).then(function(data) {
-          data.should.equal('foobar');
-        });
+        return handler.getState(request)
+          .then(function(data) {
+            data.should.equal('foobar');
+          })
+          .catch(should.fail);
       });
     });
 
-    describe('with `response_type` in the request query', function() {
+    describe('with `state` in the request query', function() {
       it('should return the state', function() {
         var model = {
           getAccessToken: function() {},
@@ -544,9 +611,11 @@ describe('AuthorizeHandler', function() {
         var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
         var request = new Request({ body: {}, headers: {}, method: {}, query: { state: 'foobar' } });
 
-        return handler.getState(request).then(function(data) {
-          data.should.equal('foobar');
-        });
+        return handler.getState(request)
+          .then(function(data) {
+            data.should.equal('foobar');
+          })
+          .catch(should.fail);
       });
     });
   });
@@ -564,9 +633,11 @@ describe('AuthorizeHandler', function() {
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
       var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
 
-      return handler.getUser(request).then(function(data) {
-        data.should.equal(user);
-      });
+      return handler.getUser(request)
+        .then(function(data) {
+          data.should.equal(user);
+        })
+        .catch(should.fail);
     });
   });
 
@@ -582,9 +653,11 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
 
-      return handler.saveAuthCode('foo', 'bar', 'biz', 'baz').then(function(data) {
-        data.should.equal(authCode);
-      });
+      return handler.saveAuthCode('foo', 'bar', 'biz', 'baz')
+        .then(function(data) {
+          data.should.equal(authCode);
+        })
+        .catch(should.fail);
     });
 
     it('should support promises when calling `model.saveAuthCode()`', function() {

@@ -53,9 +53,9 @@ describe('Request', function() {
     });
 
     it('should set the `headers`', function() {
-      var request = new Request({ body: {}, headers: 'bar', method: {}, query: {} });
+      var request = new Request({ body: {}, headers: { foo: 'bar', QuX: 'biz' }, method: {}, query: {} });
 
-      request.headers.should.equal('bar');
+      request.headers.should.eql({ foo: 'bar', qux: 'biz' });
     });
 
     it('should set the `method`', function() {
@@ -152,7 +152,7 @@ describe('Request', function() {
         query: {}
       });
 
-      request.get('content-type').should.be.equal('text/html; charset=utf-8');
+      request.get('Content-Type').should.equal('text/html; charset=utf-8');
     });
   });
 });

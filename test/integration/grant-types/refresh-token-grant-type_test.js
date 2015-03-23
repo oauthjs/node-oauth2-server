@@ -130,6 +130,19 @@ describe('RefreshTokenGrantType', function() {
         });
     });
 
+    it('should throw an error if `refresh_token` is invalid', function() {
+      var client = {};
+      var grantType = new RefreshTokenGrantType({ getRefreshToken: function() {} });
+      var request = new Request({ body: { refresh_token: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid parameter: `refresh_token`');
+        });
+    });
+
     it('should throw an error if `refresh_token` is missing', function() {
       var client = {};
       var grantType = new RefreshTokenGrantType({ getRefreshToken: function() {} });
@@ -145,9 +158,10 @@ describe('RefreshTokenGrantType', function() {
 
     it('should throw an error if `refresh_token` is expired', function() {
       var client = {};
+      var date = new Date(new Date() / 2);
       var model = {
         getRefreshToken: function() {
-          return Promise.resolve({ client: {}, expires: new Date() / 10, user: {} });
+          return Promise.resolve({ client: {}, expires: date, user: {} });
         }
       };
       var grantType = new RefreshTokenGrantType(model);
@@ -163,16 +177,19 @@ describe('RefreshTokenGrantType', function() {
 
     it('should return a refresh token', function() {
       var client = {};
-      var refreshToken = { client: {}, expires: new Date() * 10, user: {} };
+      var date = new Date(new Date() * 2);
+      var refreshToken = { client: {}, expires: date, user: {} };
       var model = {
         getRefreshToken: sinon.stub().returns(refreshToken)
       };
       var grantType = new RefreshTokenGrantType(model);
       var request = new Request({ body: { refresh_token: 12345 }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request, client).then(function(data) {
-        data.should.equal(refreshToken);
-      });
+      return grantType.handle(request, client)
+        .then(function(data) {
+          data.should.equal(refreshToken);
+        })
+        .catch(should.fail);
     });
 
     it('should support promises when calling `model.getRefreshToken()`', function() {

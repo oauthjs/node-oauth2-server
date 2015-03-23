@@ -6,6 +6,7 @@
 var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
 var Request = require('../../../lib/request');
 var sinon = require('sinon');
+var should = require('should');
 
 /**
  * Test `AuthenticateHandler`.
@@ -81,11 +82,13 @@ describe('AuthenticateHandler', function() {
       };
       var handler = new AuthenticateHandler({ model: model });
 
-      return handler.getAccessToken('foo').then(function() {
-        model.getAccessToken.callCount.should.equal(1);
-        model.getAccessToken.firstCall.args.should.have.length(1);
-        model.getAccessToken.firstCall.args[0].should.equal('foo');
-      });
+      return handler.getAccessToken('foo')
+        .then(function() {
+          model.getAccessToken.callCount.should.equal(1);
+          model.getAccessToken.firstCall.args.should.have.length(1);
+          model.getAccessToken.firstCall.args[0].should.equal('foo');
+        })
+        .catch(should.fail);
     });
   });
 
@@ -97,9 +100,11 @@ describe('AuthenticateHandler', function() {
       };
       var handler = new AuthenticateHandler({ model: model });
 
-      return handler.validateScope('foo').then(function() {
-        model.validateScope.callCount.should.equal(0);
-      });
+      return handler.validateScope('foo')
+        .then(function() {
+          model.validateScope.callCount.should.equal(0);
+        })
+        .catch(should.fail);
     });
 
     it('should call `model.getAccessToken()` if scope is defined', function() {
@@ -109,11 +114,13 @@ describe('AuthenticateHandler', function() {
       };
       var handler = new AuthenticateHandler({ model: model, scope: 'bar' });
 
-      return handler.validateScope('foo').then(function() {
-        model.validateScope.callCount.should.equal(1);
-        model.validateScope.firstCall.args.should.have.length(2);
-        model.validateScope.firstCall.args[0].should.equal('foo', 'bar');
-      });
+      return handler.validateScope('foo')
+        .then(function() {
+          model.validateScope.callCount.should.equal(1);
+          model.validateScope.firstCall.args.should.have.length(2);
+          model.validateScope.firstCall.args[0].should.equal('foo', 'bar');
+        })
+        .catch(should.fail);
     });
   });
 });
