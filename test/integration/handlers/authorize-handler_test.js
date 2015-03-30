@@ -14,6 +14,7 @@ var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
 var ServerError = require('../../../lib/errors/server-error');
+var UnauthorizedClientError = require('../../../lib/errors/unauthorized-client-error');
 var should = require('should');
 var url = require('url');
 
@@ -179,7 +180,7 @@ describe('AuthorizeHandler', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         },
         saveAuthCode: function() {
           throw new AccessDeniedError('Cannot request this auth code');
@@ -203,13 +204,13 @@ describe('AuthorizeHandler', function() {
 
       return handler.handle(request, response)
         .then(should.fail)
-        .catch(function(e) {
+        .catch(function() {
           response.get('location').should.equal('http://example.com/cb?error=access_denied&error_description=Cannot%20request%20this%20auth%20code&state=foobar');
         });
     });
 
     it('should redirect to a successful response with `code` and `state` if successful', function() {
-      var client = { redirectUri: 'http://example.com/cb' };
+      var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
       var model = {
         getAccessToken: function() {
           return { client: client, user: {} };
@@ -245,7 +246,7 @@ describe('AuthorizeHandler', function() {
     });
 
     it('should return the `code` if successful', function() {
-      var client = { redirectUri: 'http://example.com/cb' };
+      var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
       var model = {
         getAccessToken: function() {
           return { client: client, user: {} };
@@ -277,7 +278,7 @@ describe('AuthorizeHandler', function() {
         .then(function(data) {
           data.should.eql({
             authCode: 12345,
-            client: { redirectUri: 'http://example.com/cb' }
+            client: client
           });
         })
         .catch(should.fail);
@@ -346,41 +347,6 @@ describe('AuthorizeHandler', function() {
     });
   });
 
-  describe('getScope()', function() {
-    it('should throw an error if `scope` is invalid', function() {
-      var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
-      var request = new Request({ body: { scope: 'øå€£‰' }, headers: {}, method: {}, query: {} });
-
-      return handler.getScope(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidArgumentError);
-          e.message.should.equal('Invalid parameter: `scope`');
-        });
-    });
-
-    it('should return the scope', function() {
-      var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
-      var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
-
-      return handler.getScope(request)
-        .then(function(scope) {
-          scope.should.equal('foo');
-        })
-        .catch(should.fail);
-    });
-  });
-
   describe('getClient()', function() {
     it('should throw an error if `client_id` is missing', function() {
       var model = {
@@ -416,6 +382,23 @@ describe('AuthorizeHandler', function() {
         });
     });
 
+    it('should throw an error if `client.redirectUri` is invalid', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { client_id: 12345, response_type: 'code', redirect_uri: 'foobar' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal('Invalid request: `redirect_uri` is not a valid URI');
+        });
+    });
+
     it('should throw an error if `client` is missing', function() {
       var model = {
         getAccessToken: function() {},
@@ -433,10 +416,65 @@ describe('AuthorizeHandler', function() {
         });
     });
 
+    it('should throw an error if `client` is missing', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { client_id: 12345, response_type: 'code' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidClientError);
+          e.message.should.equal('Invalid client: client credentials are invalid');
+        });
+    });
+
+    it('should throw an error if `client.grants` is missing', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {
+          return {};
+        },
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { client_id: 12345, response_type: 'code' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidClientError);
+          e.message.should.equal('Invalid client: missing client `grants`');
+        });
+    });
+
+    it('should throw an error if `client` is unauthorized', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {
+          return { grants: [] };
+        },
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { client_id: 12345, response_type: 'code' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(UnauthorizedClientError);
+          e.message.should.equal('Unauthorized client: `grant_type` is invalid');
+        });
+    });
+
     it('should throw an error if `client.redirectUri` is missing', function() {
       var model = {
         getAccessToken: function() {},
-        getClient: function() { return {}; },
+        getClient: function() { return { grants: ['authorization_code'] }; },
         saveAuthCode: function() {}
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
@@ -450,20 +488,22 @@ describe('AuthorizeHandler', function() {
         });
     });
 
-    it('should throw an error if `client.redirectUri` is invalid', function() {
+    it('should throw an error if `client.redirectUri` is not equal to `redirectUri`', function() {
       var model = {
         getAccessToken: function() {},
-        getClient: function() { return { redirectUri: 'foobar' }; },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUri: 'https://example.com' };
+        },
         saveAuthCode: function() {}
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
-      var request = new Request({ body: { client_id: 12345, response_type: 'code' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { client_id: 12345, response_type: 'code', redirect_uri: 'https://foobar.com' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidClientError);
-          e.message.should.equal('Invalid client: `redirectUri` is not a valid URI');
+          e.message.should.equal('Invalid client: `redirect_uri` does not match client value');
         });
     });
 
@@ -471,7 +511,7 @@ describe('AuthorizeHandler', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {
-          return Promise.resolve({ redirectUri: 'http://example.com/cb' });
+          return Promise.resolve({ grants: ['authorization_code'], redirectUri: 'http://example.com/cb' });
         },
         saveAuthCode: function() {}
       };
@@ -490,7 +530,7 @@ describe('AuthorizeHandler', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {
-          return { redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         },
         saveAuthCode: function() {}
       };
@@ -507,7 +547,7 @@ describe('AuthorizeHandler', function() {
 
     describe('with `client_id` in the request body', function() {
       it('should return a client', function() {
-        var client = { redirectUri: 'http://example.com/cb' };
+        var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         var model = {
           getAccessToken: function() {},
           getClient: function() {
@@ -528,7 +568,7 @@ describe('AuthorizeHandler', function() {
 
     describe('with `client_id` in the request query', function() {
       it('should return a client', function() {
-        var client = { redirectUri: 'http://example.com/cb' };
+        var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         var model = {
           getAccessToken: function() {},
           getClient: function() {
@@ -545,6 +585,41 @@ describe('AuthorizeHandler', function() {
           })
           .catch(should.fail);
       });
+    });
+  });
+
+  describe('getScope()', function() {
+    it('should throw an error if `scope` is invalid', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { scope: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+
+      return handler.getScope(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidArgumentError);
+          e.message.should.equal('Invalid parameter: `scope`');
+        });
+    });
+
+    it('should return the scope', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
+
+      return handler.getScope(request)
+        .then(function(scope) {
+          scope.should.equal('foo');
+        })
+        .catch(should.fail);
     });
   });
 
@@ -687,49 +762,6 @@ describe('AuthorizeHandler', function() {
     });
   });
 
-  describe('buildSuccessRedirectUri()', function() {
-    it('should return a redirect uri', function() {
-      var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
-      var responseType = new CodeResponseType(12345);
-      var redirectUri = handler.buildSuccessRedirectUri('http://example.com/cb', responseType);
-
-      url.format(redirectUri).should.equal('http://example.com/cb?code=12345');
-    });
-  });
-
-  describe('buildErrorRedirectUri()', function() {
-    it('should set `error_description` if available', function() {
-      var error = new InvalidClientError('foo bar');
-      var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
-      var redirectUri = handler.buildErrorRedirectUri('http://example.com/cb', error)
-
-      url.format(redirectUri).should.equal('http://example.com/cb?error=invalid_client&error_description=foo%20bar');
-    });
-
-    it('should return a redirect uri', function() {
-      var error = new InvalidClientError();
-      var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
-      var redirectUri = handler.buildErrorRedirectUri('http://example.com/cb', error);
-
-      url.format(redirectUri).should.equal('http://example.com/cb?error=invalid_client');
-    });
-  });
-
   describe('getResponseType()', function() {
     it('should throw an error if `response_type` is missing', function() {
       var model = {
@@ -797,6 +829,66 @@ describe('AuthorizeHandler', function() {
 
         responseType.should.be.an.instanceOf(CodeResponseType);
       });
+    });
+  });
+
+  describe('buildSuccessRedirectUri()', function() {
+    it('should return a redirect uri', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var responseType = new CodeResponseType(12345);
+      var redirectUri = handler.buildSuccessRedirectUri('http://example.com/cb', responseType);
+
+      url.format(redirectUri).should.equal('http://example.com/cb?code=12345');
+    });
+  });
+
+  describe('buildErrorRedirectUri()', function() {
+    it('should set `error_description` if available', function() {
+      var error = new InvalidClientError('foo bar');
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var redirectUri = handler.buildErrorRedirectUri('http://example.com/cb', error);
+
+      url.format(redirectUri).should.equal('http://example.com/cb?error=invalid_client&error_description=foo%20bar');
+    });
+
+    it('should return a redirect uri', function() {
+      var error = new InvalidClientError();
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var redirectUri = handler.buildErrorRedirectUri('http://example.com/cb', error);
+
+      url.format(redirectUri).should.equal('http://example.com/cb?error=invalid_client');
+    });
+  });
+
+  describe('updateResponse()', function() {
+    it('should set the `location` header', function() {
+      var model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var response = new Response({ body: {}, headers: {} });
+      var uri = url.parse('http://example.com/cb');
+
+      handler.updateResponse(response, uri, 'foobar');
+
+      response.get('location').should.equal('http://example.com/cb?state=foobar');
     });
   });
 });

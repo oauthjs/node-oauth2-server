@@ -87,7 +87,7 @@ describe('Server', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         },
         saveAuthCode: function() {
           return { authCode: 123 };
@@ -107,7 +107,7 @@ describe('Server', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         },
         saveAuthCode: function() {
           return { authCode: 123 };
@@ -125,7 +125,7 @@ describe('Server', function() {
     it('should return a promise', function() {
       var model = {
         getClient: function() {
-          return {};
+          return { grants: ['password'] };
         },
         getUser: function() {
           return {};
@@ -145,7 +145,7 @@ describe('Server', function() {
     it('should support callbacks', function(next) {
       var model = {
         getClient: function() {
-          return {};
+          return { grants: ['password'] };
         },
         getUser: function() {
           return {};

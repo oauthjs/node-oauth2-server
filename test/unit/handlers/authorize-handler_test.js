@@ -36,7 +36,7 @@ describe('AuthorizeHandler', function() {
     it('should call `model.getClient()`', function() {
       var model = {
         getAccessToken: function() {},
-        getClient: sinon.stub().returns({ redirectUri: 'http://example.com/cb' }),
+        getClient: sinon.stub().returns({ grants: ['authorization_code'], redirectUri: 'http://example.com/cb' }),
         saveAuthCode: function() {}
       };
       var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });

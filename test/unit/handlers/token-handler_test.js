@@ -33,6 +33,9 @@ describe('TokenHandler', function() {
 
   describe('generateRefreshToken()', function() {
     it('should call `model.generateRefreshToken()`', function() {
+      var client = {
+        grants: ['refresh_token']
+      };
       var model = {
         generateRefreshToken: sinon.spy(),
         getClient: function() {},
@@ -40,7 +43,7 @@ describe('TokenHandler', function() {
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
-      return handler.generateRefreshToken()
+      return handler.generateRefreshToken(client)
         .then(function() {
           model.generateRefreshToken.callCount.should.equal(1);
           model.generateRefreshToken.firstCall.args.should.have.length(0);
@@ -52,7 +55,7 @@ describe('TokenHandler', function() {
   describe('getClient()', function() {
     it('should call `model.getClient()`', function() {
       var model = {
-        getClient: sinon.stub().returns({}),
+        getClient: sinon.stub().returns({ grants: ['password'] }),
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
