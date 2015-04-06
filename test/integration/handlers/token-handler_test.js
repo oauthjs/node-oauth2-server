@@ -506,6 +506,31 @@ describe('TokenHandler integration', function() {
         });
     });
 
+    it('should throw a 401 error if the client is invalid and the request contains an authorization header', function() {
+      var model = {
+        getClient: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({
+        body: {},
+        headers: { 'authorization': util.format('Basic %s', new Buffer('foo:bar').toString('base64')) },
+        method: {},
+        query: {}
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.getClient(request, response)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidClientError);
+          e.code.should.equal(401);
+          e.message.should.equal('Invalid client: client is invalid');
+
+          response.get('WWW-Authenticate').should.equal('Basic realm="Service"');
+        });
+    });
+
     it('should return a client', function() {
       var client = { id: 12345, grants: [] };
       var model = {
