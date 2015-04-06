@@ -11,10 +11,10 @@ var Server = require('../../lib/server');
 var should = require('should');
 
 /**
- * Test `Server`.
+ * Test `Server` integration.
  */
 
-describe('Server', function() {
+describe('Server integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `model` is missing', function() {
       try {

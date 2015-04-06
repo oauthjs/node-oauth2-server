@@ -14,10 +14,10 @@ var sinon = require('sinon');
 var should = require('should');
 
 /**
- * Test `PasswordGrantType`.
+ * Test `PasswordGrantType` integration.
  */
 
-describe('PasswordGrantType', function() {
+describe('PasswordGrantType integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `model` is missing', function() {
       try {

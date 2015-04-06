@@ -13,10 +13,10 @@ var sinon = require('sinon');
 var should = require('should');
 
 /**
- * Test `ClientCredentialsGrantType`.
+ * Test `ClientCredentialsGrantType` integration.
  */
 
-describe('ClientCredentialsGrantType', function() {
+describe('ClientCredentialsGrantType integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `model` is missing', function() {
       try {

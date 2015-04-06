@@ -8,10 +8,10 @@ var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error')
 var should = require('should');
 
 /**
- * Test `BearerTokenType`.
+ * Test `BearerTokenType` integration.
  */
 
-describe('BearerTokenType', function() {
+describe('BearerTokenType integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `accessToken` is missing', function() {
       try {

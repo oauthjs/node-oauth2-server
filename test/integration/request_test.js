@@ -8,10 +8,10 @@ var InvalidArgumentError = require('../../lib/errors/invalid-argument-error');
 var should = require('should');
 
 /**
- * Test `Request`.
+ * Test `Request` integration.
  */
 
-describe('Request', function() {
+describe('Request integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `headers` is missing', function() {
       try {

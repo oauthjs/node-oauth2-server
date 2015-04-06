@@ -14,10 +14,10 @@ var ServerError = require('../../../lib/errors/server-error');
 var should = require('should');
 
 /**
- * Test `AuthenticateHandler`.
+ * Test `AuthenticateHandler` integration.
  */
 
-describe('AuthenticateHandler', function() {
+describe('AuthenticateHandler integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `options.model` is missing', function() {
       try {

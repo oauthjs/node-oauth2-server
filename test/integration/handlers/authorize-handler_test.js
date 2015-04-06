@@ -19,10 +19,10 @@ var should = require('should');
 var url = require('url');
 
 /**
- * Test `AuthorizeHandler`.
+ * Test `AuthorizeHandler` integration.
  */
 
-describe('AuthorizeHandler', function() {
+describe('AuthorizeHandler integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `options.authCodeLifetime` is missing', function() {
       try {
@@ -174,7 +174,42 @@ describe('AuthorizeHandler', function() {
         });
     });
 
-    it('should redirect to an error response if an error is thrown', function() {
+    it('should redirect to an error response if a non-oauth error is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+        },
+        saveAuthCode: function() {
+          throw new Error('Unhandled exception');
+        }
+      };
+      var handler = new AuthorizeHandler({ authCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=server_error&error_description=Unhandled%20exception&state=foobar');
+        });
+    });
+
+    it('should redirect to an error response if an oauth error is thrown', function() {
       var model = {
         getAccessToken: function() {
           return { user: {} };

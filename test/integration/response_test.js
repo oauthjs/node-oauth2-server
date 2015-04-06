@@ -6,10 +6,10 @@
 var Response = require('../../lib/response');
 
 /**
- * Test `Response`.
+ * Test `Response` integration.
  */
 
-describe('Response', function() {
+describe('Response integration', function() {
   describe('constructor()', function() {
     it('should set the `body`', function() {
       var response = new Response({ body: 'foo', headers: {} });

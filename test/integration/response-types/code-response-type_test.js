@@ -9,10 +9,10 @@ var should = require('should');
 var url = require('url');
 
 /**
- * Test `CodeResponseType`.
+ * Test `CodeResponseType` integration.
  */
 
-describe('CodeResponseType', function() {
+describe('CodeResponseType integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `code` is missing', function() {
       try {

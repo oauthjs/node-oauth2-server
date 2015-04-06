@@ -7,6 +7,7 @@ var AccessDeniedError = require('../../../lib/errors/access-denied-error');
 var BearerTokenType = require('../../../lib/token-types/bearer-token-type');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var InvalidClientError = require('../../../lib/errors/invalid-client-error');
+var InvalidGrantError = require('../../../lib/errors/invalid-grant-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 var PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
 var Promise = require('bluebird');
@@ -20,10 +21,10 @@ var should = require('should');
 var util = require('util');
 
 /**
- * Test `TokenHandler`.
+ * Test `TokenHandler` integration.
  */
 
-describe('TokenHandler', function() {
+describe('TokenHandler integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `options.accessTokenLifetime` is missing', function() {
       try {
@@ -247,6 +248,7 @@ describe('TokenHandler', function() {
         .catch(function(e) {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Unhandled exception');
+          e.inner.should.be.an.instanceOf(Error);
         });
     });
 
@@ -481,8 +483,26 @@ describe('TokenHandler', function() {
       return handler.getClient(request)
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidClientError);
-          e.message.should.equal('Invalid client: missing client `grants`');
+          e.should.be.an.instanceOf(ServerError);
+          e.message.should.equal('Server error: missing client `grants`');
+        });
+    });
+
+    it('should throw an error if `client.grants` is invalid', function() {
+      var model = {
+        getClient: function() {
+          return { grants: 'foobar' };
+        },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(ServerError);
+          e.message.should.equal('Server error: `grants` must be an array');
         });
     });
 
@@ -740,6 +760,24 @@ describe('TokenHandler', function() {
         .catch(function(e) {
           e.should.be.an.instanceOf(UnauthorizedClientError);
           e.message.should.equal('Unauthorized client: `grant_type` is invalid');
+        });
+    });
+
+    it('should throw an invalid grant error if a non-oauth error is thrown', function() {
+      var client = { grants: ['password'] };
+      var model = {
+        getClient: function() {},
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({ body: { grant_type: 'password', username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+
+      return handler.handleGrantType(request, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidGrantError);
+          e.message.should.equal('Invalid grant: user credentials are invalid');
         });
     });
 
