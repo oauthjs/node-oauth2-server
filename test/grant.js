@@ -530,7 +530,7 @@ describe('Grant', function() {
           res.body.refresh_token.should.be.instanceOf(String);
           res.body.refresh_token.should.have.length(40);
           res.body.token_type.should.equal('bearer');
-          res.body.expires_in.should.equal(3600);
+          res.body.expires_in.should.equal(1209600);
 
           done();
         });
