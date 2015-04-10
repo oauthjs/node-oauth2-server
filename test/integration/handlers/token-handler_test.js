@@ -906,7 +906,7 @@ describe('TokenHandler integration', function() {
   describe('handleGrantType()', function() {
     describe('with grant_type `authorization_code`', function() {
       it('should return a user', function() {
-        var authCode = { client: { id: 'foobar' }, user: {} };
+        var authCode = { client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
         var client = { id: 'foobar', grants: ['authorization_code'] };
         var model = {
           getAuthCode: function() {

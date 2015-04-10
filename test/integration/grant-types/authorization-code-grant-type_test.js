@@ -201,7 +201,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should return an auth code', function() {
-      var authCode = { authCode: 12345, client: { id: 'foobar' }, user: {} };
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
       var model = {
         getAuthCode: sinon.stub().returns(authCode)
@@ -217,7 +217,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should support promises', function() {
-      var authCode = { authCode: 12345, client: { id: 'foobar' }, user: {} };
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() {
@@ -231,7 +231,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should support non-promises', function() {
-      var authCode = { authCode: 12345, client: { id: 'foobar' }, user: {} };
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() {
