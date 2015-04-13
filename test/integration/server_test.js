@@ -131,7 +131,7 @@ describe('Server integration', function() {
           return {};
         },
         saveToken: function() {
-          return { accessToken: 1234 };
+          return { accessToken: 1234, client: {}, user: {} };
         }
       };
       var server = new Server({ model: model });
@@ -151,7 +151,7 @@ describe('Server integration', function() {
           return {};
         },
         saveToken: function() {
-          return { accessToken: 1234 };
+          return { accessToken: 1234, client: {}, user: {} };
         }
       };
       var server = new Server({ model: model });

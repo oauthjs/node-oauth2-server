@@ -9,8 +9,6 @@ var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 var PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
-var ServerError = require('../../../lib/errors/server-error');
-var sinon = require('sinon');
 var should = require('should');
 
 /**
@@ -32,26 +30,38 @@ describe('PasswordGrantType integration', function() {
 
     it('should throw an error if the model does not implement `getUser()`', function() {
       try {
-        new PasswordGrantType({});
+        new PasswordGrantType({ model: {} });
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(ServerError);
-        e.message.should.equal('Server error: model does not implement `getUser()`');
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `getUser()`');
       }
     });
 
-    it('should set the `model`', function() {
-      var model = { getUser: function() {} };
-      var grantType = new PasswordGrantType(model);
+    it('should throw an error if the model does not implement `saveToken()`', function() {
+      try {
+        var model = {
+          getUser: function() {}
+        };
 
-      grantType.model.should.equal(model);
+        new PasswordGrantType({ model: model });
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `saveToken()`');
+      }
     });
   });
 
   describe('handle()', function() {
     it('should throw an error if `request` is missing', function() {
-      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var model = {
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
 
       try {
         grantType.handle();
@@ -63,11 +73,77 @@ describe('PasswordGrantType integration', function() {
       }
     });
 
+    it('should throw an error if `client` is missing', function() {
+      var model = {
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+
+      try {
+        grantType.handle({});
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Missing parameter: `client`');
+      }
+    });
+
+    it('should return a token', function() {
+      var client = { id: 'foobar' };
+      var token = {};
+      var model = {
+        getUser: function() { return {}; },
+        saveToken: function() { return token; }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+
+      return grantType.handle(request, client)
+        .then(function(data) {
+          data.should.equal(token);
+        })
+        .catch(should.fail);
+    });
+
+    it('should support promises', function() {
+      var client = { id: 'foobar' };
+      var token = {};
+      var model = {
+        getUser: function() { return {}; },
+        saveToken: function() { return Promise.resolve(token); }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+
+      grantType.handle(request, client).should.be.an.instanceOf(Promise);
+    });
+
+    it('should support non-promises', function() {
+      var client = { id: 'foobar' };
+      var token = {};
+      var model = {
+        getUser: function() { return {}; },
+        saveToken: function() { return token; }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+
+      grantType.handle(request, client).should.be.an.instanceOf(Promise);
+    });
+  });
+
+  describe('getUser()', function() {
     it('should throw an error if the request body does not contain `username`', function() {
-      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var model = {
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request)
+      return grantType.getUser(request)
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidRequestError);
@@ -76,10 +152,14 @@ describe('PasswordGrantType integration', function() {
     });
 
     it('should throw an error if the request body does not contain `password`', function() {
-      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var model = {
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foo' }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request)
+      return grantType.getUser(request)
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidRequestError);
@@ -88,10 +168,14 @@ describe('PasswordGrantType integration', function() {
     });
 
     it('should throw an error if `username` is invalid', function() {
-      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var model = {
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'øå€£‰', password: 'foobar' }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request)
+      return grantType.getUser(request)
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidRequestError);
@@ -100,10 +184,14 @@ describe('PasswordGrantType integration', function() {
     });
 
     it('should throw an error if `password` is invalid', function() {
-      var grantType = new PasswordGrantType({ getUser: function() {} });
+      var model = {
+        getUser: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foobar', password: 'øå€£‰' }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request)
+      return grantType.getUser(request)
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidRequestError);
@@ -113,14 +201,13 @@ describe('PasswordGrantType integration', function() {
 
     it('should throw an error if `user` is missing', function() {
       var model = {
-        getUser: function() {
-          return Promise.resolve();
-        }
+        getUser: function() {},
+        saveToken: function() {}
       };
-      var grantType = new PasswordGrantType(model);
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request)
+      return grantType.getUser(request)
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidGrantError);
@@ -131,42 +218,80 @@ describe('PasswordGrantType integration', function() {
     it('should return a user', function() {
       var user = { email: 'foo@bar.com' };
       var model = {
-        getUser: sinon.stub().returns(user)
+        getUser: function() { return user; },
+        saveToken: function() {}
       };
-      var grantType = new PasswordGrantType(model);
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
-      return grantType.handle(request)
+      return grantType.getUser(request)
         .then(function(data) {
           data.should.equal(user);
         })
         .catch(should.fail);
     });
 
-    it('should support promises when calling `model.getUser()`', function() {
+    it('should support promises', function() {
       var user = { email: 'foo@bar.com' };
       var model = {
-        getUser: function() {
-          return Promise.resolve(user);
-        }
+        getUser: function() { return Promise.resolve(user); },
+        saveToken: function() {}
       };
-      var grantType = new PasswordGrantType(model);
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
-      grantType.handle(request).should.be.an.instanceOf(Promise);
+      grantType.getUser(request).should.be.an.instanceOf(Promise);
     });
 
-    it('should support non-promises when calling `model.getUser()`', function() {
+    it('should support non-promises', function() {
       var user = { email: 'foo@bar.com' };
       var model = {
-        getUser: function() {
-          return user;
-        }
+        getUser: function() { return user; },
+        saveToken: function() {}
       };
-      var grantType = new PasswordGrantType(model);
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
-      grantType.handle(request).should.be.an.instanceOf(Promise);
+      grantType.getUser(request).should.be.an.instanceOf(Promise);
+    });
+  });
+
+  describe('saveToken()', function() {
+    it('should save the token', function() {
+      var token = {};
+      var model = {
+        getUser: function() {},
+        saveToken: function() { return token; }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+
+      return grantType.saveToken(token)
+        .then(function(data) {
+          data.should.equal(token);
+        })
+        .catch(should.fail);
+    });
+
+    it('should support promises', function() {
+      var token = {};
+      var model = {
+        getUser: function() {},
+        saveToken: function() { return Promise.resolve(token); }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+
+      grantType.saveToken(token).should.be.an.instanceOf(Promise);
+    });
+
+    it('should support non-promises', function() {
+      var token = {};
+      var model = {
+        getUser: function() {},
+        saveToken: function() { return token; }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+
+      grantType.saveToken(token).should.be.an.instanceOf(Promise);
     });
   });
 });

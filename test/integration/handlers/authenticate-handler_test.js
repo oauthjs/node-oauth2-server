@@ -3,6 +3,7 @@
  * Module dependencies.
  */
 
+var AccessDeniedError = require('../../../lib/errors/access-denied-error');
 var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
@@ -36,8 +37,8 @@ describe('AuthenticateHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(ServerError);
-        e.message.should.equal('Server error: model does not implement `getAccessToken()`');
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `getAccessToken()`');
       }
     });
 
@@ -47,8 +48,8 @@ describe('AuthenticateHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(ServerError);
-        e.message.should.equal('Server error: model does not implement `validateScope()`');
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `validateScope()`');
       }
     });
 
@@ -82,6 +83,40 @@ describe('AuthenticateHandler integration', function() {
         e.should.be.an.instanceOf(InvalidArgumentError);
         e.message.should.equal('Invalid argument: `request` must be an instance of Request');
       }
+    });
+
+    it('should throw the error if an oauth error is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          throw new AccessDeniedError('Cannot request this access token');
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+
+      return handler.handle(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(AccessDeniedError);
+          e.message.should.equal('Cannot request this access token');
+        });
+    });
+
+    it('should throw a server error if a non-oauth error is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          throw new Error('Unhandled exception');
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+
+      return handler.handle(request)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(ServerError);
+          e.message.should.equal('Unhandled exception');
+        });
     });
 
     it('should return an access token', function() {

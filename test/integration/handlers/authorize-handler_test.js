@@ -52,8 +52,8 @@ describe('AuthorizeHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(ServerError);
-        e.message.should.equal('Server error: model does not implement `getClient()`');
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `getClient()`');
       }
     });
 
@@ -63,8 +63,8 @@ describe('AuthorizeHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(ServerError);
-        e.message.should.equal('Server error: model does not implement `saveAuthCode()`');
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `saveAuthCode()`');
       }
     });
 
@@ -79,8 +79,8 @@ describe('AuthorizeHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(ServerError);
-        e.message.should.equal('Server error: model does not implement `getAccessToken()`');
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Invalid argument: model does not implement `getAccessToken()`');
       }
     });
 
