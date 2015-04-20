@@ -65,7 +65,7 @@ describe('AuthorizeHandler', function() {
         .then(function() {
           model.saveAuthCode.callCount.should.equal(1);
           model.saveAuthCode.firstCall.args.should.have.length(3);
-          model.saveAuthCode.firstCall.args[0].should.eql({ authCode: 'foo', expiresOn: 'bar', scope: 'qux' });
+          model.saveAuthCode.firstCall.args[0].should.eql({ authCode: 'foo', expiresAt: 'bar', scope: 'qux' });
           model.saveAuthCode.firstCall.args[1].should.equal('biz');
           model.saveAuthCode.firstCall.args[2].should.equal('baz');
         })

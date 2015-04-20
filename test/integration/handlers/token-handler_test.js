@@ -601,10 +601,10 @@ describe('TokenHandler integration', function() {
         var client = { id: 'foobar', grants: ['authorization_code'] };
         var token = {};
         var model = {
-          getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} }; },
+          getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
           getClient: function() {},
           saveToken: function() { return token; },
-          revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() / 2), user: {} }; }
+          revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
         var request = new Request({
@@ -689,9 +689,9 @@ describe('TokenHandler integration', function() {
         var token = { accessToken: 'foo', client: {}, user: {} };
         var model = {
           getClient: function() {},
-          getRefreshToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() * 2), user: {} }; },
+          getRefreshToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() * 2), user: {} }; },
           saveToken: function() { return token; },
-          revokeToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} }; }
+          revokeToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
         var request = new Request({

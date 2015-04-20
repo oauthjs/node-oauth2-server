@@ -348,7 +348,7 @@ describe('AuthenticateHandler integration', function() {
 
   describe('validateAccessToken()', function() {
     it('should throw an error if `accessToken` is expired', function() {
-      var accessToken = { accessTokenExpiresOn: new Date(new Date() / 2) };
+      var accessToken = { accessTokenExpiresAt: new Date(new Date() / 2) };
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
 
       return handler.validateAccessToken(accessToken)

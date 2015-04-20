@@ -125,19 +125,19 @@ describe('AbstractGrantType integration', function() {
     });
   });
 
-  describe('getAccessTokenExpiresOn()', function() {
+  describe('getAccessTokenExpiresAt()', function() {
     it('should return a date', function() {
       var handler = new AbstractGrantType({ accessTokenLifetime: 123, model: {}, refreshTokenLifetime: 456 });
 
-      handler.getAccessTokenExpiresOn().should.be.an.instanceOf(Date);
+      handler.getAccessTokenExpiresAt().should.be.an.instanceOf(Date);
     });
   });
 
-  describe('getRefreshTokenExpiresOn()', function() {
+  describe('getRefreshTokenExpiresAt()', function() {
     it('should return a refresh token', function() {
       var handler = new AbstractGrantType({ accessTokenLifetime: 123, model: {}, refreshTokenLifetime: 456 });
 
-      handler.getRefreshTokenExpiresOn().should.be.an.instanceOf(Date);
+      handler.getRefreshTokenExpiresAt().should.be.an.instanceOf(Date);
     });
   });
 

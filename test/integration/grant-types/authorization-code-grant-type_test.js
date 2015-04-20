@@ -94,7 +94,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     it('should throw an error if `client` is missing', function() {
       var client = {};
       var model = {
-        getAuthCode: function() { return { authCode: 12345, expiresOn: new Date(new Date() * 2), user: {} }; },
+        getAuthCode: function() { return { authCode: 12345, expiresAt: new Date(new Date() * 2), user: {} }; },
         revokeAuthCode: function() {},
         saveToken: function() {}
       };
@@ -113,8 +113,8 @@ describe('AuthorizationCodeGrantType integration', function() {
       var client = { id: 'foobar' };
       var token = {};
       var model = {
-        getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} }; },
-        revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() / 2), user: {} }; },
+        getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
+        revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; },
         saveToken: function() { return token; }
       };
       var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
@@ -130,8 +130,8 @@ describe('AuthorizationCodeGrantType integration', function() {
     it('should support promises', function() {
       var client = { id: 'foobar' };
       var model = {
-        getAuthCode: function() { return Promise.resolve({ authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} }); },
-        revokeAuthCode: function() { return Promise.resolve({ authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() / 2), user: {} }) },
+        getAuthCode: function() { return Promise.resolve({ authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }); },
+        revokeAuthCode: function() { return Promise.resolve({ authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }) },
         saveToken: function() {}
       };
       var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
@@ -143,8 +143,8 @@ describe('AuthorizationCodeGrantType integration', function() {
     it('should support non-promises', function() {
       var client = { id: 'foobar' };
       var model = {
-        getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} }; },
-        revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() / 2), user: {} }; },
+        getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
+        revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; },
         saveToken: function() {}
       };
       var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
@@ -227,7 +227,7 @@ describe('AuthorizationCodeGrantType integration', function() {
         });
     });
 
-    it('should throw an error if `authCode.expiresOn` is missing', function() {
+    it('should throw an error if `authCode.expiresAt` is missing', function() {
       var client = {};
       var model = {
         getAuthCode: function() { return { authCode: 12345, client: {}, user: {} }; },
@@ -241,14 +241,14 @@ describe('AuthorizationCodeGrantType integration', function() {
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(ServerError);
-          e.message.should.equal('Server error: `expiresOn` must be a Date instance');
+          e.message.should.equal('Server error: `expiresAt` must be a Date instance');
         });
     });
 
     it('should throw an error if `authCode.user` is missing', function() {
       var client = {};
       var model = {
-        getAuthCode: function() { return { authCode: 12345, client: {}, expiresOn: new Date() }; },
+        getAuthCode: function() { return { authCode: 12345, client: {}, expiresAt: new Date() }; },
         revokeAuthCode: function() {},
         saveToken: function() {}
       };
@@ -267,7 +267,7 @@ describe('AuthorizationCodeGrantType integration', function() {
       var client = { id: 123 };
       var model = {
         getAuthCode: function() {
-          return { authCode: 12345, expiresOn: new Date(), client: { id: 456 }, user: {} };
+          return { authCode: 12345, expiresAt: new Date(), client: { id: 456 }, user: {} };
         },
         revokeAuthCode: function() {},
         saveToken: function() {}
@@ -288,7 +288,7 @@ describe('AuthorizationCodeGrantType integration', function() {
       var date = new Date(new Date() / 2);
       var model = {
         getAuthCode: function() {
-          return { authCode: 12345, client: { id: 123 }, expiresOn: date, user: {} };
+          return { authCode: 12345, client: { id: 123 }, expiresAt: date, user: {} };
         },
         revokeAuthCode: function() {},
         saveToken: function() {}
@@ -305,7 +305,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should return an auth code', function() {
-      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() { return authCode; },
@@ -323,7 +323,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should support promises', function() {
-      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() { return Promise.resolve(authCode); },
@@ -337,7 +337,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should support non-promises', function() {
-      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresOn: new Date(new Date() * 2), user: {} };
+      var authCode = { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
       var model = {
         getAuthCode: function() { return authCode; },
@@ -353,7 +353,7 @@ describe('AuthorizationCodeGrantType integration', function() {
 
   describe('revokeAuthCode()', function() {
     it('should revoke the auth code', function() {
-      var authCode = { authCode: 12345, client: {}, expiresOn: new Date(new Date() / 2), user: {} };
+      var authCode = { authCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} };
       var model = {
         getAuthCode: function() {},
         revokeAuthCode: function() { return authCode; },
@@ -369,7 +369,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should support promises', function() {
-      var authCode = { authCode: 12345, client: {}, expiresOn: new Date(new Date() / 2), user: {} };
+      var authCode = { authCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} };
       var model = {
         getAuthCode: function() {},
         revokeAuthCode: function() { return Promise.resolve(authCode); },
@@ -381,7 +381,7 @@ describe('AuthorizationCodeGrantType integration', function() {
     });
 
     it('should support non-promises', function() {
-      var authCode = { authCode: 12345, client: {}, expiresOn: new Date(new Date() / 2), user: {} };
+      var authCode = { authCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} };
       var model = {
         getAuthCode: function() {},
         revokeAuthCode: function() { return authCode; },

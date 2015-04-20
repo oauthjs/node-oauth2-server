@@ -115,7 +115,7 @@ describe('RefreshTokenGrantType integration', function() {
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
         getRefreshToken: function() { return token; },
-        revokeToken: function() { return { accessToken: 'foo', client: { id: 123 }, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} }; },
+        revokeToken: function() { return { accessToken: 'foo', client: { id: 123 }, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }; },
         saveToken: function() { return token; }
       };
       var grantType = new RefreshTokenGrantType({ accessTokenLifetime: 123, model: model });
@@ -132,7 +132,7 @@ describe('RefreshTokenGrantType integration', function() {
       var client = { id: 123 };
       var model = {
         getRefreshToken: function() { return Promise.resolve({ accessToken: 'foo', client: { id: 123 }, user: {} }); },
-        revokeToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} }) },
+        revokeToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }) },
         saveToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, user: {} }); }
       };
       var grantType = new RefreshTokenGrantType({ accessTokenLifetime: 123, model: model });
@@ -145,7 +145,7 @@ describe('RefreshTokenGrantType integration', function() {
       var client = { id: 123 };
       var model = {
         getRefreshToken: function() { return { accessToken: 'foo', client: { id: 123 }, user: {} }; },
-        revokeToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} }; },
+        revokeToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }; },
         saveToken: function() { return { accessToken: 'foo', client: {}, user: {} }; }
       };
       var grantType = new RefreshTokenGrantType({ accessTokenLifetime: 123, model: model });
@@ -333,7 +333,7 @@ describe('RefreshTokenGrantType integration', function() {
       var date = new Date(new Date() / 2);
       var model = {
         getRefreshToken: function() {
-          return { accessToken: 'foo', client: { id: 123 }, refreshTokenExpiresOn: date, user: {} };
+          return { accessToken: 'foo', client: { id: 123 }, refreshTokenExpiresAt: date, user: {} };
         },
         revokeToken: function() {},
         saveToken: function() {}
@@ -398,7 +398,7 @@ describe('RefreshTokenGrantType integration', function() {
 
   describe('revokeToken()', function() {
     it('should revoke the token', function() {
-      var token = { accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} };
+      var token = { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} };
       var model = {
         getRefreshToken: function() {},
         revokeToken: function() { return token; },
@@ -414,7 +414,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support promises', function() {
-      var token = { accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} };
+      var token = { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} };
       var model = {
         getRefreshToken: function() {},
         revokeToken: function() { return Promise.resolve(token); },
@@ -426,7 +426,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support non-promises', function() {
-      var token = { accessToken: 'foo', client: {}, refreshTokenExpiresOn: new Date(new Date() / 2), user: {} };
+      var token = { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} };
       var model = {
         getRefreshToken: function() {},
         revokeToken: function() { return token; },

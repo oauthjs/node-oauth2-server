@@ -17,7 +17,7 @@ describe('AuthorizationCodeGrantType', function() {
   describe('getAuthCode()', function() {
     it('should call `model.getAuthCode()`', function() {
       var model = {
-        getAuthCode: sinon.stub().returns({ authCode: 12345, client: {}, expiresOn: new Date(new Date() * 2), user: {} }),
+        getAuthCode: sinon.stub().returns({ authCode: 12345, client: {}, expiresAt: new Date(new Date() * 2), user: {} }),
         revokeAuthCode: function() {},
         saveToken: function() {}
       };
@@ -39,7 +39,7 @@ describe('AuthorizationCodeGrantType', function() {
     it('should call `model.revokeAuthCode()`', function() {
       var model = {
         getAuthCode: function() {},
-        revokeAuthCode: sinon.stub().returns({ authCode: 12345, client: {}, expiresOn: new Date(new Date() / 2), user: {} }),
+        revokeAuthCode: sinon.stub().returns({ authCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} }),
         saveToken: function() {}
       };
       var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
