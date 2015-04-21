@@ -49,7 +49,7 @@ model.getClient = function (clientId, clientSecret, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
 
-    client.query('SELECT client_id, client_secret, redirect_uri FROM oauth_clients WHERE ' +
+    client.query('SELECT client_id, client_secret, redirect_uri, valid_scopes, default_scope FROM oauth_clients WHERE ' +
       'client_id = $1', [clientId], function (err, result) {
       if (err || !result.rowCount) return callback(err);
 
@@ -60,7 +60,9 @@ model.getClient = function (clientId, clientSecret, callback) {
       // This object will be exposed in req.oauth.client
       callback(null, {
         clientId: client.client_id,
-        clientSecret: client.client_secret
+        clientSecret: client.client_secret,
+        validScopes: client.valid_scopes,
+        defaultScope: client.default_scope
       });
       done();
     });
@@ -107,16 +109,17 @@ model.saveRefreshToken = function (refreshToken, clientId, expires, userId, call
     // Retrieve the scope string from the access token entry
     client.query('SELECT scope FROM oauth_access_tokens WHERE client_id = $1 AND user_id = $2',
         [clientId, userId], function (err, result) {
-      if (err) return callback(err);
-	  if (!result.rowCount) return callback('Could not retrieve access token scope string');
-      
-      client.query('INSERT INTO oauth_refresh_tokens(refresh_token, client_id, ' +
-        'user_id, scope, expires) VALUES ($1, $2, $3, $4, $5)',
-        [refreshToken, clientId, userId, result.rows[0].scope, expires],
-        function (err, result) {
-      callback(err);
-      done();
-    });
+          if (err) return callback(err);
+          if (!result.rowCount) return callback('Could not retrieve access token scope string');
+
+          client.query('INSERT INTO oauth_refresh_tokens(refresh_token, client_id, ' +
+              'user_id, scope, expires) VALUES ($1, $2, $3, $4, $5)',
+              [refreshToken, clientId, userId, result.rows[0].scope, expires],
+              function (err, result) {
+                callback(err);
+                done();
+              });
+        });
   });
 };
 
@@ -129,14 +132,22 @@ model.authoriseScope = function (accessToken, scope, callback) {
   return callback(false, hasScope ? false : 'Missing scope: ' + scope);
 };
 
-model.validateScope = function (scope, clientId, callback) {
-  // Sanitize the requested scope string, possibly
-  // against a client-specific set of valid scope keys
+model.validateScope = function (scope, client, user, callback) {
+  // Sanitize the requested scope string against a client-specific set of valid scope keys
   // You could choose to strip invalid keys, or return an error message
-  var validKeys = ['readonly', 'edit', 'admin'];
-  var isValid = scope.split(' ').every(function(key) {
-    return valid.indexOf(key) !== -1;
-  });
+  scope = scope || client.defaultScope || false;
+  var validScopes = client.validScopes;
+  var isValid = !scope || scope.split(' ').every(function(key) {
+        return validScopes.indexOf(key) !== -1;
+      });
+
+  if (user.allowedScopes) {
+    var userAllowedScopes = user.allowedScopes.split(' ');
+    var scopes = validScopes.filter(function(key) {
+      return userAllowedScopes.indexOf(key) !== -1;
+    });
+    scope = scopes.join(' ');
+  }
 
   return callback(false, scope, isValid ? false : 'Invalid scope request');
 };
@@ -147,7 +158,7 @@ model.validateScope = function (scope, clientId, callback) {
 model.getUser = function (username, password, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-    client.query('SELECT id FROM users WHERE username = $1 AND password = $2', [username,
+    client.query('SELECT id, allowed_scopes AS allowedScopes FROM users WHERE username = $1 AND password = $2', [username,
         password], function (err, result) {
       callback(err, result.rowCount ? result.rows[0] : false);
       done();
