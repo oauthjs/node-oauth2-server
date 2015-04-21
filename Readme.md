@@ -143,9 +143,10 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
  - *boolean|string* **invalid**
      - Falsey to indicate token possesses required scope; truthy (boolean or string) as invalid scope error message
 
-### validateScope (scope, clientId, callback)
+### validateScope (scope, client, user, callback)
 - *string* **scope**
-- *string* **clientId**
+- *object* **client**
+- *object* **user**
 - *function* **callback (error, validScope, invalid)**
  - *mixed* **error**
      - Truthy to indicate an error

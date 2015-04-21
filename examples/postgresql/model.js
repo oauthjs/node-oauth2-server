@@ -134,22 +134,24 @@ model.authoriseScope = function (accessToken, scope, callback) {
 
 model.validateScope = function (scope, client, user, callback) {
   // Sanitize the requested scope string against a client-specific set of valid scope keys
+  // and the scopes the user actually is allowed to use (if any).
   // You could choose to strip invalid keys, or return an error message
-  scope = scope || client.defaultScope || false;
-  var validScopes = client.validScopes;
-  var isValid = !scope || scope.split(' ').every(function(key) {
+  var requestedScope = scope || client.defaultScope || '';
+  var requestedScopes = requestedScope.split(' ');
+  var validScopes = client.validScopes.split(' ');
+  var isValid = !requestedScope || requestedScopes.every(function(key) {
         return validScopes.indexOf(key) !== -1;
       });
 
   if (user.allowedScopes) {
     var userAllowedScopes = user.allowedScopes.split(' ');
-    var scopes = validScopes.filter(function(key) {
-      return userAllowedScopes.indexOf(key) !== -1;
+    var userScopes = validScopes.filter(function(key) {
+      return (!scope || requestedScopes.indexOf(key) !== -1) && userAllowedScopes.indexOf(key) !== -1;
     });
-    scope = scopes.join(' ');
+    requestedScope = userScopes.join(' ');
   }
 
-  return callback(false, scope, isValid ? false : 'Invalid scope request');
+  return callback(false, requestedScope, isValid ? false : 'Invalid scope request');
 };
 
 /*
