@@ -180,7 +180,7 @@ describe('Granting with refresh_token grant type', function () {
         expireRefreshToken: function (refreshToken, callback) {
           callback();
         },
-        validateScope: function (scope, clientId, cb) {
+        validateScope: function (scope, client, user, cb) {
           cb(false, '', false);
         }
       },
@@ -228,7 +228,7 @@ describe('Granting with refresh_token grant type', function () {
         expireRefreshToken: function (refreshToken, callback) {
           callback();
         },
-        validateScope: function (scope, clientId, cb) {
+        validateScope: function (scope, client, user, cb) {
           cb(false, '', false);
         }
       },
@@ -273,7 +273,7 @@ describe('Granting with refresh_token grant type', function () {
         expireRefreshToken: function (refreshToken, callback) {
           callback();
         },
-        validateScope: function (scope, clientId, cb) {
+        validateScope: function (scope, client, user, cb) {
           cb(false, '', false);
         }
       },
