@@ -14,42 +14,42 @@ var should = require('should');
  */
 
 describe('AuthorizationCodeGrantType', function() {
-  describe('getAuthCode()', function() {
-    it('should call `model.getAuthCode()`', function() {
+  describe('getAuthorizationCode()', function() {
+    it('should call `model.getAuthorizationCode()`', function() {
       var model = {
-        getAuthCode: sinon.stub().returns({ authCode: 12345, client: {}, expiresAt: new Date(new Date() * 2), user: {} }),
-        revokeAuthCode: function() {},
+        getAuthorizationCode: sinon.stub().returns({ authorizationCode: 12345, client: {}, expiresAt: new Date(new Date() * 2), user: {} }),
+        revokeAuthorizationCode: function() {},
         saveToken: function() {}
       };
       var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
       var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
       var client = {};
 
-      return handler.getAuthCode(request, client)
+      return handler.getAuthorizationCode(request, client)
         .then(function() {
-          model.getAuthCode.callCount.should.equal(1);
-          model.getAuthCode.firstCall.args.should.have.length(1);
-          model.getAuthCode.firstCall.args[0].should.equal(12345);
+          model.getAuthorizationCode.callCount.should.equal(1);
+          model.getAuthorizationCode.firstCall.args.should.have.length(1);
+          model.getAuthorizationCode.firstCall.args[0].should.equal(12345);
         })
         .catch(should.fail);
     });
   });
 
-  describe('revokeAuthCode()', function() {
-    it('should call `model.revokeAuthCode()`', function() {
+  describe('revokeAuthorizationCode()', function() {
+    it('should call `model.revokeAuthorizationCode()`', function() {
       var model = {
-        getAuthCode: function() {},
-        revokeAuthCode: sinon.stub().returns({ authCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} }),
+        getAuthorizationCode: function() {},
+        revokeAuthorizationCode: sinon.stub().returns({ authorizationCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} }),
         saveToken: function() {}
       };
       var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
-      var authCode = {};
+      var authorizationCode = {};
 
-      return handler.revokeAuthCode(authCode)
+      return handler.revokeAuthorizationCode(authorizationCode)
         .then(function() {
-          model.revokeAuthCode.callCount.should.equal(1);
-          model.revokeAuthCode.firstCall.args.should.have.length(1);
-          model.revokeAuthCode.firstCall.args[0].should.equal(authCode);
+          model.revokeAuthorizationCode.callCount.should.equal(1);
+          model.revokeAuthorizationCode.firstCall.args.should.have.length(1);
+          model.revokeAuthorizationCode.firstCall.args[0].should.equal(authorizationCode);
         })
         .catch(should.fail);
     });
@@ -60,8 +60,8 @@ describe('AuthorizationCodeGrantType', function() {
       var client = {};
       var user = {};
       var model = {
-        getAuthCode: function() {},
-        revokeAuthCode: function() {},
+        getAuthorizationCode: function() {},
+        revokeAuthorizationCode: function() {},
         saveToken: sinon.stub().returns(true)
       };
       var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
@@ -72,7 +72,7 @@ describe('AuthorizationCodeGrantType', function() {
         .then(function() {
           model.saveToken.callCount.should.equal(1);
           model.saveToken.firstCall.args.should.have.length(3);
-          model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', authCode: 'foobar', scope: 'foobiz' });
+          model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', authorizationCode: 'foobar', scope: 'foobiz' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
         })

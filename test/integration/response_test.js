@@ -30,6 +30,20 @@ describe('Response integration', function() {
     });
   });
 
+  describe('get()', function() {
+    it('should return `undefined` if the field does not exist', function() {
+      var response = new Response({ body: {}, headers: {} });
+
+      (undefined === response.get('content-type')).should.be.true;
+    });
+
+    it('should return the value if the field exists', function() {
+      var response = new Response({ body: {}, headers: { 'content-type': 'text/html; charset=utf-8' } });
+
+      response.get('Content-Type').should.equal('text/html; charset=utf-8');
+    });
+  });
+
   describe('redirect()', function() {
     it('should set the location header to `url`', function() {
       var response = new Response({ body: {}, headers: {} });
@@ -45,20 +59,6 @@ describe('Response integration', function() {
       response.redirect('http://example.com');
 
       response.status.should.equal(302);
-    });
-  });
-
-  describe('get()', function() {
-    it('should return `undefined` if the field does not exist', function() {
-      var response = new Response({ body: {}, headers: {} });
-
-      (undefined === response.get('content-type')).should.be.true;
-    });
-
-    it('should return the value if the field exists', function() {
-      var response = new Response({ body: {}, headers: { 'content-type': 'text/html; charset=utf-8' } });
-
-      response.get('Content-Type').should.equal('text/html; charset=utf-8');
     });
   });
 

@@ -37,7 +37,7 @@ describe('Server', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {},
-        saveAuthCode: function() {}
+        saveAuthorizationCode: function() {}
       };
       var server = new Server({ model: model });
 

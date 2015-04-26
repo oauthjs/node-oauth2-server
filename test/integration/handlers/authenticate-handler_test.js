@@ -155,24 +155,28 @@ describe('AuthenticateHandler integration', function() {
         query: { access_token: 'foo' }
       });
 
-      return handler.getToken(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: only one authentication method is allowed');
-        });
+      try {
+        handler.getToken(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: only one authentication method is allowed');
+      }
     });
 
     it('should throw an error if `accessToken` is missing', function() {
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      return handler.getToken(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: no access token given');
-        });
+      try {
+        handler.getToken(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: no access token given');
+      }
     });
   });
 
@@ -188,12 +192,14 @@ describe('AuthenticateHandler integration', function() {
         query: {}
       });
 
-      return handler.getTokenFromRequestHeader(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: malformed authorization header');
-        });
+      try {
+        handler.getTokenFromRequestHeader(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: malformed authorization header');
+      }
     });
 
     it('should return the bearer token', function() {
@@ -207,11 +213,9 @@ describe('AuthenticateHandler integration', function() {
         query: {}
       });
 
-      return handler.getTokenFromRequestHeader(request)
-        .then(function(bearerToken) {
-          bearerToken.should.equal('foo');
-        })
-        .catch(should.fail);
+      var bearerToken = handler.getTokenFromRequestHeader(request);
+
+      bearerToken.should.equal('foo');
     });
   });
 
@@ -219,12 +223,14 @@ describe('AuthenticateHandler integration', function() {
     it('should throw an error if the query contains a token', function() {
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
 
-      return handler.getTokenFromRequestQuery()
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: do not send bearer tokens in query URLs');
-        });
+      try {
+        handler.getTokenFromRequestQuery();
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: do not send bearer tokens in query URLs');
+      }
     });
   });
 
@@ -238,12 +244,14 @@ describe('AuthenticateHandler integration', function() {
         query: {}
       });
 
-      return handler.getTokenFromRequestBody(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: token may not be passed in the body when using the GET verb');
-        });
+      try {
+        handler.getTokenFromRequestBody(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: token may not be passed in the body when using the GET verb');
+      }
     });
 
     it('should throw an error if the media type is not `application/x-www-form-urlencoded`', function() {
@@ -255,12 +263,14 @@ describe('AuthenticateHandler integration', function() {
         query: {}
       });
 
-      return handler.getTokenFromRequestBody(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: content must be application/x-www-form-urlencoded');
-        });
+      try {
+        handler.getTokenFromRequestBody(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: content must be application/x-www-form-urlencoded');
+      }
     });
 
     it('should return the bearer token', function() {
@@ -351,35 +361,21 @@ describe('AuthenticateHandler integration', function() {
       var accessToken = { accessTokenExpiresAt: new Date(new Date() / 2) };
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
 
-      return handler.validateAccessToken(accessToken)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidTokenError);
-          e.message.should.equal('Invalid token: access token has expired');
-        });
+      try {
+        handler.validateAccessToken(accessToken);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidTokenError);
+        e.message.should.equal('Invalid token: access token has expired');
+      }
     });
 
     it('should return an access token', function() {
       var accessToken = { user: {} };
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
 
-      return handler.validateAccessToken(accessToken)
-        .then(function(data) {
-          data.should.equal(accessToken);
-        })
-        .catch(should.fail);
-    });
-
-    it('should support promises', function() {
-      var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
-
-      handler.validateAccessToken('foo').should.be.an.instanceOf(Promise);
-    });
-
-    it('should support non-promises', function() {
-      var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
-
-      handler.validateAccessToken('foo').should.be.an.instanceOf(Promise);
+      handler.validateAccessToken(accessToken).should.equal(accessToken);
     });
   });
 

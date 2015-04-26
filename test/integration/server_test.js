@@ -40,10 +40,10 @@ describe('Server integration', function() {
       server.options.accessTokenLifetime.should.equal(3600);
     });
 
-    it('should set the default `authCodeLifetime`', function() {
+    it('should set the default `authorizationCodeLifetime`', function() {
       var server = new Server({ model: {} });
 
-      server.options.authCodeLifetime.should.equal(300);
+      server.options.authorizationCodeLifetime.should.equal(300);
     });
 
     it('should set the default `refreshTokenLifetime`', function() {
@@ -89,8 +89,8 @@ describe('Server integration', function() {
         getClient: function() {
           return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         },
-        saveAuthCode: function() {
-          return { authCode: 123 };
+        saveAuthorizationCode: function() {
+          return { authorizationCode: 123 };
         }
       };
       var server = new Server({ model: model });
@@ -109,8 +109,8 @@ describe('Server integration', function() {
         getClient: function() {
           return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
         },
-        saveAuthCode: function() {
-          return { authCode: 123 };
+        saveAuthorizationCode: function() {
+          return { authorizationCode: 123 };
         }
       };
       var server = new Server({ model: model });

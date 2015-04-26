@@ -303,12 +303,14 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({ body: { client_id: 'øå€£‰', client_secret: 'foo' }, headers: {}, method: {}, query: {} });
 
-      return handler.getClient(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid parameter: `client_id`');
-        });
+      try {
+        handler.getClient(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid parameter: `client_id`');
+      }
     });
 
     it('should throw an error if `clientId` is invalid', function() {
@@ -319,12 +321,14 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({ body: { client_id: 'foo', client_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
 
-      return handler.getClient(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid parameter: `client_secret`');
-        });
+      try {
+        handler.getClient(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid parameter: `client_secret`');
+      }
     });
 
     it('should throw an error if `client` is missing', function() {
@@ -521,12 +525,14 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      return handler.handleGrantType(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Missing parameter: `grant_type`');
-        });
+      try {
+        handler.handleGrantType(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Missing parameter: `grant_type`');
+      }
     });
 
     it('should throw an error if `grant_type` is invalid', function() {
@@ -537,12 +543,14 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({ body: { grant_type: '~foo~' }, headers: {}, method: {}, query: {} });
 
-      return handler.handleGrantType(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid parameter: `grant_type`');
-        });
+      try {
+        handler.handleGrantType(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid parameter: `grant_type`');
+      }
     });
 
     it('should throw an error if `grant_type` is unsupported', function() {
@@ -553,12 +561,14 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({ body: { grant_type: 'foobar' }, headers: {}, method: {}, query: {} });
 
-      return handler.handleGrantType(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(UnsupportedGrantTypeError);
-          e.message.should.equal('Unsupported grant type: `grant_type` is invalid');
-        });
+      try {
+        handler.handleGrantType(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(UnsupportedGrantTypeError);
+        e.message.should.equal('Unsupported grant type: `grant_type` is invalid');
+      }
     });
 
     it('should throw an error if `grant_type` is unauthorized', function() {
@@ -570,12 +580,14 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({ body: { grant_type: 'password' }, headers: {}, method: {}, query: {} });
 
-      return handler.handleGrantType(request, client)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(UnauthorizedClientError);
-          e.message.should.equal('Unauthorized client: `grant_type` is invalid');
-        });
+      try {
+        handler.handleGrantType(request, client);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(UnauthorizedClientError);
+        e.message.should.equal('Unauthorized client: `grant_type` is invalid');
+      }
     });
 
     it('should throw an invalid grant error if a non-oauth error is thrown', function() {
@@ -601,10 +613,10 @@ describe('TokenHandler integration', function() {
         var client = { id: 'foobar', grants: ['authorization_code'] };
         var token = {};
         var model = {
-          getAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
+          getAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
           getClient: function() {},
           saveToken: function() { return token; },
-          revokeAuthCode: function() { return { authCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; }
+          revokeAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
         var request = new Request({
@@ -756,11 +768,9 @@ describe('TokenHandler integration', function() {
       var tokenType = new BearerTokenType('foo', 'bar', 'biz');
       var response = new Response({ body: {}, headers: {} });
 
-      return handler.updateSuccessResponse(response, tokenType)
-        .then(function() {
-          response.body.should.eql({ access_token: 'foo', expires_in: 'bar', refresh_token: 'biz', token_type: 'bearer' });
-        })
-        .catch(should.fail);
+      handler.updateSuccessResponse(response, tokenType);
+
+      response.body.should.eql({ access_token: 'foo', expires_in: 'bar', refresh_token: 'biz', token_type: 'bearer' });
     });
 
     it('should set the `Cache-Control` header', function() {
@@ -772,11 +782,9 @@ describe('TokenHandler integration', function() {
       var tokenType = new BearerTokenType('foo', 'bar', 'biz');
       var response = new Response({ body: {}, headers: {} });
 
-      return handler.updateSuccessResponse(response, tokenType)
-        .then(function() {
-          response.get('Cache-Control').should.equal('no-store');
-        })
-        .catch(should.fail);
+      handler.updateSuccessResponse(response, tokenType);
+
+      response.get('Cache-Control').should.equal('no-store');
     });
 
     it('should set the `Pragma` header', function() {
@@ -788,11 +796,9 @@ describe('TokenHandler integration', function() {
       var tokenType = new BearerTokenType('foo', 'bar', 'biz');
       var response = new Response({ body: {}, headers: {} });
 
-      return handler.updateSuccessResponse(response, tokenType)
-        .then(function() {
-          response.get('Pragma').should.equal('no-cache');
-        })
-        .catch(should.fail);
+      handler.updateSuccessResponse(response, tokenType);
+
+      response.get('Pragma').should.equal('no-cache');
     });
   });
 
@@ -806,12 +812,10 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var response = new Response({ body: {}, headers: {} });
 
-      return handler.updateErrorResponse(response, error)
-        .then(function() {
-          response.body.error.should.equal('access_denied');
-          response.body.error_description.should.equal('Cannot request a token');
-        })
-        .catch(should.fail);
+      handler.updateErrorResponse(response, error);
+
+      response.body.error.should.equal('access_denied');
+      response.body.error_description.should.equal('Cannot request a token');
     });
 
     it('should set the `status`', function() {
@@ -823,11 +827,9 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var response = new Response({ body: {}, headers: {} });
 
-      return handler.updateErrorResponse(response, error)
-        .then(function() {
-          response.status.should.equal(400);
-        })
-        .catch(should.fail);
+      handler.updateErrorResponse(response, error);
+
+      response.status.should.equal(400);
     });
   });
 });

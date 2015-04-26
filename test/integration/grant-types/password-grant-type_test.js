@@ -143,12 +143,14 @@ describe('PasswordGrantType integration', function() {
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      return grantType.getUser(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Missing parameter: `username`');
-        });
+      try {
+        grantType.getUser(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Missing parameter: `username`');
+      }
     });
 
     it('should throw an error if the request body does not contain `password`', function() {
@@ -159,12 +161,14 @@ describe('PasswordGrantType integration', function() {
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foo' }, headers: {}, method: {}, query: {} });
 
-      return grantType.getUser(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Missing parameter: `password`');
-        });
+      try {
+        grantType.getUser(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Missing parameter: `password`');
+      }
     });
 
     it('should throw an error if `username` is invalid', function() {
@@ -175,12 +179,14 @@ describe('PasswordGrantType integration', function() {
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'øå€£‰', password: 'foobar' }, headers: {}, method: {}, query: {} });
 
-      return grantType.getUser(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid parameter: `username`');
-        });
+      try {
+        grantType.getUser(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid parameter: `username`');
+      }
     });
 
     it('should throw an error if `password` is invalid', function() {
@@ -191,12 +197,14 @@ describe('PasswordGrantType integration', function() {
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { username: 'foobar', password: 'øå€£‰' }, headers: {}, method: {}, query: {} });
 
-      return grantType.getUser(request)
-        .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid parameter: `password`');
-        });
+      try {
+        grantType.getUser(request);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid parameter: `password`');
+      }
     });
 
     it('should throw an error if `user` is missing', function() {

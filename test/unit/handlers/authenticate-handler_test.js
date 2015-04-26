@@ -93,20 +93,6 @@ describe('AuthenticateHandler', function() {
   });
 
   describe('validateScope()', function() {
-    it('should not call `validateScope` if scope is not defined', function() {
-      var model = {
-        getAccessToken: function() {},
-        validateScope: sinon.stub()
-      };
-      var handler = new AuthenticateHandler({ model: model });
-
-      return handler.validateScope('foo')
-        .then(function() {
-          model.validateScope.callCount.should.equal(0);
-        })
-        .catch(should.fail);
-    });
-
     it('should call `model.getAccessToken()` if scope is defined', function() {
       var model = {
         getAccessToken: function() {},

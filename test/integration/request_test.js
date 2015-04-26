@@ -71,6 +71,27 @@ describe('Request integration', function() {
     });
   });
 
+  describe('get()', function() {
+    it('should return `undefined` if the field does not exist', function() {
+      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+
+      (undefined === request.get('content-type')).should.be.true;
+    });
+
+    it('should return the value if the field exists', function() {
+      var request = new Request({
+        body: {},
+        headers: {
+          'content-type': 'text/html; charset=utf-8'
+        },
+        method: {},
+        query: {}
+      });
+
+      request.get('Content-Type').should.equal('text/html; charset=utf-8');
+    });
+  });
+
   describe('is()', function() {
     it('should accept an array of `types`', function() {
       var request = new Request({
@@ -132,27 +153,6 @@ describe('Request integration', function() {
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
       request.is('text/html').should.be.false;
-    });
-  });
-
-  describe('get()', function() {
-    it('should return `undefined` if the field does not exist', function() {
-      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
-
-      (undefined === request.get('content-type')).should.be.true;
-    });
-
-    it('should return the value if the field exists', function() {
-      var request = new Request({
-        body: {},
-        headers: {
-          'content-type': 'text/html; charset=utf-8'
-        },
-        method: {},
-        query: {}
-      });
-
-      request.get('Content-Type').should.equal('text/html; charset=utf-8');
     });
   });
 });

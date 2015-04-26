@@ -1,14 +1,10 @@
 {
   "bitwise": true,
-  "browser": true,
   "curly": true,
   "eqeqeq": true,
   "esnext": true,
   "expr": true,
   "globalstrict": false,
-  "globals": {
-    "Promise": true
-  },
   "immed": true,
   "indent": 2,
   "jquery": true,
@@ -18,6 +14,7 @@
   "noarg": true,
   "node": true,
   "noyield": true,
+  "predef": ["-Promise"],
   "quotmark": "single",
   "regexp": true,
   "smarttabs": true,

@@ -32,12 +32,12 @@ describe('CodeResponseType integration', function() {
     });
   });
 
-  describe('getRedirectUri()', function() {
+  describe('buildRedirectUri()', function() {
     it('should throw an error if the `redirectUri` is missing', function() {
       var responseType = new CodeResponseType('foo');
 
       try {
-        responseType.getRedirectUri();
+        responseType.buildRedirectUri();
 
         should.fail();
       } catch (e) {
@@ -48,14 +48,14 @@ describe('CodeResponseType integration', function() {
 
     it('should return the new redirect uri and set the `code` and `state` in the query', function() {
       var responseType = new CodeResponseType('foo');
-      var redirectUri = responseType.getRedirectUri('http://example.com/cb');
+      var redirectUri = responseType.buildRedirectUri('http://example.com/cb');
 
       url.format(redirectUri).should.equal('http://example.com/cb?code=foo');
     });
 
     it('should return the new redirect uri and append the `code` and `state` in the query', function() {
       var responseType = new CodeResponseType('foo');
-      var redirectUri = responseType.getRedirectUri('http://example.com/cb?foo=bar');
+      var redirectUri = responseType.buildRedirectUri('http://example.com/cb?foo=bar');
 
       url.format(redirectUri).should.equal('http://example.com/cb?foo=bar&code=foo');
     });
