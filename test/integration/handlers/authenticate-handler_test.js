@@ -12,6 +12,7 @@ var InvalidTokenError = require('../../../lib/errors/invalid-token-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var ServerError = require('../../../lib/errors/server-error');
+var UnauthorizedRequestError = require('../../../lib/errors/unauthorized-request-error');
 var should = require('should');
 
 /**
@@ -174,8 +175,8 @@ describe('AuthenticateHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Invalid request: no access token given');
+        e.should.be.an.instanceOf(UnauthorizedRequestError);
+        e.message.should.equal('Unauthorized request: no authentication given');
       }
     });
   });
