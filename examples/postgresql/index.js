@@ -74,7 +74,7 @@ app.post('/login', function (req, res, next) {
 
 app.all('/', app.oauth.authorise(), function (req, res) {
   // Will require a valid access_token
-  res.send({message: 'Secret area', user: req.user});
+  res.send({message: req.user ? 'Secret area, welcome ' + req.user.firstname : 'Secret area', user: req.user});
 });
 
 app.all('/public', function (req, res) {

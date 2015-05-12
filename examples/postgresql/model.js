@@ -33,13 +33,17 @@ model.getAccessToken = function (bearerToken, callback) {
       // an explicit user object is included (token.user, must include id) it will be exposed
       // in req.user instead
       var token = result.rows[0];
-      callback(null, {
-        accessToken: token.access_token,
-        clientId: token.client_id,
-        expires: token.expires,
-        userId: token.userId
+      model.getUserDetails(null, token.user_id, function(err, user){
+        if (err || !user) return callback(err);
+        callback(null, {
+          accessToken: token.access_token,
+          clientId: token.client_id,
+          expires: token.expires,
+          userId: token.user_id,
+          user: user
+        });
+        done();
       });
-      done();
     });
   });
 };
@@ -122,6 +126,30 @@ model.getUser = function (username, password, callback) {
     client.query('SELECT id FROM users WHERE username = $1 AND password = $2', [username,
         password], function (err, result) {
       callback(err, result.rowCount ? result.rows[0] : false);
+      done();
+    });
+  });
+};
+
+/*
+ * Required to return user details
+ */
+model.getUserDetails = function (identifier, uuid, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) return callback(err);
+    var query = 'SELECT * FROM users WHERE username = $1';
+    if (uuid) {
+       query = 'SELECT * FROM users WHERE id = $1';
+       identifier = uuid;
+    }
+    client.query(query, [identifier], function (err, result) {
+      if (result && result.rows && result.rows.length && result.rows[0]) {
+        result = result.rows[0];
+        delete result.password;
+      } else {
+        result = false;
+      }
+      callback(err, result);
       done();
     });
   });
