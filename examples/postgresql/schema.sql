@@ -36,7 +36,7 @@ CREATE TABLE oauth_access_tokens (
     access_token text NOT NULL,
     client_id text NOT NULL,
     user_id uuid NOT NULL,
-    expires timestamp without time zone NOT NULL
+    expires timestamp without time zone
 );
 
 
@@ -59,7 +59,7 @@ CREATE TABLE oauth_refresh_tokens (
     refresh_token text NOT NULL,
     client_id text NOT NULL,
     user_id uuid NOT NULL,
-    expires timestamp without time zone NOT NULL
+    expires timestamp without time zone
 );
 
 
