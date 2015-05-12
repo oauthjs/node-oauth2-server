@@ -70,7 +70,8 @@ CREATE TABLE oauth_refresh_tokens (
 CREATE TABLE users (
     id uuid NOT NULL,
     username text NOT NULL,
-    password text NOT NULL
+    password text NOT NULL,
+    firstname text
 );
 
 
@@ -116,4 +117,3 @@ CREATE INDEX users_username_password ON users USING btree (username, password);
 --
 -- PostgreSQL database dump complete
 --
-
