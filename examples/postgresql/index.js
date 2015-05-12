@@ -72,12 +72,12 @@ app.post('/login', function (req, res, next) {
   }
 });
 
-app.get('/secret', app.oauth.authorise(), function (req, res) {
+app.all('/', app.oauth.authorise(), function (req, res) {
   // Will require a valid access_token
   res.send({message: 'Secret area', user: req.user});
 });
 
-app.get('/public', function (req, res) {
+app.all('/public', function (req, res) {
   // Does not require an access_token
   res.send({message:'Public area'});
 });
