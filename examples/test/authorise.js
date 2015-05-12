@@ -19,51 +19,17 @@ var express = require('express'),
   request = require('supertest'),
   should = require('should');
 
-var oauth2server = require('../');
-
-var bootstrap = function (oauthConfig) {
-  if (oauthConfig === 'mockValid') {
-    oauthConfig = {
-      model: {
-        getAccessToken: function (token, callback) {
-          token.should.equal('thom');
-          var expires = new Date();
-          expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires });
-        }
-      }
-    };
-  }
-
-  var app = express();
-  app.oauth = oauth2server(oauthConfig || { model: {} });
-
-  app.use(bodyParser());
-  app.all('/', app.oauth.authorise());
-
-
-  app.all('/', function (req, res) {
-    res.send('nightworld');
-  });
-
-  app.use(app.oauth.errorHandler());
-
-  return app;
-};
+var app = require('./../postgresql/index').app;
 
 describe('Authorise', function() {
 
   it('should detect no access token', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .get('/')
       .expect(400, /the access token was not found/i, done);
   });
 
   it('should allow valid token as query param', function (done){
-    var app = bootstrap('mockValid');
-
     request(app)
       .get('/?access_token=thom')
       .expect(200, /nightworld/, done);
@@ -71,8 +37,6 @@ describe('Authorise', function() {
 
   it('should require application/x-www-form-urlencoded when access token is ' +
       'in body', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .post('/')
       .send({ access_token: 'thom' })
@@ -81,8 +45,6 @@ describe('Authorise', function() {
   });
 
   it('should not allow GET when access token in body', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .get('/')
       .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -91,8 +53,6 @@ describe('Authorise', function() {
   });
 
   it('should allow valid token in body', function (done){
-    var app = bootstrap('mockValid');
-
     request(app)
       .post('/')
       .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -101,8 +61,6 @@ describe('Authorise', function() {
   });
 
   it('should detect malformed header', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .get('/')
       .set('Authorization', 'Invalid')
@@ -110,8 +68,6 @@ describe('Authorise', function() {
   });
 
   it('should allow valid token in header', function (done){
-    var app = bootstrap('mockValid');
-
     request(app)
       .get('/')
       .set('Authorization', 'Bearer thom')
@@ -119,8 +75,6 @@ describe('Authorise', function() {
   });
 
   it('should allow exactly one method (get: query + auth)', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .get('/?access_token=thom')
       .set('Authorization', 'Invalid')
@@ -128,8 +82,6 @@ describe('Authorise', function() {
   });
 
   it('should allow exactly one method (post: query + body)', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .post('/?access_token=thom')
       .send({
@@ -139,8 +91,6 @@ describe('Authorise', function() {
   });
 
   it('should allow exactly one method (post: query + empty body)', function (done) {
-    var app = bootstrap('mockValid');
-
     request(app)
       .post('/?access_token=thom')
       .send({
@@ -150,14 +100,6 @@ describe('Authorise', function() {
   });
 
   it('should detect expired token', function (done){
-    var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          callback(false, { expires: 0 }); // Fake expires
-        }
-      }
-    });
-
     request(app)
       .get('/?access_token=thom')
       .expect(401, /the access token provided has expired/i, done);
@@ -165,63 +107,26 @@ describe('Authorise', function() {
 
   it('should passthrough with valid, non-expiring token (token = null)',
       function (done) {
-    var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          token.should.equal('thom');
-          callback(false, { expires: null });
-        }
-      }
-    }, false);
-
-    app.get('/', app.oauth.authorise(), function (req, res) {
-      res.send('nightworld');
-    });
-
-    app.use(app.oauth.errorHandler());
-
     request(app)
       .get('/?access_token=thom')
       .expect(200, /nightworld/, done);
   });
 
   it('should expose the user id when setting userId', function (done) {
-    var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          var expires = new Date();
-          expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires , userId: 1 });
-        }
-      }
-    }, false);
-
-    app.get('/', app.oauth.authorise(), function (req, res) {
+    app.get('/mockaroute', app.oauth.authorise(), function (req, res) {
       req.should.have.property('user');
       req.user.should.have.property('id');
       req.user.id.should.equal(1);
       res.send('nightworld');
     });
 
-    app.use(app.oauth.errorHandler());
-
     request(app)
-      .get('/?access_token=thom')
+      .get('/mockaroute?access_token=thom')
       .expect(200, /nightworld/, done);
   });
 
   it('should expose the user id when setting user object', function (done) {
-    var app = bootstrap({
-      model: {
-        getAccessToken: function (token, callback) {
-          var expires = new Date();
-          expires.setSeconds(expires.getSeconds() + 20);
-          callback(false, { expires: expires , user: { id: 1, name: 'thom' }});
-        }
-      }
-    }, false);
-
-    app.get('/', app.oauth.authorise(), function (req, res) {
+    app.get('/mockarouteforuserobject', app.oauth.authorise(), function (req, res) {
       req.should.have.property('user');
       req.user.should.have.property('id');
       req.user.id.should.equal(1);
@@ -230,10 +135,8 @@ describe('Authorise', function() {
       res.send('nightworld');
     });
 
-    app.use(app.oauth.errorHandler());
-
     request(app)
-      .get('/?access_token=thom')
+      .get('/mockarouteforuserobject?access_token=thom')
       .expect(200, /nightworld/, done);
   });
 
