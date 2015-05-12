@@ -19,7 +19,7 @@ app.all('/oauth/token', app.oauth.grant());
 
 // Show them the "do you authorise xyz app to access your content?" page
 app.get('/oauth/authorise', function (req, res, next) {
-  if (!req.session.user) {
+  if (!req.session || !req.session.user) {
     // If they aren't logged in, send them to your own login implementation
     return res.redirect('/login?redirect=' + req.path + '&client_id=' +
         req.query.client_id + '&redirect_uri=' + req.query.redirect_uri);
@@ -86,3 +86,5 @@ app.get('/public', function (req, res) {
 app.use(app.oauth.errorHandler());
 
 app.listen(3000);
+
+exports.app = app;
