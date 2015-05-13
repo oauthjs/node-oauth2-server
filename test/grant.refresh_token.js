@@ -174,7 +174,7 @@ describe('Granting with refresh_token grant type', function () {
         saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
-        saveRefreshToken: function (token, clientId, expires, user, cb) {
+        saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         expireRefreshToken: function (refreshToken, callback) {
@@ -222,7 +222,7 @@ describe('Granting with refresh_token grant type', function () {
         saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
-        saveRefreshToken: function (token, clientId, expires, user, cb) {
+        saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         expireRefreshToken: function (refreshToken, callback) {
@@ -267,7 +267,7 @@ describe('Granting with refresh_token grant type', function () {
         saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
-        saveRefreshToken: function (token, clientId, expires, user, cb) {
+        saveRefreshToken: function (token, clientId, expires, scope, user, cb) {
           cb();
         },
         expireRefreshToken: function (refreshToken, callback) {

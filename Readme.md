@@ -200,11 +200,12 @@ Note: see https://github.com/thomseddon/node-oauth2-server/tree/master/examples/
 
 ### Required for `refresh_token` grant type
 
-#### saveRefreshToken (refreshToken, clientId, expires, user, callback)
+#### saveRefreshToken (refreshToken, clientId, expires, user, scope, callback)
 - *string* **refreshToken**
 - *string* **clientId**
 - *date* **expires**
 - *object* **user**
+- *string* **scope**
 - *function* **callback (error)**
  - *mixed* **error**
      - Truthy to indicate an error

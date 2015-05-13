@@ -103,22 +103,16 @@ model.saveAccessToken = function (accessToken, clientId, expires, userId, scope,
   });
 };
 
-model.saveRefreshToken = function (refreshToken, clientId, expires, userId, callback) {
+model.saveRefreshToken = function (refreshToken, clientId, expires, userId, scope, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) return callback(err);
-    // Retrieve the scope string from the access token entry
-    client.query('SELECT scope FROM oauth_access_tokens WHERE client_id = $1 AND user_id = $2',
-        [clientId, userId], function (err, result) {
-          if (err) return callback(err);
-          if (!result.rowCount) return callback('Could not retrieve access token scope string');
 
-          client.query('INSERT INTO oauth_refresh_tokens(refresh_token, client_id, ' +
-              'user_id, scope, expires) VALUES ($1, $2, $3, $4, $5)',
-              [refreshToken, clientId, userId, result.rows[0].scope, expires],
-              function (err, result) {
-                callback(err);
-                done();
-              });
+    client.query('INSERT INTO oauth_refresh_tokens(refresh_token, client_id, ' +
+        'user_id, scope, expires) VALUES ($1, $2, $3, $4, $5)',
+        [refreshToken, clientId, userId, scope, expires],
+        function (err, result) {
+          callback(err);
+          done();
         });
   });
 };

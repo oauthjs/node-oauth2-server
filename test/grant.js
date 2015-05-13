@@ -379,7 +379,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             token.should.be.instanceOf(String);
             token.should.have.length(40);
             clientId.should.equal('thom');
@@ -460,7 +460,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
           validateScope: function (scope, client, user, cb) {
@@ -507,7 +507,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
           validateScope: function (scope, client, user, cb) {
@@ -555,7 +555,7 @@ describe('Grant', function() {
             should.strictEqual(null, expires);
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             should.strictEqual(null, expires);
             cb();
           },
