@@ -36,6 +36,24 @@ describe('Server integration', function() {
   });
 
   describe('authenticate()', function() {
+    it('should set the default `options`', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return server.authenticate(request, response)
+        .then(function() {
+          this.addAcceptedScopesHeader.should.be.true;
+          this.addAuthorizedScopesHeader.should.be.true;
+        })
+        .catch(should.fail);
+    });
+
     it('should return a promise', function() {
       var model = {
         getAccessToken: function() {
@@ -44,7 +62,8 @@ describe('Server integration', function() {
       };
       var server = new Server({ model: model });
       var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
-      var handler = server.authenticate(request);
+      var response = new Response({ body: {}, headers: {} });
+      var handler = server.authenticate(request, response);
 
       handler.should.be.an.instanceOf(Promise);
     });
@@ -57,13 +76,14 @@ describe('Server integration', function() {
       };
       var server = new Server({ model: model });
       var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
 
-      server.authenticate(request, null, next);
+      server.authenticate(request, response, null, next);
     });
   });
 
   describe('authorize()', function() {
-    it('should set the default `authorizationCodeLifetime`', function() {
+    it('should set the default `options`', function() {
       var model = {
         getAccessToken: function() {
           return { user: {} };
@@ -127,7 +147,7 @@ describe('Server integration', function() {
   });
 
   describe('token()', function() {
-    it('should set the default `accessTokenLifetime`', function() {
+    it('should set the default `options`', function() {
       var model = {
         getClient: function() {
           return { grants: ['password'] };
@@ -146,28 +166,6 @@ describe('Server integration', function() {
       return server.token(request, response)
         .then(function() {
           this.accessTokenLifetime.should.equal(3600);
-        })
-        .catch(should.fail);
-    });
-
-    it('should set the default `refreshTokenLifetime`', function() {
-      var model = {
-        getClient: function() {
-          return { grants: ['password'] };
-        },
-        getUser: function() {
-          return {};
-        },
-        saveToken: function() {
-          return { accessToken: 1234, client: {}, user: {} };
-        }
-      };
-      var server = new Server({ model: model });
-      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
-      var response = new Response({ body: {}, headers: {} });
-
-      return server.token(request, response)
-        .then(function() {
           this.refreshTokenLifetime.should.equal(1209600);
         })
         .catch(should.fail);

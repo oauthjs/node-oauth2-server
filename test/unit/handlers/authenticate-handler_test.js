@@ -98,7 +98,7 @@ describe('AuthenticateHandler', function() {
         getAccessToken: function() {},
         validateScope: sinon.stub().returns(true)
       };
-      var handler = new AuthenticateHandler({ model: model, scope: 'bar' });
+      var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'bar' });
 
       return handler.validateScope('foo')
         .then(function() {

@@ -737,8 +737,9 @@ describe('AuthorizeHandler integration', function() {
       };
       var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
       var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
 
-      return handler.getUser(request)
+      return handler.getUser(request, response)
         .then(function(data) {
           data.should.equal(user);
         })
