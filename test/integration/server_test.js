@@ -33,24 +33,6 @@ describe('Server integration', function() {
 
       server.options.model.should.equal(model);
     });
-
-    it('should set the default `accessTokenLifetime`', function() {
-      var server = new Server({ model: {} });
-
-      server.options.accessTokenLifetime.should.equal(3600);
-    });
-
-    it('should set the default `authorizationCodeLifetime`', function() {
-      var server = new Server({ model: {} });
-
-      server.options.authorizationCodeLifetime.should.equal(300);
-    });
-
-    it('should set the default `refreshTokenLifetime`', function() {
-      var server = new Server({ model: {} });
-
-      server.options.refreshTokenLifetime.should.equal(1209600);
-    });
   });
 
   describe('authenticate()', function() {
@@ -81,6 +63,29 @@ describe('Server integration', function() {
   });
 
   describe('authorize()', function() {
+    it('should set the default `authorizationCodeLifetime`', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+        },
+        saveAuthorizationCode: function() {
+          return { authorizationCode: 123 };
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
+      var response = new Response({ body: {}, headers: {} });
+
+      return server.authorize(request, response)
+        .then(function() {
+          this.authorizationCodeLifetime.should.equal(300);
+        })
+        .catch(should.fail);
+    });
+
     it('should return a promise', function() {
       var model = {
         getAccessToken: function() {
@@ -122,6 +127,52 @@ describe('Server integration', function() {
   });
 
   describe('token()', function() {
+    it('should set the default `accessTokenLifetime`', function() {
+      var model = {
+        getClient: function() {
+          return { grants: ['password'] };
+        },
+        getUser: function() {
+          return {};
+        },
+        saveToken: function() {
+          return { accessToken: 1234, client: {}, user: {} };
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return server.token(request, response)
+        .then(function() {
+          this.accessTokenLifetime.should.equal(3600);
+        })
+        .catch(should.fail);
+    });
+
+    it('should set the default `refreshTokenLifetime`', function() {
+      var model = {
+        getClient: function() {
+          return { grants: ['password'] };
+        },
+        getUser: function() {
+          return {};
+        },
+        saveToken: function() {
+          return { accessToken: 1234, client: {}, user: {} };
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return server.token(request, response)
+        .then(function() {
+          this.refreshTokenLifetime.should.equal(1209600);
+        })
+        .catch(should.fail);
+    });
+
     it('should return a promise', function() {
       var model = {
         getClient: function() {
