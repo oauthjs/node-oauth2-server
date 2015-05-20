@@ -241,7 +241,7 @@ describe('Grant', function() {
             token.should.equal('thommy');
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -278,7 +278,7 @@ describe('Grant', function() {
             token.should.equal('thommy');
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -311,7 +311,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb(new Error('Should not be saving'));
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -349,7 +349,7 @@ describe('Grant', function() {
             (+expires).should.be.within(10, (+new Date()) + 3600000);
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, 'foobar', false);
           }
         },
@@ -379,7 +379,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             token.should.be.instanceOf(String);
             token.should.have.length(40);
             clientId.should.equal('thom');
@@ -387,7 +387,7 @@ describe('Grant', function() {
             (+expires).should.be.within(10, (+new Date()) + 1209600000);
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -419,7 +419,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -460,10 +460,10 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -507,10 +507,10 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, 'foobar', false);
           }
         },
@@ -555,11 +555,11 @@ describe('Grant', function() {
             should.strictEqual(null, expires);
             cb();
           },
-          saveRefreshToken: function (token, clientId, expires, user, cb) {
+          saveRefreshToken: function (token, clientId, expires, user, scope, cb) {
             should.strictEqual(null, expires);
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -603,7 +603,7 @@ describe('Grant', function() {
           saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
-          validateScope: function (scope, clientId, cb) {
+          validateScope: function (scope, client, user, cb) {
             cb(null, '', false);
           }
         },
@@ -651,7 +651,7 @@ describe('Grant', function() {
             (+expires).should.be.within(10, (+new Date()) + 3600000);
             cb();
           },
-          validateScope: function(scope, clientId, cb) {
+          validateScope: function(scope, client, user, cb) {
             cb(false, false, true);
           }
         },
@@ -686,7 +686,7 @@ describe('Grant', function() {
             (+expires).should.be.within(10, (+new Date()) + 3600000);
             cb();
           },
-          validateScope: function(scope, clientId, cb) {
+          validateScope: function(scope, client, user, cb) {
             cb(false, 'foo bar', false);
           }
         },

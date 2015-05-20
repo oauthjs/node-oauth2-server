@@ -210,7 +210,7 @@ describe('Granting with authorization_code grant type', function () {
         expireRefreshToken: function (refreshToken, callback) {
           callback();
         },
-        validateScope: function (scope, clientId, cb) {
+        validateScope: function (scope, client, user, cb) {
           cb(null, 'foobar', false);
         }
       },

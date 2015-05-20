@@ -48,7 +48,9 @@ CREATE TABLE oauth_access_tokens (
 CREATE TABLE oauth_clients (
     client_id text NOT NULL,
     client_secret text NOT NULL,
-    redirect_uri text NOT NULL
+    redirect_uri text NOT NULL,
+    valid_scopes text NULL,
+    default_scope text NULL
 );
 
 
@@ -72,7 +74,8 @@ CREATE TABLE oauth_refresh_tokens (
 CREATE TABLE users (
     id uuid NOT NULL,
     username text NOT NULL,
-    password text NOT NULL
+    password text NOT NULL,
+    allowed_scopes text NULL
 );
 
 
