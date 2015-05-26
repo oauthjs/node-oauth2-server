@@ -644,16 +644,32 @@ describe('AuthorizeHandler integration', function() {
       }
     });
 
-    it('should return the scope', function() {
-      var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthorizationCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
-      var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
+    describe('with `scope` in the request body', function() {
+      it('should return the scope', function() {
+        var model = {
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: function() {}
+        };
+        var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+        var request = new Request({ body: { scope: 'foo' }, headers: {}, method: {}, query: {} });
 
-      handler.getScope(request).should.equal('foo');
+        handler.getScope(request).should.equal('foo');
+      });
+    });
+
+    describe('with `scope` in the request query', function() {
+      it('should return the scope', function() {
+        var model = {
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: function() {}
+        };
+        var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+        var request = new Request({ body: {}, headers: {}, method: {}, query: { scope: 'foo' } });
+
+        handler.getScope(request).should.equal('foo');
+      });
     });
   });
 
