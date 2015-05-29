@@ -114,6 +114,23 @@ describe('AuthenticateHandler integration', function() {
       }
     });
 
+    it('should set the `WWW-Authenticate` header if an unauthorized request error is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          throw new UnauthorizedRequestError();
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('WWW-Authenticate').should.equal('Bearer realm="Service"');
+        });
+    });
+
     it('should throw the error if an oauth error is thrown', function() {
       var model = {
         getAccessToken: function() {
