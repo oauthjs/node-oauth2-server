@@ -918,7 +918,7 @@ describe('AuthorizeHandler integration', function() {
       var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
       var redirectUri = handler.buildErrorRedirectUri('http://example.com/cb', error);
 
-      url.format(redirectUri).should.equal('http://example.com/cb?error=invalid_client');
+      url.format(redirectUri).should.equal('http://example.com/cb?error=invalid_client&error_description=Bad%20Request');
     });
   });
 

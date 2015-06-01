@@ -16,9 +16,9 @@
     "bluebird": "^2.9.13",
     "camel-case": "^1.1.1",
     "lodash": "^3.3.1",
-    "standard-error": "git+ssh://git@github.com/seegno-forks/js-standard-error#feature/add-nested-error-support",
+    "standard-http-error": "^1.1.0",
     "type-is": "^1.6.0",
-    "validator.js": "git+ssh://git@github.com/seegno-forks/validator.js#enhancement/add-extend-method-to-assert"
+    "validator.js": "^1.1.1"
   },
   "devDependencies": {
     "mocha": "^2.2.1",
