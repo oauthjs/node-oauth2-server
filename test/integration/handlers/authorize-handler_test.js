@@ -10,6 +10,7 @@ var CodeResponseType = require('../../../lib/response-types/code-response-type')
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var InvalidClientError = require('../../../lib/errors/invalid-client-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
+var InvalidScopeError = require('../../../lib/errors/invalid-scope-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
@@ -277,6 +278,75 @@ describe('AuthorizeHandler integration', function() {
           response.get('location').should.equal('http://example.com/cb?code=12345&state=foobar');
         })
         .catch(should.fail);
+    });
+
+    it('should redirect to an error response if `scope` is invalid', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+        },
+        saveAuthorizationCode: function() {
+          return {};
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          scope: [],
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=invalid_scope&error_description=Invalid%20parameter%3A%20%60scope%60');
+        });
+    });
+
+    it('should redirect to an error response if `state` is missing', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+        },
+        saveAuthorizationCode: function() {
+          throw new AccessDeniedError('Cannot request this auth code');
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {}
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=invalid_request&error_description=Missing%20parameter%3A%20%60state%60');
+        });
     });
 
     it('should return the `code` if successful', function() {
@@ -639,7 +709,7 @@ describe('AuthorizeHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.should.be.an.instanceOf(InvalidScopeError);
         e.message.should.equal('Invalid parameter: `scope`');
       }
     });
