@@ -472,7 +472,20 @@ describe('AuthenticateHandler integration', function() {
   });
 
   describe('updateResponse()', function() {
-    it('should set the `X-Accepted-OAuth-Scopes` header', function() {
+    it('should not set the `X-Accepted-OAuth-Scopes` header if `scope` is not specified', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: function() {}
+      };
+      var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: false, model: model });
+      var response = new Response({ body: {}, headers: {} });
+
+      handler.updateResponse(response, { scope: 'foo biz' });
+
+      response.headers.should.not.have.property('x-accepted-oauth-scopes');
+    });
+
+    it('should set the `X-Accepted-OAuth-Scopes` header if `scope` is specified', function() {
       var model = {
         getAccessToken: function() {},
         validateScope: function() {}
@@ -483,6 +496,19 @@ describe('AuthenticateHandler integration', function() {
       handler.updateResponse(response, { scope: 'foo biz' });
 
       response.get('X-Accepted-OAuth-Scopes').should.equal('foo bar');
+    });
+
+    it('should not set the `X-Authorized-OAuth-Scopes` header if `scope` is not specified', function() {
+      var model = {
+        getAccessToken: function() {},
+        validateScope: function() {}
+      };
+      var handler = new AuthenticateHandler({ addAcceptedScopesHeader: false, addAuthorizedScopesHeader: true, model: model });
+      var response = new Response({ body: {}, headers: {} });
+
+      handler.updateResponse(response, { scope: 'foo biz' });
+
+      response.headers.should.not.have.property('x-oauth-scopes');
     });
 
     it('should set the `X-Authorized-OAuth-Scopes` header', function() {
