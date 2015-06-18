@@ -427,6 +427,51 @@ describe('Grant', function() {
 
     });
 
+    it('should return an oauth incompatible response when accessTokenResponse is specified', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { clientId: 'thom' });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            cb();
+          }
+        },
+        grants: ['password'],
+        accessTokenResponse: function (token, res, done) {
+          res.jsonp({'token': token});
+          done();
+        }
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send(validBody)
+        .expect(200)
+        .expect('Cache-Control', 'no-store')
+        .expect('Pragma', 'no-cache')
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.keys(['token']);
+          res.body.token.should.be.instanceOf(Object);
+          res.body.token.should.have.keys(['access_token', 'token_type', 'expires_in']);
+          res.body.token.access_token.should.have.length(40);
+          res.body.token.token_type.should.equal('bearer');
+          res.body.token.expires_in.should.equal(3600);
+
+          done();
+        });
+
+    });
+
     it('should return an oauth compatible response with refresh_token', function (done) {
       var app = bootstrap({
         model: {
