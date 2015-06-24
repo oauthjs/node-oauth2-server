@@ -419,7 +419,7 @@ describe('Grant', function() {
           res.body.should.have.keys(['access_token', 'token_type', 'expires_in']);
           res.body.access_token.should.be.instanceOf(String);
           res.body.access_token.should.have.length(40);
-          res.body.token_type.should.equal('bearer');
+          res.body.token_type.should.equal('Bearer');
           res.body.expires_in.should.equal(3600);
 
           done();
@@ -465,7 +465,7 @@ describe('Grant', function() {
           res.body.access_token.should.have.length(40);
           res.body.refresh_token.should.be.instanceOf(String);
           res.body.refresh_token.should.have.length(40);
-          res.body.token_type.should.equal('bearer');
+          res.body.token_type.should.equal('Bearer');
           res.body.expires_in.should.equal(3600);
 
           done();
@@ -512,7 +512,7 @@ describe('Grant', function() {
           res.body.access_token.should.have.length(40);
           res.body.refresh_token.should.be.instanceOf(String);
           res.body.refresh_token.should.have.length(40);
-          res.body.token_type.should.equal('bearer');
+          res.body.token_type.should.equal('Bearer');
 
           done();
         });
