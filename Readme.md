@@ -78,6 +78,14 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
  - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
 - *boolean* **continueAfterResponse**
  - If true, `next` will be called even if a response has been sent (you probably don't want this)
+- *function* **accessTokenResponse (token, res, done)**
+ - An optional replacement for sending an access token response. **Warning**: Altering the format of the response [may break OAuth2 compatibility](https://tools.ietf.org/html/rfc6749#section-5.1) and thus may break OAuth clients using your authentication server.
+ - *object* **token**
+    - The generated access token.
+ - *express.Response* **res**
+    - The express response object. Up to you to set headers and send.
+ - *function* **done**
+    - You must call this function when you send the response.
 
 ## Model Specification
 
