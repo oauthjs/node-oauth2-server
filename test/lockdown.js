@@ -63,7 +63,7 @@ describe('Lockdown pattern', function() {
 
     request(app)
       .get('/private')
-      .expect(400, /access token was not found/i, done);
+      .expect(401, '', done);
   });
 
   it('should pass valid request through authorise', function (done) {

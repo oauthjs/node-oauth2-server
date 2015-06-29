@@ -44,11 +44,17 @@ var bootstrap = function (oauthConfig) {
 
 describe('Error Handler', function() {
   it('should return an oauth conformat response', function (done) {
-    var app = bootstrap();
+    var app = bootstrap({
+      model: {
+        getAccessToken: function (token, callback) {
+          callback(false, false);
+        }
+      }
+    });
 
     request(app)
-      .get('/')
-      .expect(400)
+      .get('/?access_token=thom')
+      .expect(401)
       .end(function (err, res) {
         if (err) return done(err);
 
