@@ -1,5 +1,10 @@
 ## Changelog
 
+### 2.4.1
+
+- Fix header setting syntax
+- Fix docs for supported grant types
+
 ### 2.4.0
 
 - Set Cache-Control and Pragma headers
