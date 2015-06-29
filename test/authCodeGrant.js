@@ -59,7 +59,7 @@ describe('AuthCodeGrant', function() {
 
     request(app)
       .post('/authorise')
-      .send({ response_type: 'token' })
+      .send({ response_type: 'asdf' })
       .expect(400, /invalid response_type parameter/i, done);
   });
 
@@ -181,6 +181,26 @@ describe('AuthCodeGrant', function() {
       })
       .expect(302, /Moved temporarily/i, done);
   });
+  it('should accept a valid redirect_uri with a string for token auth', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      }
+    });
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'token',
+        client_id: 'thom',
+        referer: 'http://nightworld.com',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(302, /Moved temporarily/i, done);
+  });
 
   it('should detect user access denied', function (done) {
     var app = bootstrap({
@@ -225,6 +245,33 @@ describe('AuthCodeGrant', function() {
       .send({
         response_type: 'code',
         client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .end();
+  });
+  it('should try to save access token', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAccessToken: function (token, clientId, expires, user, callback) {
+        should.exist(token);
+        token.should.have.lengthOf(40);
+        clientId.should.equal('thom');
+        (+expires).should.be.within(2, (+new Date()) + 3600000);
+        done();
+      }
+    }, [false, true]);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'token',
+        client_id: 'thom',
+        referer: 'http://nightworld.com',
         redirect_uri: 'http://nightworld.com'
       })
       .end();
@@ -286,6 +333,36 @@ describe('AuthCodeGrant', function() {
       })
       .expect(302, function (err, res) {
         res.header.location.should.equal('http://nightworld.com?code=' + code);
+        done();
+      });
+  });
+  it('should accept valid request and return code using GET and hash for token', function (done) {
+    var code;
+
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAccessToken: function (authCode, clientId, expires, user, callback) {
+        should.exist(authCode);
+        code = authCode;
+        callback();
+      }
+    }, [false, true]);
+
+    request(app)
+      .get('/authorise')
+      .query({
+        response_type: 'token',
+        client_id: 'thom',
+        referer: 'http://nightworld.com',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(302, function (err, res) {
+        res.header.location.should.equal('http://nightworld.com#access_token=' + code);
         done();
       });
   });
