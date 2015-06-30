@@ -24,17 +24,6 @@ describe('BearerTokenType integration', function() {
       }
     });
 
-    it('should throw an error if `accessTokenLifetime` is missing', function() {
-      try {
-        new BearerTokenType('foo');
-
-        should.fail();
-      } catch (e) {
-        e.should.be.an.instanceOf(InvalidArgumentError);
-        e.message.should.equal('Missing parameter: `accessTokenLifetime`');
-      }
-    });
-
     it('should set the `accessToken`', function() {
       var responseType = new BearerTokenType('foo', 'bar');
 
@@ -62,6 +51,16 @@ describe('BearerTokenType integration', function() {
       value.should.eql({
         access_token: 'foo',
         expires_in: 'bar',
+        token_type: 'bearer'
+      });
+    });
+
+    it('should not include the `expires_in` if not given', function() {
+      var responseType = new BearerTokenType('foo');
+      var value = responseType.valueOf();
+
+      value.should.eql({
+        access_token: 'foo',
         token_type: 'bearer'
       });
     });

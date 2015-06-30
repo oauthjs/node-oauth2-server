@@ -754,7 +754,7 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar', scope: 'foobar' });
 
-      tokenType.should.eql({ accessToken: 'foo', accessTokenLifetime: 120, refreshToken: 'bar', scope: 'foobar' });
+      tokenType.should.eql({ accessToken: 'foo', accessTokenLifetime: undefined, refreshToken: 'bar', scope: 'foobar' });
     });
   });
 
