@@ -87,12 +87,11 @@ describe('OAuth2Error', function() {
       done();
     };
 
-    var oldError = OAuth2Error;
     errorManager.configure({ customError: callback });
 
     var error = new errorManager.error('invalid_request', 'The access token was not found');
     
-    errorManager.configure({ customError: oldError });
+    errorManager.configure({ customError: OAuth2Error });
   });
 
 });
