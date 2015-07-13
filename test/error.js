@@ -1,6 +1,7 @@
 var should = require('should');
 
-var OAuth2Error = require('../lib/error');
+var errorManager = require('../lib/error'),
+  OAuth2Error = errorManager.error;
 
 describe('OAuth2Error', function() {
 
@@ -76,6 +77,21 @@ describe('OAuth2Error', function() {
     var error = new OAuth2Error('invalid_request', 'The access token was not found', new Error('foo'));
 
     error.message.should.equal('foo');
+  });
+
+  it('can be configured to use a custom error handler instead of OAuth2Error', function (done) {
+    var callback = function (error, description, err) {
+      error.should.equal('invalid_request');
+      description.should.equal('The access token was not found');
+
+      done();
+    };
+
+    errorManager.configure({ customError: callback });
+
+    var error = new errorManager.error('invalid_request', 'The access token was not found');
+    
+    errorManager.configure({ customError: OAuth2Error });
   });
 
 });
