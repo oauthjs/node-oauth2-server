@@ -19,7 +19,7 @@ app.all('/oauth/token', app.oauth.grant());
 
 // Show them the "do you authorise xyz app to access your content?" page
 app.get('/oauth/authorise', function (req, res, next) {
-  if (!req.session.user) {
+  if (!req.session || !req.session.user) {
     // If they aren't logged in, send them to your own login implementation
     return res.redirect('/login?redirect=' + req.path + '&client_id=' +
         req.query.client_id + '&redirect_uri=' + req.query.redirect_uri);
@@ -72,17 +72,19 @@ app.post('/login', function (req, res, next) {
   }
 });
 
-app.get('/secret', app.oauth.authorise(), function (req, res) {
+app.all('/', app.oauth.authorise(), function (req, res) {
   // Will require a valid access_token
-  res.send('Secret area');
+  res.send({message: req.user ? 'Secret area, welcome ' + req.user.firstname : 'Secret area', user: req.user});
 });
 
-app.get('/public', function (req, res) {
+app.all('/public', function (req, res) {
   // Does not require an access_token
-  res.send('Public area');
+  res.send({message:'Public area'});
 });
 
 // Error handling
 app.use(app.oauth.errorHandler());
 
 app.listen(3000);
+
+exports.app = app;

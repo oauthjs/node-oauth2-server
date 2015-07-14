@@ -36,7 +36,7 @@ CREATE TABLE oauth_access_tokens (
     access_token text NOT NULL,
     client_id text NOT NULL,
     user_id uuid NOT NULL,
-    expires timestamp without time zone NOT NULL
+    expires timestamp without time zone
 );
 
 
@@ -59,7 +59,7 @@ CREATE TABLE oauth_refresh_tokens (
     refresh_token text NOT NULL,
     client_id text NOT NULL,
     user_id uuid NOT NULL,
-    expires timestamp without time zone NOT NULL
+    expires timestamp without time zone
 );
 
 
@@ -70,7 +70,8 @@ CREATE TABLE oauth_refresh_tokens (
 CREATE TABLE users (
     id uuid NOT NULL,
     username text NOT NULL,
-    password text NOT NULL
+    password text NOT NULL,
+    firstname text
 );
 
 
@@ -116,4 +117,3 @@ CREATE INDEX users_username_password ON users USING btree (username, password);
 --
 -- PostgreSQL database dump complete
 --
-
