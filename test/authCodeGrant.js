@@ -310,10 +310,11 @@ describe('AuthCodeGrant', function() {
       .send({
         response_type: 'token',
         client_id: 'thom',
-        redirect_uri: 'http://nightworld.com'
+        redirect_uri: 'http://nightworld.com',
+        state: 'a_state'
       })
       .expect(302, function (err, res) {
-        res.header.location.should.equal('http://nightworld.com#token=' + token);
+        res.header.location.should.equal('http://nightworld.com#token=' + token + '&state=a_state');
         done();
       });
   });
