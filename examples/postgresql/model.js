@@ -54,7 +54,7 @@ model.getClient = function (clientId, clientSecret, callback) {
 
       var client = result.rows[0];
 
-      if (clientSecret !== null && client.client_secret !== clientSecret) return callback();
+      if (clientSecret !== null || client.client_secret !== clientSecret) return callback();
 
       // This object will be exposed in req.oauth.client
       callback(null, {
