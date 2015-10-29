@@ -308,6 +308,25 @@ describe('AuthorizationCodeGrantType integration', function() {
         });
     });
 
+    it('should throw an error if the `redirectUri` is invalid', function() {
+      var authorizationCode = { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), redirectUri: 'foobar', user: {} };
+      var client = { id: 'foobar' };
+      var model = {
+        getAuthorizationCode: function() { return authorizationCode; },
+        revokeAuthorizationCode: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
+
+      return grantType.getAuthorizationCode(request, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidGrantError);
+          e.message.should.equal('Invalid grant: `redirect_uri` is not a valid URI');
+        });
+    });
+
     it('should return an auth code', function() {
       var authorizationCode = { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} };
       var client = { id: 'foobar' };
@@ -352,6 +371,48 @@ describe('AuthorizationCodeGrantType integration', function() {
       var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
 
       grantType.getAuthorizationCode(request, client).should.be.an.instanceOf(Promise);
+    });
+  });
+
+  describe('validateRedirectUri()', function() {
+    it('should throw an error if `redirectUri` is missing', function() {
+      var authorizationCode = { authorizationCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), redirectUri: 'http://foo.bar', user: {} };
+      var model = {
+        getAuthorizationCode: function() {},
+        revokeAuthorizationCode: function() { return authorizationCode; },
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
+
+      try {
+        grantType.validateRedirectUri(request, authorizationCode);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: `redirect_uri` is not a valid URI');
+      }
+    });
+
+    it('should throw an error if `redirectUri` is invalid', function() {
+      var authorizationCode = { authorizationCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), redirectUri: 'http://foo.bar', user: {} };
+      var model = {
+        getAuthorizationCode: function() {},
+        revokeAuthorizationCode: function() { return authorizationCode; },
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { code: 12345, redirect_uri: 'http://bar.foo' }, headers: {}, method: {}, query: {} });
+
+      try {
+        grantType.validateRedirectUri(request, authorizationCode);
+
+        should.fail();
+      } catch (e) {
+        e.should.be.an.instanceOf(InvalidRequestError);
+        e.message.should.equal('Invalid request: `redirect_uri` is invalid');
+      }
     });
   });
 
