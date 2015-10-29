@@ -13,7 +13,7 @@ var should = require('should');
  */
 
 describe('AuthenticateHandler', function() {
-  describe('getToken()', function() {
+  describe('getTokenFromRequest()', function() {
     describe('with bearer token in the request authorization header', function() {
       it('should call `getTokenFromRequestHeader()`', function() {
         var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
@@ -26,7 +26,7 @@ describe('AuthenticateHandler', function() {
 
         sinon.stub(handler, 'getTokenFromRequestHeader');
 
-        handler.getToken(request);
+        handler.getTokenFromRequest(request);
 
         handler.getTokenFromRequestHeader.callCount.should.equal(1);
         handler.getTokenFromRequestHeader.firstCall.args[0].should.equal(request);
@@ -46,7 +46,7 @@ describe('AuthenticateHandler', function() {
 
         sinon.stub(handler, 'getTokenFromRequestQuery');
 
-        handler.getToken(request);
+        handler.getTokenFromRequest(request);
 
         handler.getTokenFromRequestQuery.callCount.should.equal(1);
         handler.getTokenFromRequestQuery.firstCall.args[0].should.equal(request);
@@ -66,7 +66,7 @@ describe('AuthenticateHandler', function() {
 
         sinon.stub(handler, 'getTokenFromRequestBody');
 
-        handler.getToken(request);
+        handler.getTokenFromRequest(request);
 
         handler.getTokenFromRequestBody.callCount.should.equal(1);
         handler.getTokenFromRequestBody.firstCall.args[0].should.equal(request);

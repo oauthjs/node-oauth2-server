@@ -194,7 +194,7 @@ describe('AuthenticateHandler integration', function() {
     });
   });
 
-  describe('getToken()', function() {
+  describe('getTokenFromRequest()', function() {
     it('should throw an error if more than one authentication method is used', function() {
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
       var request = new Request({
@@ -205,7 +205,7 @@ describe('AuthenticateHandler integration', function() {
       });
 
       try {
-        handler.getToken(request);
+        handler.getTokenFromRequest(request);
 
         should.fail();
       } catch (e) {
@@ -219,7 +219,7 @@ describe('AuthenticateHandler integration', function() {
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
       try {
-        handler.getToken(request);
+        handler.getTokenFromRequest(request);
 
         should.fail();
       } catch (e) {
