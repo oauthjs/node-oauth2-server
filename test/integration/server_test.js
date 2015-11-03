@@ -89,7 +89,7 @@ describe('Server integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           return { authorizationCode: 123 };
@@ -112,7 +112,7 @@ describe('Server integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           return { authorizationCode: 123 };
@@ -132,7 +132,7 @@ describe('Server integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           return { authorizationCode: 123 };

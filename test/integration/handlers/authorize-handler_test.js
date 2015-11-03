@@ -180,7 +180,7 @@ describe('AuthorizeHandler integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           throw new Error('Unhandled exception');
@@ -215,7 +215,7 @@ describe('AuthorizeHandler integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           throw new AccessDeniedError('Cannot request this auth code');
@@ -245,7 +245,7 @@ describe('AuthorizeHandler integration', function() {
     });
 
     it('should redirect to a successful response with `code` and `state` if successful', function() {
-      var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+      var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
         getAccessToken: function() {
           return { client: client, user: {} };
@@ -286,7 +286,7 @@ describe('AuthorizeHandler integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           return {};
@@ -322,7 +322,7 @@ describe('AuthorizeHandler integration', function() {
           return { user: {} };
         },
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {
           throw new AccessDeniedError('Cannot request this auth code');
@@ -350,7 +350,7 @@ describe('AuthorizeHandler integration', function() {
     });
 
     it('should return the `code` if successful', function() {
-      var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+      var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
         getAccessToken: function() {
           return { client: client, user: {} };
@@ -598,7 +598,7 @@ describe('AuthorizeHandler integration', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'https://example.com' };
+          return { grants: ['authorization_code'], redirectUris: ['https://example.com'] };
         },
         saveAuthorizationCode: function() {}
       };
@@ -617,7 +617,7 @@ describe('AuthorizeHandler integration', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {
-          return Promise.resolve({ grants: ['authorization_code'], redirectUri: 'http://example.com/cb' });
+          return Promise.resolve({ grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] });
         },
         saveAuthorizationCode: function() {}
       };
@@ -636,7 +636,7 @@ describe('AuthorizeHandler integration', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {
-          return { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         },
         saveAuthorizationCode: function() {}
       };
@@ -653,7 +653,7 @@ describe('AuthorizeHandler integration', function() {
 
     describe('with `client_id` in the request body', function() {
       it('should return a client', function() {
-        var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+        var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         var model = {
           getAccessToken: function() {},
           getClient: function() {
@@ -674,7 +674,7 @@ describe('AuthorizeHandler integration', function() {
 
     describe('with `client_id` in the request query', function() {
       it('should return a client', function() {
-        var client = { grants: ['authorization_code'], redirectUri: 'http://example.com/cb' };
+        var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
         var model = {
           getAccessToken: function() {},
           getClient: function() {
