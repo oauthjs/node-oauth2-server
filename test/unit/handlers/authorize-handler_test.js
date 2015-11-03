@@ -60,13 +60,13 @@ describe('AuthorizeHandler', function() {
       };
       var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
 
-      return handler.saveAuthorizationCode('foo', 'bar', 'qux', 'biz', 'baz')
+      return handler.saveAuthorizationCode('foo', 'bar', 'qux', 'biz', 'baz', 'boz')
         .then(function() {
           model.saveAuthorizationCode.callCount.should.equal(1);
           model.saveAuthorizationCode.firstCall.args.should.have.length(3);
-          model.saveAuthorizationCode.firstCall.args[0].should.eql({ authorizationCode: 'foo', expiresAt: 'bar', scope: 'qux' });
+          model.saveAuthorizationCode.firstCall.args[0].should.eql({ authorizationCode: 'foo', expiresAt: 'bar', redirectUri: 'baz', scope: 'qux' });
           model.saveAuthorizationCode.firstCall.args[1].should.equal('biz');
-          model.saveAuthorizationCode.firstCall.args[2].should.equal('baz');
+          model.saveAuthorizationCode.firstCall.args[2].should.equal('boz');
         })
         .catch(should.fail);
     });

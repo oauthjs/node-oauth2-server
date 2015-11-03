@@ -745,6 +745,54 @@ describe('TokenHandler integration', function() {
     });
   });
 
+  describe('getAccessTokenLifetime()', function() {
+    it('should return the client access token lifetime', function() {
+      var client = { accessTokenLifetime: 60 };
+      var model = {
+        getClient: function() { return client; },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+
+      handler.getAccessTokenLifetime(client).should.equal(60);
+    });
+
+    it('should return the default access token lifetime', function() {
+      var client = {};
+      var model = {
+        getClient: function() { return client; },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+
+      handler.getAccessTokenLifetime(client).should.equal(120);
+    });
+  });
+
+  describe('getRefreshTokenLifetime()', function() {
+    it('should return the client access token lifetime', function() {
+      var client = { refreshTokenLifetime: 60 };
+      var model = {
+        getClient: function() { return client; },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+
+      handler.getRefreshTokenLifetime(client).should.equal(60);
+    });
+
+    it('should return the default access token lifetime', function() {
+      var client = {};
+      var model = {
+        getClient: function() { return client; },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+
+      handler.getRefreshTokenLifetime(client).should.equal(120);
+    });
+  });
+
   describe('getTokenType()', function() {
     it('should return a token type', function() {
       var model = {
