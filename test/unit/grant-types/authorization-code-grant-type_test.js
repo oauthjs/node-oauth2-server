@@ -67,12 +67,13 @@ describe('AuthorizationCodeGrantType', function() {
       var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
 
       sinon.stub(handler, 'generateAccessToken').returns(Promise.resolve('foo'));
+      sinon.stub(handler, 'generateRefreshToken').returns(Promise.resolve('bar'));
 
       return handler.saveToken(user, client, 'foobar', 'foobiz')
         .then(function() {
           model.saveToken.callCount.should.equal(1);
           model.saveToken.firstCall.args.should.have.length(3);
-          model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', authorizationCode: 'foobar', scope: 'foobiz' });
+          model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', authorizationCode: 'foobar', refreshToken: 'bar', scope: 'foobiz' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
         })
