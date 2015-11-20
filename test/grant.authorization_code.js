@@ -200,7 +200,7 @@ describe('Granting with authorization_code grant type', function () {
             userId: '123'
           });
         },
-        saveAccessToken: function (token, clientId, expires, user, cb) {
+        saveAccessToken: function (token, clientId, expires, user, scope, cb) {
           cb();
         },
         saveRefreshToken: function (data, cb) {

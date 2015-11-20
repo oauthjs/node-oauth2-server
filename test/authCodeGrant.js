@@ -240,7 +240,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, x, callback) {
         should.exist(authCode);
         code = authCode;
         callback();
@@ -270,7 +270,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, x, callback) {
         should.exist(authCode);
         code = authCode;
         callback();
@@ -300,7 +300,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, x, callback) {
         should.exist(authCode);
         code = authCode;
         callback();
@@ -329,7 +329,7 @@ describe('AuthCodeGrant', function() {
           redirectUri: 'http://nightworld.com'
         });
       },
-      saveAuthCode: function (authCode, clientId, expires, user, callback) {
+      saveAuthCode: function (authCode, clientId, expires, user, x, callback) {
         callback();
       }
     }, [false, true], true);
