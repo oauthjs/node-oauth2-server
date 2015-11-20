@@ -236,7 +236,7 @@ describe('Grant', function() {
           generateToken: function (type, req, callback) {
             callback(false, 'thommy');
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             token.should.equal('thommy');
             cb();
           }
@@ -270,7 +270,7 @@ describe('Grant', function() {
             req.user.id.should.equal(1);
             callback(false, 'thommy');
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             token.should.equal('thommy');
             cb();
           }
@@ -301,7 +301,7 @@ describe('Grant', function() {
           generateToken: function (type, req, callback) {
             callback(false, { accessToken: 'thommy' });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb(new Error('Should not be saving'));
           }
         },
@@ -330,7 +330,7 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             token.should.be.instanceOf(String);
             token.should.have.length(40);
             clientId.should.equal('thom');
@@ -362,7 +362,7 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
           saveRefreshToken: function (token, clientId, expires, user, cb) {
@@ -399,7 +399,7 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           }
         },
@@ -439,7 +439,7 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           },
           saveRefreshToken: function (token, clientId, expires, user, cb) {
@@ -485,7 +485,7 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             should.strictEqual(null, expires);
             cb();
           },
@@ -531,7 +531,7 @@ describe('Grant', function() {
           getUser: function (uname, pword, callback) {
             callback(false, { id: 1 });
           },
-          saveAccessToken: function (token, clientId, expires, user, cb) {
+          saveAccessToken: function (token, clientId, expires, user, scope, cb) {
             cb();
           }
         },
