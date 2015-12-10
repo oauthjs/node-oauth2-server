@@ -15,7 +15,7 @@ The module provides two middlewares, one for authorization and routing, another 
 ```js
 var express = require('express'),
     bodyParser = require('body-parser'),
-    oauthserver = require('oauth2-server');
+    oauthserver = require('node-oauth2-server');
 
 var app = express();
 
