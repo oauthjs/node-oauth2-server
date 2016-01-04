@@ -50,6 +50,7 @@ describe('Server integration', function() {
         .then(function() {
           this.addAcceptedScopesHeader.should.be.true;
           this.addAuthorizedScopesHeader.should.be.true;
+          this.allowBearerTokensInQueryString.should.be.false;
         })
         .catch(should.fail);
     });

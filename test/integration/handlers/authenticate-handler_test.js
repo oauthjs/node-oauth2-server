@@ -281,6 +281,12 @@ describe('AuthenticateHandler integration', function() {
         e.message.should.equal('Invalid request: do not send bearer tokens in query URLs');
       }
     });
+
+    it('should return the bearer token if `allowBearerTokensInQueryString` is true', function() {
+      var handler = new AuthenticateHandler({ allowBearerTokensInQueryString: true, model: { getAccessToken: function() {} } });
+
+      handler.getTokenFromRequestQuery({ query: { access_token: 'foo' } }).should.equal('foo');
+    });
   });
 
   describe('getTokenFromRequestBody()', function() {
