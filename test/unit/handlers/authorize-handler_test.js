@@ -5,6 +5,7 @@
 
 var AuthorizeHandler = require('../../../lib/handlers/authorize-handler');
 var Request = require('../../../lib/request');
+var Response = require('../../../lib/response');
 var sinon = require('sinon');
 var should = require('should');
 
@@ -46,6 +47,28 @@ describe('AuthorizeHandler', function() {
           model.getClient.callCount.should.equal(1);
           model.getClient.firstCall.args.should.have.length(1);
           model.getClient.firstCall.args[0].should.equal(12345);
+        })
+        .catch(should.fail);
+    });
+  });
+
+  describe('getUser()', function() {
+    it('should call `authenticateHandler.getUser()`', function() {
+      var authenticateHandler = { handle: sinon.stub().returns(Promise.resolve({})) };
+      var model = {
+        getClient: function() {},
+        saveAuthorizationCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authenticateHandler: authenticateHandler, authorizationCodeLifetime: 120, model: model });
+      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      var response = new Response();
+
+      return handler.getUser(request, response)
+        .then(function() {
+          authenticateHandler.handle.callCount.should.equal(1);
+          authenticateHandler.handle.firstCall.args.should.have.length(2);
+          authenticateHandler.handle.firstCall.args[0].should.equal(request);
+          authenticateHandler.handle.firstCall.args[1].should.equal(response);
         })
         .catch(should.fail);
     });

@@ -14,6 +14,7 @@ var InvalidScopeError = require('../../../lib/errors/invalid-scope-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
+var ServerError = require('../../../lib/errors/server-error');
 var UnauthorizedClientError = require('../../../lib/errors/unauthorized-client-error');
 var should = require('should');
 var url = require('url');
@@ -812,6 +813,24 @@ describe('AuthorizeHandler integration', function() {
   });
 
   describe('getUser()', function() {
+    it('should throw an error if `user` is missing', function() {
+      var authenticateHandler = { handle: function() {} };
+      var model = {
+        getClient: function() {},
+        saveAuthorizationCode: function() {}
+      };
+      var handler = new AuthorizeHandler({ authenticateHandler: authenticateHandler, authorizationCodeLifetime: 120, model: model });
+      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      var response = new Response();
+
+      return handler.getUser(request, response)
+        .then(should.fail)
+        .catch(function (e) {
+          e.should.be.an.instanceOf(ServerError);
+          e.message.should.equal('Server error: `handle()` did not return a `user` object');
+        });
+    });
+
     it('should return a user', function() {
       var user = {};
       var model = {
