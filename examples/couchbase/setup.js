@@ -35,6 +35,19 @@ exports.setup = function (callback) {
                         ].join('\n')
                 }
             }
+        },
+        users: {
+            views: {
+                by_username_and_password: {
+                    map: [
+                        'function (doc, meta) {',
+                            'if (meta.id.substring(0, 6) == "user::") {',
+                                'emit([doc.username, doc.password], doc.uid);',
+                            '}',
+                        '}'
+                        ].join('\n')
+                }
+            }
         }
     }
 
@@ -56,7 +69,13 @@ exports.setup = function (callback) {
                 callback(error, null);
                 return;
             }
-            callback(null, {message: 'success'});
+            manager.upsertDesignDocument('users', design_docs['users'], function(error, result) {
+                if (error) {
+                    callback(error, null);
+                    return;
+                }
+                callback(null, {message: 'success'});
+            });
         });
     });
 }
