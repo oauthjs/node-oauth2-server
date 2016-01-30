@@ -1,6 +1,7 @@
 var couchbase = require('couchbase');
 var db = require('./app.js').bucket;
 var config = require('./config');
+var async = require('async');
 
 exports.setup = function (callback) {
     // Design documents
@@ -64,18 +65,23 @@ exports.setup = function (callback) {
     
         // Insert or update design documents
         var manager = db.manager();
-        manager.upsertDesignDocument('oauth', design_docs['oauth'], function(error, result) {
-            if (error) {
-                callback(error, null);
-                return;
-            }
-            manager.upsertDesignDocument('users', design_docs['users'], function(error, result) {
+        async.forEachOf(design_docs,
+            function(design_doc, design_doc_name, callback) {
+                manager.upsertDesignDocument(design_doc_name, design_doc, function(error, result) {
+                    if (error) {
+                        callback(error);
+                        return;
+                    }
+                    callback();
+                });
+            },
+            function (error) {
                 if (error) {
                     callback(error, null);
                     return;
                 }
                 callback(null, {message: 'success'});
-            });
-        });
+            }
+        );
     });
 }

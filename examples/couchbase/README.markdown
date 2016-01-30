@@ -2,6 +2,7 @@
 
 ## Requires
 [Couchbase](https://www.npmjs.com/package/couchbase)
+[async](https://www.npmjs.com/package/async)
 
 ## Usage
 
