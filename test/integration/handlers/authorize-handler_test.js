@@ -745,13 +745,13 @@ describe('AuthorizeHandler integration', function() {
   });
 
   describe('getState()', function() {
-    it('should throw an error if `state` is missing', function() {
+    it('should throw an error if `allowEmptyState` is false and `state` is missing', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {},
         saveAuthorizationCode: function() {}
       };
-      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var handler = new AuthorizeHandler({ allowEmptyState: false, authorizationCodeLifetime: 120, model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
       try {
