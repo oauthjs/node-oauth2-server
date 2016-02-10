@@ -26,7 +26,8 @@ var bootstrap = function (model, params, continueAfterResponse) {
   var app = express();
   app.oauth = oauth2server({
     model: model || {},
-    continueAfterResponse: continueAfterResponse
+    continueAfterResponse: continueAfterResponse,
+    implicitEnabled: true
   });
 
   app.use(bodyParser());
@@ -59,7 +60,7 @@ describe('AuthCodeGrant', function() {
 
     request(app)
       .post('/authorise')
-      .send({ response_type: 'token' })
+      .send({ response_type: 'foo' })
       .expect(400, /invalid response_type parameter/i, done);
   });
 
@@ -230,6 +231,33 @@ describe('AuthCodeGrant', function() {
       .end();
   });
 
+  it('should try to save access token', function (done) {
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAccessToken: function (accessToken, clientId, expires, user, callback) {
+        should.exist(accessToken);
+        accessToken.should.have.lengthOf(40);
+        clientId.should.equal('thom');
+        (+expires).should.be.within(2, (+new Date()) + 3600000);
+        done();
+      }
+    }, [false, true]);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'token',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .end();
+  });
+
   it('should accept valid request and return code using POST', function (done) {
     var code;
 
@@ -260,6 +288,37 @@ describe('AuthCodeGrant', function() {
       });
   });
 
+  it('should accept valid request and return token using POST', function (done) {
+    var token;
+
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAccessToken: function (accessToken, clientId, expires, user, callback) {
+        should.exist(accessToken);
+        token = accessToken;
+        callback();
+      }
+    }, [false, true]);
+
+    request(app)
+      .post('/authorise')
+      .send({
+        response_type: 'token',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com',
+        state: 'a_state'
+      })
+      .expect(302, function (err, res) {
+        res.header.location.should.equal('http://nightworld.com#token=' + token + '&state=a_state');
+        done();
+      });
+  });
+
   it('should accept valid request and return code using GET', function (done) {
     var code;
 
@@ -286,6 +345,36 @@ describe('AuthCodeGrant', function() {
       })
       .expect(302, function (err, res) {
         res.header.location.should.equal('http://nightworld.com?code=' + code);
+        done();
+      });
+  });
+
+  it('should accept valid request and return token using GET', function (done) {
+    var token;
+
+    var app = bootstrap({
+      getClient: function (clientId, clientSecret, callback) {
+        callback(false, {
+          clientId: 'thom',
+          redirectUri: 'http://nightworld.com'
+        });
+      },
+      saveAccessToken: function (accessToken, clientId, expires, user, callback) {
+        should.exist(accessToken);
+        token = accessToken;
+        callback();
+      }
+    }, [false, true]);
+
+    request(app)
+      .get('/authorise')
+      .query({
+        response_type: 'token',
+        client_id: 'thom',
+        redirect_uri: 'http://nightworld.com'
+      })
+      .expect(302, function (err, res) {
+        res.header.location.should.equal('http://nightworld.com#token=' + token);
         done();
       });
   });
