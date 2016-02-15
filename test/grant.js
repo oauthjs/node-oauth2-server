@@ -558,4 +558,103 @@ describe('Grant', function() {
 
   });
 
+  describe('when addToResponse callback is provided', function () {
+    it('should include extraInfo if extraInfo != null', function (done) {
+      var extraInfo = { extraInfo: 'extraInfo' },
+        app = bootstrap({
+          model: {
+            getClient: function (id, secret, callback) {
+              callback(false, { clientId: 'thom' });
+            },
+            grantTypeAllowed: function (clientId, grantType, callback) {
+              callback(false, true);
+            },
+            getUser: function (uname, pword, callback) {
+              callback(false, { id: 1 });
+            },
+            saveAccessToken: function (token, clientId, expires, user, cb) {
+              should.strictEqual(null, expires);
+              cb();
+            },
+            saveRefreshToken: function (token, clientId, expires, user, cb) {
+              should.strictEqual(null, expires);
+              cb();
+            },
+            addToResponse: function (req, cb) {
+              cb(null, extraInfo);
+            }
+          },
+          grants: ['password', 'refresh_token'],
+          accessTokenLifetime: null,
+          refreshTokenLifetime: null
+        });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send(validBody)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.keys(['access_token', 'refresh_token', 'token_type', 'extraInfo']);
+          res.body.access_token.should.be.instanceOf(String);
+          res.body.access_token.should.have.length(40);
+          res.body.refresh_token.should.be.instanceOf(String);
+          res.body.refresh_token.should.have.length(40);
+          res.body.token_type.should.equal('bearer');
+          res.body.extraInfo.should.eql(extraInfo);
+          done();
+        });
+    });
+
+    it('should not nclude extraInfo if extraInfo = null', function (done) {
+      var app = bootstrap({
+        model: {
+          getClient: function (id, secret, callback) {
+            callback(false, { clientId: 'thom' });
+          },
+          grantTypeAllowed: function (clientId, grantType, callback) {
+            callback(false, true);
+          },
+          getUser: function (uname, pword, callback) {
+            callback(false, { id: 1 });
+          },
+          saveAccessToken: function (token, clientId, expires, user, cb) {
+            should.strictEqual(null, expires);
+            cb();
+          },
+          saveRefreshToken: function (token, clientId, expires, user, cb) {
+            should.strictEqual(null, expires);
+            cb();
+          },
+          addToResponse: function (req, cb) {
+            cb(null, null);
+          }
+        },
+        grants: ['password', 'refresh_token'],
+        accessTokenLifetime: null,
+        refreshTokenLifetime: null
+      });
+
+      request(app)
+        .post('/oauth/token')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send(validBody)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.keys(['access_token', 'refresh_token', 'token_type']);
+          res.body.access_token.should.be.instanceOf(String);
+          res.body.access_token.should.have.length(40);
+          res.body.refresh_token.should.be.instanceOf(String);
+          res.body.refresh_token.should.have.length(40);
+          res.body.token_type.should.equal('bearer');
+          done();
+        });
+    });
+
+  });
+
 });
