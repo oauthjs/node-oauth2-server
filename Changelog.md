@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.4.2
+
+- Support custom `OAuth2Error` in Model object callbacks
+
 ### 2.4.1
 
 - Fix header setting syntax
