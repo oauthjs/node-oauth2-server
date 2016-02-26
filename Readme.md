@@ -74,6 +74,10 @@ Note: As no model was actually implemented here, delving any deeper, i.e. passin
 - *regexp* **clientIdRegex**
  - Regex to sanity check client id against before checking model. Note: the default just matches common `client_id` structures, change as needed 
   - Default: `/^[a-z0-9-_]{3,40}$/i`
+- *object* **publicUrlRegex**
+ - Is used to check if an url with specific http method can access without provide an accessToken
+  - Default: `null`
+  - Example: `{'POST': ['^/api/v[0-9]{1}/users$']}`
 - *boolean* **passthroughErrors**
  - If true, **non grant** errors will not be handled internally (so you can ensure a consistent format with the rest of your api)
 - *boolean* **continueAfterResponse**
