@@ -1,0 +1,108 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/mjsalinger/.nvm/versions/node/v5.5.0/bin/node',
+1 verbose cli   '/Users/mjsalinger/.nvm/versions/node/v5.5.0/bin/npm',
+1 verbose cli   'publish',
+1 verbose cli   '--tag',
+1 verbose cli   'next' ]
+2 info using npm@3.3.12
+3 info using node@v5.5.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/mjsalinger/Development/Personal/node-oauth2-server',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package.tgz not in flight; packing
+9 info lifecycle oauth2-server@3.0.0-b1~prepublish: oauth2-server@3.0.0-b1
+10 silly lifecycle oauth2-server@3.0.0-b1~prepublish: no script for prepublish, continuing
+11 verbose tar pack [ '/Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package.tgz',
+11 verbose tar pack   '/Users/mjsalinger/Development/Personal/node-oauth2-server' ]
+12 verbose tarball /Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package.tgz
+13 verbose folder /Users/mjsalinger/Development/Personal/node-oauth2-server
+14 verbose addLocalTarball adding from inside cache /Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package.tgz
+15 silly cache afterAdd oauth2-server@3.0.0-b1
+16 verbose afterAdd /Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package/package.json not in flight; writing
+17 verbose afterAdd /Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package/package.json written
+18 silly publish { name: 'oauth2-server',
+18 silly publish   description: 'Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js',
+18 silly publish   version: '3.0.0-b1',
+18 silly publish   keywords: [ 'oauth', 'oauth2' ],
+18 silly publish   author: { name: 'Thom Seddon', email: 'thom@seddonmedia.co.uk' },
+18 silly publish   main: 'index.js',
+18 silly publish   dependencies:
+18 silly publish    { 'basic-auth': '^1.0.0',
+18 silly publish      bluebird: '^2.9.13',
+18 silly publish      'camel-case': '^1.1.1',
+18 silly publish      lodash: '^3.3.1',
+18 silly publish      'standard-http-error': '^1.1.0',
+18 silly publish      'type-is': '^1.6.0',
+18 silly publish      'validator.js': '^1.1.1' },
+18 silly publish   devDependencies: { mocha: '^2.2.1', should: '^5.0.1', sinon: '^1.13.0' },
+18 silly publish   license: 'SEE LICENSE IN LICENSE',
+18 silly publish   engines: { node: '>=0.8' },
+18 silly publish   scripts: { test: 'NODE_ENV=test ./node_modules/.bin/mocha \'test/**/*_test.js\'' },
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/thomseddon/node-oauth2-server.git' },
+18 silly publish   readme: 'Complete, compliant and well tested module for implementing an OAuth2 server in [node.js](https://nodejs.org/).\n\n  [![NPM Version][npm-image]][npm-url]\n  [![Build Status][travis-image]][travis-url]\n  [![NPM Downloads][downloads-image]][downloads-url]\n\n# Quick Start\n\n  The _node-oauth2-server_ module is framework-agnostic but there are several wrappers available for popular frameworks such as [express](https://github.com/seegno/express-oauth-server) and [koa](https://github.com/thomseddon/koa-oauth-server).\n\n  Using the _express_ wrapper (_recommended_):\n\n```js\nvar express = require(\'express\');\nvar oauth = require(\'express-oauth-server\')({ model: model });\nvar app = express();\n\napp.use(oauth.authenticate());\n\napp.get(\'/\', function (req, res) {\n  res.send(\'Hello World\');\n})\n\napp.listen(3000);\n```\n\n  Using this module directly (_for custom servers only_):\n\n```js\nvar Request = require(\'oauth2-server\').Request;\nvar oauth = require(\'oauth2-server\')({ model: model });\n\nvar request = new Request({\n  headers: { authorization: \'Bearer foobar\' }\n});\n\noauth.authenticate(request)\n  .then(function(data) {\n    // Request is authorized.\n  })\n  .catch(function(e) {\n    // Request is not authorized.\n  });\n```\n\n  _Note: see the documentation for the [specification][wiki-model-specification] of what\'s required from the model._\n\n# Features\n\n  - Supports `authorization_code` (with scopes), `client_credentials`, `password`, `refresh_token` and custom `extension` grant types.\n  - Can be used with _node-style_ callbacks, promises and ES6 _async_/_await_.\n  - Fully [RFC6749](https://tools.ietf.org/html/rfc6749) and [RFC6750](https://tools.ietf.org/html/rfc6750) compliant.\n  - Implicitly supports any form of storage e.g. _PostgreSQL_, _MySQL_, _Mongo_, _Redis_, _etc_.\n  - Full test suite.\n\n# Documentation\n\n  - [Server options][wiki-server-options]\n  - [Model specification][wiki-model-specification]\n    - [Authorization Code][wiki-model-specification]\n    - [Client Credentials][wiki-model-specification]\n    - [Password][wiki-model-specification]\n    - [Refresh token][wiki-model-specification]\n    - [Custom extension][wiki-model-specification]\n\n# Examples\n\n  Most users should refer to our [express](https://github.com/seegno/express-oauth-server/tree/master/examples) or [koa](https://github.com/thomseddon/koa-oauth-server/tree/master/examples) examples. If you\'re implementing a custom server, we have many examples available:\n\n  - A simple **password** grant authorization [example](examples/password).\n  - A more complex **password** and **refresh_token** [example](examples/refresh-token).\n  - An advanced **password**, **refresh_token** and **authorization_code** (with scopes) [example](examples/authorization-code).\n\n# Upgrading from 2.x\n\n  This module has been rewritten with a promise-based approach and introduced a few changes in the model specification.\n\n  Please refer to our [3.0 migration guide][wiki-migrating-from-2x-to-3x] for more information.\n\n## License\n\n  [MIT](LICENSE)\n\n<!--- badge links -->\n[npm-image]: https://img.shields.io/npm/v/node-oauth2-server.svg\n[npm-url]: https://npmjs.org/package/node-oauth2-server\n[travis-image]: https://img.shields.io/travis/thomseddon/node-oauth2-server/master.svg\n[travis-url]: https://travis-ci.org/thomseddon/node-oauth2-server\n[downloads-image]: https://img.shields.io/npm/dm/node-oauth2-server.svg\n[downloads-url]: https://npmjs.org/package/node-oauth2-server\n\n<!--- wiki links -->\n[wiki-model-specification]: https://github.com/thomseddon/node-oauth2-server/wiki/Model-specification\n[wiki-migrating-from-2x-to-3x]: https://github.com/thomseddon/node-oauth2-server/wiki/Migrating-from-2-x-to-3-x\n[wiki-server-options]: https://github.com/thomseddon/node-oauth2-server/wiki/Server-options\n',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: '18c10a90461deda01f6cbec9f669d6771e6eb750',
+18 silly publish   bugs: { url: 'https://github.com/thomseddon/node-oauth2-server/issues' },
+18 silly publish   homepage: 'https://github.com/thomseddon/node-oauth2-server#readme',
+18 silly publish   _id: 'oauth2-server@3.0.0-b1',
+18 silly publish   _shasum: '6708148672eda5cb21619b9c8648f8e6ab0e14c7',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name oauth2-server
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/oauth2-server
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /Users/mjsalinger/.npm/oauth2-server/3.0.0-b1/package.tgz
+26 verbose request uri https://registry.npmjs.org/oauth2-server
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 3:40:08 PM
+29 verbose request using bearer token for auth
+30 verbose request id d69af58330325872
+31 http request PUT https://registry.npmjs.org/oauth2-server
+32 http 403 https://registry.npmjs.org/oauth2-server
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=300',
+33 verbose headers   'content-length': '98',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Wed, 02 Mar 2016 20:40:09 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-iad2139-IAD',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1456951209.012504,VS0,VE974' }
+34 verbose request invalidating /Users/mjsalinger/.npm/registry.npmjs.org/oauth2-server on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: "You cannot publish over the previously published version 3.0.0-b1." : oauth2-server
+36 verbose stack     at makeError (/Users/mjsalinger/.nvm/versions/node/v5.5.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/Users/mjsalinger/.nvm/versions/node/v5.5.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at Request._callback (/Users/mjsalinger/.nvm/versions/node/v5.5.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+36 verbose stack     at Request.self.callback (/Users/mjsalinger/.nvm/versions/node/v5.5.0/lib/node_modules/npm/node_modules/request/request.js:198:22)
+36 verbose stack     at emitTwo (events.js:100:13)
+36 verbose stack     at Request.emit (events.js:185:7)
+36 verbose stack     at Request.<anonymous> (/Users/mjsalinger/.nvm/versions/node/v5.5.0/lib/node_modules/npm/node_modules/request/request.js:1082:10)
+36 verbose stack     at emitOne (events.js:95:20)
+36 verbose stack     at Request.emit (events.js:182:7)
+36 verbose stack     at IncomingMessage.<anonymous> (/Users/mjsalinger/.nvm/versions/node/v5.5.0/lib/node_modules/npm/node_modules/request/request.js:1009:12)
+37 verbose statusCode 403
+38 verbose pkgid oauth2-server
+39 verbose cwd /Users/mjsalinger/Development/Personal/node-oauth2-server
+40 error Darwin 15.0.0
+41 error argv "/Users/mjsalinger/.nvm/versions/node/v5.5.0/bin/node" "/Users/mjsalinger/.nvm/versions/node/v5.5.0/bin/npm" "publish" "--tag" "next"
+42 error node v5.5.0
+43 error npm  v3.3.12
+44 error code E403
+45 error "You cannot publish over the previously published version 3.0.0-b1." : oauth2-server
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]
