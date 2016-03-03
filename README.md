@@ -12,8 +12,10 @@ Complete, compliant and well tested module for implementing an OAuth2 server in 
 
 ```js
 var express = require('express');
-var oauth = require('express-oauth-server')({ model: model });
+var oauthserver = require('express-oauth-server');
 var app = express();
+
+var oauth = new oauthServer({ model: model });
 
 app.use(oauth.authenticate());
 
@@ -28,7 +30,7 @@ app.listen(3000);
 
 ```js
 var Request = require('oauth2-server').Request;
-var oauthServer = require('oauth2-server')
+var oauthServer = require('oauth2-server');
 
 var oauth = new oauthServer({ model: model });
 
