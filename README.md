@@ -28,7 +28,9 @@ app.listen(3000);
 
 ```js
 var Request = require('oauth2-server').Request;
-var oauth = require('oauth2-server')({ model: model });
+var oauthServer = require('oauth2-server')
+
+var oauth = new oauthServer({ model: model });
 
 var request = new Request({
   headers: { authorization: 'Bearer foobar' }
