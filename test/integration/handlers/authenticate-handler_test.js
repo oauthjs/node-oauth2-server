@@ -66,14 +66,14 @@ describe('AuthenticateHandler integration', function() {
       }
     });
 
-    it('should throw an error if `scope` was given and the model does not implement `validateScope()`', function() {
+    it('should throw an error if `scope` was given and the model does not implement `verifyScope()`', function() {
       try {
         new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: { getAccessToken: function() {} }, scope: 'foobar' });
 
         should.fail();
       } catch (e) {
         e.should.be.an.instanceOf(InvalidArgumentError);
-        e.message.should.equal('Invalid argument: model does not implement `validateScope()`');
+        e.message.should.equal('Invalid argument: model does not implement `verifyScope()`');
       }
     });
 
@@ -87,7 +87,7 @@ describe('AuthenticateHandler integration', function() {
     it('should set the `scope`', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {}
+        verifyScope: function() {}
       };
       var grantType = new AuthenticateHandler({
         addAcceptedScopesHeader: true,
@@ -173,7 +173,7 @@ describe('AuthenticateHandler integration', function() {
         getAccessToken: function() {
           return accessToken;
         },
-        validateScope: function() {
+        verifyScope: function() {
           return true;
         }
       };
@@ -434,17 +434,17 @@ describe('AuthenticateHandler integration', function() {
     });
   });
 
-  describe('validateScope()', function() {
+  describe('verifyScope()', function() {
     it('should throw an error if `scope` is invalid', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {
+        verifyScope: function() {
           return false;
         }
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'foo' });
 
-      return handler.validateScope('foo')
+      return handler.verifyScope('foo')
         .then(should.fail)
         .catch(function(e) {
           e.should.be.an.instanceOf(InvalidScopeError);
@@ -455,25 +455,25 @@ describe('AuthenticateHandler integration', function() {
     it('should support promises', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {
+        verifyScope: function() {
           return true;
         }
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'foo' });
 
-      handler.validateScope('foo').should.be.an.instanceOf(Promise);
+      handler.verifyScope('foo').should.be.an.instanceOf(Promise);
     });
 
     it('should support non-promises', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {
+        verifyScope: function() {
           return true;
         }
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'foo' });
 
-      handler.validateScope('foo').should.be.an.instanceOf(Promise);
+      handler.verifyScope('foo').should.be.an.instanceOf(Promise);
     });
   });
 
@@ -481,7 +481,7 @@ describe('AuthenticateHandler integration', function() {
     it('should not set the `X-Accepted-OAuth-Scopes` header if `scope` is not specified', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {}
+        verifyScope: function() {}
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: false, model: model });
       var response = new Response({ body: {}, headers: {} });
@@ -494,7 +494,7 @@ describe('AuthenticateHandler integration', function() {
     it('should set the `X-Accepted-OAuth-Scopes` header if `scope` is specified', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {}
+        verifyScope: function() {}
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: false, model: model, scope: 'foo bar' });
       var response = new Response({ body: {}, headers: {} });
@@ -507,7 +507,7 @@ describe('AuthenticateHandler integration', function() {
     it('should not set the `X-Authorized-OAuth-Scopes` header if `scope` is not specified', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {}
+        verifyScope: function() {}
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: false, addAuthorizedScopesHeader: true, model: model });
       var response = new Response({ body: {}, headers: {} });
@@ -520,7 +520,7 @@ describe('AuthenticateHandler integration', function() {
     it('should set the `X-Authorized-OAuth-Scopes` header', function() {
       var model = {
         getAccessToken: function() {},
-        validateScope: function() {}
+        verifyScope: function() {}
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: false, addAuthorizedScopesHeader: true, model: model, scope: 'foo bar' });
       var response = new Response({ body: {}, headers: {} });

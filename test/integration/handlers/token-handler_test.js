@@ -269,7 +269,8 @@ describe('TokenHandler integration', function() {
       var model = {
         getClient: function() { return { grants: ['password'] }; },
         getUser: function() { return {}; },
-        saveToken: function() { return token; }
+        saveToken: function() { return token; },
+        validateScope: function() { return 'baz'; }
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({
@@ -278,7 +279,8 @@ describe('TokenHandler integration', function() {
           client_secret: 'secret',
           username: 'foo',
           password: 'bar',
-          grant_type: 'password'
+          grant_type: 'password',
+          scope: 'baz'
         },
         headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' },
         method: 'POST',
@@ -616,6 +618,7 @@ describe('TokenHandler integration', function() {
           getAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
           getClient: function() {},
           saveToken: function() { return token; },
+          validateScope: function() { return 'foo'; },
           revokeAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
@@ -644,12 +647,14 @@ describe('TokenHandler integration', function() {
         var model = {
           getClient: function() {},
           getUserFromClient: function() { return {}; },
-          saveToken: function() { return token; }
+          saveToken: function() { return token; },
+          validateScope: function() { return 'foo'; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
         var request = new Request({
           body: {
-            grant_type: 'client_credentials'
+            grant_type: 'client_credentials',
+            scope: 'foo'
           },
           headers: {},
           method: {},
@@ -671,7 +676,8 @@ describe('TokenHandler integration', function() {
         var model = {
           getClient: function() {},
           getUser: function() { return {}; },
-          saveToken: function() { return token; }
+          saveToken: function() { return token; },
+          validateScope: function() { return 'baz'; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
         var request = new Request({
@@ -680,7 +686,8 @@ describe('TokenHandler integration', function() {
             client_secret: 'secret',
             grant_type: 'password',
             password: 'bar',
-            username: 'foo'
+            username: 'foo',
+            scope: 'baz'
           },
           headers: {},
           method: {},
@@ -731,7 +738,8 @@ describe('TokenHandler integration', function() {
         var model = {
           getClient: function() {},
           getUser: function() { return {}; },
-          saveToken: function() { return token; }
+          saveToken: function() { return token; },
+          validateScope: function() { return 'foo'; }
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, extendedGrantTypes: { 'urn:ietf:params:oauth:grant-type:saml2-bearer': PasswordGrantType } });
         var request = new Request({ body: { grant_type: 'urn:ietf:params:oauth:grant-type:saml2-bearer', username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });

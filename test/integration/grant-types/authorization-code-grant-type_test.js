@@ -115,7 +115,8 @@ describe('AuthorizationCodeGrantType integration', function() {
       var model = {
         getAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
         revokeAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; },
-        saveToken: function() { return token; }
+        saveToken: function() { return token; },
+        validateScope: function() { return 'foo'; }
       };
       var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
@@ -464,7 +465,8 @@ describe('AuthorizationCodeGrantType integration', function() {
       var model = {
         getAuthorizationCode: function() {},
         revokeAuthorizationCode: function() {},
-        saveToken: function() { return token; }
+        saveToken: function() { return token; },
+        validateScope: function() { return 'foo'; }
       };
       var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
 
