@@ -159,10 +159,11 @@ describe('Server integration', function() {
         },
         saveToken: function() {
           return { accessToken: 1234, client: {}, user: {} };
-        }
+        },
+        validateScope: function() { return 'foo'; }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass', scope: 'foo' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
       var response = new Response({ body: {}, headers: {} });
 
       return server.token(request, response)
@@ -203,10 +204,13 @@ describe('Server integration', function() {
         },
         saveToken: function() {
           return { accessToken: 1234, client: {}, user: {} };
+        },
+        validateScope: function() {
+            return 'foo';
         }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass', scope: 'foo' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
       var response = new Response({ body: {}, headers: {} });
 
       server.token(request, response, null, next);

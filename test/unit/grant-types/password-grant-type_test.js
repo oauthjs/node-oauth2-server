@@ -43,6 +43,7 @@ describe('PasswordGrantType', function() {
       };
       var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
 
+      sinon.stub(handler, 'validateScope').returns('foobar');
       sinon.stub(handler, 'generateAccessToken').returns('foo');
       sinon.stub(handler, 'generateRefreshToken').returns('bar');
       sinon.stub(handler, 'getAccessTokenExpiresAt').returns('biz');
