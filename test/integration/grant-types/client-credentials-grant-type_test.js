@@ -94,7 +94,8 @@ describe('ClientCredentialsGrantType integration', function() {
       var token = {};
       var model = {
         getUserFromClient: function() { return {}; },
-        saveToken: function() { return token; }
+        saveToken: function() { return token; },
+        validateScope: function() { return 'foo'; }
       };
       var grantType = new ClientCredentialsGrantType({ accessTokenLifetime: 120, model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
@@ -194,7 +195,8 @@ describe('ClientCredentialsGrantType integration', function() {
       var token = {};
       var model = {
         getUserFromClient: function() {},
-        saveToken: function() { return token; }
+        saveToken: function() { return token; },
+        validateScope: function() { return 'foo'; }
       };
       var grantType = new ClientCredentialsGrantType({ accessTokenLifetime: 123, model: model });
 
