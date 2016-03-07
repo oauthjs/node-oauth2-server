@@ -5,7 +5,6 @@
  */
 
 var Request = require('../../lib/request');
-var sinon = require('sinon');
 var should = require('should');
 
 /**
