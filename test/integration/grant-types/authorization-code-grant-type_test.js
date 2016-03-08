@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * Module dependencies.
@@ -132,7 +133,7 @@ describe('AuthorizationCodeGrantType integration', function() {
       var client = { id: 'foobar' };
       var model = {
         getAuthorizationCode: function() { return Promise.resolve({ authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }); },
-        revokeAuthorizationCode: function() { return Promise.resolve({ authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }) },
+        revokeAuthorizationCode: function() { return Promise.resolve({ authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }); },
         saveToken: function() {}
       };
       var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });

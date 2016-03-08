@@ -21,6 +21,7 @@
     "validator.js": "^1.1.1"
   },
   "devDependencies": {
+    "jshint": "^2.9.1",
     "mocha": "^2.2.1",
     "should": "^5.0.1",
     "sinon": "^1.13.0"
@@ -30,6 +31,7 @@
     "node": ">=0.8"
   },
   "scripts": {
+    "pretest": "./node_modules/.bin/jshint --config ./.jshintrc lib test",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'"
   },
   "repository": {

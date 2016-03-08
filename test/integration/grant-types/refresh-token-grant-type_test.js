@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * Module dependencies.
@@ -132,7 +133,7 @@ describe('RefreshTokenGrantType integration', function() {
       var client = { id: 123 };
       var model = {
         getRefreshToken: function() { return Promise.resolve({ accessToken: 'foo', client: { id: 123 }, user: {} }); },
-        revokeToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }) },
+        revokeToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }); },
         saveToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, user: {} }); }
       };
       var grantType = new RefreshTokenGrantType({ accessTokenLifetime: 123, model: model });

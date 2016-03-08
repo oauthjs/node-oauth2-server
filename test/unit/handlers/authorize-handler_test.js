@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * Module dependencies.
@@ -6,6 +7,7 @@
 var AuthorizeHandler = require('../../../lib/handlers/authorize-handler');
 var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
+var Promise = require('bluebird');
 var sinon = require('sinon');
 var should = require('should');
 
