@@ -20,15 +20,16 @@ describe('PasswordGrantType', function() {
         getUser: sinon.stub().returns(true),
         saveToken: function() {}
       };
-      var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
+      var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model, context: {c:123} });
       var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
       return handler.getUser(request)
         .then(function() {
           model.getUser.callCount.should.equal(1);
-          model.getUser.firstCall.args.should.have.length(2);
+          model.getUser.firstCall.args.should.have.length(3);
           model.getUser.firstCall.args[0].should.equal('foo');
           model.getUser.firstCall.args[1].should.equal('bar');
+          model.getUser.firstCall.args[2].c.should.equal(123);
         })
         .catch(should.fail);
     });
@@ -42,7 +43,7 @@ describe('PasswordGrantType', function() {
         getUser: function() {},
         saveToken: sinon.stub().returns(true)
       };
-      var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
+      var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model, context: {c:456} });
 
       sinon.stub(handler, 'validateScope').returns('foobar');
       sinon.stub(handler, 'generateAccessToken').returns('foo');
@@ -53,10 +54,11 @@ describe('PasswordGrantType', function() {
       return handler.saveToken(user, client, 'foobar')
         .then(function() {
           model.saveToken.callCount.should.equal(1);
-          model.saveToken.firstCall.args.should.have.length(3);
+          model.saveToken.firstCall.args.should.have.length(4);
           model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresAt: 'biz', refreshToken: 'bar', refreshTokenExpiresAt: 'baz', scope: 'foobar' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
+          model.saveToken.firstCall.args[3].c.should.equal(456);
         })
         .catch(should.fail);
     });

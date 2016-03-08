@@ -81,13 +81,14 @@ describe('AuthenticateHandler', function() {
       var model = {
         getAccessToken: sinon.stub().returns({ user: {} })
       };
-      var handler = new AuthenticateHandler({ model: model });
+      var handler = new AuthenticateHandler({ model: model, context: {e:123} });
 
       return handler.getAccessToken('foo')
         .then(function() {
           model.getAccessToken.callCount.should.equal(1);
-          model.getAccessToken.firstCall.args.should.have.length(1);
+          model.getAccessToken.firstCall.args.should.have.length(2);
           model.getAccessToken.firstCall.args[0].should.equal('foo');
+          model.getAccessToken.firstCall.args[1].e.should.equal(123);
         })
         .catch(should.fail);
     });
@@ -99,13 +100,14 @@ describe('AuthenticateHandler', function() {
         getAccessToken: function() {},
         verifyScope: sinon.stub().returns(true)
       };
-      var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'bar' });
+      var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'bar', context: {e:456} });
 
       return handler.verifyScope('foo')
         .then(function() {
           model.verifyScope.callCount.should.equal(1);
-          model.verifyScope.firstCall.args.should.have.length(2);
+          model.verifyScope.firstCall.args.should.have.length(3);
           model.verifyScope.firstCall.args[0].should.equal('foo', 'bar');
+          model.verifyScope.firstCall.args[2].e.should.equal(456);
         })
         .catch(should.fail);
     });
