@@ -1,5 +1,4 @@
 var TokenModel = require('../../../lib/models/token-model');
-var sinon = require('sinon');
 
 /**
  * Test `Server`.
