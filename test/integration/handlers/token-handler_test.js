@@ -445,7 +445,7 @@ describe('TokenHandler integration', function() {
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
 
-    it('should support callbacs', function() {
+    it('should support callbacks', function() {
       var model = {
         getClient: function(clientId, clientSecret, callback) { callback(null, { grants: [] }); },
         saveToken: function() {}
