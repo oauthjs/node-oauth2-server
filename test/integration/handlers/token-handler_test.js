@@ -444,6 +444,17 @@ describe('TokenHandler integration', function() {
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
+
+    it('should support callbacs', function() {
+      var model = {
+        getClient: function(clientId, clientSecret, callback) { callback(null, { grants: [] }); },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+      handler.getClient(request).should.be.an.instanceOf(Promise);
+    });
   });
 
   describe('getClientCredentials()', function() {
@@ -596,8 +607,8 @@ describe('TokenHandler integration', function() {
     it('should throw an invalid grant error if a non-oauth error is thrown', function() {
       var client = { grants: ['password'] };
       var model = {
-        getClient: function() {},
-        getUser: function() {},
+        getClient: function(clientId, password, callback) { callback(null, client); },
+        getUser: function(uid, pwd, callback) { callback(); },
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });

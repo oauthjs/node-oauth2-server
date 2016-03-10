@@ -58,8 +58,8 @@ describe('Server integration', function() {
 
     it('should return a promise', function() {
       var model = {
-        getAccessToken: function() {
-          return { user: {} };
+        getAccessToken: function(token, callback) {
+          callback(null, { user: {} });
         }
       };
       var server = new Server({ model: model });

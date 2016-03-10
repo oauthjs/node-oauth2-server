@@ -16,6 +16,7 @@
     "bluebird": "^2.9.13",
     "camel-case": "^1.1.1",
     "lodash": "^3.3.1",
+    "promisify-any": "2.0.1",
     "standard-http-error": "^1.1.0",
     "type-is": "^1.6.0",
     "validator.js": "^1.1.1"

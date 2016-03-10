@@ -189,6 +189,18 @@ describe('ClientCredentialsGrantType integration', function() {
 
       grantType.getUserFromClient(request, {}).should.be.an.instanceOf(Promise);
     });
+
+    it('should support callbacks', function() {
+      var user = { email: 'foo@bar.com' };
+      var model = {
+        getUserFromClient: function(userId, callback) { callback(null, user); },
+        saveToken: function() {}
+      };
+      var grantType = new ClientCredentialsGrantType({ accessTokenLifetime: 120, model: model });
+      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+
+      grantType.getUserFromClient(request, {}).should.be.an.instanceOf(Promise);
+    });
   });
 
   describe('saveToken()', function() {
@@ -224,6 +236,17 @@ describe('ClientCredentialsGrantType integration', function() {
       var model = {
         getUserFromClient: function() {},
         saveToken: function() { return token; }
+      };
+      var grantType = new ClientCredentialsGrantType({ accessTokenLifetime: 123, model: model });
+
+      grantType.saveToken(token).should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function() {
+      var token = {};
+      var model = {
+        getUserFromClient: function() {},
+        saveToken: function(tokenToSave, client, user, callback) { callback(null, token); }
       };
       var grantType = new ClientCredentialsGrantType({ accessTokenLifetime: 123, model: model });
 
