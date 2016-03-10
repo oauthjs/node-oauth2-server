@@ -678,8 +678,8 @@ describe('TokenHandler integration', function() {
     it('should throw an invalid grant error if a non-oauth error is thrown', function() {
       var client = { grants: ['password'] };
       var model = {
-        getClient: function() {},
-        getUser: function() {},
+        getClient: function(clientId, password, callback) { callback(null, client); },
+        getUser: function(uid, pwd, callback) { callback(); },
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
