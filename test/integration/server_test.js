@@ -234,4 +234,56 @@ describe('Server integration', function() {
       server.token(request, response, null, next);
     });
   });
+
+  describe('revoke()', function() {
+
+    it('should return a promise', function() {
+      var model = {
+        getClient: function() {
+          return { id: 1234, grants: ['password'] };
+        },
+        getRefreshToken: function() {
+          return {
+            client: {
+              id: 1234
+            },
+            user: {}
+          };
+        },
+        revokeToken: function() {
+          return true;
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', token: 'hash', token_type_hint: 'refresh_token' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+      var handler = server.revoke(request, response);
+
+      handler.should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function(next) {
+      var model = {
+        getClient: function() {
+          return { id: 1234, grants: ['password'] };
+        },
+        getRefreshToken: function() {
+          return {
+            client: {
+              id: 1234
+            },
+            user: {}
+          };
+        },
+        revokeToken: function() {
+          return true;
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', token: 'hash', token_type_hint: 'refresh_token' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      server.revoke(request, response, null, next);
+    });
+  });
 });
