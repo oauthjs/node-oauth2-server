@@ -94,6 +94,7 @@ describe('Server', function() {
       var model = {
         getClient: function() {},
         getRefreshToken: function() {},
+        getAccessToken: function() {},
         revokeToken: function() {}
       };
       var server = new Server({ model: model });

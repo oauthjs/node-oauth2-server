@@ -250,6 +250,9 @@ describe('Server integration', function() {
             user: {}
           };
         },
+        getAccessToken: function() {
+          return null;
+        },
         revokeToken: function() {
           return true;
         }
@@ -274,6 +277,9 @@ describe('Server integration', function() {
             },
             user: {}
           };
+        },
+        getAccessToken: function() {
+          return null;
         },
         revokeToken: function() {
           return true;
