@@ -8,6 +8,7 @@ var AccessDeniedError = require('../../../lib/errors/access-denied-error');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var InvalidClientError = require('../../../lib/errors/invalid-client-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
+var InvalidTokenError = require('../../../lib/errors/invalid-token-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
@@ -49,7 +50,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
 
@@ -62,7 +64,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
 
@@ -80,7 +83,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
@@ -99,7 +103,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: {}, headers: {}, method: 'GET', query: {} });
@@ -117,7 +122,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: {}, headers: {}, method: 'POST', query: {} });
@@ -135,7 +141,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { token: 'hash' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
@@ -153,7 +160,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() { return { grants: ['password'] }; },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
@@ -173,7 +181,8 @@ describe('RevokeHandler integration', function() {
           throw new Error('Unhandled exception');
         },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({
@@ -203,7 +212,8 @@ describe('RevokeHandler integration', function() {
           throw new Error('Unhandled exception');
         },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({
@@ -228,13 +238,45 @@ describe('RevokeHandler integration', function() {
         });
     });
 
-    it('should return an empty object if successful', function() {
-      var token = { refreshToken: 'hash', client: {}, user: {} };
+    it('should not update the response if an invalid token error is thrown', function() {
+      var token = { refreshToken: 'hash', client: {}, user: {}, refreshTokenExpiresAt: new Date('2015-01-01') };
       var client = { grants: ['password'] };
       var model = {
         getClient: function() { return client; },
         revokeToken: function() { return token; },
-        getRefreshToken: function() { return { refreshToken: 'hash', client: {}, refreshTokenExpiresAt: new Date(new Date() * 2), user: {} }; }
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          client_secret: 'secret',
+          token: 'hash'
+        },
+        headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' },
+        method: 'POST',
+        query: {}
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidTokenError);
+          response.body.should.eql({});
+          response.status.should.equal(200);
+        });
+    });
+
+    it('should return an empty object if successful', function() {
+      var token = { refreshToken: 'hash', client: {}, user: {}, refreshTokenExpiresAt: new Date(new Date() * 2) };
+      var client = { grants: ['password'] };
+      var model = {
+        getClient: function() { return client; },
+        revokeToken: function() { return token; },
+        getRefreshToken: function() { return token; },
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({
@@ -251,7 +293,7 @@ describe('RevokeHandler integration', function() {
 
       return handler.handle(request, response)
         .then(function(data) {
-          data.should.eql({});
+          should.exist(data);
         })
         .catch(should.fail);
     });
@@ -262,7 +304,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 'øå€£‰', client_secret: 'foo' }, headers: {}, method: {}, query: {} });
@@ -281,7 +324,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 'foo', client_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
@@ -300,7 +344,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
@@ -317,7 +362,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() { return {}; },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
@@ -334,7 +380,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({
@@ -361,7 +408,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() { return client; },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
@@ -377,7 +425,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() { return Promise.resolve({ grants: [] }); },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
@@ -389,7 +438,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() { return { grants: [] }; },
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
@@ -403,7 +453,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_secret: 'foo' }, headers: {}, method: {}, query: {} });
@@ -422,7 +473,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { client_id: 'foo' }, headers: {}, method: {}, query: {} });
@@ -442,7 +494,8 @@ describe('RevokeHandler integration', function() {
         var model = {
           getClient: function() {},
           revokeToken: function() {},
-          getRefreshToken: function() {}
+          getRefreshToken: function() {},
+          getAccessToken: function() {}
         };
         var handler = new RevokeHandler({ model: model });
         var request = new Request({
@@ -464,7 +517,8 @@ describe('RevokeHandler integration', function() {
         var model = {
           getClient: function() {},
           revokeToken: function() {},
-          getRefreshToken: function() {}
+          getRefreshToken: function() {},
+          getAccessToken: function() {}
         };
         var handler = new RevokeHandler({ model: model });
         var request = new Request({ body: { client_id: 'foo', client_secret: 'bar' }, headers: {}, method: {}, query: {} });
@@ -480,7 +534,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
@@ -495,18 +550,38 @@ describe('RevokeHandler integration', function() {
 
     it('should return a token', function() {
       var client = { id: 12345, grants: ['password'] };
-
+      var token = { accessToken: 'hash', client: { id: 12345 }, accessTokenExpiresAt: new Date(new Date() * 2), user: {} };
       var model = {
         getClient: function() {},
-        revokeToken: function() { return 'hash'; },
-        getRefreshToken: function() { return { refreshToken: 'hash', client: { id: 12345 }, refreshTokenExpiresAt: new Date(new Date() * 2), user: {} }; }
+        revokeToken: function() { return token; },
+        getRefreshToken: function() {},
+        getAccessToken: function() { return token; }
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: { token: 'hash' }, headers: {}, method: {}, query: {} });
 
       return handler.handleRevokeToken(request, client)
         .then(function(data) {
-          data.refreshToken.should.equal('hash');
+          should.exist(data);
+        })
+        .catch(should.fail);
+    });
+
+    it('should return a token', function() {
+      var client = { id: 12345, grants: ['password'] };
+      var token = { refreshToken: 'hash', client: { id: 12345 }, refreshTokenExpiresAt: new Date(new Date() * 2), user: {} };
+      var model = {
+        getClient: function() {},
+        revokeToken: function() { return token; },
+        getRefreshToken: function() { return token; },
+        getAccessToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+      var request = new Request({ body: { token: 'hash' }, headers: {}, method: {}, query: {} });
+
+      return handler.handleRevokeToken(request, client)
+        .then(function(data) {
+          should.exist(data);
         })
         .catch(should.fail);
     });
@@ -518,15 +593,16 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
 
       return handler.getRefreshToken('hash', client)
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: refresh token is invalid');
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: refresh token is invalid');
         });
     });
 
@@ -535,51 +611,38 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() { return { client: { id: 9999}, user: {} }; }
+        getRefreshToken: function() { return { client: { id: 9999}, user: {} }; },
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
 
       return handler.getRefreshToken('hash', client)
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: refresh token is invalid');
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: refresh token client is invalid');
         });
     });
   });
 
   describe('revokeToken()', function() {
     it('should throw an error if the `refreshToken` is invalid', function() {
-      var token = {};
+      var token = 'hash';
+      var client = {};
       var model = {
         getClient: function() {},
         revokeToken: function() { return false; },
-        getRefreshToken: function() {}
+        getRefreshToken: function() { return { client: {}, user: {}};},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
 
-      return handler.revokeToken(token)
+      return handler.revokeToken(token, client)
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidRequestError);
-          e.message.should.equal('Invalid request: refresh token is invalid');
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: token is invalid');
         });
-    });
-
-    it('should throw an error if the `client_id` does not match', function() {
-      var token = {};
-      var model = {
-        getClient: function() {},
-        revokeToken: function() { return token; },
-        getRefreshToken: function() {}
-      };
-      var handler = new RevokeHandler({ model: model });
-
-      return handler.revokeToken(token)
-        .then(function(data) {
-          data.should.equal(token);
-        })
-        .catch(should.fail);
     });
   });
 
@@ -589,7 +652,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
@@ -611,7 +675,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var response = new Response({ body: {}, headers: {} });
@@ -627,7 +692,8 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() {}
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
       var response = new Response({ body: {}, headers: {} });
