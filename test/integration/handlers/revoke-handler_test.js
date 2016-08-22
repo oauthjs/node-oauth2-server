@@ -635,8 +635,8 @@ describe('RevokeHandler integration', function() {
       return handler.getRefreshToken('hash', client)
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidTokenError);
-          e.message.should.equal('Invalid token: refresh token client is invalid');
+          e.should.be.an.instanceOf(InvalidClientError);
+          e.message.should.equal('Invalid client: client is invalid');
         });
     });
 
@@ -712,8 +712,8 @@ describe('RevokeHandler integration', function() {
       return handler.getAccessToken('hash', client)
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidTokenError);
-          e.message.should.equal('Invalid token: access token client is invalid');
+          e.should.be.an.instanceOf(InvalidClientError);
+          e.message.should.equal('Invalid client: client is invalid');
         });
     });
 
