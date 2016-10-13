@@ -51,7 +51,7 @@ oauth.authenticate(request)
 
 # Features
 
-  - Supports `authorization_code` (with scopes), `client_credentials`, `password`, `refresh_token` and custom `extension` grant types.
+  - Supports `authorization_code` (with scopes), `client_credentials`, `password`, `refresh_token`, `implicit` and custom `extension` grant types.
   - Can be used with _node-style_ callbacks, promises and ES6 _async_/_await_.
   - Fully [RFC6749](https://tools.ietf.org/html/rfc6749) and [RFC6750](https://tools.ietf.org/html/rfc6750) compliant.
   - Implicitly supports any form of storage e.g. _PostgreSQL_, _MySQL_, _Mongo_, _Redis_, _etc_.
