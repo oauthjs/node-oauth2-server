@@ -444,6 +444,17 @@ describe('TokenHandler integration', function() {
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
+
+    it('should support callbacks', function() {
+      var model = {
+        getClient: function(clientId, clientSecret, callback) { callback(null, { grants: [] }); },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+      handler.getClient(request).should.be.an.instanceOf(Promise);
+    });
   });
 
   describe('getClientCredentials()', function() {

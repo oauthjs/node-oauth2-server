@@ -410,6 +410,17 @@ describe('AuthenticateHandler integration', function() {
 
       handler.getAccessToken('foo').should.be.an.instanceOf(Promise);
     });
+
+    it('should support callbacks', function() {
+      var model = {
+        getAccessToken: function(token, callback) {
+          callback(null, { user: {} });
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+
+      handler.getAccessToken('foo').should.be.an.instanceOf(Promise);
+    });
   });
 
   describe('validateAccessToken()', function() {
@@ -470,6 +481,18 @@ describe('AuthenticateHandler integration', function() {
         getAccessToken: function() {},
         verifyScope: function() {
           return true;
+        }
+      };
+      var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'foo' });
+
+      handler.verifyScope('foo').should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function() {
+      var model = {
+        getAccessToken: function() {},
+        verifyScope: function(token, scope, callback) {
+          callback(null, true);
         }
       };
       var handler = new AuthenticateHandler({ addAcceptedScopesHeader: true, addAuthorizedScopesHeader: true, model: model, scope: 'foo' });
