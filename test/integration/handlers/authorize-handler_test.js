@@ -639,7 +639,8 @@ describe('AuthorizeHandler integration', function() {
     it('should support callbacks', function() {
       var model = {
         getAccessToken: function() {},
-        getClient: function(clientId, callback) {
+        getClient: function(clientId, clientSecret, callback) {
+          clientSecret.should.eql(null);
           callback(null, { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] });
         },
         saveAuthorizationCode: function() {}
