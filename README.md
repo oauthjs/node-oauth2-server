@@ -86,8 +86,8 @@ oauth.authenticate(request)
   [MIT](LICENSE)
 
 <!--- badge links -->
-[npm-image]: https://img.shields.io/npm/v/node-oauth2-server.svg
-[npm-url]: https://npmjs.org/package/node-oauth2-server
+[npm-image]: https://img.shields.io/npm/v/oauth2-server.svg
+[npm-url]: https://npmjs.org/package/oauth2-server
 [travis-image]: https://img.shields.io/travis/oauthjs/node-oauth2-server/master.svg
 [travis-url]: https://travis-ci.org/oauthjs/node-oauth2-server
 [downloads-image]: https://img.shields.io/npm/dm/oauth2-server.svg
