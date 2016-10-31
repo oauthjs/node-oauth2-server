@@ -6,10 +6,15 @@
     "oauth",
     "oauth2"
   ],
-  "author": {
-    "name": "Thom Seddon",
-    "email": "thom@seddonmedia.co.uk"
-  },
+  "contributors": [
+    { "name": "Thom Seddon", "email": "thom@seddonmedia.co.uk" },
+    { "name": "Lars F. Karlström" , "email": "lars@lfk.io" },
+    { "name": "Rui Marinho", "email": "ruipmarinho@gmail.com" },
+    { "name" : "Tiago Ribeiro", "email": "tiago.ribeiro@gmail.com" },
+    { "name": "Michael Salinger", "email": "mjsalinger@gmail.com" },
+    { "name": "Nuno Sousa" },
+    { "name": "Max Truxa" }
+  ],
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^1.0.0",
@@ -37,6 +42,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thomseddon/node-oauth2-server.git"
+    "url": "https://github.com/oauthjs/node-oauth2-server.git"
   }
 }
