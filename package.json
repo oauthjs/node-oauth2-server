@@ -32,9 +32,9 @@
     "should": "^5.0.1",
     "sinon": "^1.13.0"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "engines": {
-    "node": ">=0.8"
+    "node": ">=4.0"
   },
   "scripts": {
     "pretest": "./node_modules/.bin/jshint --config ./.jshintrc lib test",
