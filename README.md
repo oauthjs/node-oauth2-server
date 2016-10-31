@@ -88,12 +88,12 @@ oauth.authenticate(request)
 <!--- badge links -->
 [npm-image]: https://img.shields.io/npm/v/node-oauth2-server.svg
 [npm-url]: https://npmjs.org/package/node-oauth2-server
-[travis-image]: https://img.shields.io/travis/thomseddon/node-oauth2-server/master.svg
-[travis-url]: https://travis-ci.org/thomseddon/node-oauth2-server
-[downloads-image]: https://img.shields.io/npm/dm/node-oauth2-server.svg
-[downloads-url]: https://npmjs.org/package/node-oauth2-server
+[travis-image]: https://img.shields.io/travis/oauthjs/node-oauth2-server/master.svg
+[travis-url]: https://travis-ci.org/oauthjs/node-oauth2-server
+[downloads-image]: https://img.shields.io/npm/dm/oauth2-server.svg
+[downloads-url]: https://npmjs.org/package/oauth2-server
 
 <!--- wiki links -->
-[wiki-model-specification]: https://github.com/thomseddon/node-oauth2-server/wiki/Model-specification
-[wiki-migrating-from-2x-to-3x]: https://github.com/thomseddon/node-oauth2-server/wiki/Migrating-from-2-x-to-3-x
-[wiki-server-options]: https://github.com/thomseddon/node-oauth2-server/wiki/Server-options
+[wiki-model-specification]: https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification
+[wiki-migrating-from-2x-to-3x]: https://github.com/oauthjs/node-oauth2-server/wiki/Migrating-from-2-x-to-3-x
+[wiki-server-options]: https://github.com/oauthjs/node-oauth2-server/wiki/Server-options
