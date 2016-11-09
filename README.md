@@ -6,7 +6,7 @@ Complete, compliant and well tested module for implementing an OAuth2 server in 
 
 # Quick Start
 
-  The _node-oauth2-server_ module is framework-agnostic but there are several wrappers available for popular frameworks such as [express](https://github.com/seegno/express-oauth-server) and [koa 2](https://github.com/ubilogix/koa-oauth-server).
+  The _node-oauth2-server_ module is framework-agnostic but there are several wrappers available for popular frameworks such as [express](https://github.com/oauthjs/express-oauth-server) and [koa 2](https://github.com/oauthjs/koa-oauth-server).
 
   Using the _express_ wrapper (_recommended_):
 
