@@ -192,7 +192,7 @@ describe('PasswordGrantType integration', function() {
         saveToken: function() {}
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
-      var request = new Request({ body: { username: 'øå€£‰', password: 'foobar' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { username: '\r\n', password: 'foobar' }, headers: {}, method: {}, query: {} });
 
       try {
         grantType.getUser(request);
@@ -210,7 +210,7 @@ describe('PasswordGrantType integration', function() {
         saveToken: function() {}
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
-      var request = new Request({ body: { username: 'foobar', password: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { username: 'foobar', password: '\r\n' }, headers: {}, method: {}, query: {} });
 
       try {
         grantType.getUser(request);
