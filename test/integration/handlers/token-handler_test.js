@@ -909,7 +909,7 @@ describe('TokenHandler integration', function() {
 
       handler.updateSuccessResponse(response, tokenType);
 
-      response.body.should.eql({ access_token: 'foo', expires_in: 'bar', refresh_token: 'biz', token_type: 'bearer' });
+      response.body.should.eql({ access_token: 'foo', expires_in: 'bar', refresh_token: 'biz', token_type: 'Bearer' });
     });
 
     it('should set the `Cache-Control` header', function() {
