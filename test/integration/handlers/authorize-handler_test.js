@@ -640,7 +640,7 @@ describe('AuthorizeHandler integration', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function(clientId, clientSecret, callback) {
-          clientSecret.should.eql(null);
+          should.equal(clientSecret, null);
           callback(null, { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] });
         },
         saveAuthorizationCode: function() {}
