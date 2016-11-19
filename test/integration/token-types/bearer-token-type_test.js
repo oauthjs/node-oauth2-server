@@ -52,7 +52,7 @@ describe('BearerTokenType integration', function() {
       value.should.eql({
         access_token: 'foo',
         expires_in: 'bar',
-        token_type: 'bearer'
+        token_type: 'Bearer'
       });
     });
 
@@ -62,7 +62,7 @@ describe('BearerTokenType integration', function() {
 
       value.should.eql({
         access_token: 'foo',
-        token_type: 'bearer'
+        token_type: 'Bearer'
       });
     });
 
@@ -74,7 +74,7 @@ describe('BearerTokenType integration', function() {
         access_token: 'foo',
         expires_in: 'bar',
         refresh_token: 'biz',
-        token_type: 'bearer'
+        token_type: 'Bearer'
       });
     });
 
@@ -86,7 +86,7 @@ describe('BearerTokenType integration', function() {
         access_token: 'foo',
         expires_in: 'bar',
         refresh_token: 'biz',
-        token_type: 'bearer'
+        token_type: 'Bearer'
       });
     });
   });

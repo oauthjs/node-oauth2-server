@@ -1,21 +1,27 @@
 {
   "name": "oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
-  "version": "3.0.0-b2",
+  "version": "3.0.0-b3.1",
   "keywords": [
     "oauth",
     "oauth2"
   ],
-  "author": {
-    "name": "Thom Seddon",
-    "email": "thom@seddonmedia.co.uk"
-  },
+  "contributors": [
+    { "name": "Thom Seddon", "email": "thom@seddonmedia.co.uk" },
+    { "name": "Lars F. Karlström" , "email": "lars@lfk.io" },
+    { "name": "Rui Marinho", "email": "ruipmarinho@gmail.com" },
+    { "name" : "Tiago Ribeiro", "email": "tiago.ribeiro@gmail.com" },
+    { "name": "Michael Salinger", "email": "mjsalinger@gmail.com" },
+    { "name": "Nuno Sousa" },
+    { "name": "Max Truxa" }
+  ],
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^1.0.0",
     "bluebird": "^2.9.13",
     "camel-case": "^1.1.1",
     "lodash": "^3.3.1",
+    "promisify-any": "2.0.1",
     "standard-http-error": "^1.1.0",
     "type-is": "^1.6.0",
     "validator.js": "^1.1.1"
@@ -26,9 +32,9 @@
     "should": "^5.0.1",
     "sinon": "^1.13.0"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "engines": {
-    "node": ">=0.8"
+    "node": ">=4.0"
   },
   "scripts": {
     "pretest": "./node_modules/.bin/jshint --config ./.jshintrc lib test",
@@ -36,6 +42,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thomseddon/node-oauth2-server.git"
+    "url": "https://github.com/oauthjs/node-oauth2-server.git"
   }
 }

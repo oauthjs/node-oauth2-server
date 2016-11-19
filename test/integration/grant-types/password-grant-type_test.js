@@ -134,6 +134,19 @@ describe('PasswordGrantType integration', function() {
 
       grantType.handle(request, client).should.be.an.instanceOf(Promise);
     });
+
+    it('should support callbacks', function() {
+      var client = { id: 'foobar' };
+      var token = {};
+      var model = {
+        getUser: function(username, password, callback) { callback(null, {}); },
+        saveToken: function(tokenToSave, client, user, callback) { callback(null, token); }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+
+      grantType.handle(request, client).should.be.an.instanceOf(Promise);
+    });
   });
 
   describe('getUser()', function() {
@@ -179,7 +192,7 @@ describe('PasswordGrantType integration', function() {
         saveToken: function() {}
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
-      var request = new Request({ body: { username: 'øå€£‰', password: 'foobar' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { username: '\r\n', password: 'foobar' }, headers: {}, method: {}, query: {} });
 
       try {
         grantType.getUser(request);
@@ -197,7 +210,7 @@ describe('PasswordGrantType integration', function() {
         saveToken: function() {}
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
-      var request = new Request({ body: { username: 'foobar', password: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { username: 'foobar', password: '\r\n' }, headers: {}, method: {}, query: {} });
 
       try {
         grantType.getUser(request);
@@ -264,6 +277,18 @@ describe('PasswordGrantType integration', function() {
 
       grantType.getUser(request).should.be.an.instanceOf(Promise);
     });
+
+    it('should support callbacks', function() {
+      var user = { email: 'foo@bar.com' };
+      var model = {
+        getUser: function(username, password, callback) { callback(null, user); },
+        saveToken: function() {}
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+
+      grantType.getUser(request).should.be.an.instanceOf(Promise);
+    });
   });
 
   describe('saveToken()', function() {
@@ -299,6 +324,17 @@ describe('PasswordGrantType integration', function() {
       var model = {
         getUser: function() {},
         saveToken: function() { return token; }
+      };
+      var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
+
+      grantType.saveToken(token).should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function() {
+      var token = {};
+      var model = {
+        getUser: function() {},
+        saveToken: function(tokenToSave, client, user, callback) { callback(null, token); }
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
 

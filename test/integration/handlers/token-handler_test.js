@@ -327,7 +327,78 @@ describe('TokenHandler integration', function() {
         })
         .catch(should.fail);
     });
+
+    it('should not return custom attributes in a bearer token if the allowExtendedTokenAttributes is not set', function() {
+      var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {}, foo: 'bar' };
+      var model = {
+        getClient: function() { return { grants: ['password'] }; },
+        getUser: function() { return {}; },
+        saveToken: function() { return token; },
+        validateScope: function() { return 'baz'; }
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          client_secret: 'secret',
+          username: 'foo',
+          password: 'bar',
+          grant_type: 'password',
+          scope: 'baz'
+        },
+        headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' },
+        method: 'POST',
+        query: {}
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(function() {
+          should.exist(response.body.access_token);
+          should.exist(response.body.refresh_token);
+          should.exist(response.body.token_type);
+          should.exist(response.body.scope);
+          should.not.exist(response.body.foo);
+        })
+        .catch(should.fail);
+    });
+
+    it('should return custom attributes in a bearer token if the allowExtendedTokenAttributes is set', function() {
+      var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {}, foo: 'bar' };
+      var model = {
+        getClient: function() { return { grants: ['password'] }; },
+        getUser: function() { return {}; },
+        saveToken: function() { return token; },
+        validateScope: function() { return 'baz'; }
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, allowExtendedTokenAttributes: true });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          client_secret: 'secret',
+          username: 'foo',
+          password: 'bar',
+          grant_type: 'password',
+          scope: 'baz'
+        },
+        headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' },
+        method: 'POST',
+        query: {}
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(function() {
+          should.exist(response.body.access_token);
+          should.exist(response.body.refresh_token);
+          should.exist(response.body.token_type);
+          should.exist(response.body.scope);
+          should.exist(response.body.foo);
+        })
+        .catch(should.fail);
+    });
   });
+
 
   describe('getClient()', function() {
     it('should throw an error if `clientId` is invalid', function() {
@@ -469,6 +540,17 @@ describe('TokenHandler integration', function() {
     it('should support non-promises', function() {
       var model = {
         getClient: function() { return { grants: [] }; },
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+      handler.getClient(request).should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function() {
+      var model = {
+        getClient: function(clientId, clientSecret, callback) { callback(null, { grants: [] }); },
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
@@ -628,8 +710,8 @@ describe('TokenHandler integration', function() {
     it('should throw an invalid grant error if a non-oauth error is thrown', function() {
       var client = { grants: ['password'] };
       var model = {
-        getClient: function() {},
-        getUser: function() {},
+        getClient: function(clientId, password, callback) { callback(null, client); },
+        getUser: function(uid, pwd, callback) { callback(); },
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
@@ -859,7 +941,7 @@ describe('TokenHandler integration', function() {
 
       handler.updateSuccessResponse(response, tokenType);
 
-      response.body.should.eql({ access_token: 'foo', expires_in: 'bar', refresh_token: 'biz', token_type: 'bearer' });
+      response.body.should.eql({ access_token: 'foo', expires_in: 'bar', refresh_token: 'biz', token_type: 'Bearer' });
     });
 
     it('should set the `Cache-Control` header', function() {
