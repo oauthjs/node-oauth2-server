@@ -82,6 +82,38 @@ describe('TokenHandler integration', function() {
       handler.accessTokenLifetime.should.equal(accessTokenLifetime);
     });
 
+    it('should set the `alwaysIssueNewRefreshToken`', function() {
+      var alwaysIssueNewRefreshToken = true;
+      var model = {
+        getClient: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, alwaysIssueNewRefreshToken: alwaysIssueNewRefreshToken });
+
+      handler.alwaysIssueNewRefreshToken.should.equal(alwaysIssueNewRefreshToken);
+    });
+
+    it('should set the `alwaysIssueNewRefreshToken` to false', function() {
+      var alwaysIssueNewRefreshToken = false;
+      var model = {
+        getClient: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, alwaysIssueNewRefreshToken: alwaysIssueNewRefreshToken });
+
+      handler.alwaysIssueNewRefreshToken.should.equal(alwaysIssueNewRefreshToken);
+    });
+
+    it('should return the default `alwaysIssueNewRefreshToken` value', function() {
+      var model = {
+        getClient: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120 });
+
+      handler.alwaysIssueNewRefreshToken.should.equal(true);
+    });
+
     it('should set the `extendedGrantTypes`', function() {
       var extendedGrantTypes = { foo: 'bar' };
       var model = {
