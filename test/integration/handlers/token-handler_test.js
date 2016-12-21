@@ -419,7 +419,7 @@ describe('TokenHandler integration', function() {
       }
     });
 
-    it('should throw an error if `clientId` is invalid', function() {
+    it('should throw an error if `clientSecret` is invalid', function() {
       var model = {
         getClient: function() {},
         saveToken: function() {}
@@ -526,6 +526,33 @@ describe('TokenHandler integration', function() {
         .catch(should.fail);
     });
 
+    describe('with `password` grant type and `requiresClientAuthentication` is false', function() {
+
+      it('should return a client ', function() {
+        var client = { id: 12345, grants: [] };
+        var model = {
+          getClient: function() { return client; },
+          saveToken: function() {}
+        };
+
+        var handler = new TokenHandler({
+          accessTokenLifetime: 120,
+          model: model,
+          refreshTokenLifetime: 120,
+          requiresClientAuthentication: {
+            password: false
+          }
+       });
+        var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
+
+        return handler.getClient(request)
+          .then(function(data) {
+            data.should.equal(client);
+          })
+          .catch(should.fail);
+      });
+    });
+
     it('should support promises', function() {
       var model = {
         getClient: function() { return Promise.resolve({ grants: [] }); },
@@ -595,6 +622,20 @@ describe('TokenHandler integration', function() {
         e.should.be.an.instanceOf(InvalidClientError);
         e.message.should.equal('Invalid client: cannot retrieve client credentials');
       }
+    });
+
+    describe('with `client_id` and grant type is `password` and `requiresClientAuthentication` is false', function() {
+      it('should return a client', function() {
+        var model = {
+          getClient: function() {},
+          saveToken: function() {}
+        };
+        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, requiresClientAuthentication: { password: false} });
+        var request = new Request({ body: { client_id: 'foo', grant_type: 'password' }, headers: {}, method: {}, query: {} });
+        var credentials = handler.getClientCredentials(request);
+
+        credentials.should.eql({ clientId: 'foo' });
+      });
     });
 
     describe('with `client_id` and `client_secret` in the request header as basic auth', function() {
