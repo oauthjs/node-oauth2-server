@@ -91,8 +91,8 @@ describe('AuthorizationCodeGrantType integration', function() {
         e.message.should.equal('Missing parameter: `request`');
       }
     });
-
-    it('should throw an error if `client` is missing', function() {
+    
+    it('should throw an error if `client` is invalid', function() {
       var client = {};
       var model = {
         getAuthorizationCode: function() { return { authorizationCode: 12345, expiresAt: new Date(new Date() * 2), user: {} }; },
@@ -108,6 +108,25 @@ describe('AuthorizationCodeGrantType integration', function() {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Server error: `getAuthorizationCode()` did not return a `client` object');
         });
+    });
+
+    it('should throw an error if `client` is missing', function() {
+      
+      var model = {
+        getAuthorizationCode: function() { return { authorizationCode: 12345, expiresAt: new Date(new Date() * 2), user: {} }; },
+        revokeAuthorizationCode: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+      var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
+
+      try {
+        grantType.handle(request, null);
+      }
+      catch (e) {
+        e.should.be.an.instanceOf(InvalidArgumentError);
+        e.message.should.equal('Missing parameter: `client`');
+      }
     });
 
     it('should return a token', function() {
@@ -460,6 +479,25 @@ describe('AuthorizationCodeGrantType integration', function() {
           data.should.equal(authorizationCode);
         })
         .catch(should.fail);
+    });
+
+    it('should throw an error when the auth code is invalid', function() {
+      var authorizationCode = { authorizationCode: 12345, client: {}, expiresAt: new Date(new Date() / 2), user: {} };
+      var model = {
+        getAuthorizationCode: function() {},
+        revokeAuthorizationCode: function() { return false; },
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+
+      return grantType.revokeAuthorizationCode(authorizationCode)
+        .then(function(data) {
+          data.should.equal(authorizationCode);
+        })
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidGrantError);
+          e.message.should.equal('Invalid grant: authorization code is invalid');
+        });
     });
 
     it('should support promises', function() {
