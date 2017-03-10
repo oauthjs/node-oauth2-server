@@ -12,6 +12,7 @@ var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error')
 var InvalidClientError = require('../../../lib/errors/invalid-client-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 var InvalidScopeError = require('../../../lib/errors/invalid-scope-error');
+var UnsupportedResponseTypeError = require('../../../lib/errors/unsupported-response-type-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
@@ -382,7 +383,7 @@ describe('AuthorizeHandler integration', function() {
       return handler.handle(request, response)
         .then(should.fail)
         .catch(function() {
-          response.get('location').should.equal('http://example.com/cb?error=invalid_request&error_description=Invalid%20parameter%3A%20%60response_type%60&state=foobar');
+          response.get('location').should.equal('http://example.com/cb?error=unsupported_response_type&error_description=Unsupported%20response%20type%3A%20%60response_type%60%20is%20not%20supported&state=foobar');
         });
     });
 
@@ -417,7 +418,7 @@ describe('AuthorizeHandler integration', function() {
       return handler.handle(request, response)
         .then(should.fail)
         .catch(function() {
-          response.get('location').should.equal('http://example.com/cb?error=invalid_request&error_description=Invalid%20parameter%3A%20%60response_type%60&state=foobar');
+          response.get('location').should.equal('http://example.com/cb?error=unsupported_response_type&error_description=Unsupported%20response%20type%3A%20%60response_type%60%20is%20not%20supported&state=foobar');
         });
     });
 
@@ -998,8 +999,8 @@ describe('AuthorizeHandler integration', function() {
 
         should.fail();
       } catch (e) {
-        e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Invalid parameter: `response_type`');
+        e.should.be.an.instanceOf(UnsupportedResponseTypeError);
+        e.message.should.equal('Unsupported response type: `response_type` is not supported');
       }
     });
 
