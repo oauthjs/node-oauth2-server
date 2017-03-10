@@ -351,6 +351,76 @@ describe('AuthorizeHandler integration', function() {
         });
     });
 
+    it('should redirect to an error response if `response_type` is invalid', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+        },
+        saveAuthorizationCode: function() {
+          return { authorizationCode: 12345, client: {} };
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'test'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=invalid_request&error_description=Invalid%20parameter%3A%20%60response_type%60&state=foobar');
+        });
+    });
+
+    it('should fail on invalid `response_type` before calling model.saveAuthorizationCode()', function() {
+      var model = {
+        getAccessToken: function() {
+          return { user: {} };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+        },
+        saveAuthorizationCode: function() {
+          throw new Error('must not be reached');
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'test'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=invalid_request&error_description=Invalid%20parameter%3A%20%60response_type%60&state=foobar');
+        });
+    });
+
     it('should return the `code` if successful', function() {
       var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
@@ -942,9 +1012,9 @@ describe('AuthorizeHandler integration', function() {
       };
         var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
         var request = new Request({ body: { response_type: 'code' }, headers: {}, method: {}, query: {} });
-        var responseType = handler.getResponseType(request, { authorizationCode: 123 });
+        var ResponseType = handler.getResponseType(request);
 
-        responseType.should.be.an.instanceOf(CodeResponseType);
+        ResponseType.should.equal(CodeResponseType);
       });
     });
 
@@ -957,9 +1027,9 @@ describe('AuthorizeHandler integration', function() {
       };
         var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
         var request = new Request({ body: {}, headers: {}, method: {}, query: { response_type: 'code' } });
-        var responseType = handler.getResponseType(request, { authorizationCode: 123 });
+        var ResponseType = handler.getResponseType(request);
 
-        responseType.should.be.an.instanceOf(CodeResponseType);
+        ResponseType.should.equal(CodeResponseType);
       });
     });
   });
