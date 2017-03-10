@@ -557,15 +557,15 @@ This model function is **required** for all grant types.
 +===============================+==========+=====================================================================+
 | token                         | Object   | The token(s) to be saved.                                           |
 +-------------------------------+----------+---------------------------------------------------------------------+
-| token.accessToken             | String | The access token to be saved.                                         |
+| token.accessToken             | String   | The access token to be saved.                                       |
 +-------------------------------+----------+---------------------------------------------------------------------+
-| token.accessTokenExpiresAt    | Date   | The expiry time of the access token.                                  |
+| token.accessTokenExpiresAt    | Date     | The expiry time of the access token.                                |
 +-------------------------------+----------+---------------------------------------------------------------------+
-| [token.refreshToken]          | String | The refresh token to be saved.                                        |
+| [token.refreshToken]          | String   | The refresh token to be saved.                                      |
 +-------------------------------+----------+---------------------------------------------------------------------+
-| [token.refreshTokenExpiresAt] | Date   | The expiry time of the refresh token.                                 |
+| [token.refreshTokenExpiresAt] | Date     | The expiry time of the refresh token.                               |
 +-------------------------------+----------+---------------------------------------------------------------------+
-| [token.scope]                 | String | The authorized scope of the token(s).                                 |
+| [token.scope]                 | String   | The authorized scope of the token(s).                               |
 +-------------------------------+----------+---------------------------------------------------------------------+
 | client                        | Object   | The client associated with the token(s).                            |
 +-------------------------------+----------+---------------------------------------------------------------------+
