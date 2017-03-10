@@ -8,7 +8,7 @@ var AccessDeniedError = require('../../../lib/errors/access-denied-error');
 var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
-var InvalidScopeError = require('../../../lib/errors/invalid-scope-error');
+var InsufficientScopeError = require('../../../lib/errors/insufficient-scope-error');
 var InvalidTokenError = require('../../../lib/errors/invalid-token-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
@@ -447,7 +447,7 @@ describe('AuthenticateHandler integration', function() {
   });
 
   describe('verifyScope()', function() {
-    it('should throw an error if `scope` is invalid', function() {
+    it('should throw an error if `scope` is insufficient', function() {
       var model = {
         getAccessToken: function() {},
         verifyScope: function() {
@@ -459,8 +459,8 @@ describe('AuthenticateHandler integration', function() {
       return handler.verifyScope('foo')
         .then(should.fail)
         .catch(function(e) {
-          e.should.be.an.instanceOf(InvalidScopeError);
-          e.message.should.equal('Invalid scope: scope is invalid');
+          e.should.be.an.instanceOf(InsufficientScopeError);
+          e.message.should.equal('Insufficient scope: authorized scope is insufficient');
         });
     });
 
