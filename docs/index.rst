@@ -37,10 +37,10 @@ Example Usage
 
   oauth.authenticate(request, response)
     .then((token) => {
-      // Request is authorized.
+      // The request was successfully authenticated.
     })
     .catch((err) => {
-      // Request is not authorized or an error occured.
+      // The request failed authentication.
     });
 
 See the :doc:`/model/spec` of what is required from the model passed to :doc:`/api/oauth2-server`.
