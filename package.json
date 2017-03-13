@@ -22,8 +22,7 @@
     "lodash": "^3.3.1",
     "promisify-any": "2.0.1",
     "statuses": "^1.3.1",
-    "type-is": "^1.6.0",
-    "validator.js": "^1.1.1"
+    "type-is": "^1.6.0"
   },
   "devDependencies": {
     "jshint": "^2.9.1",
