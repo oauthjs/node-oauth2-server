@@ -526,7 +526,7 @@ describe('TokenHandler integration', function() {
         .catch(should.fail);
     });
 
-    describe('with `password` grant type and `requiresClientAuthentication` is false', function() {
+    describe('with `password` grant type and `requireClientAuthentication` is false', function() {
 
       it('should return a client ', function() {
         var client = { id: 12345, grants: [] };
@@ -539,7 +539,7 @@ describe('TokenHandler integration', function() {
           accessTokenLifetime: 120,
           model: model,
           refreshTokenLifetime: 120,
-          requiresClientAuthentication: {
+          requireClientAuthentication: {
             password: false
           }
        });
@@ -624,13 +624,13 @@ describe('TokenHandler integration', function() {
       }
     });
 
-    describe('with `client_id` and grant type is `password` and `requiresClientAuthentication` is false', function() {
+    describe('with `client_id` and grant type is `password` and `requireClientAuthentication` is false', function() {
       it('should return a client', function() {
         var model = {
           getClient: function() {},
           saveToken: function() {}
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, requiresClientAuthentication: { password: false} });
+        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, requireClientAuthentication: { password: false} });
         var request = new Request({ body: { client_id: 'foo', grant_type: 'password' }, headers: {}, method: {}, query: {} });
         var credentials = handler.getClientCredentials(request);
 
