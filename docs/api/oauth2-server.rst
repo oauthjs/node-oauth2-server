@@ -233,7 +233,7 @@ Retrieves a new token for an authorized token request.
 +----------------------------------------------+-----------------+-------------------------------------------------------------------------------------------+
 | [options.allowExtendedTokenAttributes=false] | Boolean         | Allow extended attributes to be set on the returned token (see remarks section).          |
 +----------------------------------------------+-----------------+-------------------------------------------------------------------------------------------+
-| [options.requiresClientAuthentication={}]    | Object          | Require a client secret (see remarks section). Defaults to ``true`` for all grant types.  |
+| [options.requireClientAuthentication={}]     | Object          | Require a client secret (see remarks section). Defaults to ``true`` for all grant types.  |
 +----------------------------------------------+-----------------+-------------------------------------------------------------------------------------------+
 | [options.alwaysIssueNewRefreshToken=true]    | Boolean         | Always revoke the used refresh token and issue a new one for the ``refresh_token`` grant. |
 +----------------------------------------------+-----------------+-------------------------------------------------------------------------------------------+
@@ -258,7 +258,7 @@ The returned ``Promise`` **must** be ignored if ``callback`` is used.
 
 If ``options.allowExtendedTokenAttributes`` is ``true`` any additional properties set on the object returned from :ref:`Model#saveToken() <Model#saveToken>` are copied to the token response sent to the client.
 
-.. todo:: ``options.requiresClientAuthentication``
+.. todo:: ``options.requireClientAuthentication``
 
 ``options.extendedGrantTypes`` is an object mapping extension grant URIs to handler types, for example:
 
