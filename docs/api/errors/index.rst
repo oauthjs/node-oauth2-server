@@ -23,6 +23,7 @@ Noteable error types:
    server-error
    invalid-argument-error
    access-denied-error
+   insufficient-scope-error
    invalid-client-error
    invalid-grant-error
    invalid-request-error
