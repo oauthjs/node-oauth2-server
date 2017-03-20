@@ -32,4 +32,5 @@ Noteable error types:
    unauthorized-client-error
    unauthorized-request-error
    unsupported-grant-type-error
+   unsupported-response-type-error
 
