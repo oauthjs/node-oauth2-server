@@ -111,6 +111,23 @@ describe('AuthenticateHandler', function() {
       }
       failed.should.equal(true);
     });
+
+    it('should succeed if token has valid `accessTokenExpiresAt` date', function() {
+      var model = {
+        getAccessToken: sinon.stub().returns({
+          user: {},
+          accessTokenExpiresAt: new Date()
+        })
+      };
+      var handler = new AuthenticateHandler({ model: model });
+
+      try {
+        handler.validateAccessToken(model.getAccessToken);
+      }
+      catch (err) {
+        should.fail();
+      }
+    });
   });
 
   describe('verifyScope()', function() {
