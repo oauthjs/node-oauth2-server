@@ -180,7 +180,10 @@ describe('AuthorizeHandler integration', function() {
     it('should redirect to an error response if a non-oauth error is thrown', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -215,7 +218,10 @@ describe('AuthorizeHandler integration', function() {
     it('should redirect to an error response if an oauth error is thrown', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -251,7 +257,11 @@ describe('AuthorizeHandler integration', function() {
       var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
         getAccessToken: function() {
-          return { client: client, user: {} };
+          return {
+            client: client,
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return client;
@@ -286,7 +296,10 @@ describe('AuthorizeHandler integration', function() {
     it('should redirect to an error response if `scope` is invalid', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -322,7 +335,10 @@ describe('AuthorizeHandler integration', function() {
     it('should redirect to an error response if `state` is missing', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -355,7 +371,10 @@ describe('AuthorizeHandler integration', function() {
     it('should redirect to an error response if `response_type` is invalid', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -390,7 +409,10 @@ describe('AuthorizeHandler integration', function() {
     it('should fail on invalid `response_type` before calling model.saveAuthorizationCode()', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -426,7 +448,11 @@ describe('AuthorizeHandler integration', function() {
       var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
         getAccessToken: function() {
-          return { client: client, user: {} };
+          return {
+            client: client,
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return client;
@@ -889,7 +915,10 @@ describe('AuthorizeHandler integration', function() {
       var user = {};
       var model = {
         getAccessToken: function() {
-          return { user: user };
+          return {
+            user: user,
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {},
         saveAuthorizationCode: function() {}

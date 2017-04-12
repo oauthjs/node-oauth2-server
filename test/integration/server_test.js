@@ -40,7 +40,10 @@ describe('Server integration', function() {
     it('should set the default `options`', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         }
       };
       var server = new Server({ model: model });
@@ -59,7 +62,10 @@ describe('Server integration', function() {
     it('should return a promise', function() {
       var model = {
         getAccessToken: function(token, callback) {
-          callback(null, { user: {} });
+          callback(null, {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          });
         }
       };
       var server = new Server({ model: model });
@@ -73,7 +79,10 @@ describe('Server integration', function() {
     it('should support callbacks', function(next) {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         }
       };
       var server = new Server({ model: model });
@@ -88,7 +97,10 @@ describe('Server integration', function() {
     it('should set the default `options`', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -112,7 +124,10 @@ describe('Server integration', function() {
     it('should return a promise', function() {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
@@ -132,7 +147,10 @@ describe('Server integration', function() {
     it('should support callbacks', function(next) {
       var model = {
         getAccessToken: function() {
-          return { user: {} };
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
         },
         getClient: function() {
           return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
