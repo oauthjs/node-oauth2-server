@@ -97,13 +97,15 @@ describe('AuthenticateHandler', function() {
   describe('validateAccessToken()', function() {
     it('should fail if token has no valid `accessTokenExpiresAt` date', function() {
       var model = {
-        getAccessToken: sinon.stub().returns({ user: {} })
+        getAccessToken: function() {}
       };
       var handler = new AuthenticateHandler({ model: model });
 
       var failed = false;
       try {
-        handler.validateAccessToken(model.getAccessToken);
+        handler.validateAccessToken({
+          user: {}
+        });
       }
       catch (err) {
         err.should.be.an.instanceOf(ServerError);
@@ -114,15 +116,14 @@ describe('AuthenticateHandler', function() {
 
     it('should succeed if token has valid `accessTokenExpiresAt` date', function() {
       var model = {
-        getAccessToken: sinon.stub().returns({
-          user: {},
-          accessTokenExpiresAt: new Date()
-        })
+        getAccessToken: function() {}
       };
       var handler = new AuthenticateHandler({ model: model });
-
       try {
-        handler.validateAccessToken(model.getAccessToken);
+        handler.validateAccessToken({
+          user: {},
+          accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+        });
       }
       catch (err) {
         should.fail();
