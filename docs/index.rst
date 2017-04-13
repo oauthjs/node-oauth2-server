@@ -57,6 +57,7 @@ See the :doc:`/model/spec` of what is required from the model passed to :doc:`/a
    :hidden:
 
    docs/getting-started
+   docs/adapters
 
 .. toctree::
    :maxdepth: 2
