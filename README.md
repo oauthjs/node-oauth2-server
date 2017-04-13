@@ -3,6 +3,7 @@ Complete, compliant and well tested module for implementing an OAuth2 server in 
   [![NPM Version][npm-image]][npm-url]
   [![Build Status][travis-image]][travis-url]
   [![NPM Downloads][downloads-image]][downloads-url]
+  [![Slack](https://slack.minio.io/slack?type=svg)](https://oauthjs.slack.com)
 
 # Quick Start
 
