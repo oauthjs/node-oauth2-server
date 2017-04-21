@@ -118,9 +118,9 @@ See :doc:`/misc/extension-grants`.
 Request Authentication
 ======================
 
-.. todo:: Add a short description of request authentication.
+See :rfc:`Section 2 of RFC 6750 <6750#section-2>`.
 
-.. todo:: Reference :rfc:`6750`.
+The authorization server authenticates requests sent to the resource server by verifying the included bearer token.
 
 Model functions used during request authentication:
 
