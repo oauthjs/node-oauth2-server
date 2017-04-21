@@ -258,7 +258,15 @@ The returned ``Promise`` **must** be ignored if ``callback`` is used.
 
 If ``options.allowExtendedTokenAttributes`` is ``true`` any additional properties set on the object returned from :ref:`Model#saveToken() <Model#saveToken>` are copied to the token response sent to the client.
 
-.. todo:: ``options.requireClientAuthentication``
+By default all grant types require the client to send it's ``client_secret`` with the token request. ``options.requireClientAuthentication`` can be used to disable this check for selected grants. If used, this server option must be an object containing properties set to ``true`` or ``false``. Possible keys for the object include all supported values for the token request's ``grant_type`` field (``authorization_code``, ``client_credentials``, ``password`` and ``refresh_token``). Grants that are not specified default to ``true`` which enables verification of the ``client_secret``.
+
+::
+
+  let options = {
+    // ...
+    // Allow token requests using the password grant to not include a client_secret.
+    requireClientAuthentication: {password: false}
+  };
 
 ``options.extendedGrantTypes`` is an object mapping extension grant URIs to handler types, for example:
 
