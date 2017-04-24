@@ -169,7 +169,10 @@ describe('AuthenticateHandler integration', function() {
     });
 
     it('should return an access token', function() {
-      var accessToken = { user: {} };
+      var accessToken = {
+        user: {},
+        accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+      };
       var model = {
         getAccessToken: function() {
           return accessToken;
@@ -439,7 +442,10 @@ describe('AuthenticateHandler integration', function() {
     });
 
     it('should return an access token', function() {
-      var accessToken = { user: {} };
+      var accessToken = {
+        user: {},
+        accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+      };
       var handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
 
       handler.validateAccessToken(accessToken).should.equal(accessToken);

@@ -8,6 +8,7 @@ var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
 var Request = require('../../../lib/request');
 var sinon = require('sinon');
 var should = require('should');
+var ServerError = require('../../../lib/errors/server-error');
 
 /**
  * Test `AuthenticateHandler`.
@@ -90,6 +91,43 @@ describe('AuthenticateHandler', function() {
           model.getAccessToken.firstCall.args[0].should.equal('foo');
         })
         .catch(should.fail);
+    });
+  });
+
+  describe('validateAccessToken()', function() {
+    it('should fail if token has no valid `accessTokenExpiresAt` date', function() {
+      var model = {
+        getAccessToken: function() {}
+      };
+      var handler = new AuthenticateHandler({ model: model });
+
+      var failed = false;
+      try {
+        handler.validateAccessToken({
+          user: {}
+        });
+      }
+      catch (err) {
+        err.should.be.an.instanceOf(ServerError);
+        failed = true;
+      }
+      failed.should.equal(true);
+    });
+
+    it('should succeed if token has valid `accessTokenExpiresAt` date', function() {
+      var model = {
+        getAccessToken: function() {}
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      try {
+        handler.validateAccessToken({
+          user: {},
+          accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+        });
+      }
+      catch (err) {
+        should.fail();
+      }
     });
   });
 
