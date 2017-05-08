@@ -26,9 +26,10 @@ describe('PasswordGrantType', function() {
       return handler.getUser(request)
         .then(function() {
           model.getUser.callCount.should.equal(1);
-          model.getUser.firstCall.args.should.have.length(2);
+          model.getUser.firstCall.args.should.have.length(3);
           model.getUser.firstCall.args[0].should.equal('foo');
           model.getUser.firstCall.args[1].should.equal('bar');
+          model.getUser.firstCall.args[2].should.equal(request);
         })
         .catch(should.fail);
     });
