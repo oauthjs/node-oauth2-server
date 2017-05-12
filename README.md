@@ -38,11 +38,11 @@ Most users should refer to our [Express](https://github.com/oauthjs/express-oaut
 
 Examples for v3 are yet to be made. Examples for v2 can still be found [here](https://github.com/oauthjs/node-oauth2-server/tree/b36a06b445ad0a676e6175d68a8bd0b2f3353dbf/examples).
 
-[//]: # (If you're implementing a custom server, we have many examples available:)
+~~(If you're implementing a custom server, we have many examples available:)~~
 
-[//]: # (- A simple **password** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/password).)
-[//]: # (- A more complex **password** and **refresh_token** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/refresh-token).)
-[//]: # (- An advanced **password**, **refresh_token** and **authorization_code** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/authorization-code) with scopes.)
+~~(- A simple **password** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/password).)~~
+~~(- A more complex **password** and **refresh_token** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/refresh-token).)~~
+~~(- An advanced **password**, **refresh_token** and **authorization_code** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/authorization-code) with scopes.)~~
 
 
 ## Upgrading from 2.x
