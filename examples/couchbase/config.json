@@ -1,0 +1,15 @@
+{
+    "couchbase": {
+        "server": "localhost:8091",
+        "bucket": "default",
+        "password": "password"
+    },
+    "client": {
+        "client_id": "id",
+        "client_secret": "secret"
+    },
+    "oauth": {
+    	"accessTokenLifetime": 3600,
+    	"refreshTokenLifetime": 1209600
+    }
+}
