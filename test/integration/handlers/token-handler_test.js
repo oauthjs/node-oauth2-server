@@ -553,6 +553,38 @@ describe('TokenHandler integration', function() {
       });
     });
 
+    describe('with `password` grant type and `requireClientAuthentication` is false and Authorization header', function() {
+
+      it('should return a client ', function() {
+        var client = { id: 12345, grants: [] };
+        var model = {
+          getClient: function() { return client; },
+          saveToken: function() {}
+        };
+
+        var handler = new TokenHandler({
+          accessTokenLifetime: 120,
+          model: model,
+          refreshTokenLifetime: 120,
+          requireClientAuthentication: {
+            password: false
+          }
+	});
+        var request = new Request({
+	  body: { grant_type: 'password'},
+	  headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
+	  method: {},
+	  query: {}
+	});
+
+        return handler.getClient(request)
+          .then(function(data) {
+            data.should.equal(client);
+          })
+          .catch(should.fail);
+      });
+    });
+
     it('should support promises', function() {
       var model = {
         getClient: function() { return Promise.resolve({ grants: [] }); },
