@@ -89,6 +89,7 @@ describe('AuthenticateHandler', function() {
           model.getAccessToken.callCount.should.equal(1);
           model.getAccessToken.firstCall.args.should.have.length(1);
           model.getAccessToken.firstCall.args[0].should.equal('foo');
+          model.getAccessToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -144,6 +145,7 @@ describe('AuthenticateHandler', function() {
           model.verifyScope.callCount.should.equal(1);
           model.verifyScope.firstCall.args.should.have.length(2);
           model.verifyScope.firstCall.args[0].should.equal('foo', 'bar');
+          model.verifyScope.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });

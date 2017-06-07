@@ -29,6 +29,7 @@ describe('TokenHandler', function() {
           model.getClient.firstCall.args.should.have.length(2);
           model.getClient.firstCall.args[0].should.equal(12345);
           model.getClient.firstCall.args[1].should.equal('secret');
+          model.getClient.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });

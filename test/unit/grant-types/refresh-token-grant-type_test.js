@@ -31,6 +31,7 @@ describe('RefreshTokenGrantType', function() {
           model.revokeToken.callCount.should.equal(1);
           model.revokeToken.firstCall.args.should.have.length(1);
           model.revokeToken.firstCall.args[0].should.equal(token);
+          model.revokeToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -52,6 +53,7 @@ describe('RefreshTokenGrantType', function() {
           model.getRefreshToken.callCount.should.equal(1);
           model.getRefreshToken.firstCall.args.should.have.length(1);
           model.getRefreshToken.firstCall.args[0].should.equal('bar');
+          model.getRefreshToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -72,6 +74,7 @@ describe('RefreshTokenGrantType', function() {
           model.revokeToken.callCount.should.equal(1);
           model.revokeToken.firstCall.args.should.have.length(1);
           model.revokeToken.firstCall.args[0].should.equal(token);
+          model.revokeToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -106,6 +109,7 @@ describe('RefreshTokenGrantType', function() {
           model.revokeToken.callCount.should.equal(1);
           model.revokeToken.firstCall.args.should.have.length(1);
           model.revokeToken.firstCall.args[0].should.equal(token);
+          model.revokeToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -134,6 +138,7 @@ describe('RefreshTokenGrantType', function() {
           model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresAt: 'biz', refreshToken: 'bar', refreshTokenExpiresAt: 'baz', scope: 'foobar' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
+          model.saveToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -160,6 +165,7 @@ describe('RefreshTokenGrantType', function() {
           model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresAt: 'biz', scope: 'foobar' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
+          model.saveToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -186,6 +192,7 @@ describe('RefreshTokenGrantType', function() {
           model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresAt: 'biz', refreshToken: 'bar', refreshTokenExpiresAt: 'baz', scope: 'foobar' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
+          model.saveToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
