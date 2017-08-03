@@ -128,7 +128,7 @@ A ``String`` to be used as refresh token.
 
 .. _Model#generateAuthorizationCode:
 
-``generateAuthorizationCode([callback])``
+``generateAuthorizationCode(client, user, scope, [callback])``
 =========================================
 
 Invoked to generate a new authorization code.
@@ -144,6 +144,12 @@ This model function is **optional**. If not implemented, a default handler is us
 +------------+----------+---------------------------------------------------------------------+
 | Name       | Type     | Description                                                         |
 +============+==========+=====================================================================+
+| client     | Object   | The client the authorization code is generated for.                 |
++------------+----------+---------------------------------------------------------------------+
+| user       | Object   | The user the authorization code is generated for.                   |
++------------+----------+---------------------------------------------------------------------+
+| scope      | String   | The scopes associated with the authorization code. Can be ``null``. |
++------------+----------+---------------------------------------------------------------------+
 | [callback] | Function | Node-style callback to be used instead of the returned ``Promise``. |
 +------------+----------+---------------------------------------------------------------------+
 
