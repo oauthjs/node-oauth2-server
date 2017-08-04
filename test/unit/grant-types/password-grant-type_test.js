@@ -29,6 +29,7 @@ describe('PasswordGrantType', function() {
           model.getUser.firstCall.args.should.have.length(2);
           model.getUser.firstCall.args[0].should.equal('foo');
           model.getUser.firstCall.args[1].should.equal('bar');
+          model.getUser.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -57,6 +58,7 @@ describe('PasswordGrantType', function() {
           model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', accessTokenExpiresAt: 'biz', refreshToken: 'bar', refreshTokenExpiresAt: 'baz', scope: 'foobar' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
+          model.saveToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });

@@ -31,6 +31,7 @@ describe('AuthorizationCodeGrantType', function() {
           model.getAuthorizationCode.callCount.should.equal(1);
           model.getAuthorizationCode.firstCall.args.should.have.length(1);
           model.getAuthorizationCode.firstCall.args[0].should.equal(12345);
+          model.getAuthorizationCode.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -51,6 +52,7 @@ describe('AuthorizationCodeGrantType', function() {
           model.revokeAuthorizationCode.callCount.should.equal(1);
           model.revokeAuthorizationCode.firstCall.args.should.have.length(1);
           model.revokeAuthorizationCode.firstCall.args[0].should.equal(authorizationCode);
+          model.revokeAuthorizationCode.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -80,6 +82,7 @@ describe('AuthorizationCodeGrantType', function() {
           model.saveToken.firstCall.args[0].should.eql({ accessToken: 'foo', authorizationCode: 'foobar', accessTokenExpiresAt: 'biz', refreshToken: 'bar', refreshTokenExpiresAt: 'baz', scope: 'foobiz' });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
+          model.saveToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });

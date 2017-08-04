@@ -23,6 +23,7 @@ describe('AbstractGrantType', function() {
       return handler.generateAccessToken()
         .then(function() {
           model.generateAccessToken.callCount.should.equal(1);
+          model.generateAccessToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
@@ -38,6 +39,7 @@ describe('AbstractGrantType', function() {
       return handler.generateRefreshToken()
         .then(function() {
           model.generateRefreshToken.callCount.should.equal(1);
+          model.generateRefreshToken.firstCall.thisValue.should.equal(model);
         })
         .catch(should.fail);
     });
