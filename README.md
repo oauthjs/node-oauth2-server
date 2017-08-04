@@ -36,20 +36,13 @@ The *oauth2-server* module is framework-agnostic but there are several officiall
 
 Most users should refer to our [Express](https://github.com/oauthjs/express-oauth-server/tree/master/examples) or [Koa](https://github.com/oauthjs/koa-oauth-server/tree/master/examples) examples.
 
-Examples for v3 are yet to be made. Examples for v2 can still be found [here](https://github.com/oauthjs/node-oauth2-server/tree/b36a06b445ad0a676e6175d68a8bd0b2f3353dbf/examples).
-
-~~(If you're implementing a custom server, we have many examples available:)~~
-
-~~(- A simple **password** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/password).)~~
-~~(- A more complex **password** and **refresh_token** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/refresh-token).)~~
-~~(- An advanced **password**, **refresh_token** and **authorization_code** grant [example](https://github.com/oauthjs/node-oauth2-server/tree/master/examples/authorization-code) with scopes.)~~
-
+Examples for v3 are yet to be made. 
 
 ## Upgrading from 2.x
 
-This module has been rewritten using a promise-based approach, introducing changes to the API and model specification.
+This module has been rewritten using a promise-based approach, introducing changes to the API and model specification. v2.x is no longer supported.
 
-Please refer to our [3.0 migration guide](https://github.com/oauthjs/node-oauth2-server/wiki/Migrating-from-2-x-to-3-x) for more information.
+Please refer to our [3.0 migration guide](https://oauth2-server.readthedocs.io/en/latest/misc/migrating-v2-to-v3.html) for more information.
 
 
 ## Tests
