@@ -53,7 +53,7 @@ Model specification
 -------------------
 
 * `generateAccessToken(client, user, scope)` is **optional** and should return a `String`.
-* `generateAuthorizationCode()` is **optional** and should return a _String.
+* `generateAuthorizationCode()` is **optional** and should return a `String`.
 * `generateRefreshToken(client, user, scope)` is **optional** and should return a `String`.
 * `getAccessToken(token)` should return an object with:
     
