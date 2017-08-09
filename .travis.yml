@@ -7,5 +7,7 @@ node_js:
   - 6.0
   - 7
   - 7.0
+  - 8
+  - 8.0
 
 sudo: false
