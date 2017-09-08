@@ -63,6 +63,6 @@ npm test
 [travis-url]: https://travis-ci.org/oauthjs/node-oauth2-server
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg
 [license-url]: https://raw.githubusercontent.com/oauthjs/node-oauth2-server/master/LICENSE
-[slack-image]: https://img.shields.io/badge/slack-join-E01563.svg
-[slack-url]: https://oauthjs.slack.com
+[slack-image]: https://slack.oauthjs.org/badge.svg
+[slack-url]: https://slack.oauthjs.org
 
