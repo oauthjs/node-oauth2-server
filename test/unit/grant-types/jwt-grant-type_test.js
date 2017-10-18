@@ -24,7 +24,7 @@ describe('JWTGrantType', function() {
       };
       var handler = new JWTGrantType({ accessTokenLifetime: 120, model: model });
       var request = new Request(requestData);
-      var clientData = {jwtPublicCert:"test"};
+      var clientData = {jwtPublicCert:'test'};
       return handler.getToken(request, clientData)
         .then(function() {
           model.getToken.callCount.should.equal(1);
@@ -46,7 +46,7 @@ describe('JWTGrantType', function() {
       };
       var handler = new JWTGrantType({ accessTokenLifetime: 120, model: model });
       var request = new Request(requestData);
-      var clientData = {jwtPublicCert:"test"};
+      var clientData = {jwtPublicCert:'test'};
       var tokenData = {sub:'john@example.com'};
 
       return handler.getUser(request, clientData, tokenData)
