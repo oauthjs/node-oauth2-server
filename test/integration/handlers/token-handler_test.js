@@ -114,6 +114,16 @@ describe('TokenHandler integration', function() {
       handler.alwaysIssueNewRefreshToken.should.equal(true);
     });
 
+    it('should set the `PKCEEnabled` to true', function() {
+      var model = {
+        getClient: function() {},
+        saveToken: function() {}
+      };
+      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, PKCEEnabled: true });
+
+      handler.PKCEEnabled.should.equal(true);
+    });
+
     it('should set the `extendedGrantTypes`', function() {
       var extendedGrantTypes = { foo: 'bar' };
       var model = {
@@ -569,19 +579,72 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-	});
+        });
         var request = new Request({
-	  body: { grant_type: 'password'},
-	  headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
-	  method: {},
-	  query: {}
-	});
+          body: { grant_type: 'password' },
+          headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
+          method: {},
+          query: {}
+        });
 
         return handler.getClient(request)
           .then(function(data) {
             data.should.equal(client);
           })
           .catch(should.fail);
+      });
+    });
+    describe('with PKCE enabled', function() {
+      it('should return a client with `isPublic` parameter', function() {
+        var client = { id: 12345, grants: [], isPublic: true };
+        var model = {
+          getClient: function() { return client; },
+          saveToken: function() {}
+        };
+
+        var handler = new TokenHandler({
+          accessTokenLifetime: 120,
+          model: model,
+          refreshTokenLifetime: 120,
+          PKCEEnabled: true
+        });
+        var request = new Request({ body: { client_id: 'foo', client_secret: 'baz', grant_type: 'authorization_code' }, headers: {}, method: {}, query: {} });
+
+        return handler.getClient(request)
+          .then(function(data) {
+            data.should.equal(client);
+          })
+          .catch(should.fail);
+      });
+      it('should throw an error if `client.isPublic` is invalid', function() {
+        var model = {
+          getClient: function() { return { id: 123, grants: [], isPublic: 'foo' }; },
+          saveToken: function() {}
+        };
+        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, PKCEEnabled: true });
+        var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+        return handler.getClient(request)
+          .then(should.fail)
+          .catch(function(e) {
+            e.should.be.an.instanceOf(ServerError);
+            e.message.should.equal('Server error: invalid client, `isPublic` must be a boolean');
+          });
+      });
+      it('should throw an error if `client.isPublic` is missing', function() {
+        var model = {
+          getClient: function() { return { id: 123, grants: [] }; },
+          saveToken: function() {}
+        };
+        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, PKCEEnabled: true });
+        var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+        return handler.getClient(request)
+          .then(should.fail)
+          .catch(function(e) {
+            e.should.be.an.instanceOf(ServerError);
+            e.message.should.equal('Server error: missing client `isPublic`');
+          });
       });
     });
 

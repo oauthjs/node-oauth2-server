@@ -9,8 +9,10 @@ var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error')
 var InvalidGrantError = require('../../../lib/errors/invalid-grant-error');
 var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 var Promise = require('bluebird');
+var crypto = require('crypto');
 var Request = require('../../../lib/request');
 var ServerError = require('../../../lib/errors/server-error');
+var stringUtil = require('../../../lib/utils/string-util');
 var should = require('should');
 
 /**
@@ -359,6 +361,110 @@ describe('AuthorizationCodeGrantType integration', function() {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: `redirect_uri` is not a valid URI');
         });
+    });
+
+    it('should throw an error if the `code_verifier` is invalid', function() {
+      var codeVerifier = stringUtil.base64URLEncode(crypto.randomBytes(32));
+      var authorizationCode = {
+        authorizationCode: 12345,
+        client: { id: 'foobar' },
+        expiresAt: new Date(new Date() * 2),
+        user: {},
+        codeChallengeMethod: 'S256',
+        codeChallenge: stringUtil.base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest())
+      };
+      var client = { id: 'foobar', isPublic: true };
+      var model = {
+        getAuthorizationCode: function() { return authorizationCode; },
+        revokeAuthorizationCode: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var request = new Request({ body: { code: 12345, code_verifier: 'foo' }, headers: {}, method: {}, query: {} });
+
+      return grantType.getAuthorizationCode(request, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidGrantError);
+          e.message.should.equal('Invalid grant: code verifier is invalid');
+        });
+    });
+
+    it('should throw an error if the `code_verifier` is invalid', function() {
+      var authorizationCode = {
+        authorizationCode: 12345,
+        client: { id: 'foobar' },
+        expiresAt: new Date(new Date() * 2),
+        user: {},
+        codeChallengeMethod: 'plain',
+        codeChallenge: 'baz'
+      };
+      var client = { id: 'foobar', isPublic: true };
+      var model = {
+        getAuthorizationCode: function() { return authorizationCode; },
+        revokeAuthorizationCode: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var request = new Request({ body: { code: 12345, code_verifier: 'foo' }, headers: {}, method: {}, query: {} });
+
+      return grantType.getAuthorizationCode(request, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidGrantError);
+          e.message.should.equal('Invalid grant: code verifier is invalid');
+        });
+    });
+
+    it('should return an auth code when `code_verifier` is valid', function() {
+      var codeVerifier = stringUtil.base64URLEncode(crypto.randomBytes(32));
+      var authorizationCode = {
+        authorizationCode: 12345,
+        client: { id: 'foobar', isPublic: true },
+        expiresAt: new Date(new Date() * 2),
+        user: {},
+        codeChallengeMethod: 'S256',
+        codeChallenge: stringUtil.base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest())
+      };
+      var client = { id: 'foobar', isPublic: true };
+      var model = {
+        getAuthorizationCode: function() { return authorizationCode; },
+        revokeAuthorizationCode: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var request = new Request({ body: { code: 12345, code_verifier: codeVerifier }, headers: {}, method: {}, query: {} });
+
+      return grantType.getAuthorizationCode(request, client)
+        .then(function(data) {
+          data.should.equal(authorizationCode);
+        })
+        .catch(should.fail);
+    });
+
+    it('should return an auth code when `code_verifier` is valid', function() {
+      var authorizationCode = {
+        authorizationCode: 12345,
+        client: { id: 'foobar' },
+        expiresAt: new Date(new Date() * 2),
+        user: {},
+        codeChallengeMethod: 'plain',
+        codeChallenge: 'baz'
+      };
+      var client = { id: 'foobar', isPublic: true };
+      var model = {
+        getAuthorizationCode: function() { return authorizationCode; },
+        revokeAuthorizationCode: function() {},
+        saveToken: function() {}
+      };
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var request = new Request({ body: { code: 12345, code_verifier: 'baz' }, headers: {}, method: {}, query: {} });
+
+      return grantType.getAuthorizationCode(request, client)
+        .then(function(data) {
+          data.should.equal(authorizationCode);
+        })
+        .catch(should.fail);
     });
 
     it('should return an auth code', function() {
