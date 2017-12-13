@@ -139,7 +139,7 @@ describe('PasswordGrantType integration', function() {
       var client = { id: 'foobar' };
       var token = {};
       var model = {
-        getUser: function(username, password, callback) { callback(null, {}); },
+        getUser: function(username, password, request, callback) { callback(null, {}); },
         saveToken: function(tokenToSave, client, user, callback) { callback(null, token); }
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
@@ -281,7 +281,7 @@ describe('PasswordGrantType integration', function() {
     it('should support callbacks', function() {
       var user = { email: 'foo@bar.com' };
       var model = {
-        getUser: function(username, password, callback) { callback(null, user); },
+        getUser: function(username, password, request, callback) { callback(null, user); },
         saveToken: function() {}
       };
       var grantType = new PasswordGrantType({ accessTokenLifetime: 123, model: model });
