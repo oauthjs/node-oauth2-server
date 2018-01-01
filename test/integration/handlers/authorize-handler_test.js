@@ -942,7 +942,7 @@ describe('AuthorizeHandler integration', function() {
       }
     });
 
-    it('should throw an error if `response_type` is not `code`', function() {
+    it('should throw an error if `response_type` is not `code` or `token`', function() {
       var model = {
         getAccessToken: function() {},
         getClient: function() {},
