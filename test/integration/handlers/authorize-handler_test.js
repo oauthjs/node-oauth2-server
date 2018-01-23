@@ -159,21 +159,40 @@ describe('AuthorizeHandler integration', function() {
       }
     });
 
-    it('should throw an error if `allowed` is `false`', function() {
+     it('should redirect to an error response if user denied access', function() {
       var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
+        getAccessToken: function() {
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+        },
         saveAuthorizationCode: function() {}
       };
       var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
-      var request = new Request({ body: {}, headers: {}, method: {}, query: { allowed: 'false' } });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        method: {},
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        query: {
+          state: 'foobar',
+          allowed: 'false'
+        }
+      });
       var response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(should.fail)
-        .catch(function(e) {
-          e.should.be.an.instanceOf(AccessDeniedError);
-          e.message.should.equal('Access denied: user denied access to application');
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=access_denied&error_description=Access%20denied%3A%20user%20denied%20access%20to%20application&state=foobar');
         });
     });
 
