@@ -6,6 +6,7 @@
 
 var AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
 var Request = require('../../../lib/request');
+var Response = require('../../../lib/response');
 var sinon = require('sinon');
 var should = require('should');
 var ServerError = require('../../../lib/errors/server-error');
@@ -15,6 +16,39 @@ var ServerError = require('../../../lib/errors/server-error');
  */
 
 describe('AuthenticateHandler', function() {
+  describe('handle()', function() {
+    it('should extend model object with request context', function() {
+      var model = {
+        getAccessToken: sinon.stub().returns({
+          user: 'foo',
+          accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+        }),
+        verifyScope: sinon.stub().returns(true)
+      };
+
+      var handler = new AuthenticateHandler({
+        addAcceptedScopesHeader: true,
+        addAuthorizedScopesHeader: true,
+        model: model,
+        scope: 'bar'
+      });
+      
+      var request = new Request({
+        body: {},
+        headers: { 'Authorization': 'Bearer foo' },
+        method: {},
+        query: {}
+      });
+      var response = new Response({});
+      
+      return handler.handle(request, response)
+        .then(function() {
+          model.request.should.equal(request);
+        })
+        .catch(should.fail);
+    });
+  });
+  
   describe('getTokenFromRequest()', function() {
     describe('with bearer token in the request authorization header', function() {
       it('should call `getTokenFromRequestHeader()`', function() {
