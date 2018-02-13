@@ -532,7 +532,7 @@ describe('AuthorizeHandler integration', function() {
         });
     });
 
-    it('should return the `code` if successful', function() {
+    it('should return the `code` if successful with extend model obj with request', function() {
       var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
         getAccessToken: function() {
@@ -567,6 +567,7 @@ describe('AuthorizeHandler integration', function() {
 
       return handler.handle(request, response)
         .then(function(data) {
+          model.request.should.equal(request);
           data.should.eql({
             authorizationCode: 12345,
             client: client

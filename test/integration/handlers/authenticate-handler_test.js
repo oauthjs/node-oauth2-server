@@ -168,7 +168,7 @@ describe('AuthenticateHandler integration', function() {
         });
     });
 
-    it('should return an access token', function() {
+    it('should return an access token with extend model obj with request', function() {
       var accessToken = {
         user: {},
         accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
@@ -192,6 +192,7 @@ describe('AuthenticateHandler integration', function() {
 
       return handler.handle(request, response)
         .then(function(data) {
+          model.request.should.equal(request);
           data.should.equal(accessToken);
         })
         .catch(should.fail);
