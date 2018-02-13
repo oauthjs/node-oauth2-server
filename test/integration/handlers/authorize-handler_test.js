@@ -332,6 +332,94 @@ describe('AuthorizeHandler integration', function() {
         });
     });
 
+    it('should redirect to a successful response if `model.validateScope` is not defined', function() {
+      var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+      var model = {
+        getAccessToken: function() {
+          return {
+            client: client,
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
+        },
+        getClient: function() {
+          return client;
+        },
+        saveAuthorizationCode: function() {
+          return { authorizationCode: 12345, client: client };
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          scope: 'read',
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(function(data) {
+          data.should.eql({
+            authorizationCode: 12345,
+            client: client
+          });
+        })
+        .catch(should.fail);
+    });
+
+    it('should redirect to an error response if `scope` is insufficient', function() {
+      var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+      var model = {
+        getAccessToken: function() {
+          return {
+            client: client,
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
+        },
+        getClient: function() {
+          return client;
+        },
+        saveAuthorizationCode: function() {
+          return { authorizationCode: 12345, client: client };
+        },
+        validateScope: function() {
+          return false;
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          scope: 'read',
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?error=invalid_scope&error_description=Invalid%20scope%3A%20Requested%20scope%20is%20invalid');
+        });
+    });
+
     it('should redirect to an error response if `state` is missing', function() {
       var model = {
         getAccessToken: function() {
