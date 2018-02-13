@@ -5,6 +5,7 @@
  */
 
 var Request = require('../../../lib/request');
+var Response = require('../../../lib/response');
 var TokenHandler = require('../../../lib/handlers/token-handler');
 var sinon = require('sinon');
 var should = require('should');
@@ -14,6 +15,42 @@ var should = require('should');
  */
 
 describe('TokenHandler', function() {
+  describe('handle()', function() {
+    it('should extend model object with request context', function() {
+      var model = {
+        getClient: sinon.stub().returns({ grants: ['client_credentials'] }),
+        getUserFromClient: sinon.stub().returns({}),
+        saveToken: sinon.stub().returns({
+          accessToken: '123',
+          client: {},
+          user: {},
+          accessTokenExpiresAt: new Date(new Date().getTime() + 10000),
+          refreshTokenExpiresAt: new Date(new Date().getTime() + 10000)
+        }),
+      };
+
+      var handler = new TokenHandler({
+        accessTokenLifetime: 123,
+        refreshTokenLifetime: 123,
+        model: model,
+      });
+      
+      var request = new Request({
+        method: 'POST',
+        body: { 'grant_type': 'client_credentials', 'client_id': 'abc', 'client_secret': 'xyz' },
+        headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' },
+        query: {}
+      });
+      var response = new Response({});
+      
+      return handler.handle(request, response)
+        .then(function() {
+          model.request.should.equal(request);
+        })
+        .catch(should.fail);
+    });
+  });
+
   describe('getClient()', function() {
     it('should call `model.getClient()`', function() {
       var model = {
