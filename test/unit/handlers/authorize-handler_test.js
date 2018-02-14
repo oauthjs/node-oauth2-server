@@ -50,25 +50,6 @@ describe('AuthorizeHandler', function() {
     });
   });
 
-  describe('generateAuthorizationCode()', function() {
-    it('should call `model.generateAuthorizationCode()`', function() {
-      var model = {
-        generateAuthorizationCode: sinon.stub().returns({}),
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthorizationCode: function() {}
-      };
-      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
-
-      return handler.generateAuthorizationCode()
-        .then(function() {
-          model.generateAuthorizationCode.callCount.should.equal(1);
-          model.generateAuthorizationCode.firstCall.thisValue.should.equal(model);
-        })
-        .catch(should.fail);
-    });
-  });
-
   describe('getClient()', function() {
     it('should call `model.getClient()`', function() {
       var model = {
