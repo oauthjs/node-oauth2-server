@@ -14,7 +14,7 @@ var should = require('should');
  * Test `ImplicitGrantType` integration.
  */
 
-describe.only('ImplicitGrantType integration', function() {
+describe('ImplicitGrantType integration', function() {
   describe('constructor()', function() {
     it('should throw an error if `model` is missing', function() {
       try {
