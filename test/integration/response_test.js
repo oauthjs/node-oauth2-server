@@ -29,6 +29,14 @@ describe('Response integration', function() {
 
       response.status.should.equal(200);
     });
+
+    it('should set the `headers` with Object.create(null)', function() {
+      var headers = Object.create(null);
+      headers.foo = 'bar';
+      var response = new Response({ body: {}, headers: headers });
+
+      response.headers.should.eql({ foo: 'bar' });
+    });
   });
 
   describe('get()', function() {
