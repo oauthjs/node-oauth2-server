@@ -195,7 +195,7 @@ An ``Object`` representing the access token and associated data.
 +------------------------------+--------+--------------------------------------------------+
 | token.accessToken            | String | The access token passed to ``getAccessToken()``. |
 +------------------------------+--------+--------------------------------------------------+
-| [token.accessTokenExpiresAt] | Date   | The expiry time of the access token.             |
+| token.accessTokenExpiresAt   | Date   | The expiry time of the access token.             |
 +------------------------------+--------+--------------------------------------------------+
 | [token.scope]                | String | The authorized scope of the access token.        |
 +------------------------------+--------+--------------------------------------------------+
