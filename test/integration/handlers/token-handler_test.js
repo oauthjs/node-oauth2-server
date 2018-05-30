@@ -307,7 +307,7 @@ describe('TokenHandler integration', function() {
         });
     });
 
-    it('should return a bearer token if successful', function() {
+    it('should return a bearer token if successful with extend model obj with request', function() {
       var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {} };
       var model = {
         getClient: function() { return { grants: ['password'] }; },
@@ -333,6 +333,7 @@ describe('TokenHandler integration', function() {
 
       return handler.handle(request, response)
         .then(function(data) {
+          model.request.should.equal(request);
           data.should.eql(token);
         })
         .catch(should.fail);

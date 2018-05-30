@@ -16,6 +16,40 @@ var should = require('should');
  */
 
 describe('AuthorizeHandler', function() {
+  describe('handle()', function() {
+    it('should extend model object with request context', function() {
+      var model = {
+        getClient: sinon.stub().returns({
+          grants: ['authorization_code'],
+          redirectUris: ['/abc']
+        }),
+        saveAuthorizationCode: sinon.stub().returns({ authorizationCode: 'code_abc' })
+      };
+      var handler = new AuthorizeHandler({
+        authenticateHandler: {
+          handle: sinon.stub().returns({ name: 'xyz' })
+        },
+        authorizationCodeLifetime: 123,
+        allowEmptyState: true,
+        model: model
+      });
+      
+      var request = new Request({
+        body: { client_id: '123', response_type: 'code' },
+        headers: {},
+        method: {},
+        query: {}
+      });
+      var response = new Response({});
+      
+      return handler.handle(request, response)
+        .then(function() {
+          model.request.should.equal(request);
+        })
+        .catch(should.fail);
+    });
+  });
+
   describe('generateAuthorizationCode()', function() {
     it('should call `model.generateAuthorizationCode()`', function() {
       var model = {
