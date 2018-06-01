@@ -379,7 +379,7 @@ describe('AuthorizationCodeGrantType integration', function() {
         revokeAuthorizationCode: function() {},
         saveToken: function() {}
       };
-      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { code: 12345, code_verifier: 'foo' }, headers: {}, method: {}, query: {} });
 
       return grantType.getAuthorizationCode(request, client)
@@ -405,7 +405,7 @@ describe('AuthorizationCodeGrantType integration', function() {
         revokeAuthorizationCode: function() {},
         saveToken: function() {}
       };
-      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { code: 12345, code_verifier: 'foo' }, headers: {}, method: {}, query: {} });
 
       return grantType.getAuthorizationCode(request, client)
@@ -432,7 +432,7 @@ describe('AuthorizationCodeGrantType integration', function() {
         revokeAuthorizationCode: function() {},
         saveToken: function() {}
       };
-      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { code: 12345, code_verifier: codeVerifier }, headers: {}, method: {}, query: {} });
 
       return grantType.getAuthorizationCode(request, client)
@@ -457,7 +457,7 @@ describe('AuthorizationCodeGrantType integration', function() {
         revokeAuthorizationCode: function() {},
         saveToken: function() {}
       };
-      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model, PKCEEnabled: true });
+      var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
       var request = new Request({ body: { code: 12345, code_verifier: 'baz' }, headers: {}, method: {}, query: {} });
 
       return grantType.getAuthorizationCode(request, client)

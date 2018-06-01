@@ -783,44 +783,6 @@ describe('AuthorizeHandler integration', function() {
           e.message.should.equal('Invalid client: `redirect_uri` does not match client value');
         });
     });
-    describe('with PKCEEnabled', function() {
-      it('should throw an error if `client.isPublic` is missing`', function() {
-        var model = {
-          getAccessToken: function() {},
-          getClient: function() {
-            return { grants: ['authorization_code'], redirectUris: ['https://example.com'] };
-          },
-          saveAuthorizationCode: function() {}
-        };
-        var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model, PKCEEnabled: true });
-        var request = new Request({ body: { client_id: 12345, response_type: 'code', redirect_uri: 'https://example.com' }, headers: {}, method: {}, query: {} });
-
-        return handler.getClient(request)
-          .then(should.fail)
-          .catch(function(e) {
-            e.should.be.an.instanceOf(InvalidClientError);
-            e.message.should.equal('Invalid client: missing client `isPublic`');
-          });
-      });
-      it('should throw an error if `client.isPublic` is invalid`', function() {
-        var model = {
-          getAccessToken: function() {},
-          getClient: function() {
-            return { grants: ['authorization_code'], redirectUris: ['https://example.com'], isPublic: 'foo' };
-          },
-          saveAuthorizationCode: function() {}
-        };
-        var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model, PKCEEnabled: true });
-        var request = new Request({ body: { client_id: 12345, response_type: 'code', redirect_uri: 'https://example.com' }, headers: {}, method: {}, query: {} });
-
-        return handler.getClient(request)
-          .then(should.fail)
-          .catch(function(e) {
-            e.should.be.an.instanceOf(InvalidClientError);
-            e.message.should.equal('Invalid client: `isPublic` must be a boolean');
-          });
-      });
-    });
 
     it('should support promises', function() {
       var model = {
