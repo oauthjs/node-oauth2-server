@@ -54,6 +54,11 @@ npm install
 npm test
 ```
 
+To run the tests on any windows system you need to use:
+
+```bash
+npm run test-windows
+```
 
 [npm-image]: https://img.shields.io/npm/v/oauth2-server.svg
 [npm-url]: https://npmjs.org/package/oauth2-server
