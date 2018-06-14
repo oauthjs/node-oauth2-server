@@ -112,7 +112,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should return a token', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
         getRefreshToken: function() { return token; },
@@ -130,7 +130,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support promises', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var model = {
         getRefreshToken: function() { return Promise.resolve({ accessToken: 'foo', client: { id: 123 }, user: {} }); },
         revokeToken: function() { return Promise.resolve({ accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }); },
@@ -143,7 +143,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support non-promises', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var model = {
         getRefreshToken: function() { return { accessToken: 'foo', client: { id: 123 }, user: {} }; },
         revokeToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }; },
@@ -156,7 +156,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support callbacks', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var model = {
         getRefreshToken: function(refreshToken, callback) { callback(null, { accessToken: 'foo', client: { id: 123 }, user: {} }); },
         revokeToken: function(refreshToken, callback) { callback(null, { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }); },
@@ -191,7 +191,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should throw an error if `refreshToken` is not found', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var model = {
         getRefreshToken: function() { return; },
         revokeToken: function() {},
@@ -247,7 +247,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should throw an error if the client id does not match', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var model = {
         getRefreshToken: function() {
           return { accessToken: 'foo', client: { id: 456 }, user: {} };
@@ -309,7 +309,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should throw an error if `refresh_token` is expired', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var date = new Date(new Date() / 2);
       var model = {
         getRefreshToken: function() {
@@ -330,7 +330,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should throw an error if `refreshTokenExpiresAt` is not a date value', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var model = {
         getRefreshToken: function() {
           return { accessToken: 'foo', client: { id: 123 }, refreshTokenExpiresAt: 'stringvalue', user: {} };
@@ -350,7 +350,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should return a token', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
         getRefreshToken: function() { return token; },
@@ -368,7 +368,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support promises', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
         getRefreshToken: function() { return Promise.resolve(token); },
@@ -382,7 +382,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support non-promises', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
         getRefreshToken: function() { return token; },
@@ -396,7 +396,7 @@ describe('RefreshTokenGrantType integration', function() {
     });
 
     it('should support callbacks', function() {
-      var client = { id: 123 };
+      var client = { clientId: 123 };
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
         getRefreshToken: function(refreshToken, callback) { callback(null, token); },
