@@ -120,7 +120,7 @@ describe('CodeResponseType integration', function() {
 
       return handler.generateAuthorizationCode()
         .then(function(data) {
-          data.should.be.a.sha1;
+          data.should.be.a.sha1();
         })
         .catch(should.fail);
     });

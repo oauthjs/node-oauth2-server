@@ -204,7 +204,7 @@ describe('RevokeHandler integration', function() {
           e.message.should.equal('Unhandled exception');
           e.inner.should.be.an.instanceOf(Error);
         });
-      });
+    });
 
     it('should update the response if an error is thrown', function() {
       var model = {

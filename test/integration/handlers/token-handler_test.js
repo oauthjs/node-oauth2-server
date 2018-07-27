@@ -543,7 +543,7 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-       });
+        });
         var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
 
         return handler.getClient(request)
