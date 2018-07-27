@@ -52,9 +52,9 @@ describe('Server integration', function() {
 
       return server.authenticate(request, response)
         .then(function() {
-          this.addAcceptedScopesHeader.should.be.true;
-          this.addAuthorizedScopesHeader.should.be.true;
-          this.allowBearerTokensInQueryString.should.be.false;
+          this.addAcceptedScopesHeader.should.be.true();
+          this.addAuthorizedScopesHeader.should.be.true();
+          this.allowBearerTokensInQueryString.should.be.false();
         })
         .catch(should.fail);
     });
@@ -115,7 +115,7 @@ describe('Server integration', function() {
 
       return server.authorize(request, response)
         .then(function() {
-          this.allowEmptyState.should.be.false;
+          this.allowEmptyState.should.be.false();
         })
         .catch(should.fail);
     });
@@ -224,7 +224,7 @@ describe('Server integration', function() {
           return { accessToken: 1234, client: {}, user: {} };
         },
         validateScope: function() {
-            return 'foo';
+          return 'foo';
         }
       };
       var server = new Server({ model: model });

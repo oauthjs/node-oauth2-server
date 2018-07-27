@@ -35,7 +35,7 @@ describe('Response integration', function() {
     it('should return `undefined` if the field does not exist', function() {
       var response = new Response({ body: {}, headers: {} });
 
-      (undefined === response.get('content-type')).should.be.true;
+      (undefined === response.get('content-type')).should.be.true();
     });
 
     it('should return the value if the field exists', function() {
