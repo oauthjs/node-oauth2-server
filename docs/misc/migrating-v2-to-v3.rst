@@ -40,7 +40,11 @@ The following server options can be set when instantiating the OAuth service:
 * `allowExtendedTokenAttributes`: **default false** Allows additional attributes (such as `id_token`) to be included in token responses.
 * `requireClientAuthentication`: **default true for all grant types** Allow ability to set client/secret authentication to `false` for a specific grant type.   
 
-The following server options have been removed in v3.0.0
+The following server options have changed behavior in v3.0.0:
+
+ * `accessTokenLifetime` can no longer be set to `null` to indicate a non-expiring token. The recommend alternative is to set accessTokenLifetime to a high value.
+
+The following server options have been removed in v3.0.0:
 
 * `grants`: **removed** (now returned by the `getClient` method).
 * `debug`: **removed** (not the responsibility of this module).
