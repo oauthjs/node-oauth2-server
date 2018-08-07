@@ -234,7 +234,7 @@ describe('RevokeHandler integration', function() {
         .then(should.fail)
         .catch(function() {
           response.body.should.eql({ error: 'server_error', error_description: 'Unhandled exception' });
-          response.status.should.equal(503);
+          response.status.should.equal(500);
         });
     });
 
@@ -434,6 +434,21 @@ describe('RevokeHandler integration', function() {
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
 
+    it('should support callbacks', function() {
+      var model = {
+        getClient: function(clientId, clientSecret, callback) {
+          callback(null, { grants: [] });
+        },
+        revokeToken: function() {},
+        getRefreshToken: function() {},
+        getAccessToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+
+      handler.getClient(request).should.be.an.instanceOf(Promise);
+    });
+
     it('should support non-promises', function() {
       var model = {
         getClient: function() { return { grants: [] }; },
@@ -607,11 +622,12 @@ describe('RevokeHandler integration', function() {
     });
 
     it('should throw an error if the `client_id` does not match', function() {
-      var client = { id: 12345 };
+      var client = { id: 'foo' };
+      var token = { refreshToken: 'hash', client: { id: 'baz'}, user: {}, refreshTokenExpiresAt: new Date(new Date() * 2) };
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function() { return { client: { id: 9999}, user: {} }; },
+        getRefreshToken: function() { return token; },
         getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
@@ -623,6 +639,121 @@ describe('RevokeHandler integration', function() {
           e.message.should.equal('Invalid token: refresh token client is invalid');
         });
     });
+
+    it('should return a token', function() {
+      var client = { id: 'foo' };
+      var token = { refreshToken: 'hash', client: { id: 'foo'}, user: {}, refreshTokenExpiresAt: new Date(new Date() * 2) };
+      var model = {
+        getClient: function() {},
+        revokeToken: function() {},
+        getRefreshToken: function() { return token; },
+        getAccessToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.getRefreshToken('hash', client)
+        .then(function(token) {
+          should.exist(token);
+        })
+        .catch(should.fail);
+    });
+
+    it('should support callbacks', function() {
+      var client = { id: 'foo' };
+      var token = { refreshToken: 'hash', client: { id: 'foo'}, user: {}, refreshTokenExpiresAt: new Date(new Date() * 2) };
+      var model = {
+        getClient: function() {},
+        revokeToken: function() {},
+        getRefreshToken: function(refreshToken, callback) {
+          callback(null, token);
+        },
+        getAccessToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.getRefreshToken('hash', client)
+        .then(function(token) {
+          should.exist(token);
+        })
+        .catch(should.fail);
+    });
+  });
+
+  describe('getAccessToken()', function() {
+    it('should throw an error if the `accessToken` is invalid', function() {
+      var client = {};
+      var model = {
+        getClient: function() {},
+        revokeToken: function() {},
+        getAccessToken: function() {},
+        getRefreshToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.getAccessToken('hash', client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: access token is invalid');
+        });
+    });
+
+    it('should throw an error if the `client_id` does not match', function() {
+      var client = { id: 'foo' };
+      var token = { accessToken: 'hash', client: { id: 'baz'}, user: {}, accessTokenExpiresAt: new Date(new Date() * 2) };
+      var model = {
+        getClient: function() {},
+        revokeToken: function() {},
+        getAccessToken: function() { return token; },
+        getRefreshToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.getAccessToken('hash', client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: access token client is invalid');
+        });
+    });
+
+    it('should return a token', function() {
+      var client = { id: 'foo' };
+      var token = { accessToken: 'hash', client: { id: 'foo'}, user: {}, accessTokenExpiresAt: new Date(new Date() * 2) };
+      var model = {
+        getClient: function() {},
+        revokeToken: function() {},
+        getAccessToken: function() { return token; },
+        getRefreshToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.getAccessToken('hash', client)
+        .then(function(token) {
+          should.exist(token);
+        })
+        .catch(should.fail);
+    });
+
+    it('should support callbacks', function() {
+      var client = { id: 'foo' };
+      var token = { accessToken: 'hash', client: { id: 'foo'}, user: {}, accessTokenExpiresAt: new Date(new Date() * 2) };
+      var model = {
+        getClient: function() {},
+        revokeToken: function() {},
+        getAccessToken: function(accessToken, callback) {
+          callback(null, token);
+        },
+        getRefreshToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.getAccessToken('hash', client)
+        .then(function(token) {
+          should.exist(token);
+        })
+        .catch(should.fail);
+    });
   });
 
   describe('revokeToken()', function() {
@@ -633,6 +764,29 @@ describe('RevokeHandler integration', function() {
         getClient: function() {},
         revokeToken: function() { return false; },
         getRefreshToken: function() { return { client: {}, user: {}};},
+        getAccessToken: function() {}
+      };
+      var handler = new RevokeHandler({ model: model });
+
+      return handler.revokeToken(token, client)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(InvalidTokenError);
+          e.message.should.equal('Invalid token: token is invalid');
+        });
+    });
+
+    it('should support callbacks', function() {
+      var token = {};
+      var client = {};
+      var model = {
+        getClient: function() {},
+        revokeToken: function(tokenObject, callback) {
+          callback(null, null);
+        },
+        getRefreshToken: function(refreshToken, callback) {
+          callback(null, { client: {}, user: {}});
+        },
         getAccessToken: function() {}
       };
       var handler = new RevokeHandler({ model: model });
