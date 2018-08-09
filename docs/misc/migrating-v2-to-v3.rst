@@ -28,19 +28,23 @@ The naming of the exposed middlewares has changed to match the OAuth2 _RFC_ more
 Server options
 --------------
 
-The following server options can be set when instantiating the OAuth service:  
+The following server options can be set when instantiating the OAuth service:
 
 * `addAcceptedScopesHeader`: **default true** Add the `X-Accepted-OAuth-Scopes` header with a list of scopes that will be accepted
 * `addAuthorizedScopesHeader`: **default true** Add the `X-OAuth-Scopes` header with a list of scopes that the user is authorized for
 * `allowBearerTokensInQueryString`: **default false** Determine if the bearer token can be included in the query string (i.e. `?access_token=`) for validation calls
 * `allowEmptyState`: **default false** If true, `state` can be empty or not passed.  If false, `state` is required.
-* `authorizationCodeLifetime`: **default 300** Default number of milliseconds that the authorization code is active for
-* `accessTokenLifetime`: **default 3600** Default number of milliseconds that an access token is valid for
-* `refreshTokenLifetime`: **default 1209600** Default number of milliseconds that a refresh token is valid for
+* `authorizationCodeLifetime`: **default 300** Default number of seconds that the authorization code is active for
+* `accessTokenLifetime`: **default 3600** Default number of seconds that an access token is valid for
+* `refreshTokenLifetime`: **default 1209600** Default number of seconds that a refresh token is valid for
 * `allowExtendedTokenAttributes`: **default false** Allows additional attributes (such as `id_token`) to be included in token responses.
-* `requireClientAuthentication`: **default true for all grant types** Allow ability to set client/secret authentication to `false` for a specific grant type.   
+* `requireClientAuthentication`: **default true for all grant types** Allow ability to set client/secret authentication to `false` for a specific grant type.
 
-The following server options have been removed in v3.0.0
+The following server options have changed behavior in v3.0.0:
+
+ * `accessTokenLifetime` can no longer be set to `null` to indicate a non-expiring token. The recommend alternative is to set accessTokenLifetime to a high value.
+
+The following server options have been removed in v3.0.0:
 
 * `grants`: **removed** (now returned by the `getClient` method).
 * `debug`: **removed** (not the responsibility of this module).
@@ -56,7 +60,7 @@ Model specification
 * `generateAuthorizationCode()` is **optional** and should return a `String`.
 * `generateRefreshToken(client, user, scope)` is **optional** and should return a `String`.
 * `getAccessToken(token)` should return an object with:
-    
+
   * `accessToken` (`String`)
   * `accessTokenExpiresAt` (`Date`)
   * `client` (`Object`),  containing at least an `id` property that matches the supplied client
@@ -71,7 +75,7 @@ Model specification
   * `user` (`Object`)
 
 * `getClient(clientId, clientSecret)` should return an object with, at minimum:
-  
+
   * `redirectUris` (`Array`)
   * `grants` (`Array`)
 
@@ -84,11 +88,11 @@ Model specification
   * `user` (`Object`)
 
 * `getUser(username, password)` should return an object:
- 
+
   * No longer requires that `id` be returned.
 
 * `getUserFromClient(client)` should return an object:
-    
+
   * No longer requires that `id` be returned.
 
 * `grantTypeAllowed()` was **removed**. You can instead:

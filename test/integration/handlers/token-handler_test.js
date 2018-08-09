@@ -293,7 +293,7 @@ describe('TokenHandler integration', function() {
         .then(should.fail)
         .catch(function() {
           response.body.should.eql({ error: 'server_error', error_description: 'Unhandled exception' });
-          response.status.should.equal(503);
+          response.status.should.equal(500);
         });
     });
 

@@ -116,7 +116,6 @@ describe('Server integration', function() {
       return server.authorize(request, response)
         .then(function() {
           this.allowEmptyState.should.be.false;
-          this.authorizationCodeLifetime.should.equal(300);
         })
         .catch(should.fail);
     });
