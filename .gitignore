@@ -2,4 +2,35 @@ node_modules/
 docs/_build/
 __pycache__/
 *.pyc
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.iml
 
+.idea
+.jshint
+.DS_Store
+
+pids
+logs
+results
+
+lib/dockerImage/keys
+coverage
+npm-debug.log*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
