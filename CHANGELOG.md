@@ -1,5 +1,17 @@
 ## Changelog
 
+### 3.1.0
+* new: .npmignore tests
+* fix: validate requested scope on authorize request
+* fix: always issue correct expiry dates for tokens
+* fix: set numArgs for promisify of generateAuthorizationCode
+* fix: Changed 'hasOwnProperty' call in Response
+* docs: Ensure accessTokenExpiresAt is required
+* docs: Add missing notice of breaking change for accessExpireLifetime to migration guide
+* docs: Correct tokens time scale for 2.x to 3.x  migration guide
+* readme: Update Slack badge and link
+* readme: Fix link to RFC6750 standard
+
 ### 3.0.2 (24/05/2020)
 
 * Update all dependencies 🎉
