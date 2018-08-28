@@ -249,6 +249,46 @@ describe('AuthorizeHandler integration', function() {
         .catch(should.fail);
     });
 
+
+    it('given an implicit grant flow, should redirect to a successful response with `token` and `state` if successful', function() {
+      var client = { grants: ['implicit'], redirectUris: ['http://example.com/cb'] };
+      var token = { accessToken: 'foobar-token' }
+      var model = {
+        getAccessToken: function() {
+          return {
+            client: client,
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
+        },
+        getClient: function() {
+          return client;
+        },
+        saveToken: function() { return token; }
+      };
+      var handler = new AuthorizeHandler({ accessTokenLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          client_id: 12345,
+          response_type: 'token',
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(function() {
+          response.get('location').should.equal('http://example.com/cb#access_token=foobar-token&state=foobar');
+        })
+        .catch(should.fail);
+    });
+
     it('should redirect to an error response if `scope` is invalid', function() {
       var model = {
         getAccessToken: function() {
