@@ -36,6 +36,10 @@
     {
       "name": "Jonathon Hill",
       "email": "jhill9693@gmail.com"
+    },
+    {
+      "name": "Marco Lüthy",
+      "email": "marco.luethy@gmail.com"
     }
   ],
   "main": "index.js",
