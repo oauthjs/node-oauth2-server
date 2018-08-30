@@ -44,4 +44,27 @@ describe('AbstractGrantType', function() {
         .catch(should.fail);
     });
   });
+
+  describe('getAccessTokenExpiresAt()', function() {
+    it('should return null if the token does not expire', function() {
+      var model = {};
+      var handler = new AbstractGrantType({ accessTokenLifetime: null, model: model });
+
+      const result = handler.getAccessTokenExpiresAt();
+
+      should(result).equal(null);
+    });
+  });
+
+  describe('getRefreshTokenExpiresAt()', function() {
+    it('should return null if the token does not expire', function() {
+      var model = {};
+      var handler = new AbstractGrantType({ accessTokenLifetime: 120, refreshTokenLifetime: null, model: model });
+
+      const result = handler.getRefreshTokenExpiresAt();
+
+      should(result).equal(null);
+    });
+  });
+
 });
