@@ -14,6 +14,24 @@ var should = require('should');
  */
 
 describe('TokenHandler', function() {
+  describe('constructor()', function() {
+    it('should allow null refreshTokenLifetime', function() {
+      var model = {
+        getClient: sinon.stub().returns({ grants: ['password'] }),
+        saveToken: function() {}
+      };
+      new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: null });
+
+    });
+    it('should allow null accessTokenLifetime', function() {
+      var model = {
+        getClient: sinon.stub().returns({ grants: ['password'] }),
+        saveToken: function() {}
+      };
+      new TokenHandler({ accessTokenLifetime: null, model: model, refreshTokenLifetime: 120 });
+
+    });
+  });
   describe('getClient()', function() {
     it('should call `model.getClient()`', function() {
       var model = {
