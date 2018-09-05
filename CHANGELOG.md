@@ -5,7 +5,8 @@
 * BREAKING: Remove support for node v4
 * new: Added revoke-handler to revoke access token
 * new: Added implicit grant flow
-* new: Switch from jshint to eslint
+* new: Switch from jshint to eslin
+* fix: authorization_code grant should not be required in implicit flowt
 
 ### 3.1.0
 * new: Added package-lock.json
