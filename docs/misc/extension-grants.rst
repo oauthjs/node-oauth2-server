@@ -22,7 +22,7 @@ Create a subclass of ``AbstractGrantType`` and create methods `handle` and `save
           if (!client) throw new InvalidArgumentError('Missing `client`');
 
           let scope = this.getScope(request);
-          let user = await this.getUser(request);
+          let user = await this.getUserBySomething(request);
 
           return this.saveToken(user, client, scope);
       }
