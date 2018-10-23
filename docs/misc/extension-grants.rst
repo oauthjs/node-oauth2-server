@@ -8,9 +8,10 @@ Create a subclass of ``AbstractGrantType`` and create methods `handle` and `save
 
 .. code-block:: js
 
-  let AbstractGrantType = require('oauth2-server/lib/grant-types/abstract-grant-type');
-  let InvalidArgumentError = require('oauth2-server/lib/errors/invalid-argument-error');
-  let InvalidRequestError = require('oauth2-server/lib/errors/invalid-request-error');
+  const OAuth2Server = require('oauth2-server');
+  const AbstractGrantType = OAuth2Server.AbstractGrantType;
+  const InvalidArgumentError = OAuth2Server.InvalidArgumentError;
+  const InvalidRequestError = OAuth2Server.InvalidRequestError;
 
   class MyCustomGrantType extends AbstractGrantType {
       constructor(opts) {
@@ -36,7 +37,7 @@ Create a subclass of ``AbstractGrantType`` and create methods `handle` and `save
               refreshToken: await this.generateRefreshToken(client, user, scope),
               refreshTokenExpiresAt: this.getRefreshTokenExpiresAt(),
               scope: scope
-          }
+          };
 
           return this.model.saveToken(token, client, user);
       }
@@ -48,6 +49,6 @@ Create a subclass of ``AbstractGrantType`` and create methods `handle` and `save
 
   module.exports = MyCustomGrantType;
 
-Extension grants are registered through `OAuth2Server#token() <https://oauth2-server.readthedocs.io/en/latest/api/oauth2-server.html#token-request-response-options-callback>`_ (``options.extendedGrantTypes``).
+Extension grants are registered through :ref:`OAuth2Server#token() <OAuth2Server#token>` (``options.extendedGrantTypes``).
 
-This might require you to add the new ``grant_type`` into the ``client`` data
+This might require you to approve the new ``grant_type`` for a particular ``client`` if you do checks on valid grant types.
