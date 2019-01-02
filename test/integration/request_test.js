@@ -76,7 +76,7 @@ describe('Request integration', function() {
     it('should return `undefined` if the field does not exist', function() {
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      (undefined === request.get('content-type')).should.be.true;
+      (undefined === request.get('content-type')).should.be.true();
     });
 
     it('should return the value if the field exists', function() {
@@ -147,13 +147,13 @@ describe('Request integration', function() {
         query: {}
       });
 
-      request.is('json').should.be.false;
+      request.is('json').should.be.false();
     });
 
     it('should return `false` if the request has no body', function() {
       var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
-      request.is('text/html').should.be.false;
+      request.is('text/html').should.be.false();
     });
   });
 });

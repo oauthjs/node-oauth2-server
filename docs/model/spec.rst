@@ -195,7 +195,7 @@ An ``Object`` representing the access token and associated data.
 +------------------------------+--------+--------------------------------------------------+
 | token.accessToken            | String | The access token passed to ``getAccessToken()``. |
 +------------------------------+--------+--------------------------------------------------+
-| [token.accessTokenExpiresAt] | Date   | The expiry time of the access token.             |
+| token.accessTokenExpiresAt   | Date   | The expiry time of the access token.             |
 +------------------------------+--------+--------------------------------------------------+
 | [token.scope]                | String | The authorized scope of the access token.        |
 +------------------------------+--------+--------------------------------------------------+
@@ -399,6 +399,7 @@ This model function is **required** for all grant types.
 
 - ``authorization_code`` grant
 - ``client_credentials`` grant
+- ``implicit`` grant
 - ``refresh_token`` grant
 - ``password`` grant
 
@@ -553,6 +554,7 @@ This model function is **required** for all grant types.
 
 - ``authorization_code`` grant
 - ``client_credentials`` grant
+- ``implicit`` grant
 - ``refresh_token`` grant
 - ``password`` grant
 
@@ -865,6 +867,7 @@ This model function is **optional**. If not implemented, any scope is accepted.
 
 - ``authorization_code`` grant
 - ``client_credentials`` grant
+- ``implicit`` grant
 - ``password`` grant
 
 **Arguments:**

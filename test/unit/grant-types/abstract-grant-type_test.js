@@ -50,7 +50,7 @@ describe('AbstractGrantType', function() {
       var model = {};
       var handler = new AbstractGrantType({ accessTokenLifetime: null, model: model });
 
-      const result = handler.getAccessTokenExpiresAt();
+      var result = handler.getAccessTokenExpiresAt();
 
       should(result).equal(null);
     });
@@ -61,7 +61,7 @@ describe('AbstractGrantType', function() {
       var model = {};
       var handler = new AbstractGrantType({ accessTokenLifetime: 120, refreshTokenLifetime: null, model: model });
 
-      const result = handler.getRefreshTokenExpiresAt();
+      var result = handler.getRefreshTokenExpiresAt();
 
       should(result).equal(null);
     });

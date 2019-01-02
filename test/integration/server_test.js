@@ -52,9 +52,9 @@ describe('Server integration', function() {
 
       return server.authenticate(request, response)
         .then(function() {
-          this.addAcceptedScopesHeader.should.be.true;
-          this.addAuthorizedScopesHeader.should.be.true;
-          this.allowBearerTokensInQueryString.should.be.false;
+          this.addAcceptedScopesHeader.should.be.true();
+          this.addAuthorizedScopesHeader.should.be.true();
+          this.allowBearerTokensInQueryString.should.be.false();
         })
         .catch(should.fail);
     });
@@ -115,8 +115,7 @@ describe('Server integration', function() {
 
       return server.authorize(request, response)
         .then(function() {
-          this.allowEmptyState.should.be.false;
-          this.authorizationCodeLifetime.should.equal(300);
+          this.allowEmptyState.should.be.false();
         })
         .catch(should.fail);
     });
@@ -225,7 +224,7 @@ describe('Server integration', function() {
           return { accessToken: 1234, client: {}, user: {} };
         },
         validateScope: function() {
-            return 'foo';
+          return 'foo';
         }
       };
       var server = new Server({ model: model });
@@ -233,6 +232,64 @@ describe('Server integration', function() {
       var response = new Response({ body: {}, headers: {} });
 
       server.token(request, response, null, next);
+    });
+  });
+
+  describe('revoke()', function() {
+
+    it('should return a promise', function() {
+      var model = {
+        getClient: function() {
+          return { id: 1234, grants: ['password'] };
+        },
+        getRefreshToken: function() {
+          return {
+            client: {
+              id: 1234
+            },
+            user: {}
+          };
+        },
+        getAccessToken: function() {
+          return null;
+        },
+        revokeToken: function() {
+          return true;
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', token: 'hash', token_type_hint: 'refresh_token' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+      var handler = server.revoke(request, response);
+
+      handler.should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function(next) {
+      var model = {
+        getClient: function() {
+          return { id: 1234, grants: ['password'] };
+        },
+        getRefreshToken: function() {
+          return {
+            client: {
+              id: 1234
+            },
+            user: {}
+          };
+        },
+        getAccessToken: function() {
+          return null;
+        },
+        revokeToken: function() {
+          return true;
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', token: 'hash', token_type_hint: 'refresh_token' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      server.revoke(request, response, null, next);
     });
   });
 });

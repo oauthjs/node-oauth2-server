@@ -293,11 +293,11 @@ describe('TokenHandler integration', function() {
         .then(should.fail)
         .catch(function() {
           response.body.should.eql({ error: 'server_error', error_description: 'Unhandled exception' });
-          response.status.should.equal(503);
+          response.status.should.equal(500);
         });
     });
 
-    it('should return a bearer token if successful', function() {
+    it('should return a bearer token if successful with extend model obj with request', function() {
       var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {} };
       var model = {
         getClient: function() { return { grants: ['password'] }; },
@@ -323,6 +323,7 @@ describe('TokenHandler integration', function() {
 
       return handler.handle(request, response)
         .then(function(data) {
+          model.request.should.equal(request);
           data.should.eql(token);
         })
         .catch(should.fail);
@@ -542,7 +543,7 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-       });
+        });
         var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
 
         return handler.getClient(request)
@@ -569,13 +570,13 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-	});
+        });
         var request = new Request({
 	  body: { grant_type: 'password'},
 	  headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
 	  method: {},
 	  query: {}
-	});
+        });
 
         return handler.getClient(request)
           .then(function(data) {

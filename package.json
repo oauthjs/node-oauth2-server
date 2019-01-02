@@ -1,43 +1,70 @@
 {
   "name": "oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
-  "version": "3.0.0",
+  "version": "4.0.0-dev.2",
   "keywords": [
     "oauth",
     "oauth2"
   ],
   "contributors": [
-    { "name": "Thom Seddon", "email": "thom@seddonmedia.co.uk" },
-    { "name": "Lars F. Karlström" , "email": "lars@lfk.io" },
-    { "name": "Rui Marinho", "email": "ruipmarinho@gmail.com" },
-    { "name" : "Tiago Ribeiro", "email": "tiago.ribeiro@gmail.com" },
-    { "name": "Michael Salinger", "email": "mjsalinger@gmail.com" },
-    { "name": "Nuno Sousa" },
-    { "name": "Max Truxa" }
+    {
+      "name": "Thom Seddon",
+      "email": "thom@seddonmedia.co.uk"
+    },
+    {
+      "name": "Lars F. Karlström",
+      "email": "lars@lfk.io"
+    },
+    {
+      "name": "Rui Marinho",
+      "email": "ruipmarinho@gmail.com"
+    },
+    {
+      "name": "Tiago Ribeiro",
+      "email": "tiago.ribeiro@gmail.com"
+    },
+    {
+      "name": "Michael Salinger",
+      "email": "mjsalinger@gmail.com"
+    },
+    {
+      "name": "Nuno Sousa"
+    },
+    {
+      "name": "Max Truxa"
+    },
+    {
+      "name": "Jonathon Hill",
+      "email": "jhill9693@gmail.com"
+    },
+    {
+      "name": "Marco Lüthy",
+      "email": "marco.luethy@gmail.com"
+    }
   ],
   "main": "index.js",
   "dependencies": {
-    "basic-auth": "1.1.0",
-    "bluebird": "3.5.0",
-    "lodash": "4.17.4",
-    "promisify-any": "2.0.1",
-    "statuses": "1.3.1",
-    "type-is": "1.6.15"
+    "basic-auth": "^2.0.0",
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.10",
+    "promisify-any": "^2.0.1",
+    "statuses": "^1.5.0",
+    "type-is": "^1.6.16"
   },
   "devDependencies": {
-    "jshint": "2.9.4",
-    "mocha": "3.3.0",
-    "should": "11.2.1",
-    "sinon": "2.3.2"
+    "eslint": "^5.2.0",
+    "mocha": "^5.2.0",
+    "should": "^13.2.3",
+    "sinon": "^6.1.4"
   },
   "license": "MIT",
   "engines": {
-    "node": ">=4.0"
+    "node": ">=6.14"
   },
   "scripts": {
-    "pretest": "./node_modules/.bin/jshint --config ./.jshintrc lib test",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'",
-    "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'"
+    "pretest": "eslint lib test --fix",
+    "test": "NODE_ENV=test mocha 'test/**/*_test.js'",
+    "test-debug": "NODE_ENV=test mocha  --inspect --debug-brk 'test/**/*_test.js'"
   },
   "repository": {
     "type": "git",

@@ -9,6 +9,7 @@ var AuthorizeHandler = require('../../lib/handlers/authorize-handler');
 var Promise = require('bluebird');
 var Server = require('../../lib/server');
 var TokenHandler = require('../../lib/handlers/token-handler');
+var RevokeHandler = require('../../lib/handlers/revoke-handler');
 var sinon = require('sinon');
 
 /**
@@ -85,6 +86,26 @@ describe('Server', function() {
       TokenHandler.prototype.handle.callCount.should.equal(1);
       TokenHandler.prototype.handle.firstCall.args[0].should.equal('foo');
       TokenHandler.prototype.handle.restore();
+    });
+  });
+
+  describe('revoke()', function() {
+    it('should call `handle`', function() {
+      var model = {
+        getClient: function() {},
+        getRefreshToken: function() {},
+        getAccessToken: function() {},
+        revokeToken: function() {}
+      };
+      var server = new Server({ model: model });
+
+      sinon.stub(RevokeHandler.prototype, 'handle').returns(Promise.resolve());
+
+      server.revoke('foo', 'bar');
+
+      RevokeHandler.prototype.handle.callCount.should.equal(1);
+      RevokeHandler.prototype.handle.firstCall.args[0].should.equal('foo');
+      RevokeHandler.prototype.handle.restore();
     });
   });
 });

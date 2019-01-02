@@ -58,6 +58,23 @@ Model functions used by the client credentials grant:
 - :ref:`Model#getUserFromClient`
 - :ref:`Model#saveToken`
 - :ref:`Model#validateScope`
+--------
+
+.. _ImplicitGrant:
+
+Implicit Grant
+------------------------
+
+See :rfc:`Section 4.2 of RFC 6749 <6749#section-4.2>`.
+
+An implicit grant is used to obtain access tokens optimised for public clients known to operate a particular redirection URI. Usually used for browser-based clients implemented in JavaScript.
+
+Model functions used by the implicit grant:
+
+- :ref:`Model#generateAccessToken`
+- :ref:`Model#getClient`
+- :ref:`Model#saveToken`
+- :ref:`Model#validateScope`
 
 --------
 
