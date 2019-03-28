@@ -62,7 +62,7 @@ describe('TokenResponseType integration', function() {
       }
     });
 
-    it('should return the new redirect uri and set `access_token` and `state` in the query', function() {
+    it('should return the new redirect uri and set `access_token`, `token_type`, `expires_in` and `state` in the fragment', function() {
       var responseType = new TokenResponseType({
         accessTokenLifetime: 120,
         model: {}
@@ -71,10 +71,10 @@ describe('TokenResponseType integration', function() {
       responseType.accessToken = 'foobar-token';
       var redirectUri = responseType.buildRedirectUri(url.parse('http://example.com/cb'));
 
-      url.format(redirectUri).should.equal('http://example.com/cb#access_token=foobar-token');
+      url.format(redirectUri).should.equal('http://example.com/cb#access_token=foobar-token&token_type=access_token&expires_in=120');
     });
 
-    it('should return the new redirect uri and append `access_token` and `state` in the query', function() {
+    it('should return the new redirect uri and append `access_token`, `token_type`, `expires_in` and `state` in the fragment', function() {
       var responseType = new TokenResponseType({
         accessTokenLifetime: 120,
         model: {}
@@ -83,7 +83,7 @@ describe('TokenResponseType integration', function() {
       responseType.accessToken = 'foobar-token';
       var redirectUri = responseType.buildRedirectUri(url.parse('http://example.com/cb?foo=bar', true));
 
-      url.format(redirectUri).should.equal('http://example.com/cb?foo=bar#access_token=foobar-token');
+      url.format(redirectUri).should.equal('http://example.com/cb?foo=bar#access_token=foobar-token&token_type=access_token&expires_in=120');
     });
   });
 });

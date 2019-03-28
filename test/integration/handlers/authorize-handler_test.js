@@ -250,9 +250,9 @@ describe('AuthorizeHandler integration', function() {
     });
 
 
-    it('given an implicit grant flow, should redirect to a successful response with `token` and `state` if successful', function() {
+    it('given an implicit grant flow, should redirect to a successful response with `token`, `token_type`, `expires_in` and `state` if successful', function() {
       var client = { grants: ['implicit'], redirectUris: ['http://example.com/cb'] };
-      var token = { accessToken: 'foobar-token' }
+      var token = { accessToken: 'foobar-token' };
       var model = {
         getAccessToken: function() {
           return {
@@ -284,7 +284,7 @@ describe('AuthorizeHandler integration', function() {
 
       return handler.handle(request, response)
         .then(function() {
-          response.get('location').should.equal('http://example.com/cb#access_token=foobar-token&state=foobar');
+          response.get('location').should.equal('http://example.com/cb#access_token=foobar-token&token_type=access_token&expires_in=120&state=foobar');
         })
         .catch(should.fail);
     });
