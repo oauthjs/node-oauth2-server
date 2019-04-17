@@ -158,7 +158,7 @@ describe('RefreshTokenGrantType integration', function() {
     it('should support callbacks', function() {
       var client = { id: 123 };
       var model = {
-        getRefreshToken: function(refreshToken, callback) { callback(null, { accessToken: 'foo', client: { id: 123 }, user: {} }); },
+        getRefreshToken: function(refreshToken, id, callback) { callback(null, { accessToken: 'foo', client: { id: 123 }, user: {} }); },
         revokeToken: function(refreshToken, callback) { callback(null, { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }); },
         saveToken: function(tokenToSave, client, user, callback) { callback(null,{ accessToken: 'foo', client: {}, user: {} }); }
       };
@@ -399,7 +399,7 @@ describe('RefreshTokenGrantType integration', function() {
       var client = { id: 123 };
       var token = { accessToken: 'foo', client: { id: 123 }, user: {} };
       var model = {
-        getRefreshToken: function(refreshToken, callback) { callback(null, token); },
+        getRefreshToken: function(refreshToken, id, callback) { callback(null, token); },
         revokeToken: function() {},
         saveToken: function() {}
       };
