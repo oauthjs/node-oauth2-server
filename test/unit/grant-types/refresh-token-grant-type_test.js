@@ -51,7 +51,7 @@ describe('RefreshTokenGrantType', function() {
       return handler.getRefreshToken(request, client)
         .then(function() {
           model.getRefreshToken.callCount.should.equal(1);
-          model.getRefreshToken.firstCall.args.should.have.length(1);
+          model.getRefreshToken.firstCall.args.should.have.length(2);
           model.getRefreshToken.firstCall.args[0].should.equal('bar');
           model.getRefreshToken.firstCall.thisValue.should.equal(model);
         })

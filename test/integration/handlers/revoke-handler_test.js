@@ -448,7 +448,6 @@ describe('RevokeHandler integration', function() {
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
-
     it('should support non-promises', function() {
       var model = {
         getClient: function() { return { grants: [] }; },
@@ -664,7 +663,7 @@ describe('RevokeHandler integration', function() {
       var model = {
         getClient: function() {},
         revokeToken: function() {},
-        getRefreshToken: function(refreshToken, callback) {
+        getRefreshToken: function(refreshToken, id, callback) {
           callback(null, token);
         },
         getAccessToken: function() {}
@@ -677,6 +676,7 @@ describe('RevokeHandler integration', function() {
         })
         .catch(should.fail);
     });
+
   });
 
   describe('getAccessToken()', function() {

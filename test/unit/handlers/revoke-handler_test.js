@@ -74,7 +74,7 @@ describe('RevokeHandler', function() {
       return handler.getRefreshToken(token, client)
         .then(function() {
           model.getRefreshToken.callCount.should.equal(1);
-          model.getRefreshToken.firstCall.args.should.have.length(1);
+          model.getRefreshToken.firstCall.args.should.have.length(2);
           model.getRefreshToken.firstCall.args[0].should.equal(token);
         })
         .catch(should.fail);
