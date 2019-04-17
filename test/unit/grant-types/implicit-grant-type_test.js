@@ -27,7 +27,7 @@ describe('ImplicitGrantType', function() {
         user: user
       });
 
-      sinon.stub(handler, 'validateScope').returns('foobar-scope');
+      sinon.stub(handler, 'validateScope').returns('foobar');
       sinon.stub(handler, 'generateAccessToken').returns(Promise.resolve('foobar-token'));
       sinon.stub(handler, 'getAccessTokenExpiresAt').returns(Promise.resolve('foo-1234'));
 
@@ -38,7 +38,7 @@ describe('ImplicitGrantType', function() {
           model.saveToken.firstCall.args[0].should.eql({
             accessToken: 'foobar-token',
             accessTokenExpiresAt: 'foo-1234',
-            scope: 'foobar-scope'
+            scope: 'foobar'
           });
           model.saveToken.firstCall.args[1].should.equal(client);
           model.saveToken.firstCall.args[2].should.equal(user);
