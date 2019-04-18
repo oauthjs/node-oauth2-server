@@ -1,3 +1,7 @@
+# This project is seeking maintainer(s)
+
+## This is a popular project in need of maintenance, please contact @thomseddon on GitHub if you are interested in contributing to this project.
+
 # oauth2-server
 
 [![npm Version][npm-image]][npm-url]
