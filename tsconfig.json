@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    // "emitDecoratorMetadata": true,
+    // "experimentalDecorators": true,
+    "lib": ["es2017"],
+    "target": "es2017",
+    "sourceMap": true,
+    "importHelpers": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["node_modules", "./dist"]
+}

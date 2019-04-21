@@ -1,0 +1,29 @@
+{
+  // "defaultSeverity": "error",
+  "extends": ["tslint:recommended", "tslint:all", "tslint:latest"],
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "rules": {
+    "file-name-casing": [true, "kebab-case"],
+    "no-unused-expression": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "completed-docs": false,
+    "quotemark": [true, "single"],
+    "max-file-line-count": [false],
+    "member-access": [false],
+    "no-unsafe-any": false,
+    "promise-function-async": false,
+    "ordered-imports": [false],
+    "no-empty": [false],
+    "newline-per-chained-call": [false],
+    "max-line-length": [true, 120],
+    "no-magic-numbers": [false],
+    "member-ordering": [false],
+    "interface-name": [false],
+    "arrow-parens": false,
+    "no-implicit-dependencies": false,
+    "object-literal-sort-keys": false
+  },
+  "rulesDirectory": []
+}

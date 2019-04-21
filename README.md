@@ -1,7 +1,3 @@
-# This project is seeking maintainer(s)
-
-## This is a popular project in need of maintenance, please contact @thomseddon on GitHub if you are interested in contributing to this project.
-
 # oauth2-server
 
 [![npm Version][npm-image]][npm-url]
@@ -26,7 +22,7 @@ The *oauth2-server* module is framework-agnostic but there are several officiall
 
 - Supports `authorization_code`, `client_credentials`, `refresh_token` and `password` grant, as well as *extension grants*, with scopes.
 - Can be used with *promises*, *Node-style callbacks*, *ES6 generators* and *async*/*await* (using [Babel](https://babeljs.io)).
-- Fully [RFC 6749](https://tools.ietf.org/html/rfc6749.html) and [RFC 6750](https://tools.ietf.org/html/rfc6750.html) compliant.
+- Fully [RFC 6749](https://tools.ietf.org/html/rfc6749.html) and [RFC 6750](https://tools.ietf.org/html/rfc6749.html) compliant.
 - Implicitly supports any form of storage, e.g. *PostgreSQL*, *MySQL*, *MongoDB*, *Redis*, etc.
 - Complete [test suite](https://github.com/oauthjs/node-oauth2-server/tree/master/test).
 

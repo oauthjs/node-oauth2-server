@@ -1,0 +1,88 @@
+import { InvalidArgumentError } from '../errors/invalid-argument-error';
+import { InvalidGrantError } from '../errors/invalid-grant-error';
+import { Client } from '../interfaces/client.interface';
+import { Token } from '../interfaces/token.interface';
+import { User } from '../interfaces/user.interface';
+import { Request } from '../request';
+import { AbstractGrantType } from './abstract-grant-type';
+
+export class ClientCredentialsGrantType extends AbstractGrantType {
+  constructor(options: any = {}) {
+    super(options);
+    if (!options.model) {
+      throw new InvalidArgumentError('Missing parameter: `model`');
+    }
+
+    if (!options.model.getUserFromClient) {
+      throw new InvalidArgumentError(
+        'Invalid argument: model does not implement `getUserFromClient()`',
+      );
+    }
+
+    if (!options.model.saveToken) {
+      throw new InvalidArgumentError(
+        'Invalid argument: model does not implement `saveToken()`',
+      );
+    }
+  }
+
+  /**
+   * Handle client credentials grant.
+   *
+   * @see https://tools.ietf.org/html/rfc6749#section-4.4.2
+   */
+
+  async handle(request: Request, client: Client) {
+    if (!request) {
+      throw new InvalidArgumentError('Missing parameter: `request`');
+    }
+
+    if (!client) {
+      throw new InvalidArgumentError('Missing parameter: `client`');
+    }
+
+    const scope = this.getScope(request);
+    const user = await this.getUserFromClient(client);
+
+    return this.saveToken(user, client, scope);
+  }
+
+  /**
+   * Retrieve the user using client credentials.
+   */
+
+  async getUserFromClient(client: Client) {
+    const user = await this.model.getUserFromClient(client);
+    if (!user) {
+      throw new InvalidGrantError(
+        'Invalid grant: user credentials are invalid',
+      );
+    }
+
+    return user;
+  }
+
+  /**
+   * Save token.
+   */
+
+  async saveToken(user: User, client: Client, scope: string) {
+    const fns = [
+      this.validateScope(user, client, scope),
+      this.generateAccessToken(client, user, scope),
+      this.getAccessTokenExpiresAt(),
+    ];
+
+    const [accessScope, accessToken, accessTokenExpiresAt] = await Promise.all(
+      fns as any,
+    );
+
+    const token = {
+      accessToken,
+      accessTokenExpiresAt,
+      scope: accessScope,
+    } as Token;
+
+    return this.model.saveToken(token, client, user);
+  }
+}

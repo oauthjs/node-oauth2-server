@@ -1,5 +1,22 @@
-node_modules/
-docs/_build/
-__pycache__/
-*.pyc
+
+# IDE
+/.idea
+/.awcache
+/.vscode
+
+# misc
+npm-debug.log
+
+# example
+/quick-start
+
+# tests
+# /test
+
+# dist
+/dist
+/node_modules
+
+.DS_Store
+# conf
 

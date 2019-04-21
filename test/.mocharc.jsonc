@@ -1,0 +1,7 @@
+{
+  "require": ["ts-node/register", "should", "test/assertions"],
+  "reporter": "spec",
+  "slow": 75,
+  "timeout": 2000,
+  "ui": "bdd"
+}
