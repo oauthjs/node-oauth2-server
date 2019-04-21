@@ -1,45 +1,45 @@
-import { has } from 'lodash';
-import { format, parse, UrlWithParsedQuery } from 'url';
-import { AccessDeniedError } from '../errors/access-denied-error';
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { InvalidClientError } from '../errors/invalid-client-error';
-import { InvalidRequestError } from '../errors/invalid-request-error';
-import { InvalidScopeError } from '../errors/invalid-scope-error';
-import { OAuthError } from '../errors/oauth-error';
-import { ServerError } from '../errors/server-error';
-import { UnauthorizedClientError } from '../errors/unauthorized-client-error';
-import { UnsupportedResponseTypeError } from '../errors/unsupported-response-type-error';
-import { AuthenticateHandler } from '../handlers/authenticate-handler';
-import { AuthorizationCode } from '../interfaces/authorization-code.interface';
-import { Client } from '../interfaces/client.interface';
-import { Model } from '../interfaces/model.interface';
-import { User } from '../interfaces/user.interface';
+import * as url from 'url';
+import { AuthenticateHandler } from '.';
+import {
+  AccessDeniedError,
+  InvalidArgumentError,
+  InvalidClientError,
+  InvalidRequestError,
+  InvalidScopeError,
+  OAuthError,
+  ServerError,
+  UnauthorizedClientError,
+  UnsupportedResponseTypeError,
+} from '../errors';
+import { Client, Model, User } from '../interfaces';
 import { Request } from '../request';
 import { Response } from '../response';
-import { CodeResponseType } from '../response-types/code-response-type';
-import * as tokenUtil from '../utils/token-util';
+import { CodeResponseType, TokenResponseType } from '../response-types';
+import { hasOwnProperty } from '../utils/fn';
 import * as is from '../validator/is';
+
+/**
+ * Response types.
+ */
 
 const responseTypes = {
   code: CodeResponseType,
-  // token: require('../response-types/token-response-type')
+  token: TokenResponseType,
 };
 
+/**
+ * Constructor.
+ */
+
 export class AuthorizeHandler {
+  options: any;
   allowEmptyState: boolean;
   authenticateHandler: any;
-  authorizationCodeLifetime: number;
   model: Model;
   constructor(options: any = {}) {
     if (options.authenticateHandler && !options.authenticateHandler.handle) {
       throw new InvalidArgumentError(
         'Invalid argument: authenticateHandler does not implement `handle()`',
-      );
-    }
-
-    if (!options.authorizationCodeLifetime) {
-      throw new InvalidArgumentError(
-        'Missing parameter: `authorizationCodeLifetime`',
       );
     }
 
@@ -53,16 +53,10 @@ export class AuthorizeHandler {
       );
     }
 
-    if (!options.model.saveAuthorizationCode) {
-      throw new InvalidArgumentError(
-        'Invalid argument: model does not implement `saveAuthorizationCode()`',
-      );
-    }
-
+    this.options = options;
     this.allowEmptyState = options.allowEmptyState;
     this.authenticateHandler =
       options.authenticateHandler || new AuthenticateHandler(options);
-    this.authorizationCodeLifetime = options.authorizationCodeLifetime;
     this.model = options.model;
   }
 
@@ -89,72 +83,49 @@ export class AuthorizeHandler {
       );
     }
 
-    const fns = [
-      this.getAuthorizationCodeLifetime(),
-      this.getClient(request),
-      this.getUser(request, response),
-    ];
+    // Extend model object with request
+    // this.model.request = request;
 
-    const [expiresAt, client, user] = await Promise.all(fns);
+    const fns = [this.getClient(request), this.getUser(request, response)];
+    // try {
+    const [client, user] = await Promise.all(fns);
+
+    let scope: string;
+    let state: string;
+    let RequestedResponseType: any;
+    let responseType: any;
     const uri = this.getRedirectUri(request, client);
-    let scope: any;
-    let state: any;
-    let ResponseType: any;
-
     try {
-      scope = this.getScope(request);
-      const authorizationCode = await this.generateAuthorizationCode(
-        client,
-        user,
-        scope,
-      );
-      state = this.getState(request);
-      ResponseType = this.getResponseType(request);
-      const code = await this.saveAuthorizationCode(
-        authorizationCode,
-        expiresAt,
-        scope,
-        client,
-        uri,
-        user,
-      );
-      const responseType = new ResponseType(code.authorizationCode);
-      const redirectUri = this.buildSuccessRedirectUri(uri, responseType);
-      this.updateResponse(response, redirectUri, state);
+      const requestedScope = this.getScope(request);
 
-      return code;
+      const validScope = await this.validateScope(user, client, requestedScope);
+      scope = validScope;
+      state = this.getState(request);
+      RequestedResponseType = this.getResponseType(request, client);
+      responseType = new RequestedResponseType(this.options);
+      const codeOrAccessToken = await responseType.handle(
+        request,
+        client,
+        user,
+        uri,
+        scope,
+      );
+      const redirectUri = this.buildSuccessRedirectUri(uri, responseType);
+      this.updateResponse(response, redirectUri, responseType, state);
+
+      return codeOrAccessToken;
     } catch (e) {
       if (!(e instanceof OAuthError)) {
         e = new ServerError(e);
       }
-      const redirectUri = this.buildErrorRedirectUri(uri, e);
-      this.updateResponse(response, redirectUri, state);
+
+      const redirectUri = this.buildErrorRedirectUri(uri, responseType, e);
+
+      this.updateResponse(response, redirectUri, responseType, state);
+
       throw e;
     }
-  }
-
-  /**
-   * Generate authorization code.
-   */
-
-  generateAuthorizationCode(client, user, scope) {
-    if (this.model.generateAuthorizationCode) {
-      return this.model.generateAuthorizationCode(client, user, scope);
-    }
-
-    return tokenUtil.GenerateRandomToken();
-  }
-
-  /**
-   * Get authorization code lifetime.
-   */
-
-  getAuthorizationCodeLifetime() {
-    const expires = new Date();
-
-    expires.setSeconds(expires.getSeconds() + this.authorizationCodeLifetime);
-
-    return expires;
+    // } catch (error) {}
   }
 
   /**
@@ -191,7 +162,12 @@ export class AuthorizeHandler {
       throw new InvalidClientError('Invalid client: missing client `grants`');
     }
 
-    if (!client.grants.includes('authorization_code')) {
+    const responseType =
+      request.body.response_type || request.query.response_type;
+    const requestedGrantType =
+      responseType === 'token' ? 'implicit' : 'authorization_code';
+
+    if (!client.grants.includes(requestedGrantType)) {
       throw new UnauthorizedClientError(
         'Unauthorized client: `grant_type` is invalid',
       );
@@ -210,6 +186,28 @@ export class AuthorizeHandler {
     }
 
     return client;
+  }
+
+  /**
+   * Validate requested scope.
+   */
+  async validateScope(user: User, client: Client, scope: string) {
+    if (this.model.validateScope) {
+      const validatedScope = await this.model.validateScope(
+        user,
+        client,
+        scope,
+      );
+      if (!validatedScope) {
+        throw new InvalidScopeError(
+          'Invalid scope: Requested scope is invalid',
+        );
+      }
+
+      return validatedScope;
+    }
+
+    return scope;
   }
 
   /**
@@ -269,7 +267,7 @@ export class AuthorizeHandler {
    * Get redirect URI.
    */
 
-  getRedirectUri = (request: Request, client) => {
+  getRedirectUri = (request: Request, client: Client) => {
     return (
       request.body.redirect_uri ||
       request.query.redirect_uri ||
@@ -278,32 +276,10 @@ export class AuthorizeHandler {
   };
 
   /**
-   * Save authorization code.
-   */
-
-  async saveAuthorizationCode(
-    authorizationCode: string,
-    expiresAt: Date,
-    scope: string,
-    client: Client,
-    redirectUri: string,
-    user: User,
-  ) {
-    const code = {
-      authorizationCode,
-      expiresAt,
-      redirectUri,
-      scope,
-    } as AuthorizationCode;
-
-    return this.model.saveAuthorizationCode(code, client, user);
-  }
-
-  /**
    * Get response type.
    */
 
-  getResponseType = (request: Request) => {
+  getResponseType = (request: Request, client: Client) => {
     const responseType =
       request.body.response_type || request.query.response_type;
 
@@ -311,9 +287,18 @@ export class AuthorizeHandler {
       throw new InvalidRequestError('Missing parameter: `response_type`');
     }
 
-    if (!has(responseTypes, responseType)) {
+    if (!hasOwnProperty(responseTypes, responseType)) {
       throw new UnsupportedResponseTypeError(
         'Unsupported response type: `response_type` is not supported',
+      );
+    }
+
+    if (
+      responseType === 'token' &&
+      (!client || !client.grants.includes('implicit'))
+    ) {
+      throw new UnauthorizedClientError(
+        'Unauthorized client: `grant_type` is invalid',
       );
     }
 
@@ -326,24 +311,42 @@ export class AuthorizeHandler {
 
   buildSuccessRedirectUri = (
     redirectUri: string,
-    responseType: CodeResponseType,
+    responseType: CodeResponseType | TokenResponseType,
   ) => {
-    return responseType.buildRedirectUri(redirectUri);
+    const uri = url.parse(redirectUri);
+
+    return responseType.buildRedirectUri(uri);
   };
 
   /**
    * Build an error response that redirects the user-agent to the client-provided url.
    */
 
-  buildErrorRedirectUri = (redirectUri: string, error: Error) => {
-    const uri = parse(redirectUri, true);
+  buildErrorRedirectUri = (
+    redirectUri: any,
+    responseType: CodeResponseType | TokenResponseType,
+    error: Error,
+  ) => {
+    let uri = url.parse(redirectUri, true);
 
-    uri.query = {
-      error: error.name,
-    };
+    if (responseType) {
+      uri = responseType.setRedirectUriParam(uri, 'error', error.name);
 
-    if (error.message) {
-      uri.query.error_description = error.message;
+      if (error.message) {
+        uri = responseType.setRedirectUriParam(
+          uri,
+          'error_description',
+          error.message,
+        );
+      }
+    } else {
+      uri.query = {
+        error: error.name,
+      };
+
+      if (error.message) {
+        uri.query.error_description = error.message;
+      }
     }
 
     return uri;
@@ -355,15 +358,22 @@ export class AuthorizeHandler {
 
   updateResponse = (
     response: Response,
-    redirectUri: UrlWithParsedQuery,
-    state: string,
+    redirectUri: any,
+    responseType: CodeResponseType | TokenResponseType,
+    state: any,
   ) => {
-    redirectUri.query = redirectUri.query || {};
-
-    if (state) {
+    if (responseType && state) {
+      // tslint:disable-next-line:no-parameter-reassignment
+      redirectUri = responseType.setRedirectUriParam(
+        redirectUri,
+        'state',
+        state,
+      );
+    } else if (state) {
+      redirectUri.query = redirectUri.query || {};
       redirectUri.query.state = state;
     }
 
-    response.redirect(format(redirectUri));
+    response.redirect(url.format(redirectUri));
   };
 }

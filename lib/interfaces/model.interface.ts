@@ -12,7 +12,7 @@ export interface BaseModel {
   generateAccessToken?(
     client: Client,
     user: User,
-    scope: string | string[],
+    scope: string,
   ): Promise<string>;
 
   /**
@@ -41,7 +41,7 @@ export interface RequestAuthenticationModel {
    * the provided access token was authorized the requested scopes.
    *
    */
-  verifyScope(token: Token, scope: string | string[]): Promise<boolean>;
+  verifyScope(token: Token, scope: string): Promise<boolean>;
 }
 
 export interface AuthorizationCodeModel
@@ -54,7 +54,7 @@ export interface AuthorizationCodeModel
   generateRefreshToken?(
     client: Client,
     user: User,
-    scope: string | string[],
+    scope: string,
   ): Promise<string>;
 
   /**
@@ -64,7 +64,7 @@ export interface AuthorizationCodeModel
   generateAuthorizationCode?(
     client: Client,
     user: User,
-    scope: string | string[],
+    scope: string,
   ): Promise<string>;
 
   /**
@@ -95,11 +95,7 @@ export interface AuthorizationCodeModel
    *  valid for a particular client/user combination.
    *
    */
-  validateScope?(
-    user: User,
-    client: Client,
-    scope: string | string[],
-  ): Promise<string | string[]>;
+  validateScope?(user: User, client: Client, scope: string): Promise<string>;
 }
 
 export interface PasswordModel extends BaseModel, RequestAuthenticationModel {
@@ -110,7 +106,7 @@ export interface PasswordModel extends BaseModel, RequestAuthenticationModel {
   generateRefreshToken?(
     client: Client,
     user: User,
-    scope: string | string[],
+    scope: string,
   ): Promise<string>;
 
   /**
@@ -125,11 +121,7 @@ export interface PasswordModel extends BaseModel, RequestAuthenticationModel {
    * is valid for a particular client/user combination.
    *
    */
-  validateScope?(
-    user: User,
-    client: Client,
-    scope: string | string[],
-  ): Promise<string | string[]>;
+  validateScope?(user: User, client: Client, scope: string): Promise<string>;
 }
 
 export interface RefreshTokenModel
@@ -142,7 +134,7 @@ export interface RefreshTokenModel
   generateRefreshToken?(
     client: Client,
     user: User,
-    scope: string | string[],
+    scope: string,
   ): Promise<string>;
 
   /**
@@ -171,11 +163,7 @@ export interface ClientCredentialsModel
    * Invoked to check if the requested scope is valid for a particular client/user combination.
    *
    */
-  validateScope?(
-    user: User,
-    client: Client,
-    scope: string | string[],
-  ): Promise<string | string[]>;
+  validateScope?(user: User, client: Client, scope: string): Promise<string>;
 }
 
 export interface ExtensionModel extends BaseModel, RequestAuthenticationModel {}

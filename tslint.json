@@ -15,6 +15,7 @@
     "member-ordering": [false],
     "no-default-export": [false],
     "no-magic-numbers": [false],
+    "newline-per-chained-call": false,
     "no-unsafe-any": false,
     "object-literal-sort-keys": false,
     "ordered-imports": [false],

@@ -97,7 +97,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `client` is invalid', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode() {
           return {
@@ -165,7 +165,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should return a token', async () => {
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const token = {};
       const model = {
         getAuthorizationCode: () => {
@@ -205,7 +205,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should support promises', () => {
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const model = {
         getAuthorizationCode: () => {
           return Promise.resolve({
@@ -235,7 +235,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should support non-promises', () => {
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const model = {
         getAuthorizationCode: () => {
           return {
@@ -265,7 +265,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     // it('should support callbacks', () => {
-    //   const client = { id: 'foobar' };
+    //   const client: any = { id: 'foobar' };
     //   const model = {
     //     getAuthorizationCode: (code, callback) => {
     //       callback(undefined, {
@@ -304,7 +304,7 @@ describe('AuthorizationCodeGrantType integration', () => {
 
   describe('getAuthorizationCode()', () => {
     it('should throw an error if the request body does not contain `code`', async () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode: () => {},
         revokeAuthorizationCode: () => {},
@@ -332,7 +332,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `code` is invalid', async () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode: () => {},
         revokeAuthorizationCode: () => {},
@@ -360,7 +360,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `authorizationCode` is missing', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode: () => {},
         revokeAuthorizationCode: () => {},
@@ -389,7 +389,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `authorizationCode.client` is missing', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode: () => {
           return { authorizationCode: 12345 };
@@ -420,7 +420,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `authorizationCode.expiresAt` is missing', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode: () => {
           return { authorizationCode: 12345, client: {}, user: {} };
@@ -451,7 +451,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `authorizationCode.user` is missing', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getAuthorizationCode: () => {
           return {
@@ -486,7 +486,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if the client id does not match', () => {
-      const client = { id: 123 };
+      const client: any = { id: 123 };
       const model = {
         getAuthorizationCode() {
           return {
@@ -522,7 +522,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if the auth code is expired', () => {
-      const client = { id: 123 };
+      const client: any = { id: 123 };
       const date = new Date(new Date().getTime() / 2);
       const model = {
         getAuthorizationCode() {
@@ -566,7 +566,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         redirectUri: 'foobar',
         user: {},
       };
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const model = {
         getAuthorizationCode() {
           return authorizationCode;
@@ -603,7 +603,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         expiresAt: new Date(new Date().getTime() * 2),
         user: {},
       };
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const model = {
         getAuthorizationCode() {
           return authorizationCode;
@@ -637,7 +637,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         expiresAt: new Date(new Date().getTime() * 2),
         user: {},
       };
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const model = {
         getAuthorizationCode() {
           return Promise.resolve(authorizationCode);
@@ -668,7 +668,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         expiresAt: new Date(new Date().getTime() * 2),
         user: {},
       };
-      const client = { id: 'foobar' };
+      const client: any = { id: 'foobar' };
       const model = {
         getAuthorizationCode() {
           return authorizationCode;
@@ -699,7 +699,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     //     expiresAt: new Date(new Date().getTime() * 2),
     //     user: {},
     //   };
-    //   const client = { id: 'foobar' };
+    //   const client: any = { id: 'foobar' };
     //   const model = {
     //     getAuthorizationCode(code, callback) {
     //       callback(undefined, authorizationCode);

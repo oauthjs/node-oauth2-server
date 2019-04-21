@@ -1,8 +1,5 @@
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { InvalidScopeError } from '../errors/invalid-scope-error';
-import { Client } from '../interfaces/client.interface';
-import { Model } from '../interfaces/model.interface';
-import { User } from '../interfaces/user.interface';
+import { InvalidArgumentError, InvalidScopeError } from '../errors';
+import { Client, Model, User } from '../interfaces';
 import { Request } from '../request';
 import * as tokenUtil from '../utils/token-util';
 import * as is from '../validator/is';
@@ -63,10 +60,7 @@ export class AbstractGrantType {
    */
 
   getAccessTokenExpiresAt() {
-    const expires = new Date();
-    expires.setSeconds(expires.getSeconds() + this.accessTokenLifetime);
-
-    return expires;
+    return new Date(Date.now() + this.accessTokenLifetime * 1000);
   }
 
   /**
@@ -74,10 +68,7 @@ export class AbstractGrantType {
    */
 
   getRefreshTokenExpiresAt() {
-    const expires = new Date();
-    expires.setSeconds(expires.getSeconds() + this.refreshTokenLifetime);
-
-    return expires;
+    return new Date(Date.now() + this.refreshTokenLifetime * 1000);
   }
 
   /**
@@ -97,14 +88,18 @@ export class AbstractGrantType {
    */
   async validateScope(user: User, client: Client, scope: string) {
     if (this.model.validateScope) {
-      const sc = await this.model.validateScope(user, client, scope);
-      if (!sc) {
+      const validatedScope = await this.model.validateScope(
+        user,
+        client,
+        scope,
+      );
+      if (!validatedScope) {
         throw new InvalidScopeError(
           'Invalid scope: Requested scope is invalid',
         );
       }
 
-      return sc;
+      return validatedScope;
     }
 
     return scope;

@@ -10,6 +10,6 @@ import { OAuthError } from './oauth-error';
 
 export class ServerError extends OAuthError {
   constructor(message?: string | Error, properties?: any) {
-    super(message, { code: 503, name: 'server_error', ...properties });
+    super(message, { code: 500, name: 'server_error', ...properties });
   }
 }

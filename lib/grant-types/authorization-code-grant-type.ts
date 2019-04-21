@@ -1,13 +1,13 @@
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { InvalidGrantError } from '../errors/invalid-grant-error';
-import { InvalidRequestError } from '../errors/invalid-request-error';
-import { ServerError } from '../errors/server-error';
-import { Client } from '../interfaces/client.interface';
-import { Token } from '../interfaces/token.interface';
-import { User } from '../interfaces/user.interface';
+import { AbstractGrantType } from '.';
+import {
+  InvalidArgumentError,
+  InvalidGrantError,
+  InvalidRequestError,
+  ServerError,
+} from '../errors';
+import { Client, Token, User } from '../interfaces';
 import { Request } from '../request';
 import * as is from '../validator/is';
-import { AbstractGrantType } from './abstract-grant-type';
 
 export class AuthorizationCodeGrantType extends AbstractGrantType {
   constructor(options: any = {}) {
@@ -41,7 +41,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
    * @see https://tools.ietf.org/html/rfc6749#section-4.1.3
    */
 
-  async handle(request: Request, client) {
+  async handle(request: Request, client: Client) {
     if (!request) {
       throw new InvalidArgumentError('Missing parameter: `request`');
     }
@@ -65,7 +65,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
    * Get the authorization code.
    */
 
-  async getAuthorizationCode(request: Request, client) {
+  async getAuthorizationCode(request: Request, client: Client) {
     if (!request.body.code) {
       throw new InvalidRequestError('Missing parameter: `code`');
     }

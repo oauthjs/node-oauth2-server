@@ -1,21 +1,27 @@
 import * as auth from 'basic-auth';
-import { has } from 'lodash';
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { InvalidClientError } from '../errors/invalid-client-error';
-import { InvalidRequestError } from '../errors/invalid-request-error';
-import { OAuthError } from '../errors/oauth-error';
-import { ServerError } from '../errors/server-error';
-import { UnauthorizedClientError } from '../errors/unauthorized-client-error';
-import { UnsupportedGrantTypeError } from '../errors/unsupported-grant-type-error';
-import { AuthorizationCodeGrantType } from '../grant-types/authorization-code-grant-type';
-import { ClientCredentialsGrantType } from '../grant-types/client-credentials-grant-type';
-import { PasswordGrantType } from '../grant-types/password-grant-type';
-import { RefreshTokenGrantType } from '../grant-types/refresh-token-grant-type';
+import {
+  InvalidArgumentError,
+  InvalidClientError,
+  InvalidRequestError,
+  OAuthError,
+  ServerError,
+  UnauthorizedClientError,
+  UnsupportedGrantTypeError,
+} from '../errors';
+import {
+  AuthorizationCodeGrantType,
+  ClientCredentialsGrantType,
+  PasswordGrantType,
+  RefreshTokenGrantType,
+} from '../grant-types';
+import { Client } from '../interfaces/client.interface';
 import { TokenModel } from '../models/token-model';
 import { Request } from '../request';
 import { Response } from '../response';
 import { BearerTokenType } from '../token-types/bearer-token-type';
+import { hasOwnProperty } from '../utils/fn';
 import * as is from '../validator/is';
+
 /**
  * Grant types.
  */
@@ -87,9 +93,7 @@ export class TokenHandler {
     }
 
     if (request.method !== 'POST') {
-      // return Promise.reject(
       throw new InvalidRequestError('Invalid request: method must be POST');
-      // );
     }
 
     if (!request.is('application/x-www-form-urlencoded')) {
@@ -184,8 +188,8 @@ export class TokenHandler {
    * @see https://tools.ietf.org/html/rfc6749#section-2.3.1
    */
 
-  getClientCredentials(request) {
-    const credentials = auth(request);
+  getClientCredentials(request: Request) {
+    const credentials = auth(request as any);
     const grantType = request.body.grant_type;
 
     if (credentials) {
@@ -228,7 +232,7 @@ export class TokenHandler {
       throw new InvalidRequestError('Invalid parameter: `grant_type`');
     }
 
-    if (!has(this.grantTypes, grantType)) {
+    if (!hasOwnProperty(this.grantTypes, grantType)) {
       throw new UnsupportedGrantTypeError(
         'Unsupported grant type: `grant_type` is invalid',
       );
@@ -266,7 +270,7 @@ export class TokenHandler {
    * Get refresh token lifetime.
    */
 
-  getRefreshTokenLifetime(client) {
+  getRefreshTokenLifetime(client: Client) {
     return client.refreshTokenLifetime || this.refreshTokenLifetime;
   }
 
@@ -274,7 +278,7 @@ export class TokenHandler {
    * Get token type.
    */
 
-  getTokenType = model => {
+  getTokenType = (model: any) => {
     return new BearerTokenType(
       model.accessToken,
       model.accessTokenLifetime,
@@ -288,7 +292,7 @@ export class TokenHandler {
    * Update response when a token is generated.
    */
 
-  updateSuccessResponse = (response, tokenType) => {
+  updateSuccessResponse = (response: Response, tokenType: BearerTokenType) => {
     response.body = tokenType.valueOf();
 
     response.set('Cache-Control', 'no-store');
@@ -299,7 +303,7 @@ export class TokenHandler {
    * Update response when an error is thrown.
    */
 
-  updateErrorResponse = (response, error) => {
+  updateErrorResponse = (response: Response, error: OAuthError) => {
     response.body = {
       error: error.name,
       error_description: error.message,
@@ -311,7 +315,7 @@ export class TokenHandler {
   /**
    * Given a grant type, check if client authentication is required
    */
-  isClientAuthenticationRequired = grantType => {
+  isClientAuthenticationRequired = (grantType: string) => {
     if (Object.keys(this.requireClientAuthentication).length > 0) {
       return typeof this.requireClientAuthentication[grantType] !== 'undefined'
         ? this.requireClientAuthentication[grantType]

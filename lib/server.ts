@@ -1,21 +1,26 @@
-import { AccessDeniedError } from './errors/access-denied-error';
-import { InsufficientScopeError } from './errors/insufficient-scope-error';
-import { InvalidArgumentError } from './errors/invalid-argument-error';
-import { InvalidClientError } from './errors/invalid-client-error';
-import { InvalidGrantError } from './errors/invalid-grant-error';
-import { InvalidRequestError } from './errors/invalid-request-error';
-import { InvalidScopeError } from './errors/invalid-scope-error';
-import { InvalidTokenError } from './errors/invalid-token-error';
-import { OAuthError } from './errors/oauth-error';
-import { ServerError } from './errors/server-error';
-import { UnauthorizedClientError } from './errors/unauthorized-client-error';
-import { UnauthorizedRequestError } from './errors/unauthorized-request-error';
-import { UnsupportedGrantTypeError } from './errors/unsupported-grant-type-error';
-import { UnsupportedResponseTypeError } from './errors/unsupported-response-type-error';
-import { AbstractGrantType } from './grant-types/abstract-grant-type';
-import { AuthenticateHandler } from './handlers/authenticate-handler';
-import { AuthorizeHandler } from './handlers/authorize-handler';
-import { TokenHandler } from './handlers/token-handler';
+import {
+  AccessDeniedError,
+  InsufficientScopeError,
+  InvalidArgumentError,
+  InvalidClientError,
+  InvalidGrantError,
+  InvalidRequestError,
+  InvalidScopeError,
+  InvalidTokenError,
+  OAuthError,
+  ServerError,
+  UnauthorizedClientError,
+  UnauthorizedRequestError,
+  UnsupportedGrantTypeError,
+  UnsupportedResponseTypeError,
+} from './errors';
+import { AbstractGrantType } from './grant-types';
+import {
+  AuthenticateHandler,
+  AuthorizeHandler,
+  RevokeHandler,
+  TokenHandler,
+} from './handlers';
 import { Request } from './request';
 import { Response } from './response';
 
@@ -32,9 +37,17 @@ export class OAuth2Server {
   /**
    * Authenticate a token.
    */
-  authenticate(request: Request, response?: Response, scope?: string);
-  // tslint:disable-next-line:unified-signatures
-  authenticate(request: Request, response?: Response, options?: any);
+  authenticate(
+    request: Request,
+    response?: Response,
+    scope?: string,
+  ): Promise<any>;
+  authenticate(
+    request: Request,
+    response?: Response,
+    // tslint:disable-next-line:unified-signatures
+    options?: any,
+  ): Promise<any>;
 
   async authenticate(
     request: Request,
@@ -62,10 +75,10 @@ export class OAuth2Server {
    */
 
   async authorize(request: Request, response: Response, options?: any) {
-    const defaultLifeTime = 300;
     const opts = {
       allowEmptyState: false,
-      authorizationCodeLifetime: defaultLifeTime,
+      accessTokenLifetime: 60 * 60,
+      authorizationCodeLifetime: 5 * 60,
       ...this.options,
       ...options,
     };
@@ -88,6 +101,16 @@ export class OAuth2Server {
     };
 
     return new TokenHandler(opts).handle(request, response);
+  }
+
+  /**
+   * Revoke a token.
+   */
+
+  async revoke(request: Request, response: Response, options: any) {
+    const opt = { ...this.options, ...options };
+
+    return new RevokeHandler(opt).handle(request, response);
   }
 
   static Request = Request;

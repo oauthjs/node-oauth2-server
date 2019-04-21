@@ -1,4 +1,5 @@
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
+import { InvalidArgumentError } from '../errors';
+import { hasOwnProperty } from '../utils/fn';
 
 export class BearerTokenType {
   accessToken: string;
@@ -50,7 +51,7 @@ export class BearerTokenType {
     }
 
     for (const key in this.customAttributes) {
-      if (this.customAttributes.hasOwnProperty(key)) {
+      if (hasOwnProperty(this.customAttributes, key)) {
         object[key] = this.customAttributes[key];
       }
     }

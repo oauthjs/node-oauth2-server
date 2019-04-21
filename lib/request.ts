@@ -1,5 +1,5 @@
 import * as typeis from 'type-is';
-import { InvalidArgumentError } from './errors/invalid-argument-error';
+import { InvalidArgumentError } from './errors';
 
 export class Request {
   body: any;

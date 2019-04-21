@@ -1,13 +1,13 @@
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { InvalidGrantError } from '../errors/invalid-grant-error';
-import { InvalidRequestError } from '../errors/invalid-request-error';
-import { ServerError } from '../errors/server-error';
-import { Client } from '../interfaces/client.interface';
-import { RefreshToken } from '../interfaces/refresh-token.interface';
-import { User } from '../interfaces/user.interface';
+import { AbstractGrantType } from '.';
+import {
+  InvalidArgumentError,
+  InvalidGrantError,
+  InvalidRequestError,
+  ServerError,
+} from '../errors';
+import { Client, RefreshToken, User } from '../interfaces';
 import { Request } from '../request';
 import * as is from '../validator/is';
-import { AbstractGrantType } from './abstract-grant-type';
 
 export class RefreshTokenGrantType extends AbstractGrantType {
   constructor(options: any = {}) {

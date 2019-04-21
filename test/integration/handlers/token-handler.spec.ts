@@ -1496,7 +1496,7 @@ describe('TokenHandler integration', () => {
 
   describe('getRefreshTokenLifetime()', () => {
     it('should return the client access token lifetime', () => {
-      const client = { refreshTokenLifetime: 60 };
+      const client: any = { refreshTokenLifetime: 60 };
       const model = {
         getClient() {
           return client;
@@ -1513,7 +1513,7 @@ describe('TokenHandler integration', () => {
     });
 
     it('should return the default access token lifetime', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getClient() {
           return client;

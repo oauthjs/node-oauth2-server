@@ -12,6 +12,8 @@ npm-debug.log
 
 # tests
 # /test
+/coverage
+/.nyc_output
 
 # dist
 /dist
@@ -19,4 +21,4 @@ npm-debug.log
 
 .DS_Store
 # conf
-
+ormconfig.json

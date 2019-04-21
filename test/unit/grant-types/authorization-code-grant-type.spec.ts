@@ -30,7 +30,7 @@ describe('AuthorizationCodeGrantType', () => {
         method: {},
         query: {},
       });
-      const client = {};
+      const client: any = {};
       try {
         await handler.getAuthorizationCode(request, client);
 

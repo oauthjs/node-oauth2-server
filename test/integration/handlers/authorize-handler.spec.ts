@@ -7,7 +7,6 @@ import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
 import { InvalidScopeError } from '../../../lib/errors/invalid-scope-error';
 import { ServerError } from '../../../lib/errors/server-error';
 import { UnauthorizedClientError } from '../../../lib/errors/unauthorized-client-error';
-import { UnsupportedResponseTypeError } from '../../../lib/errors/unsupported-response-type-error';
 import { AuthenticateHandler } from '../../../lib/handlers/authenticate-handler';
 import { AuthorizeHandler } from '../../../lib/handlers/authorize-handler';
 import { Request } from '../../../lib/request';
@@ -91,19 +90,19 @@ describe('AuthorizeHandler integration', () => {
       }
     });
 
-    it('should set the `authorizationCodeLifetime`', () => {
-      const model = {
-        getAccessToken: () => {},
-        getClient: () => {},
-        saveAuthorizationCode: () => {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+    // it('should set the `authorizationCodeLifetime`', () => {
+    //   const model = {
+    //     getAccessToken: () => {},
+    //     getClient: () => {},
+    //     saveAuthorizationCode: () => {},
+    //   };
+    //   const handler = new AuthorizeHandler({
+    //     authorizationCodeLifetime: 120,
+    //     model,
+    //   });
 
-      handler.authorizationCodeLifetime.should.equal(120);
-    });
+    //   handler.authorizationCodeLifetime.should.equal(120);
+    // });
 
     it('should set the `authenticateHandler`', () => {
       const model = {
@@ -608,86 +607,86 @@ describe('AuthorizeHandler integration', () => {
     });
   });
 
-  describe('generateAuthorizationCode()', () => {
-    it('should return an auth code', async () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
-      try {
-        const data: any = await handler.generateAuthorizationCode(
-          undefined,
-          undefined,
-          undefined,
-        );
-        data.should.be.a.sha1();
-      } catch (error) {
-        should.fail('should.fail', '');
-      }
-    });
+  // describe('generateAuthorizationCode()', () => {
+  //   it('should return an auth code', async () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {},
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
+  //     try {
+  //       const data: any = await handler.generateAuthorizationCode(
+  //         undefined,
+  //         undefined,
+  //         undefined,
+  //       );
+  //       data.should.be.a.sha1();
+  //     } catch (error) {
+  //       should.fail('should.fail', '');
+  //     }
+  //   });
 
-    it('should support promises', async () => {
-      const model = {
-        generateAuthorizationCode() {
-          return Promise.resolve({});
-        },
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
-      try {
-        await handler
-          .generateAuthorizationCode(undefined, undefined, undefined)
-          .should.be.an.instanceOf(Promise);
-      } catch (error) {
-        should.fail('should.fail', '');
-      }
-    });
+  //   it('should support promises', async () => {
+  //     const model = {
+  //       generateAuthorizationCode() {
+  //         return Promise.resolve({});
+  //       },
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {},
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
+  //     try {
+  //       await handler
+  //         .generateAuthorizationCode(undefined, undefined, undefined)
+  //         .should.be.an.instanceOf(Promise);
+  //     } catch (error) {
+  //       should.fail('should.fail', '');
+  //     }
+  //   });
 
-    /*  it('should support non-promises', () => {
-      const model = {
-        generateAuthorizationCode() {
-          return {};
-        },
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+  //   /*  it('should support non-promises', () => {
+  //     const model = {
+  //       generateAuthorizationCode() {
+  //         return {};
+  //       },
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {},
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
 
-      handler
-        .generateAuthorizationCode(undefined, undefined, undefined)
-        .should.be.an.instanceOf(Promise);
-    }); */
-  });
+  //     handler
+  //       .generateAuthorizationCode(undefined, undefined, undefined)
+  //       .should.be.an.instanceOf(Promise);
+  //   }); */
+  // });
 
-  describe('getAuthorizationCodeLifetime()', () => {
-    it('should return a date', () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+  // describe('getAuthorizationCodeLifetime()', () => {
+  //   it('should return a date', () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {},
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
 
-      handler.getAuthorizationCodeLifetime().should.be.an.instanceOf(Date);
-    });
-  });
+  //     handler.getAuthorizationCodeLifetime().should.be.an.instanceOf(Date);
+  //   });
+  // });
 
   describe('getClient()', () => {
     it('should throw an error if `client_id` is missing', async () => {
@@ -1281,201 +1280,201 @@ describe('AuthorizeHandler integration', () => {
     });
   });
 
-  describe('saveAuthorizationCode()', () => {
-    it('should return an auth code', () => {
-      const authorizationCode = {};
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {
-          return authorizationCode;
-        },
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+  // describe('saveAuthorizationCode()', () => {
+  //   it('should return an auth code', () => {
+  //     const authorizationCode = {};
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {
+  //         return authorizationCode;
+  //       },
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
 
-      return handler
-        .saveAuthorizationCode(
-          'foo',
-          'bar' as any,
-          'biz',
-          'baz' as any,
-          undefined,
-          undefined,
-        )
-        .then(data => {
-          data.should.equal(authorizationCode);
-        })
-        .catch(() => should.fail('should.fail', ''));
-    });
+  //     return handler
+  //       .saveAuthorizationCode(
+  //         'foo',
+  //         'bar' as any,
+  //         'biz',
+  //         'baz' as any,
+  //         undefined,
+  //         undefined,
+  //       )
+  //       .then(data => {
+  //         data.should.equal(authorizationCode);
+  //       })
+  //       .catch(() => should.fail('should.fail', ''));
+  //   });
 
-    it('should support promises when calling `model.saveAuthorizationCode()`', () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {
-          return Promise.resolve({});
-        },
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+  //   it('should support promises when calling `model.saveAuthorizationCode()`', () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {
+  //         return Promise.resolve({});
+  //       },
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
 
-      handler
-        .saveAuthorizationCode(
-          'foo',
-          'bar' as any,
-          'biz',
-          'baz' as any,
-          undefined,
-          undefined,
-        )
-        .should.be.an.instanceOf(Promise);
-    });
+  //     handler
+  //       .saveAuthorizationCode(
+  //         'foo',
+  //         'bar' as any,
+  //         'biz',
+  //         'baz' as any,
+  //         undefined,
+  //         undefined,
+  //       )
+  //       .should.be.an.instanceOf(Promise);
+  //   });
 
-    /*    it('should support non-promises when calling `model.saveAuthorizationCode()`', () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {
-          return {};
-        },
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+  //   /*    it('should support non-promises when calling `model.saveAuthorizationCode()`', () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {
+  //         return {};
+  //       },
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
 
-      handler
-        .saveAuthorizationCode('foo', 'bar', 'biz', 'baz', undefined, undefined)
-        .should.be.an.instanceOf(Promise);
-    }); */
+  //     handler
+  //       .saveAuthorizationCode('foo', 'bar', 'biz', 'baz', undefined, undefined)
+  //       .should.be.an.instanceOf(Promise);
+  //   }); */
 
-    /*     it('should support callbacks when calling `model.saveAuthorizationCode()`', () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode(code, client, user, callback) {
-          return callback(null, true);
-        },
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
+  //   /*     it('should support callbacks when calling `model.saveAuthorizationCode()`', () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode(code, client, user, callback) {
+  //         return callback(null, true);
+  //       },
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
 
-      handler
-        .saveAuthorizationCode('foo', 'bar', 'biz', 'baz')
-        .should.be.an.instanceOf(Promise);
-    }); */
-  });
+  //     handler
+  //       .saveAuthorizationCode('foo', 'bar', 'biz', 'baz')
+  //       .should.be.an.instanceOf(Promise);
+  //   }); */
+  // });
 
-  describe('getResponseType()', () => {
-    it('should throw an error if `response_type` is missing', () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
-      const request = new Request({
-        body: {},
-        headers: {},
-        method: {},
-        query: {},
-      });
+  // describe('getResponseType()', () => {
+  //   it('should throw an error if `response_type` is missing', () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {},
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
+  //     const request = new Request({
+  //       body: {},
+  //       headers: {},
+  //       method: {},
+  //       query: {},
+  //     });
 
-      try {
-        handler.getResponseType(request);
+  //     try {
+  //       handler.getResponseType(request);
 
-        should.fail('should.fail', '');
-      } catch (e) {
-        e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Missing parameter: `response_type`');
-      }
-    });
+  //       should.fail('should.fail', '');
+  //     } catch (e) {
+  //       e.should.be.an.instanceOf(InvalidRequestError);
+  //       e.message.should.equal('Missing parameter: `response_type`');
+  //     }
+  //   });
 
-    it('should throw an error if `response_type` is not `code`', () => {
-      const model = {
-        getAccessToken() {},
-        getClient() {},
-        saveAuthorizationCode() {},
-      };
-      const handler = new AuthorizeHandler({
-        authorizationCodeLifetime: 120,
-        model,
-      });
-      const request = new Request({
-        body: { response_type: 'foobar' },
-        headers: {},
-        method: {},
-        query: {},
-      });
+  //   it('should throw an error if `response_type` is not `code`', () => {
+  //     const model = {
+  //       getAccessToken() {},
+  //       getClient() {},
+  //       saveAuthorizationCode() {},
+  //     };
+  //     const handler = new AuthorizeHandler({
+  //       authorizationCodeLifetime: 120,
+  //       model,
+  //     });
+  //     const request = new Request({
+  //       body: { response_type: 'foobar' },
+  //       headers: {},
+  //       method: {},
+  //       query: {},
+  //     });
 
-      try {
-        handler.getResponseType(request);
+  //     try {
+  //       handler.getResponseType(request);
 
-        should.fail('should.fail', '');
-      } catch (e) {
-        e.should.be.an.instanceOf(UnsupportedResponseTypeError);
-        e.message.should.equal(
-          'Unsupported response type: `response_type` is not supported',
-        );
-      }
-    });
+  //       should.fail('should.fail', '');
+  //     } catch (e) {
+  //       e.should.be.an.instanceOf(UnsupportedResponseTypeError);
+  //       e.message.should.equal(
+  //         'Unsupported response type: `response_type` is not supported',
+  //       );
+  //     }
+  //   });
 
-    describe('with `response_type` in the request body', () => {
-      it('should return a response type', () => {
-        const model = {
-          getAccessToken() {},
-          getClient() {},
-          saveAuthorizationCode() {},
-        };
-        const handler = new AuthorizeHandler({
-          authorizationCodeLifetime: 120,
-          model,
-        });
-        const request = new Request({
-          body: { response_type: 'code' },
-          headers: {},
-          method: {},
-          query: {},
-        });
-        const ResponseType = handler.getResponseType(request);
+  //   describe('with `response_type` in the request body', () => {
+  //     it('should return a response type', () => {
+  //       const model = {
+  //         getAccessToken() {},
+  //         getClient() {},
+  //         saveAuthorizationCode() {},
+  //       };
+  //       const handler = new AuthorizeHandler({
+  //         authorizationCodeLifetime: 120,
+  //         model,
+  //       });
+  //       const request = new Request({
+  //         body: { response_type: 'code' },
+  //         headers: {},
+  //         method: {},
+  //         query: {},
+  //       });
+  //       const ResponseType = handler.getResponseType(request);
 
-        ResponseType.should.equal(CodeResponseType);
-      });
-    });
+  //       ResponseType.should.equal(CodeResponseType);
+  //     });
+  //   });
 
-    describe('with `response_type` in the request query', () => {
-      it('should return a response type', () => {
-        const model = {
-          getAccessToken() {},
-          getClient() {},
-          saveAuthorizationCode() {},
-        };
-        const handler = new AuthorizeHandler({
-          authorizationCodeLifetime: 120,
-          model,
-        });
-        const request = new Request({
-          body: {},
-          headers: {},
-          method: {},
-          query: { response_type: 'code' },
-        });
-        const ResponseType = handler.getResponseType(request);
+  //   describe('with `response_type` in the request query', () => {
+  //     it('should return a response type', () => {
+  //       const model = {
+  //         getAccessToken() {},
+  //         getClient() {},
+  //         saveAuthorizationCode() {},
+  //       };
+  //       const handler = new AuthorizeHandler({
+  //         authorizationCodeLifetime: 120,
+  //         model,
+  //       });
+  //       const request = new Request({
+  //         body: {},
+  //         headers: {},
+  //         method: {},
+  //         query: { response_type: 'code' },
+  //       });
+  //       const ResponseType = handler.getResponseType(request);
 
-        ResponseType.should.equal(CodeResponseType);
-      });
-    });
-  });
+  //       ResponseType.should.equal(CodeResponseType);
+  //     });
+  //   });
+  // });
 
   describe('buildSuccessRedirectUri()', () => {
     it('should return a redirect uri', () => {
@@ -1512,6 +1511,7 @@ describe('AuthorizeHandler integration', () => {
       });
       const redirectUri = handler.buildErrorRedirectUri(
         'http://example.com/cb',
+        new CodeResponseType(),
         error,
       );
 
@@ -1535,6 +1535,7 @@ describe('AuthorizeHandler integration', () => {
       });
       const redirectUri = handler.buildErrorRedirectUri(
         'http://example.com/cb',
+        new CodeResponseType(),
         error,
       );
 
@@ -1560,7 +1561,7 @@ describe('AuthorizeHandler integration', () => {
       const response = new Response({ body: {}, headers: {} });
       const uri = url.parse('http://example.com/cb', true);
 
-      handler.updateResponse(response, uri, 'foobar');
+      handler.updateResponse(response, uri, new CodeResponseType(), 'foobar');
 
       response
         .get('location')

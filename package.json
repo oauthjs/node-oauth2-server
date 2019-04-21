@@ -37,12 +37,10 @@
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^2.0.1",
-    "fs-extra": "^7.0.1",
-    "klaw-sync": "^6.0.0",
     "lodash": "^4.17.11",
     "statuses": "^1.5.0",
-    "tslib": "^1.9.3",
-    "type-is": "^1.6.16"
+    "type-is": "^1.6.16",
+    "tslib": "^1.9.3"
   },
   "devDependencies": {
     "mocha": "^6.1.3",
@@ -68,6 +66,7 @@
     "lint:all": "tslint -p tsconfig.json -c tslint.json",
     "pretest": "npx jshint --config ./.jshintrc lib test",
     "build": "npx tsc -p tsconfig.build.json",
+    "build:prod": "npx tsc -p tsconfig.build.json && node ./scripts/build-prod.js",
     "test": "NODE_ENV=test npx mocha 'test/**/*_test.js'",
     "test2": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'",
     "test-debug": "NODE_ENV=test npx mocha --inspect --debug-brk 'test/**/*_test.js'"

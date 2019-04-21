@@ -1,20 +1,17 @@
 import { AbstractGrantType } from '.';
-import { InvalidArgumentError, InvalidGrantError } from '../errors';
+import { InvalidArgumentError } from '../errors';
 import { Client, User } from '../interfaces';
 import { Token } from '../interfaces/token.interface';
 import { Request } from '../request';
 
-export class ClientCredentialsGrantType extends AbstractGrantType {
+export class ImplicitGrantType extends AbstractGrantType {
+  scope: string;
+  user: User;
   constructor(options: any = {}) {
     super(options);
+
     if (!options.model) {
       throw new InvalidArgumentError('Missing parameter: `model`');
-    }
-
-    if (!options.model.getUserFromClient) {
-      throw new InvalidArgumentError(
-        'Invalid argument: model does not implement `getUserFromClient()`',
-      );
     }
 
     if (!options.model.saveToken) {
@@ -22,15 +19,20 @@ export class ClientCredentialsGrantType extends AbstractGrantType {
         'Invalid argument: model does not implement `saveToken()`',
       );
     }
+
+    if (!options.user) {
+      throw new InvalidArgumentError('Missing parameter: `user`');
+    }
+
+    this.scope = options.scope;
+    this.user = options.user;
   }
 
   /**
-   * Handle client credentials grant.
-   *
-   * @see https://tools.ietf.org/html/rfc6749#section-4.4.2
+   * Handle implicit token grant.
    */
 
-  async handle(request: Request, client: Client) {
+  handle(request: Request, client: Client) {
     if (!request) {
       throw new InvalidArgumentError('Missing parameter: `request`');
     }
@@ -39,25 +41,7 @@ export class ClientCredentialsGrantType extends AbstractGrantType {
       throw new InvalidArgumentError('Missing parameter: `client`');
     }
 
-    const scope = this.getScope(request);
-    const user = await this.getUserFromClient(client);
-
-    return this.saveToken(user, client, scope);
-  }
-
-  /**
-   * Retrieve the user using client credentials.
-   */
-
-  async getUserFromClient(client: Client) {
-    const user = await this.model.getUserFromClient(client);
-    if (!user) {
-      throw new InvalidGrantError(
-        'Invalid grant: user credentials are invalid',
-      );
-    }
-
-    return user;
+    return this.saveToken(this.user, client, this.scope);
   }
 
   /**
@@ -71,14 +55,16 @@ export class ClientCredentialsGrantType extends AbstractGrantType {
       this.getAccessTokenExpiresAt(),
     ];
 
-    const [accessScope, accessToken, accessTokenExpiresAt] = await Promise.all(
-      fns as any,
-    );
+    const [
+      validatedScope,
+      accessToken,
+      accessTokenExpiresAt,
+    ] = await Promise.all(fns as any);
 
     const token = {
       accessToken,
       accessTokenExpiresAt,
-      scope: accessScope,
+      scope: validatedScope,
     } as Token;
 
     return this.model.saveToken(token, client, user);

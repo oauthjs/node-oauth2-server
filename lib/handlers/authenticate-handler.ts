@@ -1,12 +1,13 @@
-import { InsufficientScopeError } from '../errors/insufficient-scope-error';
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { InvalidRequestError } from '../errors/invalid-request-error';
-import { InvalidTokenError } from '../errors/invalid-token-error';
-import { OAuthError } from '../errors/oauth-error';
-import { ServerError } from '../errors/server-error';
-import { UnauthorizedRequestError } from '../errors/unauthorized-request-error';
-import { Model } from '../interfaces/model.interface';
-import { Token } from '../interfaces/token.interface';
+import {
+  InsufficientScopeError,
+  InvalidArgumentError,
+  InvalidRequestError,
+  InvalidTokenError,
+  OAuthError,
+  ServerError,
+  UnauthorizedRequestError,
+} from '../errors';
+import { Model, Token } from '../interfaces';
 import { Request } from '../request';
 import { Response } from '../response';
 
