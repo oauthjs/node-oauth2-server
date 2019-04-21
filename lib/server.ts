@@ -1,20 +1,4 @@
-import {
-  AccessDeniedError,
-  InsufficientScopeError,
-  InvalidArgumentError,
-  InvalidClientError,
-  InvalidGrantError,
-  InvalidRequestError,
-  InvalidScopeError,
-  InvalidTokenError,
-  OAuthError,
-  ServerError,
-  UnauthorizedClientError,
-  UnauthorizedRequestError,
-  UnsupportedGrantTypeError,
-  UnsupportedResponseTypeError,
-} from './errors';
-import { AbstractGrantType } from './grant-types';
+import { InvalidArgumentError } from './errors';
 import {
   AuthenticateHandler,
   AuthorizeHandler,
@@ -112,22 +96,4 @@ export class OAuth2Server {
 
     return new RevokeHandler(opt).handle(request, response);
   }
-
-  static Request = Request;
-  static Response = Response;
-  static AbstractGrantType = AbstractGrantType;
-  static AccessDeniedError = AccessDeniedError;
-  static InsufficientScopeError = InsufficientScopeError;
-  static InvalidArgumentError = InvalidArgumentError;
-  static InvalidClientError = InvalidClientError;
-  static InvalidGrantError = InvalidGrantError;
-  static InvalidRequestError = InvalidRequestError;
-  static InvalidScopeError = InvalidScopeError;
-  static InvalidTokenError = InvalidTokenError;
-  static OAuthError = OAuthError;
-  static ServerError = ServerError;
-  static UnauthorizedClientError = UnauthorizedClientError;
-  static UnauthorizedRequestError = UnauthorizedRequestError;
-  static UnsupportedGrantTypeError = UnsupportedGrantTypeError;
-  static UnsupportedResponseTypeError = UnsupportedResponseTypeError;
 }

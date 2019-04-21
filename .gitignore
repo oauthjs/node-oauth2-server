@@ -2,7 +2,7 @@
 # IDE
 /.idea
 /.awcache
-/.vscode
+/.vscode/*.code-workspace
 
 # misc
 npm-debug.log

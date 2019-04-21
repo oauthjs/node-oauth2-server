@@ -1,3 +1,4 @@
+import { MS_IN_S } from '../constants';
 import { InvalidArgumentError } from '../errors/invalid-argument-error';
 import { Client } from '../interfaces/client.interface';
 import { Token } from '../interfaces/token.interface';
@@ -71,10 +72,10 @@ export class TokenModel implements Token {
         }
       }
     }
-    const msInS = 1000;
+
     if (this.accessTokenExpiresAt) {
       this.accessTokenLifetime = Math.floor(
-        (this.accessTokenExpiresAt.getTime() - new Date().getTime()) / msInS,
+        (this.accessTokenExpiresAt.getTime() - new Date().getTime()) / MS_IN_S,
       );
     }
   }

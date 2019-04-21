@@ -87,7 +87,7 @@ export class AuthorizeHandler {
     // this.model.request = request;
 
     const fns = [this.getClient(request), this.getUser(request, response)];
-    // try {
+
     const [client, user] = await Promise.all(fns);
 
     let scope: string;
@@ -125,7 +125,6 @@ export class AuthorizeHandler {
 
       throw e;
     }
-    // } catch (error) {}
   }
 
   /**
@@ -228,7 +227,7 @@ export class AuthorizeHandler {
    * Get state from the request.
    */
 
-  getState(request) {
+  getState(request: Request) {
     const state = request.body.state || request.query.state;
 
     if (!this.allowEmptyState && !state) {

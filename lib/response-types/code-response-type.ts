@@ -1,3 +1,4 @@
+import { MS_IN_S } from '../constants';
 import { InvalidArgumentError } from '../errors';
 import { AuthorizationCode, Client, Model, User } from '../interfaces';
 import { Request } from '../request';
@@ -82,7 +83,7 @@ export class CodeResponseType {
   getAuthorizationCodeExpiresAt(client: Client) {
     const authorizationCodeLifetime = this.getAuthorizationCodeLifetime(client);
 
-    return new Date(Date.now() + authorizationCodeLifetime * 1000);
+    return new Date(Date.now() + authorizationCodeLifetime * MS_IN_S);
   }
 
   /**

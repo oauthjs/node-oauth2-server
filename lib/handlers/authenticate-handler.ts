@@ -257,7 +257,7 @@ export class AuthenticateHandler {
    * Update response.
    */
 
-  updateResponse(response: Response, accessToken) {
+  updateResponse(response: Response, accessToken: Token) {
     if (this.scope && this.addAcceptedScopesHeader) {
       response.set('X-Accepted-OAuth-Scopes', this.scope);
     }

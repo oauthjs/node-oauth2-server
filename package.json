@@ -43,9 +43,6 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "mocha": "^6.1.3",
-    "should": "^13.2.3",
-    "sinon": "^7.3.1",
     "@types/basic-auth": "^1.1.2",
     "@types/lodash": "^4.14.123",
     "@types/mocha": "^5.2.6",
@@ -53,6 +50,11 @@
     "@types/sinon": "^7.0.11",
     "@types/statuses": "^1.5.0",
     "@types/type-is": "^1.6.2",
+    "mocha": "^6.1.3",
+    "npm-run-all": "^4.1.5",
+    "should": "^13.2.3",
+    "shx": "^0.3.2",
+    "sinon": "^7.3.1",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",
     "typescript": "^3.4.3"
@@ -65,8 +67,11 @@
     "lint": "tslint -p tsconfig.build.json -c tslint.json",
     "lint:all": "tslint -p tsconfig.json -c tslint.json",
     "pretest": "npx jshint --config ./.jshintrc lib test",
-    "build": "npx tsc -p tsconfig.build.json",
-    "build:prod": "npx tsc -p tsconfig.build.json && node ./scripts/build-prod.js",
+    "build": "npx tsc -p tsconfig.json",
+    "build:clean": "npx shx rm -rf ./dist",
+    "build:prod": "npx npm-run-all build:clean build:prod:*",
+    "build:prod:src": "npx tsc -p tsconfig.build.json",
+    "build:prod:package": "node ./scripts/build-prod.js",
     "test": "NODE_ENV=test npx mocha 'test/**/*_test.js'",
     "test2": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'",
     "test-debug": "NODE_ENV=test npx mocha --inspect --debug-brk 'test/**/*_test.js'"
