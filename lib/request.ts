@@ -1,5 +1,6 @@
 import * as typeis from 'type-is';
 import { InvalidArgumentError } from './errors';
+import { hasOwnProperty } from './utils/fn';
 
 export class Request {
   body: any;
@@ -26,14 +27,14 @@ export class Request {
 
     // Store the headers in lower case.
     for (const field in options.headers) {
-      if (options.headers.hasOwnProperty(field)) {
+      if (hasOwnProperty(options.headers, field)) {
         this.headers[field.toLowerCase()] = options.headers[field];
       }
     }
 
     // Store additional properties of the request object passed in
     for (const property in options) {
-      if (options.hasOwnProperty(property) && !this[property]) {
+      if (hasOwnProperty(options, property) && !this[property]) {
         this[property] = options[property];
       }
     }
@@ -43,7 +44,7 @@ export class Request {
    * Get a request header.
    */
 
-  get(field) {
+  get(field: string) {
     return this.headers[field.toLowerCase()];
   }
 

@@ -98,7 +98,7 @@ export class CodeResponseType {
    * Save authorization code.
    */
 
-  saveAuthorizationCode(
+  async saveAuthorizationCode(
     authorizationCode: string,
     expiresAt: Date,
     scope: string,

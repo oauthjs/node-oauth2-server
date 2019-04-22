@@ -32,7 +32,7 @@ export class ImplicitGrantType extends AbstractGrantType {
    * Handle implicit token grant.
    */
 
-  handle(request: Request, client: Client) {
+  async handle(request: Request, client: Client) {
     if (!request) {
       throw new InvalidArgumentError('Missing parameter: `request`');
     }

@@ -73,11 +73,11 @@ export class AuthenticateHandler {
     try {
       let token = await this.getTokenFromRequest(request);
       token = await this.getAccessToken(token);
-      await this.validateAccessToken(token);
+      this.validateAccessToken(token);
       if (this.scope) {
         await this.verifyScope(token);
       }
-      await this.updateResponse(response, token);
+      this.updateResponse(response, token);
 
       return token;
     } catch (e) {

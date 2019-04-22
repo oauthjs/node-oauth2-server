@@ -3,6 +3,7 @@ import { InvalidArgumentError } from '../errors/invalid-argument-error';
 import { Client } from '../interfaces/client.interface';
 import { Token } from '../interfaces/token.interface';
 import { User } from '../interfaces/user.interface';
+import { hasOwnProperty } from '../utils/fn';
 
 const modelAttributes = [
   'accessToken',
@@ -67,7 +68,7 @@ export class TokenModel implements Token {
       this.customAttributes = {};
 
       for (const key in data) {
-        if (data.hasOwnProperty(key) && modelAttributes.indexOf(key) < 0) {
+        if (hasOwnProperty(key, data) && modelAttributes.indexOf(key) < 0) {
           this.customAttributes[key] = data[key];
         }
       }
