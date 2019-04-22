@@ -6,19 +6,12 @@
 
 # misc
 npm-debug.log
-
-# example
-/quick-start
-
-# tests
-# /test
-/coverage
-/.nyc_output
-
-# dist
+# folders
 /dist
 /node_modules
+docs/_build/
+__pycache__/
 
+# files
 .DS_Store
-# conf
-ormconfig.json
+*.pyc
