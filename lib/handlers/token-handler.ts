@@ -278,7 +278,7 @@ export class TokenHandler {
    * Get token type.
    */
 
-  getTokenType = (model: any) => {
+  getTokenType(model: any) {
     return new BearerTokenType(
       model.accessToken,
       model.accessTokenLifetime,
@@ -286,36 +286,36 @@ export class TokenHandler {
       model.scope,
       model.customAttributes,
     );
-  };
+  }
 
   /**
    * Update response when a token is generated.
    */
 
-  updateSuccessResponse = (response: Response, tokenType: BearerTokenType) => {
+  updateSuccessResponse(response: Response, tokenType: BearerTokenType) {
     response.body = tokenType.valueOf();
 
     response.set('Cache-Control', 'no-store');
     response.set('Pragma', 'no-cache');
-  };
+  }
 
   /**
    * Update response when an error is thrown.
    */
 
-  updateErrorResponse = (response: Response, error: OAuthError) => {
+  updateErrorResponse(response: Response, error: OAuthError) {
     response.body = {
       error: error.name,
       error_description: error.message,
     };
 
     response.status = error.code;
-  };
+  }
 
   /**
    * Given a grant type, check if client authentication is required
    */
-  isClientAuthenticationRequired = (grantType: string) => {
+  isClientAuthenticationRequired(grantType: string) {
     if (Object.keys(this.requireClientAuthentication).length > 0) {
       return typeof this.requireClientAuthentication[grantType] !== 'undefined'
         ? this.requireClientAuthentication[grantType]
@@ -323,5 +323,5 @@ export class TokenHandler {
     }
 
     return true;
-  };
+  }
 }

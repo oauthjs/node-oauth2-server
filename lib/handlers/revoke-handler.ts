@@ -185,7 +185,7 @@ export class RevokeHandler {
    * @see https://tools.ietf.org/html/rfc6749#section-2.3.1
    */
 
-  getClientCredentials = (request: Request) => {
+  getClientCredentials(request: Request) {
     const credentials = auth(request as any);
 
     if (credentials) {
@@ -202,7 +202,7 @@ export class RevokeHandler {
     throw new InvalidClientError(
       'Invalid client: cannot retrieve client credentials',
     );
-  };
+  }
 
   /**
    * Get the token from the body.
@@ -210,7 +210,7 @@ export class RevokeHandler {
    * @see https://tools.ietf.org/html/rfc7009#section-2.1
    */
 
-  getTokenFromRequest = (request: Request) => {
+  getTokenFromRequest(request: Request) {
     const bodyToken = request.body.token;
 
     if (!bodyToken) {
@@ -218,7 +218,7 @@ export class RevokeHandler {
     }
 
     return bodyToken;
-  };
+  }
 
   /**
    * Get refresh token.
@@ -327,12 +327,12 @@ export class RevokeHandler {
    * Update response when an error is thrown.
    */
 
-  updateErrorResponse = (response: Response, error: OAuthError) => {
+  updateErrorResponse(response: Response, error: OAuthError) {
     response.body = {
       error: error.name,
       error_description: error.message,
     };
 
     response.status = error.code;
-  };
+  }
 }

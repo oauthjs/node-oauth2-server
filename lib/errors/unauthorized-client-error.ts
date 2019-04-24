@@ -9,7 +9,10 @@ import { OAuthError } from './oauth-error';
  */
 
 export class UnauthorizedClientError extends OAuthError {
-  constructor(message?: string | Error, properties?: any) {
+  constructor(
+    message?: string | Error,
+    properties?: { code?: number; message?: string },
+  ) {
     super(message, { code: 400, name: 'unauthorized_client', ...properties });
   }
 }

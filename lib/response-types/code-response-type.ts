@@ -146,7 +146,7 @@ export class CodeResponseType {
    * Set redirect uri parameter.
    */
 
-  setRedirectUriParam = (redirectUri: any, key: string, value: string) => {
+  setRedirectUriParam(redirectUri: any, key: string, value: string) {
     if (!redirectUri) {
       throw new InvalidArgumentError('Missing parameter: `redirectUri`');
     }
@@ -159,5 +159,5 @@ export class CodeResponseType {
     redirectUri.query[key] = value;
 
     return redirectUri;
-  };
+  }
 }

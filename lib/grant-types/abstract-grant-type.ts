@@ -76,13 +76,13 @@ export class AbstractGrantType {
    * Get scope from the request body.
    */
 
-  getScope = (request: Request) => {
+  getScope(request: Request) {
     if (!is.nqschar(request.body.scope)) {
       throw new InvalidArgumentError('Invalid parameter: `scope`');
     }
 
     return request.body.scope;
-  };
+  }
 
   /**
    * Validate requested scope.

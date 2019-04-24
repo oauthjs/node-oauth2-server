@@ -131,7 +131,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
    * @see https://tools.ietf.org/html/rfc6749#section-4.1.3
    */
 
-  validateRedirectUri = (request: Request, code) => {
+  validateRedirectUri(request: Request, code) {
     if (!code.redirectUri) {
       return;
     }
@@ -149,7 +149,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
         'Invalid request: `redirect_uri` is invalid',
       );
     }
-  };
+  }
 
   /**
    * Revoke the authorization code.

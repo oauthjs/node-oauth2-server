@@ -139,7 +139,7 @@ export class AuthenticateHandler {
    * @see http://tools.ietf.org/html/rfc6750#section-2.1
    */
 
-  getTokenFromRequestHeader = (request: Request) => {
+  getTokenFromRequestHeader(request: Request) {
     const token = request.get('Authorization');
     const matches = token.match(/Bearer\s(\S+)/);
 
@@ -150,7 +150,7 @@ export class AuthenticateHandler {
     }
 
     return matches[1];
-  };
+  }
 
   /**
    * Get the token from the request query.
@@ -185,7 +185,7 @@ export class AuthenticateHandler {
    * @see http://tools.ietf.org/html/rfc6750#section-2.2
    */
 
-  getTokenFromRequestBody = (request: Request) => {
+  getTokenFromRequestBody(request: Request) {
     if (request.method === 'GET') {
       throw new InvalidRequestError(
         'Invalid request: token may not be passed in the body when using the GET verb',
@@ -199,7 +199,7 @@ export class AuthenticateHandler {
     }
 
     return request.body.access_token;
-  };
+  }
 
   /**
    * Get the access token from the model.
@@ -224,7 +224,7 @@ export class AuthenticateHandler {
    * Validate access token.
    */
 
-  validateAccessToken = (accessToken: Token) => {
+  validateAccessToken(accessToken: Token) {
     if (!(accessToken.accessTokenExpiresAt instanceof Date)) {
       throw new ServerError(
         'Server error: `accessTokenExpiresAt` must be a Date instance',
@@ -236,7 +236,7 @@ export class AuthenticateHandler {
     }
 
     return accessToken;
-  };
+  }
 
   /**
    * Verify scope.

@@ -68,19 +68,19 @@ export class TokenResponseType {
    * Build redirect uri.
    */
 
-  buildRedirectUri = (redirectUri: any) => {
+  buildRedirectUri(redirectUri: any) {
     return this.setRedirectUriParam(
       redirectUri,
       'access_token',
       this.accessToken,
     );
-  };
+  }
 
   /**
    * Set redirect uri parameter.
    */
 
-  setRedirectUriParam = (redirectUri: any, key: string, value: any) => {
+  setRedirectUriParam(redirectUri: any, key: string, value: any) {
     if (!redirectUri) {
       throw new InvalidArgumentError('Missing parameter: `redirectUri`');
     }
@@ -95,5 +95,5 @@ export class TokenResponseType {
     }${key}=${encodeURIComponent(value)}`;
 
     return redirectUri;
-  };
+  }
 }

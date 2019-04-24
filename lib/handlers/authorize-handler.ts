@@ -213,7 +213,7 @@ export class AuthorizeHandler {
    * Get scope from the request.
    */
 
-  getScope = (request: Request) => {
+  getScope(request: Request) {
     const scope = request.body.scope || request.query.scope;
 
     if (!is.nqschar(scope)) {
@@ -221,7 +221,7 @@ export class AuthorizeHandler {
     }
 
     return scope;
-  };
+  }
 
   /**
    * Get state from the request.
@@ -266,19 +266,19 @@ export class AuthorizeHandler {
    * Get redirect URI.
    */
 
-  getRedirectUri = (request: Request, client: Client) => {
+  getRedirectUri(request: Request, client: Client) {
     return (
       request.body.redirect_uri ||
       request.query.redirect_uri ||
       client.redirectUris[0]
     );
-  };
+  }
 
   /**
    * Get response type.
    */
 
-  getResponseType = (request: Request, client: Client) => {
+  getResponseType(request: Request, client: Client) {
     const responseType =
       request.body.response_type || request.query.response_type;
 
@@ -302,30 +302,30 @@ export class AuthorizeHandler {
     }
 
     return responseTypes[responseType];
-  };
+  }
 
   /**
    * Build a successful response that redirects the user-agent to the client-provided url.
    */
 
-  buildSuccessRedirectUri = (
+  buildSuccessRedirectUri(
     redirectUri: string,
     responseType: CodeResponseType | TokenResponseType,
-  ) => {
+  ) {
     const uri = url.parse(redirectUri);
 
     return responseType.buildRedirectUri(uri);
-  };
+  }
 
   /**
    * Build an error response that redirects the user-agent to the client-provided url.
    */
 
-  buildErrorRedirectUri = (
+  buildErrorRedirectUri(
     redirectUri: any,
     responseType: CodeResponseType | TokenResponseType,
     error: Error,
-  ) => {
+  ) {
     let uri = url.parse(redirectUri, true);
 
     if (responseType) {
@@ -349,18 +349,18 @@ export class AuthorizeHandler {
     }
 
     return uri;
-  };
+  }
 
   /**
    * Update response with the redirect uri and the state parameter, if available.
    */
 
-  updateResponse = (
+  updateResponse(
     response: Response,
     redirectUri: any,
     responseType: CodeResponseType | TokenResponseType,
     state: any,
-  ) => {
+  ) {
     if (responseType && state) {
       // tslint:disable-next-line:no-parameter-reassignment
       redirectUri = responseType.setRedirectUriParam(
@@ -374,5 +374,5 @@ export class AuthorizeHandler {
     }
 
     response.redirect(url.format(redirectUri));
-  };
+  }
 }
