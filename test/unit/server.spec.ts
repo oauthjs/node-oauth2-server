@@ -13,7 +13,7 @@ const Token: any = TokenHandler;
 
 describe('Server', () => {
   describe('authenticate()', () => {
-    it('should call `handle`', () => {
+    it('should call `handle`', async () => {
       const model = {
         getAccessToken() {},
       };
@@ -21,14 +21,14 @@ describe('Server', () => {
 
       sinon.stub(Authenticate.prototype, 'handle').returns(Promise.resolve());
 
-      server.authenticate('foo' as any);
+      await server.authenticate('foo' as any);
 
       Authenticate.prototype.handle.callCount.should.equal(1);
       Authenticate.prototype.handle.firstCall.args[0].should.equal('foo');
       Authenticate.prototype.handle.restore();
     });
 
-    it('should map string passed as `options` to `options.scope`', () => {
+    it('should map string passed as `options` to `options.scope`', async () => {
       const model = {
         getAccessToken() {},
         verifyScope() {},
@@ -37,7 +37,7 @@ describe('Server', () => {
 
       sinon.stub(Authenticate.prototype, 'handle').returns(Promise.resolve());
 
-      server.authenticate('foo' as any, 'bar' as any, 'test');
+      await server.authenticate('foo' as any, 'bar' as any, 'test');
 
       Authenticate.prototype.handle.callCount.should.equal(1);
       Authenticate.prototype.handle.firstCall.args[0].should.equal('foo');

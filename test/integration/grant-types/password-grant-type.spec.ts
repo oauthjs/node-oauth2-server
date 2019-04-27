@@ -124,7 +124,9 @@ describe('PasswordGrantType integration', () => {
         .then(data => {
           data.should.equal(token);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should support promises', () => {

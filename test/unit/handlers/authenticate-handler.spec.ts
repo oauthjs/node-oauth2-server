@@ -111,7 +111,7 @@ describe('AuthenticateHandler', () => {
 
       let failed = false;
       try {
-        await handler.validateAccessToken({
+        handler.validateAccessToken({
           user: {},
         } as any);
       } catch (err) {

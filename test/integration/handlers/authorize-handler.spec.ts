@@ -206,7 +206,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(AccessDeniedError);
           e.message.should.equal(
@@ -254,7 +256,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(() => {
           response
             .get('location')
@@ -360,7 +364,9 @@ describe('AuthorizeHandler integration', () => {
             .get('location')
             .should.equal('http://example.com/cb?code=12345&state=foobar');
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should redirect to an error response if `scope` is invalid', () => {
@@ -403,7 +409,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(() => {
           response
             .get('location')
@@ -450,7 +458,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(() => {
           response
             .get('location')
@@ -499,7 +509,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(() => {
           response.get('location').should.equal(
             // tslint:disable-next-line:max-line-length
@@ -547,7 +559,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(() => {
           response.get('location').should.equal(
             // tslint:disable-next-line:max-line-length
@@ -603,7 +617,9 @@ describe('AuthorizeHandler integration', () => {
             client,
           });
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
   });
 
@@ -795,7 +811,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getClient(request)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
@@ -825,7 +843,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getClient(request)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: missing client `grants`');
@@ -853,7 +873,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getClient(request)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(UnauthorizedClientError);
           e.message.should.equal(
@@ -883,7 +905,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getClient(request)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
@@ -920,7 +944,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getClient(request)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
@@ -951,7 +977,7 @@ describe('AuthorizeHandler integration', () => {
         query: {},
       });
       try {
-        await handler.getClient(request).should.be.an.instanceOf(Promise);
+        handler.getClient(request).should.be.an.instanceOf(Promise);
       } catch (error) {
         should.fail('should.fail', '');
       }
@@ -1037,7 +1063,9 @@ describe('AuthorizeHandler integration', () => {
           .then(data => {
             data.should.equal(client);
           })
-          .catch(() => should.fail('should.fail', ''));
+          .catch(() => {
+            should.fail('should.fail', '');
+          });
       });
     });
   });
@@ -1238,7 +1266,9 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getUser(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -1276,7 +1306,9 @@ describe('AuthorizeHandler integration', () => {
         .then(data => {
           data.should.equal(user);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
   });
 

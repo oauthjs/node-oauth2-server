@@ -379,7 +379,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
@@ -410,7 +412,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -441,7 +445,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -476,7 +482,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -512,7 +520,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
@@ -549,7 +559,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
@@ -587,7 +599,9 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
@@ -627,7 +641,9 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(data => {
           data.should.equal(authorizationCode);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should support promises', () => {

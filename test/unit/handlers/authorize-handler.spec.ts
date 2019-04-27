@@ -95,7 +95,9 @@ describe('AuthorizeHandler', () => {
           authenticateHandler.handle.firstCall.args[0].should.equal(request);
           authenticateHandler.handle.firstCall.args[1].should.equal(response);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
   });
 

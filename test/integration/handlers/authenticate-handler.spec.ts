@@ -147,7 +147,9 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(() => {
           response
             .get('WWW-Authenticate')
@@ -172,7 +174,9 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(AccessDeniedError);
           e.message.should.equal('Cannot request this access token');
@@ -196,7 +200,9 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Unhandled exception');
@@ -235,7 +241,9 @@ describe('AuthenticateHandler integration', () => {
         .then(data => {
           data.should.equal(accessToken);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
   });
 
@@ -431,7 +439,9 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .getAccessToken('foo')
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidTokenError);
           e.message.should.equal('Invalid token: access token is invalid');
@@ -448,7 +458,9 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .getAccessToken('foo')
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -471,7 +483,9 @@ describe('AuthenticateHandler integration', () => {
         .then(data => {
           data.should.equal(accessToken);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should support promises', () => {
@@ -557,7 +571,9 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .verifyScope('foo' as any)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InsufficientScopeError);
           e.message.should.equal(
@@ -631,7 +647,7 @@ describe('AuthenticateHandler integration', () => {
       });
       const response = new Response({ body: {}, headers: {} });
 
-      handler.updateResponse(response, { scope: 'foo biz' });
+      handler.updateResponse(response, { scope: 'foo biz' } as any);
 
       response.headers.should.not.have.property('x-accepted-oauth-scopes');
     });
@@ -649,7 +665,7 @@ describe('AuthenticateHandler integration', () => {
       });
       const response = new Response({ body: {}, headers: {} });
 
-      handler.updateResponse(response, { scope: 'foo biz' });
+      handler.updateResponse(response, { scope: 'foo biz' } as any);
 
       response.get('X-Accepted-OAuth-Scopes').should.equal('foo bar');
     });
@@ -666,7 +682,7 @@ describe('AuthenticateHandler integration', () => {
       });
       const response = new Response({ body: {}, headers: {} });
 
-      handler.updateResponse(response, { scope: 'foo biz' });
+      handler.updateResponse(response, { scope: 'foo biz' } as any);
 
       response.headers.should.not.have.property('x-oauth-scopes');
     });
@@ -684,7 +700,7 @@ describe('AuthenticateHandler integration', () => {
       });
       const response = new Response({ body: {}, headers: {} });
 
-      handler.updateResponse(response, { scope: 'foo biz' });
+      handler.updateResponse(response, { scope: 'foo biz' } as any);
 
       response.get('X-OAuth-Scopes').should.equal('foo biz');
     });

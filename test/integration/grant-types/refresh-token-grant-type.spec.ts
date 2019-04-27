@@ -156,7 +156,9 @@ describe('RefreshTokenGrantType integration', () => {
         .then(data => {
           data.should.equal(token);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should support promises', () => {
@@ -311,7 +313,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
@@ -340,7 +344,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -371,7 +377,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -402,7 +410,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
@@ -461,7 +471,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
@@ -496,7 +508,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token has expired');
@@ -530,7 +544,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
@@ -565,7 +581,9 @@ describe('RefreshTokenGrantType integration', () => {
         .then(data => {
           data.should.equal(token);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should support promises', () => {
@@ -661,7 +679,9 @@ describe('RefreshTokenGrantType integration', () => {
 
       grantType
         .revokeToken({} as any)
-        .then(() => should.fail('should.fail', ''))
+        .then(() => {
+          should.fail('should.fail', '');
+        })
         .catch(e => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
@@ -692,7 +712,9 @@ describe('RefreshTokenGrantType integration', () => {
         .then(data => {
           data.should.equal(token);
         })
-        .catch(() => should.fail('should.fail', ''));
+        .catch(() => {
+          should.fail('should.fail', '');
+        });
     });
 
     it('should support promises', () => {
