@@ -108,14 +108,14 @@ export class RevokeHandler {
    */
 
   async handleRevokeToken(request: Request, client: Client) {
-    const token = await this.getTokenFromRequest(request);
     try {
-      const t = await oneSuccess([
+      let token = await this.getTokenFromRequest(request);
+      token = await oneSuccess([
         this.getAccessToken(token, client),
         this.getRefreshToken(token, client),
       ]);
 
-      return this.revokeToken(t);
+      return this.revokeToken(token);
     } catch (errors) {
       throw errors;
     }
@@ -269,7 +269,7 @@ export class RevokeHandler {
    * Get the access token from the model.
    */
 
-  async getAccessToken(token, client) {
+  async getAccessToken(token: string, client: Client) {
     const accessToken = await this.model.getAccessToken(token);
     if (!accessToken) {
       throw new InvalidTokenError('Invalid token: access token is invalid');

@@ -118,7 +118,7 @@ export class RefreshTokenGrantType extends AbstractGrantType {
    */
 
   async revokeToken(token: RefreshToken) {
-    if (!this.alwaysIssueNewRefreshToken) {
+    if (this.alwaysIssueNewRefreshToken === false) {
       return token;
     }
 
@@ -155,7 +155,7 @@ export class RefreshTokenGrantType extends AbstractGrantType {
       scope,
     };
 
-    if (this.alwaysIssueNewRefreshToken) {
+    if (this.alwaysIssueNewRefreshToken !== false) {
       token.refreshToken = refreshToken;
       token.refreshTokenExpiresAt = refreshTokenExpiresAt;
     }

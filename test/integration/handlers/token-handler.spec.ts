@@ -1,17 +1,19 @@
 import * as should from 'should';
 import * as util from 'util';
-import { AccessDeniedError } from '../../../lib/errors/access-denied-error';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidClientError } from '../../../lib/errors/invalid-client-error';
-import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
-import { ServerError } from '../../../lib/errors/server-error';
-import { UnauthorizedClientError } from '../../../lib/errors/unauthorized-client-error';
-import { UnsupportedGrantTypeError } from '../../../lib/errors/unsupported-grant-type-error';
-import { PasswordGrantType } from '../../../lib/grant-types/password-grant-type';
-import { TokenHandler } from '../../../lib/handlers/token-handler';
+import {
+  AccessDeniedError,
+  InvalidArgumentError,
+  InvalidClientError,
+  InvalidRequestError,
+  ServerError,
+  UnauthorizedClientError,
+  UnsupportedGrantTypeError,
+} from '../../../lib/errors';
+import { PasswordGrantType } from '../../../lib/grant-types';
+import { TokenHandler } from '../../../lib/handlers';
 import { Request } from '../../../lib/request';
 import { Response } from '../../../lib/response';
-import { BearerTokenType } from '../../../lib/token-types/bearer-token-type';
+import { BearerTokenType } from '../../../lib/token-types';
 
 /**
  * Test `TokenHandler` integration.
@@ -409,7 +411,7 @@ describe('TokenHandler integration', () => {
             error: 'server_error',
             error_description: 'Unhandled exception',
           });
-          response.status.should.equal(503);
+          response.status.should.equal(500);
         });
     });
 
@@ -525,7 +527,7 @@ describe('TokenHandler integration', () => {
         });
     });
 
-    it('should return custom attributes in a bearer token if the allowExtendedTokenAttributes is set', () => {
+    it('should return custom attributes in a bearer token if the allowExtendedTokenAttributes is set', async () => {
       const token = {
         accessToken: 'foo',
         client: {},
@@ -572,18 +574,12 @@ describe('TokenHandler integration', () => {
       });
       const response = new Response({ body: {}, headers: {} });
 
-      return handler
-        .handle(request, response)
-        .then(() => {
-          should.exist(response.body.access_token);
-          should.exist(response.body.refresh_token);
-          should.exist(response.body.token_type);
-          should.exist(response.body.scope);
-          should.exist(response.body.foo);
-        })
-        .catch(() => {
-          should.fail('should.fail', '');
-        });
+      await handler.handle(request, response);
+      should.exist(response.body.access_token);
+      should.exist(response.body.refresh_token);
+      should.exist(response.body.token_type);
+      should.exist(response.body.scope);
+      should.exist(response.body.foo);
     });
   });
 
@@ -1156,7 +1152,7 @@ describe('TokenHandler integration', () => {
     });
 
     it('should throw an error if `grant_type` is unauthorized', async () => {
-      const client = { grants: ['client_credentials'] };
+      const client: any = { grants: ['client_credentials'] };
       const model = {
         getClient() {},
         saveToken() {},
@@ -1216,7 +1212,7 @@ describe('TokenHandler integration', () => {
 
     describe('with grant_type `authorization_code`', () => {
       it('should return a token', () => {
-        const client = { id: 'foobar', grants: ['authorization_code'] };
+        const client: any = { id: 'foobar', grants: ['authorization_code'] };
         const token = {};
         const model = {
           getAuthorizationCode() {
@@ -1258,20 +1254,18 @@ describe('TokenHandler integration', () => {
           query: {},
         });
 
-        return handler
-          .handleGrantType(request, client)
-          .then(data => {
-            data.should.equal(token);
-          })
-          .catch(() => {
-            should.fail('should.fail', '');
-          });
+        return handler.handleGrantType(request, client).then(data => {
+          data.should.equal(token);
+        });
+        // .catch(() => {
+        //   should.fail('should.fail', '');
+        // });
       });
     });
 
     describe('with grant_type `client_credentials`', () => {
       it('should return a token', () => {
-        const client = { grants: ['client_credentials'] };
+        const client: any = { grants: ['client_credentials'] };
         const token = {};
         const model = {
           getClient() {},
@@ -1313,7 +1307,7 @@ describe('TokenHandler integration', () => {
 
     describe('with grant_type `password`', () => {
       it('should return a token', () => {
-        const client = { grants: ['password'] };
+        const client: any = { grants: ['password'] };
         const token = {};
         const model = {
           getClient() {},
@@ -1359,7 +1353,7 @@ describe('TokenHandler integration', () => {
 
     describe('with grant_type `refresh_token`', () => {
       it('should return a token', () => {
-        const client = { grants: ['refresh_token'] };
+        const client: any = { grants: ['refresh_token'] };
         const token = { accessToken: 'foo', client: {}, user: {} };
         const model = {
           getClient() {},
@@ -1411,7 +1405,7 @@ describe('TokenHandler integration', () => {
 
     describe('with custom grant_type', () => {
       it('should return a token', () => {
-        const client = {
+        const client: any = {
           grants: ['urn:ietf:params:oauth:grant-type:saml2-bearer'],
         };
         const token = {};
@@ -1460,7 +1454,7 @@ describe('TokenHandler integration', () => {
 
   describe('getAccessTokenLifetime()', () => {
     it('should return the client access token lifetime', () => {
-      const client = { accessTokenLifetime: 60 };
+      const client: any = { accessTokenLifetime: 60 };
       const model = {
         getClient() {
           return client;
@@ -1477,7 +1471,7 @@ describe('TokenHandler integration', () => {
     });
 
     it('should return the default access token lifetime', () => {
-      const client = {};
+      const client: any = {};
       const model = {
         getClient() {
           return client;

@@ -1,7 +1,6 @@
 import * as should from 'should';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidGrantError } from '../../../lib/errors/invalid-grant-error';
-import { ClientCredentialsGrantType } from '../../../lib/grant-types/client-credentials-grant-type';
+import { InvalidArgumentError, InvalidGrantError } from '../../../lib/errors';
+import { ClientCredentialsGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**

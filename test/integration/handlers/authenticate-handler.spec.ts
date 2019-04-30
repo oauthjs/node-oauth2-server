@@ -1,12 +1,14 @@
 import * as should from 'should';
-import { AccessDeniedError } from '../../../lib/errors/access-denied-error';
-import { InsufficientScopeError } from '../../../lib/errors/insufficient-scope-error';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
-import { InvalidTokenError } from '../../../lib/errors/invalid-token-error';
-import { ServerError } from '../../../lib/errors/server-error';
-import { UnauthorizedRequestError } from '../../../lib/errors/unauthorized-request-error';
-import { AuthenticateHandler } from '../../../lib/handlers/authenticate-handler';
+import {
+  AccessDeniedError,
+  InsufficientScopeError,
+  InvalidArgumentError,
+  InvalidRequestError,
+  InvalidTokenError,
+  ServerError,
+  UnauthorizedRequestError,
+} from '../../../lib/errors';
+import { AuthenticateHandler } from '../../../lib/handlers';
 import { Request } from '../../../lib/request';
 import { Response } from '../../../lib/response';
 

@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { AuthorizationCodeGrantType } from '../../../lib/grant-types/authorization-code-grant-type';
+import { AuthorizationCodeGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**
@@ -55,7 +55,7 @@ describe('AuthorizationCodeGrantType', () => {
         accessTokenLifetime: 120,
         model,
       });
-      const authorizationCode = {};
+      const authorizationCode: any = {};
       try {
         await handler.revokeAuthorizationCode(authorizationCode);
 

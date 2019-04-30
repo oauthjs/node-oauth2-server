@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { RefreshTokenGrantType } from '../../../lib/grant-types/refresh-token-grant-type';
+import { RefreshTokenGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**
@@ -191,10 +191,10 @@ describe('RefreshTokenGrantType', () => {
         model,
       });
 
-      sinon.stub(handler, 'generateAccessToken').returns('foo' as any);
-      sinon.stub(handler, 'generateRefreshToken').returns('bar' as any);
-      sinon.stub(handler, 'getAccessTokenExpiresAt').returns('biz' as any);
-      sinon.stub(handler, 'getRefreshTokenExpiresAt').returns('baz' as any);
+      sinon.stub(handler, 'generateAccessToken').returns('foo');
+      sinon.stub(handler, 'generateRefreshToken').returns('bar');
+      sinon.stub(handler, 'getAccessTokenExpiresAt').returns('biz');
+      sinon.stub(handler, 'getRefreshTokenExpiresAt').returns('baz');
 
       return handler
         .saveToken(user, client, 'foobar')

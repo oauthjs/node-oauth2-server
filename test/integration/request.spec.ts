@@ -1,5 +1,5 @@
 import * as should from 'should';
-import { InvalidArgumentError } from '../../lib/errors/invalid-argument-error';
+import { InvalidArgumentError } from '../../lib/errors';
 import { Request } from '../../lib/request';
 
 /**

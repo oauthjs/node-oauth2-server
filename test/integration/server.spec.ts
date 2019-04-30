@@ -1,9 +1,11 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { InvalidArgumentError } from '../../lib/errors/invalid-argument-error';
-import { AuthenticateHandler } from '../../lib/handlers/authenticate-handler';
-import { AuthorizeHandler } from '../../lib/handlers/authorize-handler';
-import { TokenHandler } from '../../lib/handlers/token-handler';
+import { InvalidArgumentError } from '../../lib/errors';
+import {
+  AuthenticateHandler,
+  AuthorizeHandler,
+  TokenHandler,
+} from '../../lib/handlers';
 import { Request } from '../../lib/request';
 import { Response } from '../../lib/response';
 import { OAuth2Server as Server } from '../../lib/server';
@@ -140,17 +142,18 @@ describe('Server integration', () => {
         query: { state: 'foobar' },
       });
       const response = new Response({ body: {}, headers: {} });
-      try {
-        const stub = sinon
-          .stub(AuthorizeHandler.prototype, 'handle')
-          .returnsThis();
-        const code = await server.authorize(request, response);
-        code.allowEmptyState.should.be.false();
-        code.authorizationCodeLifetime.should.be.equal(300);
-        stub.restore();
-      } catch (error) {
-        should.fail('should.fail', '');
-      }
+      // try {
+      const stub = sinon
+        .stub(AuthorizeHandler.prototype, 'handle')
+        .returnsThis();
+      const code = await server.authorize(request, response);
+      const options = code.options;
+      options.allowEmptyState.should.be.false();
+      options.authorizationCodeLifetime.should.be.equal(300);
+      stub.restore();
+      // } catch (error) {
+      //   should.fail('should.fail', '');
+      // }
     });
 
     it('should return a promise', () => {

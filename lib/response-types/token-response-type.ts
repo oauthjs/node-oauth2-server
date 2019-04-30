@@ -1,5 +1,5 @@
 import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { ImplicitGrantType } from '../grant-types/implicit-grant-type';
+import { ImplicitGrantType } from '../grant-types';
 import { Client } from '../interfaces/client.interface';
 import { Model } from '../interfaces/model.interface';
 import { User } from '../interfaces/user.interface';

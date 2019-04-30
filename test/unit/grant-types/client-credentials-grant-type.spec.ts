@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { ClientCredentialsGrantType } from '../../../lib/grant-types/client-credentials-grant-type';
+import { ClientCredentialsGrantType } from '../../../lib/grant-types';
 
 /**
  * Test `ClientCredentialsGrantType`.

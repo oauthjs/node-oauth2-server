@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { PasswordGrantType } from '../../../lib/grant-types/password-grant-type';
+import { PasswordGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**

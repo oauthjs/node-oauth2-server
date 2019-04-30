@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { TokenHandler } from '../../../lib/handlers/token-handler';
+import { TokenHandler } from '../../../lib/handlers';
 import { Request } from '../../../lib/request';
 
 /**

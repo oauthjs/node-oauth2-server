@@ -1,9 +1,11 @@
 import * as should from 'should';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidGrantError } from '../../../lib/errors/invalid-grant-error';
-import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
-import { ServerError } from '../../../lib/errors/server-error';
-import { AuthorizationCodeGrantType } from '../../../lib/grant-types/authorization-code-grant-type';
+import {
+  InvalidArgumentError,
+  InvalidGrantError,
+  InvalidRequestError,
+  ServerError,
+} from '../../../lib/errors';
+import { AuthorizationCodeGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**
@@ -742,7 +744,7 @@ describe('AuthorizationCodeGrantType integration', () => {
 
   describe('validateRedirectUri()', () => {
     it('should throw an error if `redirectUri` is missing', () => {
-      const authorizationCode = {
+      const authorizationCode: any = {
         authorizationCode: 12345,
         client: {},
         expiresAt: new Date(new Date().getTime() / 2),
@@ -780,7 +782,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error if `redirectUri` is invalid', () => {
-      const authorizationCode = {
+      const authorizationCode: any = {
         authorizationCode: 12345,
         client: {},
         expiresAt: new Date(new Date().getTime() / 2),
@@ -818,7 +820,7 @@ describe('AuthorizationCodeGrantType integration', () => {
 
   describe('revokeAuthorizationCode()', () => {
     it('should revoke the auth code', async () => {
-      const authorizationCode = {
+      const authorizationCode: any = {
         authorizationCode: 12345,
         client: {},
         expiresAt: new Date(new Date().getTime() / 2),
@@ -844,7 +846,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should throw an error when the auth code is invalid', () => {
-      const authorizationCode = {
+      const authorizationCode: any = {
         authorizationCode: 12345,
         client: {},
         expiresAt: new Date(new Date().getTime() / 2),
@@ -876,7 +878,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should support promises', () => {
-      const authorizationCode = {
+      const authorizationCode: any = {
         authorizationCode: 12345,
         client: {},
         expiresAt: new Date(new Date().getTime() / 2),
@@ -900,7 +902,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     });
 
     it('should support non-promises', () => {
-      const authorizationCode = {
+      const authorizationCode: any = {
         authorizationCode: 12345,
         client: {},
         expiresAt: new Date(new Date().getTime() / 2),

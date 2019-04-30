@@ -1,7 +1,7 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { ServerError } from '../../../lib/errors/server-error';
-import { AuthenticateHandler } from '../../../lib/handlers/authenticate-handler';
+import { ServerError } from '../../../lib/errors';
+import { AuthenticateHandler } from '../../../lib/handlers';
 import { Request } from '../../../lib/request';
 
 /**

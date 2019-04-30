@@ -1,8 +1,10 @@
 import * as should from 'should';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidGrantError } from '../../../lib/errors/invalid-grant-error';
-import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
-import { PasswordGrantType } from '../../../lib/grant-types/password-grant-type';
+import {
+  InvalidArgumentError,
+  InvalidGrantError,
+  InvalidRequestError,
+} from '../../../lib/errors';
+import { PasswordGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**

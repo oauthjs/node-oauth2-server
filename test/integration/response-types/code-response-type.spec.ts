@@ -1,8 +1,8 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
 import * as url from 'url';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { CodeResponseType } from '../../../lib/response-types/code-response-type';
+import { InvalidArgumentError } from '../../../lib/errors';
+import { CodeResponseType } from '../../../lib/response-types';
 
 /**
  * Test `CodeResponseType` integration.

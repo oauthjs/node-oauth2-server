@@ -1,17 +1,18 @@
 import * as should from 'should';
 import * as url from 'url';
-import { AccessDeniedError } from '../../../lib/errors/access-denied-error';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidClientError } from '../../../lib/errors/invalid-client-error';
-import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
-import { InvalidScopeError } from '../../../lib/errors/invalid-scope-error';
-import { ServerError } from '../../../lib/errors/server-error';
-import { UnauthorizedClientError } from '../../../lib/errors/unauthorized-client-error';
-import { AuthenticateHandler } from '../../../lib/handlers/authenticate-handler';
-import { AuthorizeHandler } from '../../../lib/handlers/authorize-handler';
+import {
+  AccessDeniedError,
+  InvalidArgumentError,
+  InvalidClientError,
+  InvalidRequestError,
+  InvalidScopeError,
+  ServerError,
+  UnauthorizedClientError,
+} from '../../../lib/errors';
+import { AuthenticateHandler, AuthorizeHandler } from '../../../lib/handlers';
 import { Request } from '../../../lib/request';
 import { Response } from '../../../lib/response';
-import { CodeResponseType } from '../../../lib/response-types/code-response-type';
+import { CodeResponseType } from '../../../lib/response-types';
 
 /**
  * Test `AuthorizeHandler` integration.
@@ -19,18 +20,19 @@ import { CodeResponseType } from '../../../lib/response-types/code-response-type
 
 describe('AuthorizeHandler integration', () => {
   describe('constructor()', () => {
-    it('should throw an error if `options.authorizationCodeLifetime` is missing', () => {
-      try {
-        new AuthorizeHandler();
+    // Move to Code Response Type
+    // it('should throw an error if `options.authorizationCodeLifetime` is missing', () => {
+    //   try {
+    //     new AuthorizeHandler({ model: {} });
 
-        should.fail('should.fail', '');
-      } catch (e) {
-        e.should.be.an.instanceOf(InvalidArgumentError);
-        e.message.should.equal(
-          'Missing parameter: `authorizationCodeLifetime`',
-        );
-      }
-    });
+    //     should.fail('should.fail', '');
+    //   } catch (e) {
+    //     e.should.be.an.instanceOf(InvalidArgumentError);
+    //     e.message.should.equal(
+    //       'Missing parameter: `authorizationCodeLifetime`',
+    //     );
+    //   }
+    // });
 
     it('should throw an error if `options.model` is missing', () => {
       try {
@@ -56,21 +58,22 @@ describe('AuthorizeHandler integration', () => {
       }
     });
 
-    it('should throw an error if the model does not implement `saveAuthorizationCode()`', () => {
-      try {
-        new AuthorizeHandler({
-          authorizationCodeLifetime: 120,
-          model: { getClient: () => {} },
-        });
+    // Move to Code Response Type
+    // it('should throw an error if the model does not implement `saveAuthorizationCode()`', () => {
+    //   try {
+    //     new AuthorizeHandler({
+    //       authorizationCodeLifetime: 120,
+    //       model: { getClient: () => {} },
+    //     });
 
-        should.fail('should.fail', '');
-      } catch (e) {
-        e.should.be.an.instanceOf(InvalidArgumentError);
-        e.message.should.equal(
-          'Invalid argument: model does not implement `saveAuthorizationCode()`',
-        );
-      }
-    });
+    //     should.fail('should.fail', '');
+    //   } catch (e) {
+    //     e.should.be.an.instanceOf(InvalidArgumentError);
+    //     e.message.should.equal(
+    //       'Invalid argument: model does not implement `saveAuthorizationCode()`',
+    //     );
+    //   }
+    // });
 
     it('should throw an error if the model does not implement `getAccessToken()`', () => {
       const model = {
@@ -958,11 +961,11 @@ describe('AuthorizeHandler integration', () => {
     it('should support promises', async () => {
       const model = {
         getAccessToken() {},
-        getClient() {
-          return Promise.resolve({
+        async getClient() {
+          return {
             grants: ['authorization_code'],
             redirectUris: ['http://example.com/cb'],
-          });
+          };
         },
         saveAuthorizationCode() {},
       };
@@ -1519,7 +1522,11 @@ describe('AuthorizeHandler integration', () => {
         authorizationCodeLifetime: 120,
         model,
       });
-      const responseType = new CodeResponseType(12345);
+      const responseType = new CodeResponseType({
+        authorizationCodeLifetime: 360,
+        model: { saveAuthorizationCode: () => {} },
+      });
+      responseType.code = 12345;
       const redirectUri = handler.buildSuccessRedirectUri(
         'http://example.com/cb',
         responseType,
@@ -1541,9 +1548,13 @@ describe('AuthorizeHandler integration', () => {
         authorizationCodeLifetime: 120,
         model,
       });
+      const responseType = new CodeResponseType({
+        authorizationCodeLifetime: 360,
+        model: { saveAuthorizationCode: () => {} },
+      });
       const redirectUri = handler.buildErrorRedirectUri(
         'http://example.com/cb',
-        new CodeResponseType(),
+        responseType,
         error,
       );
 
@@ -1565,9 +1576,13 @@ describe('AuthorizeHandler integration', () => {
         authorizationCodeLifetime: 120,
         model,
       });
+      const responseType = new CodeResponseType({
+        authorizationCodeLifetime: 360,
+        model: { saveAuthorizationCode: () => {} },
+      });
       const redirectUri = handler.buildErrorRedirectUri(
         'http://example.com/cb',
-        new CodeResponseType(),
+        responseType,
         error,
       );
 
@@ -1590,10 +1605,14 @@ describe('AuthorizeHandler integration', () => {
         authorizationCodeLifetime: 120,
         model,
       });
+      const responseType = new CodeResponseType({
+        authorizationCodeLifetime: 360,
+        model: { saveAuthorizationCode: () => {} },
+      });
       const response = new Response({ body: {}, headers: {} });
       const uri = url.parse('http://example.com/cb', true);
 
-      handler.updateResponse(response, uri, new CodeResponseType(), 'foobar');
+      handler.updateResponse(response, uri, responseType, 'foobar');
 
       response
         .get('location')

@@ -1,9 +1,11 @@
 import * as should from 'should';
-import { InvalidArgumentError } from '../../../lib/errors/invalid-argument-error';
-import { InvalidGrantError } from '../../../lib/errors/invalid-grant-error';
-import { InvalidRequestError } from '../../../lib/errors/invalid-request-error';
-import { ServerError } from '../../../lib/errors/server-error';
-import { RefreshTokenGrantType } from '../../../lib/grant-types/refresh-token-grant-type';
+import {
+  InvalidArgumentError,
+  InvalidGrantError,
+  InvalidRequestError,
+  ServerError,
+} from '../../../lib/errors';
+import { RefreshTokenGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
 /**

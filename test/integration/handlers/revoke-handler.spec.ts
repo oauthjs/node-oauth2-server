@@ -1,16 +1,17 @@
+import * as should from 'should';
+import * as util from 'util';
 import {
   AccessDeniedError,
   InvalidArgumentError,
   InvalidClientError,
   InvalidRequestError,
   InvalidTokenError,
-  Request,
-  Response,
-  RevokeHandler,
   ServerError,
-} from 'index';
-import * as should from 'should';
-import * as util from 'util';
+} from '../../../lib/errors';
+import { RevokeHandler } from '../../../lib/handlers';
+import { Request } from '../../../lib/request';
+import { Response } from '../../../lib/response';
+
 /**
  * Test `RevokeHandler` integration.
  */
@@ -55,7 +56,7 @@ describe('RevokeHandler integration', () => {
   });
 
   describe('handle()', () => {
-    it('should throw an error if `request` is missing', () => {
+    it('should throw an error if `request` is missing', async () => {
       const model = {
         getClient() {},
         revokeToken() {},
@@ -65,7 +66,7 @@ describe('RevokeHandler integration', () => {
       const handler: any = new RevokeHandler({ model });
 
       try {
-        handler.handle();
+        await handler.handle();
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -76,7 +77,7 @@ describe('RevokeHandler integration', () => {
       }
     });
 
-    it('should throw an error if `response` is missing', () => {
+    it('should throw an error if `response` is missing', async () => {
       const model = {
         getClient() {},
         revokeToken() {},
@@ -92,7 +93,7 @@ describe('RevokeHandler integration', () => {
       });
 
       try {
-        handler.handle(request);
+        await handler.handle(request);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -327,7 +328,8 @@ describe('RevokeHandler integration', () => {
         .handle(request, response)
         .then(should.fail)
         .catch(e => {
-          e.should.be.an.instanceOf(InvalidTokenError);
+          e[0].should.be.an.instanceOf(InvalidTokenError);
+          e[1].should.be.an.instanceOf(InvalidTokenError);
           response.body.should.eql({});
           response.status.should.equal(200);
         });
@@ -379,7 +381,7 @@ describe('RevokeHandler integration', () => {
   });
 
   describe('getClient()', () => {
-    it('should throw an error if `clientId` is invalid', () => {
+    it('should throw an error if `clientId` is invalid', async () => {
       const model = {
         getClient() {},
         revokeToken() {},
@@ -395,7 +397,7 @@ describe('RevokeHandler integration', () => {
       });
 
       try {
-        handler.getClient(request);
+        await handler.getClient(request);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -404,7 +406,7 @@ describe('RevokeHandler integration', () => {
       }
     });
 
-    it('should throw an error if `clientId` is invalid', () => {
+    it('should throw an error if `clientId` is invalid', async () => {
       const model = {
         getClient() {},
         revokeToken() {},
@@ -420,7 +422,7 @@ describe('RevokeHandler integration', () => {
       });
 
       try {
-        handler.getClient(request);
+        await handler.getClient(request);
 
         should.fail('should.fail', '');
       } catch (e) {

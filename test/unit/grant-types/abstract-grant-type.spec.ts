@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { AbstractGrantType } from '../../../lib/grant-types/abstract-grant-type';
+import { AbstractGrantType } from '../../../lib/grant-types';
 
 /**
  * Test `AbstractGrantType`.

@@ -5,7 +5,7 @@ import {
   InvalidRequestError,
   ServerError,
 } from '../errors';
-import { Client, Token, User } from '../interfaces';
+import { AuthorizationCode, Client, Token, User } from '../interfaces';
 import { Request } from '../request';
 import * as is from '../validator/is';
 
@@ -131,7 +131,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
    * @see https://tools.ietf.org/html/rfc6749#section-4.1.3
    */
 
-  validateRedirectUri(request: Request, code) {
+  validateRedirectUri(request: Request, code: AuthorizationCode) {
     if (!code.redirectUri) {
       return;
     }
@@ -161,7 +161,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
    * @see https://tools.ietf.org/html/rfc6749#section-4.1.2
    */
 
-  async revokeAuthorizationCode(code) {
+  async revokeAuthorizationCode(code: AuthorizationCode) {
     const status = await this.model.revokeAuthorizationCode(code);
     if (!status) {
       throw new InvalidGrantError(

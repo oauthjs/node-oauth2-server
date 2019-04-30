@@ -1,6 +1,7 @@
-import { InvalidArgumentError, Request } from 'index';
 import * as should from 'should';
-import { ImplicitGrantType } from '../../../lib/grant-types/implicit-grant-type';
+import { InvalidArgumentError } from '../../../lib/errors';
+import { ImplicitGrantType } from '../../../lib/grant-types';
+import { Request } from '../../../lib/request';
 
 /**
  * Test `ImplicitGrantType` integration.
@@ -10,7 +11,7 @@ describe('ImplicitGrantType integration', () => {
   describe('constructor()', () => {
     it('should throw an error if `model` is missing', () => {
       try {
-        new ImplicitGrantType();
+        new ImplicitGrantType({ accessTokenLifetime: 3600 });
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -23,7 +24,7 @@ describe('ImplicitGrantType integration', () => {
       try {
         const model = {};
 
-        new ImplicitGrantType({ model });
+        new ImplicitGrantType({ model, accessTokenLifetime: 3600 });
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -40,7 +41,7 @@ describe('ImplicitGrantType integration', () => {
           saveToken() {},
         };
 
-        new ImplicitGrantType({ model });
+        new ImplicitGrantType({ model, accessTokenLifetime: 3600 });
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -51,7 +52,7 @@ describe('ImplicitGrantType integration', () => {
   });
 
   describe('handle()', () => {
-    it('should throw an error if `request` is missing', () => {
+    it('should throw an error if `request` is missing', async () => {
       const model = {
         saveToken() {},
       };
@@ -62,8 +63,7 @@ describe('ImplicitGrantType integration', () => {
       });
 
       try {
-        grantType.handle();
-
+        await grantType.handle();
         should.fail('should.fail', '');
       } catch (e) {
         e.should.be.an.instanceOf(InvalidArgumentError);
@@ -71,7 +71,7 @@ describe('ImplicitGrantType integration', () => {
       }
     });
 
-    it('should throw an error if `client` is missing', () => {
+    it('should throw an error if `client` is missing', async () => {
       const model = {
         saveToken() {},
       };
@@ -88,7 +88,7 @@ describe('ImplicitGrantType integration', () => {
       });
 
       try {
-        grantType.handle(request, undefined);
+        await grantType.handle(request, undefined);
       } catch (e) {
         e.should.be.an.instanceOf(InvalidArgumentError);
         e.message.should.equal('Missing parameter: `client`');

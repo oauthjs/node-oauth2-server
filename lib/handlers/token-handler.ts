@@ -14,6 +14,7 @@ import {
   PasswordGrantType,
   RefreshTokenGrantType,
 } from '../grant-types';
+import { Model } from '../interfaces';
 import { Client } from '../interfaces/client.interface';
 import { TokenModel } from '../models/token-model';
 import { Request } from '../request';
@@ -32,13 +33,12 @@ const grantTypes = {
   password: PasswordGrantType,
   refresh_token: RefreshTokenGrantType,
 };
-
 export class TokenHandler {
   accessTokenLifetime: any;
-  grantTypes: any;
-  model: any;
-  refreshTokenLifetime: any;
-  allowExtendedTokenAttributes: any;
+  grantTypes: { [key: string]: any };
+  model: Model;
+  refreshTokenLifetime: number;
+  allowExtendedTokenAttributes: boolean;
   requireClientAuthentication: any;
   alwaysIssueNewRefreshToken: boolean;
   constructor(options: any = {}) {
@@ -221,7 +221,7 @@ export class TokenHandler {
    * Handle grant type.
    */
 
-  async handleGrantType(request: Request, client) {
+  async handleGrantType(request: Request, client: Client) {
     const grantType = request.body.grant_type;
 
     if (!grantType) {
@@ -246,7 +246,7 @@ export class TokenHandler {
 
     const accessTokenLifetime = this.getAccessTokenLifetime(client);
     const refreshTokenLifetime = this.getRefreshTokenLifetime(client);
-    const Type = this.grantTypes[grantType];
+    const GrantType = this.grantTypes[grantType];
 
     const options = {
       accessTokenLifetime,
@@ -255,14 +255,14 @@ export class TokenHandler {
       alwaysIssueNewRefreshToken: this.alwaysIssueNewRefreshToken,
     };
 
-    return new Type(options).handle(request, client);
+    return new GrantType(options).handle(request, client);
   }
 
   /**
    * Get access token lifetime.
    */
 
-  getAccessTokenLifetime(client) {
+  getAccessTokenLifetime(client: Client) {
     return client.accessTokenLifetime || this.accessTokenLifetime;
   }
 

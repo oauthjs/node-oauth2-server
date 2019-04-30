@@ -1,7 +1,9 @@
 import * as sinon from 'sinon';
-import { AuthenticateHandler } from '../../lib/handlers/authenticate-handler';
-import { AuthorizeHandler } from '../../lib/handlers/authorize-handler';
-import { TokenHandler } from '../../lib/handlers/token-handler';
+import {
+  AuthenticateHandler,
+  AuthorizeHandler,
+  TokenHandler,
+} from '../../lib/handlers';
 import { OAuth2Server as Server } from '../../lib/server';
 
 const Authenticate: any = AuthenticateHandler;

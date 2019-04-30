@@ -1,6 +1,6 @@
 import * as should from 'should';
 import * as sinon from 'sinon';
-import { AuthorizeHandler } from '../../../lib/handlers/authorize-handler';
+import { AuthorizeHandler } from '../../../lib/handlers';
 import { Request } from '../../../lib/request';
 import { Response } from '../../../lib/response';
 

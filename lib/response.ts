@@ -11,7 +11,7 @@ export class Response {
 
     // Store the headers in lower case.
     for (const field in options.headers) {
-      if (hasOwnProperty(options, field)) {
+      if (hasOwnProperty(options.headers, field)) {
         this.headers[field.toLowerCase()] = options.headers[field];
       }
     }
