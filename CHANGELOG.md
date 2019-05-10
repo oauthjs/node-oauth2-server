@@ -1,5 +1,8 @@
 ## Changelog
 
+### 5.0.0
+* BREAKING: Remove support for node v6
+
 ### 4.0.0
 * BREAKING: Set server_error Code to 500
 * BREAKING: Remove support for node v4
