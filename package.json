@@ -61,20 +61,17 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=8.0"
+    "node": ">=8.10"
   },
   "scripts": {
     "lint": "tslint -p tsconfig.build.json -c tslint.json",
     "lint:all": "tslint -p tsconfig.json -c tslint.json",
-    "pretest": "npx jshint --config ./.jshintrc lib test",
     "build": "npx tsc -p tsconfig.json",
     "build:clean": "npx shx rm -rf ./dist",
     "build:prod": "npx npm-run-all build:clean build:prod:*",
     "build:prod:src": "npx tsc -p tsconfig.build.json",
     "build:prod:package": "node ./scripts/build-prod.js",
-    "test": "NODE_ENV=test npx mocha 'test/**/*_test.js'",
-    "test2": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'",
-    "test-debug": "NODE_ENV=test npx mocha --inspect --debug-brk 'test/**/*_test.js'"
+    "test": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'"
   },
   "repository": {
     "type": "git",
