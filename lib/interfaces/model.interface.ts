@@ -1,8 +1,4 @@
-import { AuthorizationCode } from './authorization-code.interface';
-import { Client } from './client.interface';
-import { RefreshToken } from './refresh-token.interface';
-import { Token } from './token.interface';
-import { User } from './user.interface';
+import { AuthorizationCode, Client, RefreshToken, Token, User } from '.';
 
 export interface BaseModel {
   /**

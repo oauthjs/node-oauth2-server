@@ -1,5 +1,4 @@
-import { Client } from './client.interface';
-import { User } from './user.interface';
+import { Client, User } from '.';
 
 /**
  * An interface representing the refresh token and associated data.

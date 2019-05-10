@@ -1,7 +1,6 @@
 import { AbstractGrantType } from '.';
 import { InvalidArgumentError, InvalidGrantError } from '../errors';
-import { Client, User } from '../interfaces';
-import { Token } from '../interfaces/token.interface';
+import { Client, Token, User } from '../interfaces';
 import { Request } from '../request';
 
 export class ClientCredentialsGrantType extends AbstractGrantType {

@@ -1,8 +1,6 @@
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
+import { InvalidArgumentError } from '../errors';
 import { ImplicitGrantType } from '../grant-types';
-import { Client } from '../interfaces/client.interface';
-import { Model } from '../interfaces/model.interface';
-import { User } from '../interfaces/user.interface';
+import { Client, Model, User } from '../interfaces';
 import { Request } from '../request';
 
 export class TokenResponseType {
