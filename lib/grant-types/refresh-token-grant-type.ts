@@ -135,19 +135,10 @@ export class RefreshTokenGrantType extends AbstractGrantType {
    */
 
   async saveToken(user: User, client: Client, scope: string) {
-    const fns = [
-      this.generateAccessToken(client, user, scope),
-      this.generateRefreshToken(client, user, scope),
-      this.getAccessTokenExpiresAt(),
-      this.getRefreshTokenExpiresAt(),
-    ];
-
-    const [
-      accessToken,
-      refreshToken,
-      accessTokenExpiresAt,
-      refreshTokenExpiresAt,
-    ] = await Promise.all(fns as any);
+    const accessToken = await this.generateAccessToken(client, user, scope);
+    const refreshToken = await this.generateRefreshToken(client, user, scope);
+    const accessTokenExpiresAt = this.getAccessTokenExpiresAt();
+    const refreshTokenExpiresAt = this.getRefreshTokenExpiresAt();
 
     const token: any = {
       accessToken,

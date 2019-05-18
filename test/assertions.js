@@ -1,5 +1,3 @@
-const from = require('should');
-
 /**
  * SHA-1 assertion.
  */

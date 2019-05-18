@@ -84,11 +84,10 @@ export class AuthorizeHandler {
     }
 
     // Extend model object with request
-    // this.model.request = request;
+    this.model.request = request;
 
-    const fns = [this.getClient(request), this.getUser(request, response)];
-
-    const [client, user] = await Promise.all(fns);
+    const client = await this.getClient(request);
+    const user = await this.getUser(request, response);
 
     let scope: string;
     let state: string;

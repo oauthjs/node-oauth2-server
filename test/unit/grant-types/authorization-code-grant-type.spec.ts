@@ -92,12 +92,8 @@ describe('AuthorizationCodeGrantType', () => {
       sinon
         .stub(handler, 'generateRefreshToken')
         .returns(Promise.resolve('bar'));
-      sinon
-        .stub(handler, 'getAccessTokenExpiresAt')
-        .returns(Promise.resolve('biz') as any);
-      sinon
-        .stub(handler, 'getRefreshTokenExpiresAt')
-        .returns(Promise.resolve('baz') as any);
+      sinon.stub(handler, 'getAccessTokenExpiresAt').returns('biz' as any);
+      sinon.stub(handler, 'getRefreshTokenExpiresAt').returns('baz' as any);
       try {
         await handler.saveToken(user, client, 'foobar', 'foobiz');
         model.saveToken.callCount.should.equal(1);

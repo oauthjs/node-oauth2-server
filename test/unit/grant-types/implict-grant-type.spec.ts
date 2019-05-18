@@ -23,9 +23,7 @@ describe('ImplicitGrantType', () => {
       sinon
         .stub(handler, 'generateAccessToken')
         .returns(Promise.resolve('foobar-token'));
-      sinon
-        .stub(handler, 'getAccessTokenExpiresAt')
-        .returns(Promise.resolve('foo-1234'));
+      sinon.stub(handler, 'getAccessTokenExpiresAt').returns('foo-1234');
 
       return handler
         .saveToken(user, client, 'foobar')

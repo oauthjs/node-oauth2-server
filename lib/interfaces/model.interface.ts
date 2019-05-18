@@ -1,6 +1,8 @@
 import { AuthorizationCode, Client, RefreshToken, Token, User } from '.';
+import { Request } from '../request';
 
 export interface BaseModel {
+  request: Request;
   /**
    * Invoked to generate a new access token.
    *

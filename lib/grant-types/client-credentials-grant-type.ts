@@ -64,15 +64,9 @@ export class ClientCredentialsGrantType extends AbstractGrantType {
    */
 
   async saveToken(user: User, client: Client, scope: string) {
-    const fns = [
-      this.validateScope(user, client, scope),
-      this.generateAccessToken(client, user, scope),
-      this.getAccessTokenExpiresAt(),
-    ];
-
-    const [accessScope, accessToken, accessTokenExpiresAt] = await Promise.all(
-      fns as any,
-    );
+    const accessScope = await this.validateScope(user, client, scope);
+    const accessToken = await this.generateAccessToken(client, user, scope);
+    const accessTokenExpiresAt = this.getAccessTokenExpiresAt();
 
     const token = {
       accessToken,

@@ -70,6 +70,10 @@ export class AuthenticateHandler {
         'Invalid argument: `response` must be an instance of Response',
       );
     }
+
+    // Extend model object with request
+    this.model.request = request;
+
     try {
       let token = await this.getTokenFromRequest(request);
       token = await this.getAccessToken(token);

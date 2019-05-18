@@ -182,21 +182,11 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
     authorizationCode: string,
     scope: string,
   ) {
-    const fns = [
-      this.validateScope(user, client, scope),
-      this.generateAccessToken(client, user, scope),
-      this.generateRefreshToken(client, user, scope),
-      this.getAccessTokenExpiresAt(),
-      this.getRefreshTokenExpiresAt(),
-    ];
-
-    const [
-      accessScope,
-      accessToken,
-      refreshToken,
-      accessTokenExpiresAt,
-      refreshTokenExpiresAt,
-    ] = await Promise.all(fns as any);
+    const accessScope = await this.validateScope(user, client, scope);
+    const accessToken = await this.generateAccessToken(client, user, scope);
+    const refreshToken = await this.generateRefreshToken(client, user, scope);
+    const accessTokenExpiresAt = this.getAccessTokenExpiresAt();
+    const refreshTokenExpiresAt = this.getRefreshTokenExpiresAt();
 
     const token: Token = {
       accessToken,

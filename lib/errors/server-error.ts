@@ -1,7 +1,7 @@
 import { OAuthError } from './oauth-error';
 
 /**
- * Constructor.
+ * ServerError
  *
  * "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
  *

@@ -30,6 +30,6 @@ export class OAuthError extends Error {
         this[key] = props[key];
       }
     }
-    // Error.captureStackTrace(this, OAuthError);
+    Error.captureStackTrace(this, OAuthError);
   }
 }
