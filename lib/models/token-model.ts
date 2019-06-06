@@ -1,8 +1,6 @@
 import { MS_IN_S } from '../constants';
-import { InvalidArgumentError } from '../errors/invalid-argument-error';
-import { Client } from '../interfaces/client.interface';
-import { Token } from '../interfaces/token.interface';
-import { User } from '../interfaces/user.interface';
+import { InvalidArgumentError } from '../errors';
+import { Client, Token, User } from '../interfaces';
 import { hasOwnProperty } from '../utils/fn';
 
 const modelAttributes = [

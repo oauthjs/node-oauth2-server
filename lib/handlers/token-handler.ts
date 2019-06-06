@@ -14,12 +14,11 @@ import {
   PasswordGrantType,
   RefreshTokenGrantType,
 } from '../grant-types';
-import { Model } from '../interfaces';
-import { Client } from '../interfaces/client.interface';
-import { TokenModel } from '../models/token-model';
+import { Client, Model } from '../interfaces';
+import { TokenModel } from '../models';
 import { Request } from '../request';
 import { Response } from '../response';
-import { BearerTokenType } from '../token-types/bearer-token-type';
+import { BearerTokenType } from '../token-types';
 import { hasOwnProperty } from '../utils/fn';
 import * as is from '../validator/is';
 
