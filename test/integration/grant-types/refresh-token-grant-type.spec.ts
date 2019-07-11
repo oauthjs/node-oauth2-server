@@ -41,7 +41,7 @@ describe('RefreshTokenGrantType integration', () => {
     it('should throw an error if the model does not implement `revokeToken()`', () => {
       try {
         const model = {
-          async getRefreshToken() {},
+          getRefreshToken() {},
         };
 
         new RefreshTokenGrantType({ accessTokenLifetime: 3600, model });
@@ -58,8 +58,8 @@ describe('RefreshTokenGrantType integration', () => {
     it('should throw an error if the model does not implement `saveToken()`', () => {
       try {
         const model = {
-          async getRefreshToken() {},
-          async revokeToken() {},
+          getRefreshToken() {},
+          revokeToken() {},
         };
 
         new RefreshTokenGrantType({ accessTokenLifetime: 3600, model });

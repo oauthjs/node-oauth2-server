@@ -105,7 +105,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
       );
     }
 
-    if (code.expiresAt < new Date()) {
+    if (code.expiresAt.getTime() < Date.now()) {
       throw new InvalidGrantError(
         'Invalid grant: authorization code has expired',
       );

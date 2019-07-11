@@ -1,3 +1,4 @@
+import { isUndefined } from 'lodash';
 import {
   InsufficientScopeError,
   InvalidArgumentError,
@@ -28,13 +29,13 @@ export class AuthenticateHandler {
       );
     }
 
-    if (options.scope && options.addAcceptedScopesHeader === undefined) {
+    if (options.scope && isUndefined(options.addAcceptedScopesHeader)) {
       throw new InvalidArgumentError(
         'Missing parameter: `addAcceptedScopesHeader`',
       );
     }
 
-    if (options.scope && options.addAuthorizedScopesHeader === undefined) {
+    if (options.scope && isUndefined(options.addAuthorizedScopesHeader)) {
       throw new InvalidArgumentError(
         'Missing parameter: `addAuthorizedScopesHeader`',
       );
@@ -235,7 +236,7 @@ export class AuthenticateHandler {
       );
     }
 
-    if (accessToken.accessTokenExpiresAt < new Date()) {
+    if (accessToken.accessTokenExpiresAt.getTime() < Date.now()) {
       throw new InvalidTokenError('Invalid token: access token has expired');
     }
 

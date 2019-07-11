@@ -796,7 +796,7 @@ describe('TokenHandler integration', () => {
           async getClient() {
             return client;
           },
-          async saveToken() {},
+          saveToken() {},
         };
 
         const handler = new TokenHandler({
@@ -832,7 +832,7 @@ describe('TokenHandler integration', () => {
           async getClient() {
             return client;
           },
-          async saveToken() {},
+          saveToken() {},
         };
 
         const handler = new TokenHandler({

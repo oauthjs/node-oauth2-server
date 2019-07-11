@@ -103,7 +103,7 @@ describe('AuthenticateHandler', () => {
   });
 
   describe('validateAccessToken()', () => {
-    it('should fail if token has no valid `accessTokenExpiresAt` date', async () => {
+    it('should fail if token has no valid `accessTokenExpiresAt` date', () => {
       const model = {
         getAccessToken() {},
       };

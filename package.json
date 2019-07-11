@@ -45,17 +45,17 @@
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^2.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "statuses": "^1.5.0",
-    "tslib": "^1.9.3",
+    "tslib": "^1.10.0",
     "type-is": "^1.6.18"
   },
   "devDependencies": {
     "@types/basic-auth": "^1.1.2",
-    "@types/lodash": "^4.14.133",
+    "@types/lodash": "^4.14.136",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^11.13.13",
-    "@types/sinon": "^7.0.12",
+    "@types/node": "^11.13.17",
+    "@types/sinon": "^7.0.13",
     "@types/statuses": "^1.5.0",
     "@types/type-is": "^1.6.2",
     "mocha": "^6.1.4",
@@ -63,9 +63,9 @@
     "should": "^13.2.3",
     "shx": "^0.3.2",
     "sinon": "^7.3.2",
-    "ts-node": "^8.2.0",
-    "tslint": "^5.17.0",
-    "typescript": "^3.5.1"
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
   },
   "license": "MIT",
   "engines": {

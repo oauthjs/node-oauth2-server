@@ -1568,9 +1568,9 @@ describe('AuthorizeHandler integration', () => {
     it('should return a redirect uri', () => {
       const error = new InvalidClientError();
       const model = {
-        async getAccessToken() {},
-        async getClient() {},
-        async saveAuthorizationCode() {},
+        getAccessToken() {},
+        getClient() {},
+        saveAuthorizationCode() {},
       };
       const handler = new AuthorizeHandler({
         authorizationCodeLifetime: 120,

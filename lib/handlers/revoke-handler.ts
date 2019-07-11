@@ -257,7 +257,7 @@ export class RevokeHandler {
 
     if (
       refreshToken.refreshTokenExpiresAt &&
-      refreshToken.refreshTokenExpiresAt < new Date()
+      refreshToken.refreshTokenExpiresAt.getTime() < Date.now()
     ) {
       throw new InvalidTokenError('Invalid token: refresh token has expired');
     }
@@ -300,7 +300,7 @@ export class RevokeHandler {
 
     if (
       accessToken.accessTokenExpiresAt &&
-      accessToken.accessTokenExpiresAt < new Date()
+      accessToken.accessTokenExpiresAt.getTime() < Date.now()
     ) {
       throw new InvalidTokenError('Invalid token: access token has expired.');
     }
