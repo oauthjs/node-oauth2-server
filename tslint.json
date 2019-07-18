@@ -1,5 +1,4 @@
 {
-  // "defaultSeverity": "error",
   "extends": ["tslint:recommended", "tslint:all", "tslint:latest"],
   "jsRules": {
     "no-unused-expression": true

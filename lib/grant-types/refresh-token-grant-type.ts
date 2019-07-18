@@ -103,7 +103,7 @@ export class RefreshTokenGrantType extends AbstractGrantType {
 
     if (
       token.refreshTokenExpiresAt &&
-      token.refreshTokenExpiresAt < new Date()
+      token.refreshTokenExpiresAt.getTime() < Date.now()
     ) {
       throw new InvalidGrantError('Invalid grant: refresh token has expired');
     }
