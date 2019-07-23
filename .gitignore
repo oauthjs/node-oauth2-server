@@ -3,6 +3,7 @@
 /.idea
 /.awcache
 /.vscode/*.code-workspace
+/.vscode/settings.json
 
 # misc
 npm-debug.log
