@@ -8,11 +8,14 @@ The *oauth2-server* module is typically not used directly but through one of the
 
 - express-oauth-server_ for Express_
 - koa-oauth-server_ for Koa_
+- hapi-server-oauth2_ for Hapi_
 
 .. _express-oauth-server: https://npmjs.org/package/express-oauth-server
 .. _Express: https://npmjs.org/package/express
 .. _koa-oauth-server: https://npmjs.org/package/koa-oauth-server
 .. _Koa: https://npmjs.org/package/koa
+.. _hapi-server-oauth2: https://npmjs.org/package/hapi-server-oauth2
+.. _Hapi: https://npmjs.org/package/@hapi/hapi
 
 
 Writing Adapters
