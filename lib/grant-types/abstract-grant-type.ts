@@ -1,4 +1,4 @@
-import { MS_IN_S } from '../constants';
+import { MILLISECONDS_PER_SECOND } from '../constants';
 import { InvalidArgumentError, InvalidScopeError } from '../errors';
 import { Client, Model, User } from '../interfaces';
 import { Request } from '../request';
@@ -61,7 +61,9 @@ export class AbstractGrantType {
    */
 
   getAccessTokenExpiresAt() {
-    return new Date(Date.now() + this.accessTokenLifetime * MS_IN_S);
+    return new Date(
+      Date.now() + this.accessTokenLifetime * MILLISECONDS_PER_SECOND,
+    );
   }
 
   /**
@@ -69,7 +71,9 @@ export class AbstractGrantType {
    */
 
   getRefreshTokenExpiresAt() {
-    return new Date(Date.now() + this.refreshTokenLifetime * MS_IN_S);
+    return new Date(
+      Date.now() + this.refreshTokenLifetime * MILLISECONDS_PER_SECOND,
+    );
   }
 
   /**

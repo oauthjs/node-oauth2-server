@@ -1,3 +1,4 @@
+import { HOUR, MINUTE, SECOND, WEEK } from './constants';
 import { InvalidArgumentError } from './errors';
 import {
   AuthenticateHandler,
@@ -61,8 +62,8 @@ export class OAuth2Server {
   async authorize(request: Request, response: Response, options?: any) {
     const opts = {
       allowEmptyState: false,
-      accessTokenLifetime: 60 * 60,
-      authorizationCodeLifetime: 5 * 60,
+      accessTokenLifetime: HOUR / SECOND,
+      authorizationCodeLifetime: (MINUTE * 5) / SECOND,
       ...this.options,
       ...options,
     };
@@ -76,8 +77,8 @@ export class OAuth2Server {
 
   async token(request: Request, response: Response, options?: any) {
     const opts = {
-      accessTokenLifetime: 60 * 60, // 1 hour.
-      refreshTokenLifetime: 60 * 60 * 24 * 14, // 2 weeks.
+      accessTokenLifetime: HOUR / SECOND, // 1 hour in seconds.
+      refreshTokenLifetime: (WEEK * 2) / SECOND, // 2 weeks.
       allowExtendedTokenAttributes: false,
       requireClientAuthentication: {},
       ...this.options,

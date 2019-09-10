@@ -1,4 +1,4 @@
-import { MS_IN_S } from '../constants';
+import { MILLISECONDS_PER_SECOND } from '../constants';
 import { InvalidArgumentError } from '../errors';
 import { Client, Token, User } from '../interfaces';
 import { hasOwnProperty } from '../utils/fn';
@@ -74,7 +74,8 @@ export class TokenModel implements Token {
 
     if (this.accessTokenExpiresAt) {
       this.accessTokenLifetime = Math.floor(
-        (this.accessTokenExpiresAt.getTime() - new Date().getTime()) / MS_IN_S,
+        (this.accessTokenExpiresAt.getTime() - new Date().getTime()) /
+          MILLISECONDS_PER_SECOND,
       );
     }
   }
