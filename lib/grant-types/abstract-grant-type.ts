@@ -36,7 +36,7 @@ export class AbstractGrantType {
     if (this.model.generateAccessToken) {
       const token = await this.model.generateAccessToken(client, user, scope);
 
-      return token || tokenUtil.GenerateRandomToken();
+      return token ? token : tokenUtil.GenerateRandomToken();
     }
 
     return tokenUtil.GenerateRandomToken();
@@ -50,7 +50,7 @@ export class AbstractGrantType {
     if (this.model.generateRefreshToken) {
       const token = await this.model.generateRefreshToken(client, user, scope);
 
-      return token || tokenUtil.GenerateRandomToken();
+      return token ? token : tokenUtil.GenerateRandomToken();
     }
 
     return tokenUtil.GenerateRandomToken();

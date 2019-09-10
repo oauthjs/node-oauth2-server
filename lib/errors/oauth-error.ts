@@ -25,7 +25,7 @@ export class OAuthError extends Error {
     }
     this.code = this.status = this.statusCode = props.code;
     this.message = message;
-    for (const key in props) {
+    for (const key of Object.keys(props)) {
       if (key !== 'code') {
         this[key] = props[key];
       }

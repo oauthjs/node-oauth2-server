@@ -65,7 +65,7 @@ export class TokenModel implements Token {
     if (options && options.allowExtendedTokenAttributes) {
       this.customAttributes = {};
 
-      for (const key in data) {
+      for (const key of Object.keys(data)) {
         if (hasOwnProperty(data, key) && modelAttributes.indexOf(key) < 0) {
           this.customAttributes[key] = data[key];
         }

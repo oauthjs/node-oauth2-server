@@ -50,7 +50,7 @@ export class BearerTokenType {
       object.scope = this.scope;
     }
 
-    for (const key in this.customAttributes) {
+    for (const key of Object.keys(this.customAttributes || {})) {
       if (hasOwnProperty(this.customAttributes, key)) {
         object[key] = this.customAttributes[key];
       }

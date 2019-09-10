@@ -10,14 +10,14 @@ export class Response {
     this.status = 200;
 
     // Store the headers in lower case.
-    for (const field in options.headers) {
+    for (const field of Object.keys(options.headers || {})) {
       if (hasOwnProperty(options.headers, field)) {
         this.headers[field.toLowerCase()] = options.headers[field];
       }
     }
 
     // Store additional properties of the response object passed in
-    for (const property in options) {
+    for (const property of Object.keys(options)) {
       if (hasOwnProperty(options, property) && !this[property]) {
         this[property] = options[property];
       }

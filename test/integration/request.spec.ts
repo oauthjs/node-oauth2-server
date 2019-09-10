@@ -11,7 +11,7 @@ describe('Request integration', () => {
   describe('constructor()', () => {
     it('should throw an error if `headers` is missing', () => {
       try {
-        new Request({ body: {} });
+        new Request({ body: {} } as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -22,7 +22,7 @@ describe('Request integration', () => {
 
     it('should throw an error if `method` is missing', () => {
       try {
-        new Request({ body: {}, headers: {} });
+        new Request({ body: {}, headers: {} } as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -33,7 +33,7 @@ describe('Request integration', () => {
 
     it('should throw an error if `query` is missing', () => {
       try {
-        new Request({ body: {}, headers: {}, method: {} });
+        new Request({ body: {}, headers: {}, method: {} } as any);
 
         should.fail('should.fail', '');
       } catch (e) {

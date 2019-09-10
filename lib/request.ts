@@ -26,14 +26,14 @@ export class Request {
     this.query = options.query;
 
     // Store the headers in lower case.
-    for (const field in options.headers) {
+    for (const field of Object.keys(options.headers)) {
       if (hasOwnProperty(options.headers, field)) {
         this.headers[field.toLowerCase()] = options.headers[field];
       }
     }
 
     // Store additional properties of the request object passed in
-    for (const property in options) {
+    for (const property of Object.keys(options)) {
       if (hasOwnProperty(options, property) && !this[property]) {
         this[property] = options[property];
       }

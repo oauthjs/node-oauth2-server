@@ -1,10 +1,5 @@
 import * as should from 'should';
-import {
-  InvalidArgumentError,
-  InvalidGrantError,
-  InvalidRequestError,
-  ServerError,
-} from '../../../lib/errors';
+import { InvalidArgumentError, InvalidGrantError, InvalidRequestError, ServerError } from '../../../lib/errors';
 import { AuthorizationCodeGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
