@@ -87,7 +87,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -121,7 +121,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -152,7 +152,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -176,7 +176,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -197,7 +197,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -227,7 +227,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -253,7 +253,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -275,7 +275,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -297,7 +297,7 @@ describe('ClientCredentialsGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

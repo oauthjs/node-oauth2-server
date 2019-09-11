@@ -183,7 +183,7 @@ describe('AbstractGrantType integration', () => {
       const request = new Request({
         body: { scope: 'øå€£‰' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -205,7 +205,7 @@ describe('AbstractGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -221,7 +221,7 @@ describe('AbstractGrantType integration', () => {
       const request = new Request({
         body: { scope: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

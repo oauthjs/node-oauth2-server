@@ -50,7 +50,7 @@ describe('AuthorizeHandler', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -82,7 +82,7 @@ describe('AuthorizeHandler', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response();

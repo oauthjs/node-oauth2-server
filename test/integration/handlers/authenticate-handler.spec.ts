@@ -142,7 +142,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -169,7 +169,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -195,7 +195,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -233,7 +233,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -257,7 +257,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: { access_token: 'foo' },
       });
 
@@ -280,7 +280,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -305,7 +305,7 @@ describe('AuthenticateHandler integration', () => {
         headers: {
           Authorization: 'foobar',
         },
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -330,7 +330,7 @@ describe('AuthenticateHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -398,7 +398,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: { access_token: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -424,7 +424,7 @@ describe('AuthenticateHandler integration', () => {
           'content-type': 'application/x-www-form-urlencoded',
           'transfer-encoding': 'chunked',
         },
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

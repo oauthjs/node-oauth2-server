@@ -24,7 +24,7 @@ describe('TokenHandler', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

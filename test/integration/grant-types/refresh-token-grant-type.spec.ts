@@ -109,7 +109,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -149,7 +149,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -192,7 +192,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -224,7 +224,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -256,7 +256,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -279,7 +279,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -309,7 +309,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: '12345' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -340,7 +340,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -373,7 +373,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -406,7 +406,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -437,7 +437,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'øå€£‰' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -467,7 +467,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -504,7 +504,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -540,7 +540,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -574,7 +574,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -605,7 +605,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -631,7 +631,7 @@ describe('RefreshTokenGrantType integration', () => {
       const request = new Request({
         body: { refresh_token: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -657,7 +657,7 @@ describe('RefreshTokenGrantType integration', () => {
     //   const request = new Request({
     //     body: { refresh_token: 'foobar' },
     //     headers: {},
-    //     method: {},
+    //     method: 'ANY',
     //     query: {},
     //   });
 

@@ -83,7 +83,7 @@ describe('ImplicitGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -114,7 +114,7 @@ describe('ImplicitGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -139,7 +139,7 @@ describe('ImplicitGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -159,7 +159,7 @@ describe('ImplicitGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -181,7 +181,7 @@ describe('ImplicitGrantType integration', () => {
     //   const request = new Request({
     //     body: { code: 12345 },
     //     headers: {},
-    //     method: {},
+    //     method: 'ANY',
     //     query: {},
     //   });
 

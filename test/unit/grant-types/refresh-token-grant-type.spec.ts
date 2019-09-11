@@ -32,7 +32,7 @@ describe('RefreshTokenGrantType', () => {
       const request = new Request({
         body: { refresh_token: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const client: any = {};
@@ -67,7 +67,7 @@ describe('RefreshTokenGrantType', () => {
       const request = new Request({
         body: { refresh_token: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const client: any = {};

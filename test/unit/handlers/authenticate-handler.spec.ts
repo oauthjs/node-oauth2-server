@@ -18,7 +18,7 @@ describe('AuthenticateHandler', () => {
         const request = new Request({
           body: {},
           headers: { Authorization: 'Bearer foo' },
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -42,7 +42,7 @@ describe('AuthenticateHandler', () => {
         const request = new Request({
           body: {},
           headers: {},
-          method: {},
+          method: 'ANY',
           query: { access_token: 'foo' },
         });
 
@@ -66,7 +66,7 @@ describe('AuthenticateHandler', () => {
         const request = new Request({
           body: { access_token: 'foo' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 

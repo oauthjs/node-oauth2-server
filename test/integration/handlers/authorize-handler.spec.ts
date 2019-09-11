@@ -173,7 +173,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -202,7 +202,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: { allowed: 'false' },
       });
       const response = new Response({ body: {}, headers: {} });
@@ -250,7 +250,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           state: 'foobar',
         },
@@ -301,7 +301,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           state: 'foobar',
         },
@@ -353,7 +353,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           state: 'foobar',
         },
@@ -402,7 +402,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           scope: [],
           state: 'foobar',
@@ -454,7 +454,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -503,7 +503,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           state: 'foobar',
         },
@@ -553,7 +553,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           state: 'foobar',
         },
@@ -605,7 +605,7 @@ describe('AuthorizeHandler integration', () => {
         headers: {
           Authorization: 'Bearer foo',
         },
-        method: {},
+        method: 'ANY',
         query: {
           state: 'foobar',
         },
@@ -721,7 +721,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { response_type: 'code' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -748,7 +748,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 'øå€£‰', response_type: 'code' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -779,7 +779,7 @@ describe('AuthorizeHandler integration', () => {
           redirect_uri: 'foobar',
         },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -808,7 +808,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, response_type: 'code' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -840,7 +840,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, response_type: 'code' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -870,7 +870,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, response_type: 'code' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -902,7 +902,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, response_type: 'code' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -941,7 +941,7 @@ describe('AuthorizeHandler integration', () => {
           redirect_uri: 'https://foobar.com',
         },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -976,7 +976,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -1004,7 +1004,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1030,7 +1030,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1057,7 +1057,7 @@ describe('AuthorizeHandler integration', () => {
         const request = new Request({
           body: { response_type: 'code' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: { client_id: 12345 },
         });
 
@@ -1087,7 +1087,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: { scope: 'øå€£‰' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1115,7 +1115,7 @@ describe('AuthorizeHandler integration', () => {
         const request = new Request({
           body: { scope: 'foo' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -1137,7 +1137,7 @@ describe('AuthorizeHandler integration', () => {
         const request = new Request({
           body: {},
           headers: {},
-          method: {},
+          method: 'ANY',
           query: { scope: 'foo' },
         });
 
@@ -1161,7 +1161,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1188,7 +1188,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: { state: 'øå€£‰' },
       });
 
@@ -1216,7 +1216,7 @@ describe('AuthorizeHandler integration', () => {
         const request = new Request({
           body: { state: 'foobar' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -1238,7 +1238,7 @@ describe('AuthorizeHandler integration', () => {
         const request = new Request({
           body: {},
           headers: {},
-          method: {},
+          method: 'ANY',
           query: { state: 'foobar' },
         });
 
@@ -1262,7 +1262,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response();
@@ -1299,7 +1299,7 @@ describe('AuthorizeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -1421,7 +1421,7 @@ describe('AuthorizeHandler integration', () => {
   //     const request = new Request({
   //       body: {},
   //       headers: {},
-  //       method: {},
+  //       method: 'ANY',
   //       query: {},
   //     });
 
@@ -1448,7 +1448,7 @@ describe('AuthorizeHandler integration', () => {
   //     const request = new Request({
   //       body: { response_type: 'foobar' },
   //       headers: {},
-  //       method: {},
+  //       method: 'ANY',
   //       query: {},
   //     });
 
@@ -1478,7 +1478,7 @@ describe('AuthorizeHandler integration', () => {
   //       const request = new Request({
   //         body: { response_type: 'code' },
   //         headers: {},
-  //         method: {},
+  //         method: 'ANY',
   //         query: {},
   //       });
   //       const ResponseType = handler.getResponseType(request);
@@ -1501,7 +1501,7 @@ describe('AuthorizeHandler integration', () => {
   //       const request = new Request({
   //         body: {},
   //         headers: {},
-  //         method: {},
+  //         method: 'ANY',
   //         query: { response_type: 'code' },
   //       });
   //       const ResponseType = handler.getResponseType(request);

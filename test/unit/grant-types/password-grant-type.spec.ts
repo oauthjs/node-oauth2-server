@@ -21,7 +21,7 @@ describe('PasswordGrantType', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {

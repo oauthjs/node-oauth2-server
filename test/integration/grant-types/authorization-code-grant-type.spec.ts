@@ -1,5 +1,10 @@
 import * as should from 'should';
-import { InvalidArgumentError, InvalidGrantError, InvalidRequestError, ServerError } from '../../../lib/errors';
+import {
+  InvalidArgumentError,
+  InvalidGrantError,
+  InvalidRequestError,
+  ServerError,
+} from '../../../lib/errors';
 import { AuthorizationCodeGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
 
@@ -113,7 +118,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -149,7 +154,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -190,7 +195,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -224,7 +229,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -254,7 +259,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -291,7 +296,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     //   const request = new Request({
     //     body: { code: 12345 },
     //     headers: {},
-    //     method: {},
+    //     method: "ANY",
     //     query: {},
     //   });
 
@@ -314,7 +319,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -342,7 +347,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 'øå€£‰' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -370,7 +375,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -403,7 +408,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -436,7 +441,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -473,7 +478,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -511,7 +516,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -550,7 +555,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -590,7 +595,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -629,7 +634,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -665,7 +670,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -696,7 +701,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -727,7 +732,7 @@ describe('AuthorizationCodeGrantType integration', () => {
     //   const request = new Request({
     //     body: { code: 12345 },
     //     headers: {},
-    //     method: {},
+    //     method: "ANY",
     //     query: {},
     //   });
 
@@ -760,7 +765,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -798,7 +803,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       const request = new Request({
         body: { code: 12345, redirect_uri: 'http://bar.foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

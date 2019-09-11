@@ -49,7 +49,7 @@ describe('Server integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -80,7 +80,7 @@ describe('Server integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -102,7 +102,7 @@ describe('Server integration', () => {
       const request = new Request({
         body: {},
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -138,7 +138,7 @@ describe('Server integration', () => {
           response_type: 'code',
         },
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: { state: 'foobar' },
       });
       const response = new Response({ body: {}, headers: {} });
@@ -182,7 +182,7 @@ describe('Server integration', () => {
           response_type: 'code',
         },
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: { state: 'foobar' },
       });
 
@@ -221,7 +221,7 @@ describe('Server integration', () => {
           response_type: 'code',
         },
         headers: { Authorization: 'Bearer foo' },
-        method: {},
+        method: 'ANY',
         query: { state: 'foobar' },
       });
       const response = new Response({ body: {}, headers: {} });

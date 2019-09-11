@@ -209,10 +209,11 @@ export class TokenHandler {
       };
     }
 
-    if (!this.isClientAuthenticationRequired(grantType)) {
-      if (request.body.client_id) {
-        return { clientId: request.body.client_id };
-      }
+    if (
+      !this.isClientAuthenticationRequired(grantType) &&
+      request.body.client_id
+    ) {
+      return { clientId: request.body.client_id };
     }
 
     throw new InvalidClientError(

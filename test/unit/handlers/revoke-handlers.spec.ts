@@ -25,7 +25,7 @@ describe('RevokeHandler', () => {
       const request = new Request({
         body: { token: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const client = {};
@@ -54,7 +54,7 @@ describe('RevokeHandler', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

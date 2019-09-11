@@ -219,7 +219,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -597,7 +597,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 'øå€£‰', client_secret: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -624,7 +624,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 'foo', client_secret: 'øå€£‰' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -651,7 +651,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -681,7 +681,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -711,7 +711,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -741,7 +741,7 @@ describe('TokenHandler integration', () => {
             Buffer.from('foo:bar').toString('base64'),
           ),
         },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -778,7 +778,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -810,7 +810,7 @@ describe('TokenHandler integration', () => {
         const request = new Request({
           body: { client_id: 'blah', grant_type: 'password' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -851,7 +851,7 @@ describe('TokenHandler integration', () => {
               Buffer.from('blah:').toString('base64'),
             ),
           },
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -881,7 +881,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -903,7 +903,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -925,7 +925,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -947,7 +947,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_secret: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -976,7 +976,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { client_id: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1007,7 +1007,7 @@ describe('TokenHandler integration', () => {
         const request = new Request({
           body: { client_id: 'foo', grant_type: 'password' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
         const credentials = handler.getClientCredentials(request);
@@ -1035,7 +1035,7 @@ describe('TokenHandler integration', () => {
               Buffer.from('foo:bar').toString('base64'),
             ),
           },
-          method: {},
+          method: 'ANY',
           query: {},
         });
         const credentials = handler.getClientCredentials(request);
@@ -1058,7 +1058,7 @@ describe('TokenHandler integration', () => {
         const request = new Request({
           body: { client_id: 'foo', client_secret: 'bar' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
         const credentials = handler.getClientCredentials(request);
@@ -1082,7 +1082,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1109,7 +1109,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { grant_type: '~foo~' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1135,7 +1135,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { grant_type: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1165,7 +1165,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { grant_type: 'password' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1197,7 +1197,7 @@ describe('TokenHandler integration', () => {
       const request = new Request({
         body: { grant_type: 'password', username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1250,7 +1250,7 @@ describe('TokenHandler integration', () => {
             grant_type: 'authorization_code',
           },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -1290,7 +1290,7 @@ describe('TokenHandler integration', () => {
             scope: 'foo',
           },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -1336,7 +1336,7 @@ describe('TokenHandler integration', () => {
             scope: 'baz',
           },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -1388,7 +1388,7 @@ describe('TokenHandler integration', () => {
             refresh_token: 12345,
           },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 
@@ -1436,7 +1436,7 @@ describe('TokenHandler integration', () => {
             password: 'bar',
           },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
 

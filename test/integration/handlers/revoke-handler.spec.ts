@@ -88,7 +88,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -392,7 +392,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 'øå€£‰', client_secret: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -417,7 +417,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 'foo', client_secret: 'øå€£‰' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -442,7 +442,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -468,7 +468,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -497,7 +497,7 @@ describe('RevokeHandler integration', () => {
             Buffer.from('foo:bar').toString('base64'),
           ),
         },
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const response = new Response({ body: {}, headers: {} });
@@ -530,7 +530,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -555,7 +555,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -575,7 +575,7 @@ describe('RevokeHandler integration', () => {
     //   const request = new Request({
     //     body: { client_id: 12345, client_secret: 'secret' },
     //     headers: {},
-    //     method: {},
+    //     method: 'ANY',
     //     query: {},
     //   });
 
@@ -595,7 +595,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 12345, client_secret: 'secret' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -615,7 +615,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_secret: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -642,7 +642,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { client_id: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -675,7 +675,7 @@ describe('RevokeHandler integration', () => {
               Buffer.from('foo:bar').toString('base64'),
             ),
           },
-          method: {},
+          method: 'ANY',
           query: {},
         });
         const credentials = handler.getClientCredentials(request);
@@ -696,7 +696,7 @@ describe('RevokeHandler integration', () => {
         const request = new Request({
           body: { client_id: 'foo', client_secret: 'bar' },
           headers: {},
-          method: {},
+          method: 'ANY',
           query: {},
         });
         const credentials = handler.getClientCredentials(request);
@@ -718,7 +718,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -753,7 +753,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { token: 'hash' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -787,7 +787,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: { token: 'hash' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -1062,7 +1062,7 @@ describe('RevokeHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

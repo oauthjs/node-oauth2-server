@@ -117,7 +117,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar', scope: 'baz' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -149,7 +149,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -174,7 +174,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -199,7 +199,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -220,7 +220,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: {},
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -246,7 +246,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -272,7 +272,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: '\r\n', password: 'foobar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -298,7 +298,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foobar', password: '\r\n' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -324,7 +324,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -351,7 +351,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       try {
@@ -377,7 +377,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -399,7 +399,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 
@@ -421,7 +421,7 @@ describe('PasswordGrantType integration', () => {
       const request = new Request({
         body: { username: 'foo', password: 'bar' },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
 

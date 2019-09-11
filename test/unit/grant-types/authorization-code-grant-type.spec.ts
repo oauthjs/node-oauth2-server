@@ -27,7 +27,7 @@ describe('AuthorizationCodeGrantType', () => {
       const request = new Request({
         body: { code: 12345 },
         headers: {},
-        method: {},
+        method: 'ANY',
         query: {},
       });
       const client: any = {};

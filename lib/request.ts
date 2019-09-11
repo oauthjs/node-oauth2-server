@@ -5,9 +5,17 @@ import { hasOwnProperty } from './utils/fn';
 export class Request {
   body: any;
   headers: any;
-  method: any;
+  method: string;
   query: any;
-  constructor(options: any = {}) {
+  constructor(
+    options: {
+      body: any;
+      headers: any;
+      method: string;
+      query: any;
+      [key: string]: any;
+    } = {} as any,
+  ) {
     if (!options.headers) {
       throw new InvalidArgumentError('Missing parameter: `headers`');
     }
@@ -16,13 +24,17 @@ export class Request {
       throw new InvalidArgumentError('Missing parameter: `method`');
     }
 
+    if (typeof options.method !== 'string') {
+      throw new InvalidArgumentError('Invalid parameter: `method`');
+    }
+
     if (!options.query) {
       throw new InvalidArgumentError('Missing parameter: `query`');
     }
 
     this.body = options.body || {};
     this.headers = {};
-    this.method = options.method;
+    this.method = options.method.toUpperCase();
     this.query = options.query;
 
     // Store the headers in lower case.
