@@ -65,7 +65,7 @@
     "sinon": "^7.4.2",
     "ts-node": "^8.3.0",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.3"
   },
   "license": "MIT",
   "engines": {
