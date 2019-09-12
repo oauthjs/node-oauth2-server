@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false
+  },
   "exclude": ["node_modules", "test", "**/*spec.ts"]
 }

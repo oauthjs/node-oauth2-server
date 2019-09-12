@@ -1,4 +1,3 @@
-import { isUndefined } from 'lodash';
 import { Response } from '../../lib/response';
 
 /**
@@ -33,7 +32,7 @@ describe('Response integration', () => {
     it('should return `undefined` if the field does not exist', () => {
       const response = new Response({ body: {}, headers: {} });
 
-      isUndefined(response.get('content-type')).should.be.true();
+      (response.get('content-type') === undefined).should.be.true();
     });
 
     it('should return the value if the field exists', () => {

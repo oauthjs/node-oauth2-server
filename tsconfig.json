@@ -3,15 +3,17 @@
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
-    // "emitDecoratorMetadata": true,
-    // "experimentalDecorators": true,
-    "lib": ["es2017"],
     "target": "es2017",
     "sourceMap": true,
     "importHelpers": true,
     "outDir": "./dist",
     "baseUrl": ".",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "downlevelIteration": false,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": false,
+    "moduleResolution": "node",
+    "lib": ["es2018"]
   },
   "exclude": ["node_modules", "./dist"]
 }

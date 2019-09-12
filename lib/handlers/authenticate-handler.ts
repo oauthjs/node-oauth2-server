@@ -1,4 +1,3 @@
-import { isUndefined } from 'lodash';
 import {
   InsufficientScopeError,
   InvalidArgumentError,
@@ -29,13 +28,13 @@ export class AuthenticateHandler {
       );
     }
 
-    if (options.scope && isUndefined(options.addAcceptedScopesHeader)) {
+    if (options.scope && options.addAcceptedScopesHeader === undefined) {
       throw new InvalidArgumentError(
         'Missing parameter: `addAcceptedScopesHeader`',
       );
     }
 
-    if (options.scope && isUndefined(options.addAuthorizedScopesHeader)) {
+    if (options.scope && options.addAuthorizedScopesHeader === undefined) {
       throw new InvalidArgumentError(
         'Missing parameter: `addAuthorizedScopesHeader`',
       );

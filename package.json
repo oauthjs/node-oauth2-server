@@ -43,16 +43,28 @@
     }
   ],
   "main": "index.ts",
-  "dependencies": {
-    "basic-auth": "^2.0.1",
-    "lodash": "^4.17.15",
-    "statuses": "^1.5.0",
-    "tslib": "^1.10.0",
-    "type-is": "^1.6.18"
+  "engines": {
+    "node": ">=8.10"
+  },
+  "license": "MIT",
+  "scripts": {
+    "lint": "tslint -p tsconfig.build.json -c tslint.json",
+    "lint:all": "tslint -p tsconfig.json -c tslint.json",
+    "build:clean": "npx shx rm -rf ./dist",
+    "build": "npx npm-run-all build:clean build:test:*",
+    "build:test:src": "npx tsc -p tsconfig.json",
+    "build:test:package": "node ./scripts/build-prod.js",
+    "build:prod": "npx npm-run-all build:clean build:prod:*",
+    "build:prod:src": "npx tsc -p tsconfig.build.json",
+    "build:prod:package": "node ./scripts/build-prod.js",
+    "test": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'"
+  },
+  "repository": {
+    "url": "https://github.com/oauthjs/node-oauth2-server.git",
+    "type": "git"
   },
   "devDependencies": {
     "@types/basic-auth": "^1.1.2",
-    "@types/lodash": "^4.14.138",
     "@types/mocha": "^5.2.7",
     "@types/node": "^11.13.20",
     "@types/sinon": "^7.0.13",
@@ -67,22 +79,10 @@
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   },
-  "license": "MIT",
-  "engines": {
-    "node": ">=8.10"
-  },
-  "scripts": {
-    "lint": "tslint -p tsconfig.build.json -c tslint.json",
-    "lint:all": "tslint -p tsconfig.json -c tslint.json",
-    "build": "npx tsc -p tsconfig.json",
-    "build:clean": "npx shx rm -rf ./dist",
-    "build:prod": "npx npm-run-all build:clean build:prod:*",
-    "build:prod:src": "npx tsc -p tsconfig.build.json",
-    "build:prod:package": "node ./scripts/build-prod.js",
-    "test": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/oauthjs/node-oauth2-server.git"
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "statuses": "^1.5.0",
+    "tslib": "^1.10.0",
+    "type-is": "^1.6.18"
   }
 }

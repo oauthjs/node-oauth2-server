@@ -1,4 +1,3 @@
-import { isUndefined } from 'lodash';
 import * as should from 'should';
 import { InvalidArgumentError } from '../../lib/errors';
 import { Request } from '../../lib/request';
@@ -96,7 +95,7 @@ describe('Request integration', () => {
         query: {},
       });
 
-      isUndefined(request.get('content-type')).should.be.true();
+      (request.get('content-type') === undefined).should.be.true();
     });
 
     it('should return the value if the field exists', () => {
