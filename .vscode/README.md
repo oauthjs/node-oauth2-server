@@ -1,6 +1,6 @@
 # VSCode Configuration
 
-This folder contains opt-in [Workspace Settings](https://code.visualstudio.com/docs/getstarted/settings) and [Extension Recommendations](https://code.visualstudio.com/docs/editor/extension-gallery#_workspace-recommended-extensions) that the our team recommends using when working on this repository.
+This folder contains opt-in [Workspace Settings](https://code.visualstudio.com/docs/getstarted/settings) and [Extension Recommendations](https://code.visualstudio.com/docs/editor/extension-gallery#_workspace-recommended-extensions) that our team recommends using when working on this repository.
 
 ## Usage
 

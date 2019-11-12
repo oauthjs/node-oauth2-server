@@ -3,7 +3,7 @@ import { OAuthError } from './oauth-error';
 /**
  * Constructor.
  *
- * "The request requires higher privileges than provided by the access token.."
+ * "The request requires higher privileges than provided by the access token."
  *
  * @see https://tools.ietf.org/html/rfc6750.html#section-3.1
  */

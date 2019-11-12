@@ -7,7 +7,7 @@ export class Response {
   constructor(options: any = {}) {
     this.body = options.body || {};
     this.headers = {};
-    this.status = 200;
+    this.status = 200; // OK
 
     // Store the headers in lower case.
     for (const field of Object.keys(options.headers || {})) {
@@ -16,7 +16,7 @@ export class Response {
       }
     }
 
-    // Store additional properties of the response object passed in
+    // Store additional properties of the response object passed in.
     for (const property of Object.keys(options)) {
       if (hasOwnProperty(options, property) && !this[property]) {
         this[property] = options[property];
@@ -38,7 +38,7 @@ export class Response {
 
   redirect(url: string) {
     this.set('Location', url);
-    this.status = 302;
+    this.status = 302; // Found
   }
 
   /**

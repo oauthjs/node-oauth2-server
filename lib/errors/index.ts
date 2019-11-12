@@ -11,6 +11,4 @@ export { ServerError } from './server-error';
 export { UnauthorizedClientError } from './unauthorized-client-error';
 export { UnauthorizedRequestError } from './unauthorized-request-error';
 export { UnsupportedGrantTypeError } from './unsupported-grant-type-error';
-export {
-  UnsupportedResponseTypeError,
-} from './unsupported-response-type-error';
+export { UnsupportedResponseTypeError } from './unsupported-response-type-error';

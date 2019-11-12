@@ -52,20 +52,20 @@
   },
   "devDependencies": {
     "@types/basic-auth": "^1.1.2",
-    "@types/lodash": "^4.14.138",
+    "@types/lodash": "^4.14.146",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^11.13.20",
-    "@types/sinon": "^7.0.13",
+    "@types/node": "^11.15.2",
+    "@types/sinon": "^7.5.0",
     "@types/statuses": "^1.5.0",
     "@types/type-is": "^1.6.3",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.2",
     "npm-run-all": "^4.1.5",
     "should": "^13.2.3",
     "shx": "^0.3.2",
-    "sinon": "^7.4.2",
-    "ts-node": "^8.3.0",
-    "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "sinon": "^7.5.0",
+    "ts-node": "^8.5.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   },
   "license": "MIT",
   "engines": {

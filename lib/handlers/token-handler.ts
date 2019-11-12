@@ -317,7 +317,7 @@ export class TokenHandler {
   }
 
   /**
-   * Given a grant type, check if client authentication is required
+   * Given a grant type, check if client authentication is required.
    */
   isClientAuthenticationRequired(grantType: string) {
     if (Object.keys(this.requireClientAuthentication).length > 0) {
