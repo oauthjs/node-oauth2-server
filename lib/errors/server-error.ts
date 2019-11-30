@@ -9,7 +9,7 @@ import { OAuthError } from './oauth-error';
  */
 
 export class ServerError extends OAuthError {
-  constructor(message?: string | Error, properties?: any) {
+  constructor(message: string | Error = '', properties?: any) {
     super(message, { code: 500, name: 'server_error', ...properties });
   }
 }

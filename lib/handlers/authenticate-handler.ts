@@ -114,7 +114,7 @@ export class AuthenticateHandler {
     const queryToken = request.query.access_token;
     const bodyToken = request.body.access_token;
 
-    if ((!!headerToken && 1) + (!!queryToken && 1) + (!!bodyToken && 1) > 1) {
+    if ([headerToken, queryToken, bodyToken].filter(Boolean).length > 1) {
       throw new InvalidRequestError(
         'Invalid request: only one authentication method is allowed',
       );

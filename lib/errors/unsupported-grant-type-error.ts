@@ -9,7 +9,7 @@ import { OAuthError } from './oauth-error';
  */
 
 export class UnsupportedGrantTypeError extends OAuthError {
-  constructor(message?: string | Error, properties?: any) {
+  constructor(message: string | Error = '', properties?: any) {
     super(message, {
       code: 400,
       name: 'unsupported_grant_type',

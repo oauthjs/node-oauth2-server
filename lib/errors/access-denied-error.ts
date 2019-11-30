@@ -9,7 +9,7 @@ import { OAuthError } from './oauth-error';
  */
 
 export class AccessDeniedError extends OAuthError {
-  constructor(message?: string | Error, properties?: any) {
+  constructor(message: string | Error = '', properties?: any) {
     super(message, { code: 400, name: 'access_denied', ...properties });
   }
 }

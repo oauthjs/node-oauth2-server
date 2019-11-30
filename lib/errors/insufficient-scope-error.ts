@@ -9,7 +9,7 @@ import { OAuthError } from './oauth-error';
  */
 
 export class InsufficientScopeError extends OAuthError {
-  constructor(message?: string | Error, properties?: any) {
+  constructor(message: string | Error = '', properties?: any) {
     super(message, { code: 403, name: 'insufficient_scope', ...properties });
   }
 }
