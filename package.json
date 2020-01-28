@@ -1,7 +1,7 @@
 {
   "name": "oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
-  "version": "4.0.0-dev.2",
+  "version": "5.0.0-dev.0",
   "keywords": [
     "oauth",
     "oauth2"
@@ -42,32 +42,47 @@
       "email": "marco.luethy@gmail.com"
     }
   ],
-  "main": "index.js",
-  "dependencies": {
-    "basic-auth": "^2.0.0",
-    "bluebird": "^3.5.1",
-    "lodash": "^4.17.10",
-    "promisify-any": "^2.0.1",
-    "statuses": "^1.5.0",
-    "type-is": "^1.6.16"
-  },
-  "devDependencies": {
-    "eslint": "^5.2.0",
-    "mocha": "^5.2.0",
-    "should": "^13.2.3",
-    "sinon": "^6.1.4"
+  "main": "index.ts",
+  "engines": {
+    "node": ">=8.10"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=6.14"
-  },
   "scripts": {
-    "pretest": "eslint lib test --fix",
-    "test": "NODE_ENV=test mocha 'test/**/*_test.js'",
-    "test-debug": "NODE_ENV=test mocha  --inspect --debug-brk 'test/**/*_test.js'"
+    "lint": "tslint -p tsconfig.build.json -c tslint.json",
+    "lint:all": "tslint -p tsconfig.json -c tslint.json",
+    "build:clean": "npx shx rm -rf ./dist",
+    "build": "npx npm-run-all build:clean build:test:*",
+    "build:test:src": "npx tsc -p tsconfig.json",
+    "build:test:package": "node ./scripts/build-prod.js",
+    "build:prod": "npx npm-run-all build:clean build:prod:*",
+    "build:prod:src": "npx tsc -p tsconfig.build.json",
+    "build:prod:package": "node ./scripts/build-prod.js",
+    "test": "npx mocha 'test/**/*.spec.ts' --config 'test/.mocharc.jsonc'"
   },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/oauthjs/node-oauth2-server.git"
+    "url": "https://github.com/oauthjs/node-oauth2-server.git",
+    "type": "git"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/sinon": "^7.5.1",
+    "mocha": "^6.2.2",
+    "npm-run-all": "^4.1.5",
+    "should": "^13.2.3",
+    "shx": "^0.3.2",
+    "sinon": "^7.5.0",
+    "ts-node": "^8.5.4",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@types/basic-auth": "^1.1.2",
+    "@types/node": "^11.15.3",
+    "@types/statuses": "^1.5.0",
+    "@types/type-is": "^1.6.3",
+    "basic-auth": "^2.0.1",
+    "statuses": "^1.5.0",
+    "tslib": "^1.10.0",
+    "type-is": "^1.6.18"
   }
 }

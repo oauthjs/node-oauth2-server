@@ -1,5 +1,13 @@
 ## Changelog
 
+### 5.0.0
+* BREAKING: Remove support for node v6
+* BREAKING: Remove support for callbacks only support native Promises
+* new: Rewrote in TypeScript
+* new: Switch from Eslint to Tslint
+* new: added .vscode folder for recommend extensions and recommend setting required for development
+* new: added suitable TypeScript Interfaces for various Objects
+
 ### 4.0.0
 * BREAKING: Set server_error Code to 500
 * BREAKING: Remove support for node v4

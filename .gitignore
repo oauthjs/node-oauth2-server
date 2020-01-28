@@ -1,36 +1,19 @@
-node_modules/
+
+# IDE
+/.idea
+/.awcache
+/.vscode/*.code-workspace
+/.vscode/settings.json
+
+# misc
+npm-debug.log
+# folders
+/dist
+/node_modules
 docs/_build/
 __pycache__/
-*.pyc
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-*.iml
 
-.idea
-.jshint
+# files
 .DS_Store
-
-pids
-logs
-results
-
-lib/dockerImage/keys
-coverage
-npm-debug.log*~
-\#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-.elc
-auto-save-list
-tramp
-.\#*
-
-# Org-mode
-.org-id-locations
-*_archive
+*.pyc
+/aio
