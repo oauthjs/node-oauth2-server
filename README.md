@@ -40,7 +40,7 @@ The *oauth2-server* module is framework-agnostic but there are several officiall
 
 Most users should refer to our [Express](https://github.com/oauthjs/express-oauth-server/tree/master/examples) or [Koa](https://github.com/oauthjs/koa-oauth-server/tree/master/examples) examples.
 
-Examples for v3 are yet to be made. 
+More examples can be found here: https://github.com/14gasher/oauth-example
 
 ## Upgrading from 2.x
 
