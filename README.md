@@ -1,6 +1,6 @@
-# This project is seeking maintainers and reviewers 
+# This project is seeking maintainers and reviewers
 
-## This is a popular project in need of maintenance, we currently have a complete typescript rewrite open in [#564]( https://github.com/oauthjs/node-oauth2-server/pull/564), please help contribute to the review of this branch and/or please contact @thomseddon on GitHub if you are interested in assisting with maintaining this project.
+## The currently released version is now significantly out of date. The project has been rewritten in typescript ([#564](https://github.com/oauthjs/node-oauth2-server/pull/564)), we're now working in the [v5-dev](https://github.com/oauthjs/node-oauth2-server/tree/v5-dev) branch and we're seeking further review, testing and documentation - any help with this popular project would be hugely appreciated, anyone providing consistent help will be promoted to collaborator.
 
 # oauth2-server
 
