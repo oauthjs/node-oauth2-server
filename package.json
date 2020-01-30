@@ -13,7 +13,8 @@
     { "name" : "Tiago Ribeiro", "email": "tiago.ribeiro@gmail.com" },
     { "name": "Michael Salinger", "email": "mjsalinger@gmail.com" },
     { "name": "Nuno Sousa" },
-    { "name": "Max Truxa" }
+    { "name": "Max Truxa" },
+    { "name": "Fabiano Taioli" }
   ],
   "main": "index.js",
   "dependencies": {
