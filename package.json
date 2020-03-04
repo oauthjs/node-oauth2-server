@@ -1,5 +1,5 @@
 {
-  "name": "oauth2-server",
+  "name": "@vista/oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
   "version": "3.0.0",
   "keywords": [
@@ -13,7 +13,8 @@
     { "name" : "Tiago Ribeiro", "email": "tiago.ribeiro@gmail.com" },
     { "name": "Michael Salinger", "email": "mjsalinger@gmail.com" },
     { "name": "Nuno Sousa" },
-    { "name": "Max Truxa" }
+    { "name": "Max Truxa" },
+    { "name": "Fabiano Taioli" }
   ],
   "main": "index.js",
   "dependencies": {
