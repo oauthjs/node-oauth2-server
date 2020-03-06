@@ -35,7 +35,7 @@ export class PasswordGrantType extends AbstractGrantType {
    * @see https://tools.ietf.org/html/rfc6749#section-4.3.2
    */
 
-  async handle(request, client) {
+  async handle(request: Request, client: Client) {
     if (!request) {
       throw new InvalidArgumentError('Missing parameter: `request`');
     }

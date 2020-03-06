@@ -91,7 +91,7 @@ export class AbstractGrantType {
   /**
    * Validate requested scope.
    */
-  async validateScope(user: User, client: Client, scope: string) {
+  async validateScope(user: User, client: Client, scope?: string) {
     if (this.model.validateScope) {
       const validatedScope = await this.model.validateScope(
         user,

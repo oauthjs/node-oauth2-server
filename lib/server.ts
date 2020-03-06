@@ -52,7 +52,7 @@ export class OAuth2Server {
       ...opt,
     };
 
-    return new AuthenticateHandler(opt).handle(request, response);
+    return new AuthenticateHandler(opt).handle(request, response as any);
   }
 
   /**

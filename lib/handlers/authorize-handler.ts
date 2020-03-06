@@ -90,7 +90,7 @@ export class AuthorizeHandler {
     const user = await this.getUser(request, response);
 
     let scope: string;
-    let state: string;
+    let state = '';
     let RequestedResponseType: any;
     let responseType: any;
     const uri = this.getRedirectUri(request, client);
@@ -269,7 +269,7 @@ export class AuthorizeHandler {
     return (
       request.body.redirect_uri ||
       request.query.redirect_uri ||
-      client.redirectUris[0]
+      (client.redirectUris || [])[0]
     );
   }
 
@@ -300,7 +300,7 @@ export class AuthorizeHandler {
       );
     }
 
-    return responseTypes[responseType];
+    return (responseTypes as any)[responseType];
   }
 
   /**

@@ -87,7 +87,7 @@ describe('RefreshTokenGrantType integration', () => {
       });
 
       try {
-        await grantType.handle(undefined, undefined);
+        await grantType.handle(undefined as any, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -114,7 +114,7 @@ describe('RefreshTokenGrantType integration', () => {
       });
 
       try {
-        await grantType.handle(request, undefined);
+        await grantType.handle(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {

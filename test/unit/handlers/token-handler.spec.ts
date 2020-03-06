@@ -29,7 +29,7 @@ describe('TokenHandler', () => {
       });
 
       return handler
-        .getClient(request, {})
+        .getClient(request, {} as any)
         .then(() => {
           model.getClient.callCount.should.equal(1);
           model.getClient.firstCall.args.should.have.length(2);

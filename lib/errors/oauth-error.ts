@@ -17,7 +17,7 @@ export class OAuthError extends Error {
       props.inner = error;
     }
     if (!message) {
-      message = statuses[props.code];
+      message = statuses[props.code as keyof typeof statuses] as any;
     }
     this.code = this.status = this.statusCode = props.code;
     this.message = message;
@@ -25,7 +25,9 @@ export class OAuthError extends Error {
     const ignoreAttr = ['code', 'message'];
     Object.keys(props)
       .filter(key => !ignoreAttr.includes(key))
-      .forEach(key => (this[key] = props[key]));
+      .forEach(key => {
+       (this as any)[key] = props[key]
+      });
 
     Error.captureStackTrace(this, OAuthError);
   }

@@ -124,7 +124,7 @@ describe('Request integration', () => {
         query: {},
       });
 
-      request.is(['html', 'json']).should.equal('json');
+      request.is('html', 'json').should.equal('json');
     });
 
     it('should accept multiple `types` as arguments', () => {

@@ -8,9 +8,9 @@ export interface BaseModel {
    *
    */
   generateAccessToken?(
-    client: Client,
-    user: User,
-    scope: string,
+    client?: Client,
+    user?: User,
+    scope?: string,
   ): Promise<string>;
 
   /**
@@ -50,9 +50,9 @@ export interface AuthorizationCodeModel
    *
    */
   generateRefreshToken?(
-    client: Client,
-    user: User,
-    scope: string,
+    client?: Client,
+    user?: User,
+    scope?: string,
   ): Promise<string>;
 
   /**
@@ -93,7 +93,7 @@ export interface AuthorizationCodeModel
    *  valid for a particular client/user combination.
    *
    */
-  validateScope?(user: User, client: Client, scope: string): Promise<string>;
+  validateScope?(user: User, client: Client, scope?: string): Promise<string>;
 }
 
 export interface PasswordModel extends BaseModel, RequestAuthenticationModel {

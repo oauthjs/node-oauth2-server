@@ -67,7 +67,7 @@ describe('PasswordGrantType integration', () => {
       });
 
       try {
-        await grantType.handle(undefined, undefined);
+        await grantType.handle(undefined as any, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -87,7 +87,7 @@ describe('PasswordGrantType integration', () => {
       });
 
       try {
-        await grantType.handle({}, undefined);
+        await grantType.handle({} as any, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -122,8 +122,8 @@ describe('PasswordGrantType integration', () => {
       });
 
       return grantType
-        .handle(request, client)
-        .then(data => {
+        .handle(request, client as any)
+        .then((data: any) => {
           data.should.equal(token);
         })
         .catch(() => {
@@ -153,7 +153,7 @@ describe('PasswordGrantType integration', () => {
         query: {},
       });
 
-      grantType.handle(request, client).should.be.an.instanceOf(Promise);
+      grantType.handle(request, client as any).should.be.an.instanceOf(Promise);
     });
 
     it('should support non-promises', () => {
@@ -178,7 +178,7 @@ describe('PasswordGrantType integration', () => {
         query: {},
       });
 
-      grantType.handle(request, client).should.be.an.instanceOf(Promise);
+      grantType.handle(request, client as any).should.be.an.instanceOf(Promise);
     });
 
     /*     it('should support callbacks', () => {

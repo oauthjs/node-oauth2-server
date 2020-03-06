@@ -4,7 +4,7 @@ import { Client, Model, User } from '../interfaces';
 import { Request } from '../request';
 
 export class TokenResponseType {
-  accessToken: string;
+  accessToken?: string;
   accessTokenLifetime: number;
   model: Model;
   constructor(options: any = {}) {

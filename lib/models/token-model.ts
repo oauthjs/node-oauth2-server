@@ -21,8 +21,8 @@ export class TokenModel implements Token {
   scope?: string;
   client: Client;
   user: User;
-  customAttributes: {};
-  accessTokenLifetime: number;
+  customAttributes: { [attrName: string]: string } = {};
+  accessTokenLifetime = 0;
   constructor(data: any = {}, options: any = {}) {
     if (!data.accessToken) {
       throw new InvalidArgumentError('Missing parameter: `accessToken`');

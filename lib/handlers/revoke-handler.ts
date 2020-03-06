@@ -1,4 +1,4 @@
-import * as auth from 'basic-auth';
+import auth from 'basic-auth';
 import {
   InvalidArgumentError,
   InvalidClientError,
@@ -227,7 +227,7 @@ export class RevokeHandler {
    * Get refresh token.
    */
 
-  async getRefreshToken(token, client: Client) {
+  async getRefreshToken(token: string, client: Client) {
     const refreshToken = await this.model.getRefreshToken(token);
     if (!refreshToken) {
       throw new InvalidTokenError('Invalid token: refresh token is invalid');

@@ -180,7 +180,7 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
     user: User,
     client: Client,
     authorizationCode: string,
-    scope: string,
+    scope?: string,
   ) {
     const accessScope = await this.validateScope(user, client, scope);
     const accessToken = await this.generateAccessToken(client, user, scope);

@@ -69,7 +69,7 @@ describe('Server integration', () => {
 
     it('should return a promise', () => {
       const model = {
-        async getAccessToken(token) {
+        async getAccessToken(token: any) {
           return {
             user: {},
             accessTokenExpiresAt: new Date(new Date().getTime() + 10000),

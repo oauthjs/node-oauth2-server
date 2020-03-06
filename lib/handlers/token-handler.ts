@@ -1,4 +1,4 @@
-import * as auth from 'basic-auth';
+import auth from 'basic-auth';
 import {
   InvalidArgumentError,
   InvalidClientError,
@@ -127,7 +127,7 @@ export class TokenHandler {
    * Get the client from the model.
    */
 
-  async getClient(request, response) {
+  async getClient(request: Request, response: Response) {
     const credentials = this.getClientCredentials(request);
     const grantType = request.body.grant_type;
 

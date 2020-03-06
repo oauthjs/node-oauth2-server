@@ -121,7 +121,7 @@ describe('AuthenticateHandler integration', () => {
       });
 
       try {
-        await handler.handle(undefined, undefined);
+        await handler.handle(undefined as any, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -347,7 +347,7 @@ describe('AuthenticateHandler integration', () => {
       });
 
       try {
-        handler.getTokenFromRequestQuery(undefined);
+        handler.getTokenFromRequestQuery(undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {

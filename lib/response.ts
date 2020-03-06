@@ -18,8 +18,8 @@ export class Response {
 
     // Store additional properties of the response object passed in.
     for (const property of Object.keys(options)) {
-      if (hasOwnProperty(options, property) && !this[property]) {
-        this[property] = options[property];
+      if (hasOwnProperty(options, property) && !(this as any)[property]) {
+        (this as any)[property] = options[property];
       }
     }
   }

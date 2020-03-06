@@ -267,7 +267,7 @@ export class AuthenticateHandler {
     }
 
     if (this.scope && this.addAuthorizedScopesHeader) {
-      response.set('X-OAuth-Scopes', accessToken.scope);
+      response.set('X-OAuth-Scopes', accessToken.scope as any);
     }
   }
 }

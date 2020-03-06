@@ -195,7 +195,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.handle(undefined, undefined);
+        await handler.handle(undefined as any, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -224,7 +224,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.handle(request, undefined);
+        await handler.handle(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -602,7 +602,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.getClient(request, undefined);
+        await handler.getClient(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -629,7 +629,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.getClient(request, undefined);
+        await handler.getClient(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -656,7 +656,7 @@ describe('TokenHandler integration', () => {
       });
 
       return handler
-        .getClient(request, undefined)
+        .getClient(request, undefined as any)
         .then(() => {
           should.fail('should.fail', '');
         })
@@ -686,7 +686,7 @@ describe('TokenHandler integration', () => {
       });
 
       return handler
-        .getClient(request, undefined)
+        .getClient(request, undefined as any)
         .then(() => {
           should.fail('should.fail', '');
         })
@@ -715,7 +715,7 @@ describe('TokenHandler integration', () => {
         query: {},
       });
       try {
-        await handler.getClient(request, undefined);
+        await handler.getClient(request, undefined as any);
         should.fail('should.fail', '');
       } catch (e) {
         e.should.be.an.instanceOf(ServerError);
@@ -782,7 +782,7 @@ describe('TokenHandler integration', () => {
         query: {},
       });
       try {
-        const data = await handler.getClient(request, undefined);
+        const data = await handler.getClient(request, undefined as any);
         data.should.equal(client);
       } catch (error) {
         should.fail('should.fail', '');
@@ -815,7 +815,7 @@ describe('TokenHandler integration', () => {
         });
 
         return handler
-          .getClient(request, undefined)
+          .getClient(request, undefined as any)
           .then(data => {
             data.should.equal(client);
           })
@@ -856,7 +856,7 @@ describe('TokenHandler integration', () => {
         });
 
         return handler
-          .getClient(request, undefined)
+          .getClient(request, undefined as any)
           .then(data => {
             data.should.equal(client);
           })
@@ -885,7 +885,7 @@ describe('TokenHandler integration', () => {
         query: {},
       });
 
-      handler.getClient(request, undefined).should.be.an.instanceOf(Promise);
+      handler.getClient(request, undefined as any).should.be.an.instanceOf(Promise);
     });
 
     it('should support non-promises', () => {
@@ -907,7 +907,7 @@ describe('TokenHandler integration', () => {
         query: {},
       });
 
-      handler.getClient(request, undefined).should.be.an.instanceOf(Promise);
+      handler.getClient(request, undefined as any).should.be.an.instanceOf(Promise);
     });
 
     /*     it('should support callbacks', () => {
@@ -929,7 +929,7 @@ describe('TokenHandler integration', () => {
         query: {},
       });
 
-      handler.getClient(request, undefined).should.be.an.instanceOf(Promise);
+      handler.getClient(request, undefined as any).should.be.an.instanceOf(Promise);
     }); */
   });
 
@@ -1087,7 +1087,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.handleGrantType(request, undefined);
+        await handler.handleGrantType(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -1114,7 +1114,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.handleGrantType(request, undefined);
+        await handler.handleGrantType(request, undefined as any);
         should.fail('should.fail', '');
       } catch (e) {
         e.should.be.an.instanceOf(InvalidRequestError);
@@ -1140,7 +1140,7 @@ describe('TokenHandler integration', () => {
       });
 
       try {
-        await handler.handleGrantType(request, undefined);
+        await handler.handleGrantType(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -1543,7 +1543,7 @@ describe('TokenHandler integration', () => {
 
       tokenType.should.containEql({
         accessToken: 'foo',
-        accessTokenLifetime: undefined,
+        accessTokenLifetime: undefined as any,
         refreshToken: 'bar',
         scope: 'foobar',
       });
@@ -1565,8 +1565,8 @@ describe('TokenHandler integration', () => {
         'foo',
         'bar' as any,
         'biz',
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
       );
       const response = new Response({ body: {}, headers: {} });
 
@@ -1594,8 +1594,8 @@ describe('TokenHandler integration', () => {
         'foo',
         'bar' as any,
         'biz',
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
       );
       const response = new Response({ body: {}, headers: {} });
 
@@ -1618,8 +1618,8 @@ describe('TokenHandler integration', () => {
         'foo',
         'bar' as any,
         'biz',
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
       );
       const response = new Response({ body: {}, headers: {} });
 

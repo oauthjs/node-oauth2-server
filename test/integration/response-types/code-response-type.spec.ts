@@ -141,7 +141,7 @@ describe('CodeResponseType integration', () => {
       });
 
       return handler
-        .generateAuthorizationCode(undefined, undefined, undefined)
+        .generateAuthorizationCode(undefined as any, undefined as any, undefined as any)
         .then((data: any) => {
           data.should.be.a.sha1();
         })
@@ -165,7 +165,7 @@ describe('CodeResponseType integration', () => {
       });
 
       handler
-        .generateAuthorizationCode(undefined, undefined, undefined)
+        .generateAuthorizationCode(undefined as any, undefined as any, undefined as any)
         .should.be.an.instanceOf(Promise);
     });
 
@@ -184,7 +184,7 @@ describe('CodeResponseType integration', () => {
     //   });
 
     //   handler
-    //     .generateAuthorizationCode(undefined, undefined, undefined)
+    //     .generateAuthorizationCode(undefined as any, undefined as any, undefined as any)
     //     .should.be.an.instanceOf(Promise);
     // });
   });
@@ -222,7 +222,7 @@ describe('CodeResponseType integration', () => {
 
       return handler
         .saveAuthorizationCode('foo', 'bar', 'biz', 'baz')
-        .then(data => {
+        .then((data: { should: { equal: (arg0: {}) => void; }; }) => {
           data.should.equal(authorizationCode);
         })
         .catch(() => {
@@ -327,7 +327,7 @@ describe('CodeResponseType integration', () => {
       });
 
       return handler
-        .generateAuthorizationCode(undefined, undefined, undefined)
+        .generateAuthorizationCode(undefined as any, undefined as any, undefined as any)
         .then(() => {
           model.generateAuthorizationCode.callCount.should.equal(1);
         })

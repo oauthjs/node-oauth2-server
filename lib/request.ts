@@ -1,4 +1,4 @@
-import * as typeis from 'type-is';
+import typeIs from 'type-is';
 import { InvalidArgumentError } from './errors';
 import { hasOwnProperty } from './utils/fn';
 
@@ -46,8 +46,8 @@ export class Request {
 
     // Store additional properties of the request object passed in
     for (const property of Object.keys(options)) {
-      if (hasOwnProperty(options, property) && !this[property]) {
-        this[property] = options[property];
+      if (hasOwnProperty(options, property) && !(this as any)[property]) {
+       (this as any)[property] = options[property];
       }
     }
   }
@@ -63,15 +63,13 @@ export class Request {
   /**
    * Check if the content-type matches any of the given mime type.
    */
-  public is(args: string[]): string | false;
   public is(...args: string[]): string | false;
-
-  is(...args) {
+  is(...args: string[]) {
     let types = args;
     if (Array.isArray(types[0])) {
       types = types[0];
     }
 
-    return typeis(this as any, types) || false;
+    return typeIs(this as any, types) || false;
   }
 }

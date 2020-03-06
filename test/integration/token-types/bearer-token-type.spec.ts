@@ -11,11 +11,11 @@ describe('BearerTokenType integration', () => {
     it('should throw an error if `accessToken` is missing', () => {
       try {
         new BearerTokenType(
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
+          undefined as any,
+          undefined as any,
+          undefined as any,
+          undefined as any,
+          undefined as any,
         );
 
         should.fail('should.fail', '');
@@ -29,9 +29,9 @@ describe('BearerTokenType integration', () => {
       const responseType = new BearerTokenType(
         'foo',
         'bar' as any,
-        undefined,
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
+        undefined as any,
       );
 
       responseType.accessToken.should.equal('foo');
@@ -41,9 +41,9 @@ describe('BearerTokenType integration', () => {
       const responseType = new BearerTokenType(
         'foo',
         'bar' as any,
-        undefined,
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
+        undefined as any,
       );
 
       responseType.accessTokenLifetime.should.equal('bar');
@@ -54,8 +54,8 @@ describe('BearerTokenType integration', () => {
         'foo',
         'bar' as any,
         'biz',
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
       );
 
       responseType.refreshToken.should.equal('biz');
@@ -67,9 +67,9 @@ describe('BearerTokenType integration', () => {
       const responseType = new BearerTokenType(
         'foo',
         'bar' as any,
-        undefined,
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
+        undefined as any,
       );
       const value = responseType.valueOf();
 
@@ -83,10 +83,10 @@ describe('BearerTokenType integration', () => {
     it('should not include the `expires_in` if not given', () => {
       const responseType = new BearerTokenType(
         'foo',
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
+        undefined as any,
+        undefined as any,
       );
       const value = responseType.valueOf();
 
@@ -101,8 +101,8 @@ describe('BearerTokenType integration', () => {
         'foo',
         'bar' as any,
         'biz',
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
       );
       const value = responseType.valueOf();
 
@@ -119,8 +119,8 @@ describe('BearerTokenType integration', () => {
         'foo',
         'bar' as any,
         'biz',
-        undefined,
-        undefined,
+        undefined as any,
+        undefined as any,
       );
       const value = responseType.valueOf();
 

@@ -149,7 +149,7 @@ describe('AuthorizeHandler integration', () => {
       });
 
       try {
-        await handler.handle(undefined, undefined);
+        await handler.handle(undefined as any, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {
@@ -178,7 +178,7 @@ describe('AuthorizeHandler integration', () => {
       });
 
       try {
-        await handler.handle(request, undefined);
+        await handler.handle(request, undefined as any);
 
         should.fail('should.fail', '');
       } catch (e) {

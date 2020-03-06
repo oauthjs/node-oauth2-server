@@ -90,7 +90,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       });
 
       try {
-        await grantType.handle(undefined, undefined);
+        await grantType.handle(undefined as any, undefined as any);
         should.fail('should.fail', '');
       } catch (e) {
         e.should.be.an.instanceOf(InvalidArgumentError);
@@ -159,7 +159,7 @@ describe('AuthorizationCodeGrantType integration', () => {
       });
 
       try {
-        await grantType.handle(request, undefined);
+        await grantType.handle(request as any, undefined as any);
       } catch (e) {
         e.should.be.an.instanceOf(InvalidArgumentError);
         e.message.should.equal('Missing parameter: `client`');

@@ -123,7 +123,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handle(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidRequestError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal('Invalid request: method must be POST');
         });
@@ -148,7 +148,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handle(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidRequestError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal(
             'Invalid request: content must be application/x-www-form-urlencoded',
@@ -178,7 +178,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handle(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidClientError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
             'Invalid client: cannot retrieve client credentials',
@@ -210,7 +210,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handle(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidRequestError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal('Missing parameter: `token`');
         });
@@ -244,7 +244,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handle(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof ServerError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; inner: { should: { be: { an: { instanceOf: (arg0: ErrorConstructor) => void; }; }; }; }; }) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Unhandled exception');
           e.inner.should.be.an.instanceOf(Error);
@@ -327,7 +327,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handle(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidTokenError) => void; }; }; }; }[]) => {
           e[0].should.be.an.instanceOf(InvalidTokenError);
           e[1].should.be.an.instanceOf(InvalidTokenError);
           response.body.should.eql({});
@@ -373,7 +373,7 @@ describe('RevokeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(data => {
+        .then((data: any) => {
           should.exist(data);
         })
         .catch(should.fail);
@@ -449,7 +449,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getClient(request)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidClientError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: client is invalid');
         });
@@ -475,7 +475,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getClient(request)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof ServerError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Server error: missing client `grants`');
         });
@@ -505,7 +505,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getClient(request, response)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidClientError) => void; }; }; }; code: { should: { equal: (arg0: number) => void; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.code.should.equal(401);
           e.message.should.equal('Invalid client: client is invalid');
@@ -536,7 +536,7 @@ describe('RevokeHandler integration', () => {
 
       return handler
         .getClient(request)
-        .then(data => {
+        .then((data: { should: { equal: (arg0: { id: number; grants: never[]; }) => void; }; }) => {
           data.should.equal(client);
         })
         .catch(should.fail);
@@ -725,7 +725,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .handleRevokeToken(request)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidRequestError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal('Missing parameter: `token`');
         });
@@ -759,7 +759,7 @@ describe('RevokeHandler integration', () => {
 
       return handler
         .handleRevokeToken(request, client)
-        .then(data => {
+        .then((data: any) => {
           should.exist(data);
         })
         .catch(should.fail);
@@ -793,7 +793,7 @@ describe('RevokeHandler integration', () => {
 
       return handler
         .handleRevokeToken(request, client)
-        .then(data => {
+        .then((data: any) => {
           should.exist(data);
         })
         .catch(should.fail);
@@ -814,7 +814,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getRefreshToken('hash', client)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidTokenError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidTokenError);
           e.message.should.equal('Invalid token: refresh token is invalid');
         });
@@ -841,7 +841,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getRefreshToken('hash', client)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidClientError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: client is invalid');
         });
@@ -867,7 +867,7 @@ describe('RevokeHandler integration', () => {
 
       return handler
         .getRefreshToken('hash', client)
-        .then(Token => {
+        .then((Token: any) => {
           should.exist(Token);
         })
         .catch(should.fail);
@@ -914,7 +914,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getAccessToken('hash', client)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidTokenError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidTokenError);
           e.message.should.equal('Invalid token: access token is invalid');
         });
@@ -941,7 +941,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .getAccessToken('hash', client)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidClientError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: client is invalid');
         });
@@ -967,7 +967,7 @@ describe('RevokeHandler integration', () => {
 
       return handler
         .getAccessToken('hash', client)
-        .then(Token => {
+        .then((Token: any) => {
           should.exist(Token);
         })
         .catch(should.fail);
@@ -1019,7 +1019,7 @@ describe('RevokeHandler integration', () => {
       return handler
         .revokeToken(token, client)
         .then(should.fail)
-        .catch(e => {
+        .catch((e: { should: { be: { an: { instanceOf: (arg0: typeof InvalidTokenError) => void; }; }; }; message: { should: { equal: (arg0: string) => void; }; }; }) => {
           e.should.be.an.instanceOf(InvalidTokenError);
           e.message.should.equal('Invalid token: token is invalid');
         });
