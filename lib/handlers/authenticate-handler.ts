@@ -71,9 +71,6 @@ export class AuthenticateHandler {
       );
     }
 
-    // Extend model object with request
-    this.model.request = request;
-
     try {
       let token = await this.getTokenFromRequest(request);
       token = await this.getAccessToken(token);

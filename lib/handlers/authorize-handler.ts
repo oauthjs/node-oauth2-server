@@ -83,9 +83,6 @@ export class AuthorizeHandler {
       );
     }
 
-    // Extend model object with request
-    this.model.request = request;
-
     const client = await this.getClient(request);
     const user = await this.getUser(request, response);
 

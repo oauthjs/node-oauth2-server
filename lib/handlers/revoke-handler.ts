@@ -73,8 +73,6 @@ export class RevokeHandler {
         'Invalid request: content must be application/x-www-form-urlencoded',
       );
     }
-    // Extend model object with request
-    this.model.request = request;
 
     try {
       const client = await this.getClient(request, response);
