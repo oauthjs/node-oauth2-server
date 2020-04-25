@@ -7,6 +7,7 @@
 
 # misc
 npm-debug.log
+
 # folders
 /dist
 /node_modules
@@ -17,3 +18,7 @@ __pycache__/
 .DS_Store
 *.pyc
 /aio
+
+# codecoverage
+/.nyc_output
+/coverage
