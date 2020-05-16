@@ -145,7 +145,7 @@ export class AuthenticateHandler {
 
   getTokenFromRequestHeader(request: Request) {
     const token = request.get('Authorization');
-    const matches = token.match(/Bearer\s(\S+)/);
+    const matches = token.match(/^Bearer\s(\S+)/);
 
     if (!matches) {
       throw new InvalidRequestError(
