@@ -303,7 +303,7 @@ describe('AuthenticateHandler integration', () => {
       const request = new Request({
         body: {},
         headers: {
-          Authorization: 'foobar',
+          Authorization: 'foo Bearer bar',
         },
         method: 'ANY',
         query: {},
