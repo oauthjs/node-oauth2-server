@@ -1,6 +1,16 @@
 ## Changelog
 
-### 3.0.0
+### 3.0.2 (24/05/2020)
+
+* Update all dependencies 🎉
+
+### 3.0.1 (27/08/2018)
+
+* Doc fixes
+
+Tag never released on npm
+
+### 3.0.0 (04/08/2017)
 * Complete re-write, with Promises and callback support
 * Dropped support for node v0.8, v0.10, v0.12
 * Supports Node v4, v6, v7, and v8.  Will continue support for node current and active LTS versions
