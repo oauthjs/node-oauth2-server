@@ -1,6 +1,3 @@
-# This project is seeking maintainers and reviewers
-
-## The currently released version is now significantly out of date. The project has been rewritten in typescript ([#564](https://github.com/oauthjs/node-oauth2-server/pull/564)), we're now working in the [v5-dev](https://github.com/oauthjs/node-oauth2-server/tree/v5-dev) branch and we're seeking further review, testing and documentation - any help with this popular project would be hugely appreciated, anyone providing consistent help will be promoted to collaborator.
 
 # oauth2-server
 
@@ -12,6 +9,7 @@
 
 Complete, compliant and well tested module for implementing an OAuth2 server in [Node.js](https://nodejs.org).
 
+Note: After a period of hiatus, this project is now back under active maintenance. Dependencies have been updated and bug fixes will land in v3 (current master). v4 will be _mostly backwards compatible_ with no code changes required for users using a supported node release. More details in [#621](https://github.com/oauthjs/node-oauth2-server/issues/621).
 
 ## Installation
 
