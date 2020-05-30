@@ -45,9 +45,9 @@
   },
   "devDependencies": {
     "jshint": "2.11.1",
-    "mocha": "3.5.3",
+    "mocha": "5.2.0",
     "should": "13.2.3",
-    "sinon": "2.4.1"
+    "sinon": "7.5.0"
   },
   "license": "MIT",
   "engines": {
