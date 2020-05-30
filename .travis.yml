@@ -1,9 +1,11 @@
 language: node_js
 
 node_js:
+  - 4
+  - 6
+  - 8
   - 10
   - 12
   - 13
-  - 14
 
 sudo: false
