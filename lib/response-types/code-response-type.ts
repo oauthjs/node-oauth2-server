@@ -1,5 +1,5 @@
 import { MILLISECONDS_PER_SECOND } from '../constants';
-import { InvalidArgumentError } from '../errors';
+import { InvalidArgumentError, InvalidRequestError } from '../errors';
 import { AuthorizationCode, Client, Model, User } from '../interfaces';
 import { Request } from '../request';
 import * as tokenUtil from '../utils/token-util';
@@ -56,6 +56,13 @@ export class CodeResponseType {
       throw new InvalidArgumentError('Missing parameter: `uri`');
     }
 
+    const codeChallenge = this.getCodeChallenge(request);
+    const codeChallengeMethod = this.getCodeChallengeMethod(request);
+
+    if (!codeChallenge && codeChallengeMethod) {
+      throw new InvalidArgumentError('Missing parameter: `code_challenge`');
+    }
+
     const authorizationCode = await this.generateAuthorizationCode(
       client,
       user,
@@ -70,6 +77,8 @@ export class CodeResponseType {
       client,
       uri,
       user,
+      codeChallenge,
+      codeChallengeMethod,
     );
     this.code = code.authorizationCode;
 
@@ -107,6 +116,8 @@ export class CodeResponseType {
     client: Client,
     redirectUri: any,
     user: User,
+    codeChallenge?: string,
+    codeChallengeMethod?: 'S256' | 'plain' | null,
   ) {
     const code = {
       authorizationCode,
@@ -114,6 +125,14 @@ export class CodeResponseType {
       redirectUri,
       scope,
     } as AuthorizationCode;
+
+    if (codeChallenge) {
+      code.codeChallenge = codeChallenge;
+
+      // Section 4.3 - https://tools.ietf.org/html/rfc7636#section-4
+      // Defaults to "plain" if not present in the request.
+      code.codeChallengeMethod = codeChallengeMethod || 'plain';
+    }
 
     return this.model.saveAuthorizationCode(code, client, user);
   }
@@ -161,5 +180,42 @@ export class CodeResponseType {
     redirectUri.query[key] = value;
 
     return redirectUri;
+  }
+
+  /**
+   * Get Code challenge
+   */
+  getCodeChallenge(request: Request): string | undefined {
+    const codeChallenge = request.body.code_challenge || request.query.code_challenge;
+
+    if (!codeChallenge) {
+      return undefined;
+    }
+
+    // https://tools.ietf.org/html/rfc7636#section-4
+    if (!codeChallenge.match(/^([A-Za-z0-9\.\-\_\~]){43,128}$/)) {
+      throw new InvalidRequestError('Invalid parameter: `code_challenge`');
+    }
+
+    return codeChallenge;
+  }
+
+  /**
+   * Get Code challenge method
+   */
+  getCodeChallengeMethod(request: Request): 'S256' | 'plain' | undefined {
+    const codeChallengeMethod = request.body.code_challenge_method || request.query.code_challenge_method;
+
+    // https://tools.ietf.org/html/rfc7636#section-4
+    // Section 4.3 - codeChallengeMethod is optional.
+    if (!codeChallengeMethod) {
+      return undefined;
+    }
+
+    if (codeChallengeMethod !== 'S256' && codeChallengeMethod !== 'plain') {
+      throw new InvalidRequestError('Invalid parameter: `code_challenge_method`');
+    }
+
+    return codeChallengeMethod;
   }
 }

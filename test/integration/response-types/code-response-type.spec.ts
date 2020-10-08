@@ -1,3 +1,4 @@
+import { Client, User } from 'lib/interfaces';
 import * as should from 'should';
 import * as sinon from 'sinon';
 import * as url from 'url';
@@ -187,6 +188,62 @@ describe('CodeResponseType integration', () => {
     //     .generateAuthorizationCode(undefined, undefined, undefined)
     //     .should.be.an.instanceOf(Promise);
     // });
+
+    describe('with PKCE', function() {
+      it('should save codeChallenge and codeChallengeMethod', function() {
+        var model = {
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: sinon.stub().returns({})
+        };
+        var handler = new CodeResponseType({ authorizationCodeLifetime: 120, model: model });
+
+        return handler.saveAuthorizationCode('foo', new Date(12345), 'qux', { id: 'biz' } as Client, 'baz', { id: 'boz' } as User, 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM', 'S256')
+          .then(function() {
+            model.saveAuthorizationCode.callCount.should.equal(1);
+            model.saveAuthorizationCode.firstCall.args.should.have.length(3);
+            model.saveAuthorizationCode.firstCall.args[0].should.eql({ authorizationCode: 'foo', expiresAt: new Date(12345), redirectUri: 'baz', scope: 'qux', codeChallenge: 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM', codeChallengeMethod: 'S256' });
+            model.saveAuthorizationCode.firstCall.args[1].id.should.equal('biz');
+            model.saveAuthorizationCode.firstCall.args[2].id.should.equal('boz');
+          });
+      });
+
+      it('should save codeChallenge and set codeChallengeMethod to `plain` when codeChallengeMethod is not present', function() {
+        var model = {
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: sinon.stub().returns({})
+        };
+        var handler = new CodeResponseType({ authorizationCodeLifetime: 120, model: model });
+
+        return handler.saveAuthorizationCode('foo', new Date(12345), 'qux', { id: 'biz' } as Client, 'baz', { id: 'boz' } as User, 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM', null)
+          .then(function() {
+            model.saveAuthorizationCode.callCount.should.equal(1);
+            model.saveAuthorizationCode.firstCall.args.should.have.length(3);
+            model.saveAuthorizationCode.firstCall.args[0].should.eql({ authorizationCode: 'foo', expiresAt: new Date(12345), redirectUri: 'baz', scope: 'qux', codeChallenge: 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM', codeChallengeMethod: 'plain' });
+            model.saveAuthorizationCode.firstCall.args[1].id.should.equal('biz');
+            model.saveAuthorizationCode.firstCall.args[2].id.should.equal('boz');
+          });
+      });
+
+      it('should save code but not save codeChallenge or codeChallengeMethod when codeChallenge is not present and codeChallengeMethod is present', function() {
+        var model = {
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: sinon.stub().returns({})
+        };
+        var handler = new CodeResponseType({ authorizationCodeLifetime: 120, model: model });
+
+        return handler.saveAuthorizationCode('foo', new Date(12345), 'qux', { id: 'biz' } as Client, 'baz', { id: 'boz' } as User, '', 'S256')
+          .then(function() {
+            model.saveAuthorizationCode.callCount.should.equal(1);
+            model.saveAuthorizationCode.firstCall.args.should.have.length(3);
+            model.saveAuthorizationCode.firstCall.args[0].should.eql({ authorizationCode: 'foo', expiresAt: new Date(12345), redirectUri: 'baz', scope: 'qux' });
+            model.saveAuthorizationCode.firstCall.args[1].id.should.equal('biz');
+            model.saveAuthorizationCode.firstCall.args[2].id.should.equal('boz');
+          });
+      });
+    });
   });
 
   describe('getAuthorizationCodeExpiresAt()', () => {
