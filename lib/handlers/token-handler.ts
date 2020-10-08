@@ -22,6 +22,11 @@ import { BearerTokenType } from '../token-types';
 import { hasOwnProperty } from '../utils/fn';
 import * as is from '../validator/is';
 
+interface ClientCredentials {
+  clientId: string;
+  clientSecret?: string;
+}
+
 /**
  * Grant types.
  */
@@ -127,9 +132,10 @@ export class TokenHandler {
    * Get the client from the model.
    */
 
-  async getClient(request, response) {
-    const credentials = this.getClientCredentials(request);
+  async getClient(request: Request, response: Response) {
+    const credentials: ClientCredentials = this.getClientCredentials(request);
     const grantType = request.body.grant_type;
+    const isPkce = this.isPKCERequest(request, grantType);
 
     if (!credentials.clientId) {
       throw new InvalidRequestError('Missing parameter: `client_id`');
@@ -137,7 +143,8 @@ export class TokenHandler {
 
     if (
       this.isClientAuthenticationRequired(grantType) &&
-      !credentials.clientSecret
+      !credentials.clientSecret &&
+      !isPkce
     ) {
       throw new InvalidRequestError('Missing parameter: `client_secret`');
     }
@@ -207,6 +214,12 @@ export class TokenHandler {
         clientId: request.body.client_id,
         clientSecret: request.body.client_secret,
       };
+    }
+
+    if (this.isPKCERequest(request, grantType)) {
+      if (request.body.client_id) {
+        return { clientId: request.body.client_id };
+      }
     }
 
     if (
@@ -328,4 +341,17 @@ export class TokenHandler {
 
     return true;
   }
+
+  /**
+   * Check if the request is a PCKE request. We assume PKCE if grant type is 'authorization_code'
+   * and code verifier is present.
+   */
+  isPKCERequest(request: Request, grantType: string): boolean {
+    if (grantType === 'authorization_code' && request.body.code_verifier) {
+      return true;
+    }
+
+    return false;
+  }
+
 }

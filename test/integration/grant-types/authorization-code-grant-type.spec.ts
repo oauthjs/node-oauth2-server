@@ -7,6 +7,8 @@ import {
 } from '../../../lib/errors';
 import { AuthorizationCodeGrantType } from '../../../lib/grant-types';
 import { Request } from '../../../lib/request';
+import * as stringUtil from '../../../lib/utils/string-util';
+import * as crypto from 'crypto';
 
 /**
  * Test `AuthorizationCodeGrantType` integration.
@@ -610,6 +612,122 @@ describe('AuthorizationCodeGrantType integration', () => {
             'Invalid grant: `redirect_uri` is not a valid URI',
           );
         });
+    });
+
+    describe('with PKCE', function() {
+      it('should throw an error if the `code_verifier` is invalid with S256 code challenge method', () => {
+        var codeVerifier = stringUtil.base64URLEncode(crypto.randomBytes(32));
+        var authorizationCode = {
+          authorizationCode: 12345,
+          client: { id: 'foobar' },
+          expiresAt: new Date(new Date().getTime() * 2),
+          user: {},
+          codeChallengeMethod: 'S256',
+          codeChallenge: stringUtil.base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest())
+        };
+        var client: any = { id: 'foobar', isPublic: true };
+        var model = {
+          getAuthorizationCode: function() { return authorizationCode; },
+          revokeAuthorizationCode: function() {},
+          saveToken: function() {}
+        };
+        var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+        var request = new Request({ body: { code: 12345, code_verifier: 'foo' }, headers: {}, method: 'POST', query: {} });
+
+        return grantType.getAuthorizationCode(request, client)
+          .then(() => {
+            should.fail('should.fail', '');
+          })
+          .catch(e => {
+            e.should.be.an.instanceOf(InvalidGrantError);
+            e.message.should.equal('Invalid grant: code verifier is invalid');
+          });
+      });
+
+      it('should throw an error if the `code_verifier` is invalid with plain code challenge method', () => {
+        var codeVerifier = stringUtil.base64URLEncode(crypto.randomBytes(32));
+        var authorizationCode = {
+          authorizationCode: 12345,
+          client: { id: 'foobar' },
+          expiresAt: new Date(new Date().getTime() * 2),
+          user: {},
+          codeChallengeMethod: 'plain',
+          codeChallenge: codeVerifier
+        };
+        var client: any = { id: 'foobar', isPublic: true };
+        var model = {
+          getAuthorizationCode: function() { return authorizationCode; },
+          revokeAuthorizationCode: function() {},
+          saveToken: function() {}
+        };
+        var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+        var request = new Request({ body: { code: 12345, code_verifier: 'foo' }, headers: {}, method: 'POST', query: {} });
+
+        return grantType.getAuthorizationCode(request, client)
+          .then(() => {
+            should.fail('should.fail', '');
+          })
+          .catch(function(e) {
+            e.should.be.an.instanceOf(InvalidGrantError);
+            e.message.should.equal('Invalid grant: code verifier is invalid');
+          });
+      });
+
+      it('should return an auth code when `code_verifier` is valid with S256 code challenge method', () => {
+        var codeVerifier = stringUtil.base64URLEncode(crypto.randomBytes(32));
+        var authorizationCode = {
+          authorizationCode: 12345,
+          client: { id: 'foobar', isPublic: true },
+          expiresAt: new Date(new Date().getTime() * 2),
+          user: {},
+          codeChallengeMethod: 'S256',
+          codeChallenge: stringUtil.base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest())
+        };
+        var client: any = { id: 'foobar', isPublic: true };
+        var model = {
+          getAuthorizationCode: function() { return authorizationCode; },
+          revokeAuthorizationCode: function() {},
+          saveToken: function() {}
+        };
+        var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+        var request = new Request({ body: { code: 12345, code_verifier: codeVerifier }, headers: {}, method: 'POST', query: {} });
+
+        return grantType.getAuthorizationCode(request, client)
+          .then(function(data) {
+            data.should.equal(authorizationCode);
+          })
+          .catch(() => {
+            should.fail('should.fail', '');
+          });
+      });
+
+      it('should return an auth code when `code_verifier` is valid with plain code challenge method', () => {
+        var codeVerifier = stringUtil.base64URLEncode(crypto.randomBytes(32));
+        var authorizationCode = {
+          authorizationCode: 12345,
+          client: { id: 'foobar' },
+          expiresAt: new Date(new Date().getTime() * 2),
+          user: {},
+          codeChallengeMethod: 'plain',
+          codeChallenge: codeVerifier
+        };
+        var client: any = { id: 'foobar', isPublic: true };
+        var model = {
+          getAuthorizationCode: function() { return authorizationCode; },
+          revokeAuthorizationCode: function() {},
+          saveToken: function() {}
+        };
+        var grantType = new AuthorizationCodeGrantType({ accessTokenLifetime: 123, model: model });
+        var request = new Request({ body: { code: 12345, code_verifier: codeVerifier }, headers: {}, method: 'POST', query: {} });
+
+        return grantType.getAuthorizationCode(request, client)
+          .then(function(data) {
+            data.should.equal(authorizationCode);
+          })
+          .catch(() => {
+            should.fail('should.fail', '');
+          });
+      });
     });
 
     it('should return an auth code', () => {

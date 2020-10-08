@@ -8,6 +8,8 @@ import {
 import { AuthorizationCode, Client, Token, User } from '../interfaces';
 import { Request } from '../request';
 import * as is from '../validator/is';
+import * as crypto from 'crypto';
+import * as stringUtil from '../utils/string-util';
 
 export class AuthorizationCodeGrantType extends AbstractGrantType {
   constructor(options: any = {}) {
@@ -115,6 +117,33 @@ export class AuthorizationCodeGrantType extends AbstractGrantType {
       throw new InvalidGrantError(
         'Invalid grant: `redirect_uri` is not a valid URI',
       );
+    }
+
+    if (code.codeChallenge) {
+      if (!request.body.code_verifier) {
+        throw new InvalidGrantError('Missing parameter: `code_verifier`');
+      }
+
+      let hash;
+      switch (code.codeChallengeMethod) {
+        case 'plain':
+          hash = request.body.code_verifier;
+          break;
+        case 'S256':
+          hash = stringUtil.base64URLEncode(crypto.createHash('sha256').update(request.body.code_verifier).digest());
+          break;
+        default:
+          throw new ServerError('Server error: `getAuthorizationCode()` did not return a valid `codeChallengeMethod` property');
+      }
+
+      if (code.codeChallenge !== hash) {
+        throw new InvalidGrantError('Invalid grant: code verifier is invalid');
+      }
+    } else {
+      if (request.body.code_verifier) {
+        // No code challenge but code_verifier was passed in.
+        throw new InvalidGrantError('Invalid grant: code verifier is invalid');
+      }
     }
 
     return code;

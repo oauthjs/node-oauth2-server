@@ -10,5 +10,7 @@ export interface AuthorizationCode {
   scope?: string;
   client: Client;
   user: User;
+  codeChallenge?: string;
+  codeChallengeMethod?: 'S256' | 'plain' | null;
   [key: string]: any;
 }
