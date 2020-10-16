@@ -4,6 +4,7 @@
 
 ### 5.0.0
 
+- BREAKING: Remove support for node v8
 - fix: Switch back from Tslint to Eslint
 - BREAKING: RevokeHandler#handleRevokeToken will throw [AggregateError](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError) is error
 - BREAKING: Remove support for node v6
@@ -46,7 +47,7 @@
 - Complete re-write, with Promises and callback support
 - Dropped support for node v0.8, v0.10, v0.12
 - Supports Node v4, v6, v7, and v8. Will continue support for node current and active LTS versions
-- For migration guide, see https://oauth2-server.readthedocs.io/en/latest/misc/migrating-v2-to-v3.html
+- For migration guide, [see](https://oauth2-server.readthedocs.io/en/latest/misc/migrating-v2-to-v3.html)
 
 ### 2.4.1
 
