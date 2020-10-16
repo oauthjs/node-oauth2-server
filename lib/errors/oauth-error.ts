@@ -17,15 +17,15 @@ export class OAuthError extends Error {
       props.inner = error;
     }
     if (!message) {
-      message = statuses[props.code];
+      message = statuses.message[props.code];
     }
     this.code = this.status = this.statusCode = props.code;
     this.message = message;
 
     const ignoreAttr = ['code', 'message'];
     Object.keys(props)
-      .filter(key => !ignoreAttr.includes(key))
-      .forEach(key => (this[key] = props[key]));
+      .filter((key) => !ignoreAttr.includes(key))
+      .forEach((key) => (this[key] = props[key]));
 
     Error.captureStackTrace(this, OAuthError);
   }

@@ -1,7 +1,7 @@
-import { AbstractGrantType } from '.';
 import { InvalidArgumentError } from '../errors';
 import { Client, Token, User } from '../interfaces';
 import { Request } from '../request';
+import { AbstractGrantType } from './abstract-grant-type';
 
 export class ImplicitGrantType extends AbstractGrantType {
   scope: string;

@@ -1,4 +1,3 @@
-import { AbstractGrantType } from '.';
 import {
   InvalidArgumentError,
   InvalidGrantError,
@@ -8,6 +7,7 @@ import {
 import { Client, RefreshToken, User } from '../interfaces';
 import { Request } from '../request';
 import * as is from '../validator/is';
+import { AbstractGrantType } from './abstract-grant-type';
 
 export class RefreshTokenGrantType extends AbstractGrantType {
   constructor(options: any = {}) {

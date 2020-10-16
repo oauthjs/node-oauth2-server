@@ -155,7 +155,7 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .handle(request, client)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(() => {
@@ -318,7 +318,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
         });
@@ -349,7 +349,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `getRefreshToken()` did not return a `client` object',
@@ -382,7 +382,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `getRefreshToken()` did not return a `user` object',
@@ -415,7 +415,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
         });
@@ -476,7 +476,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
         });
@@ -513,7 +513,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token has expired');
         });
@@ -549,7 +549,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `refreshTokenExpiresAt` must be a Date instance',
@@ -580,7 +580,7 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .getRefreshToken(request, client)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(() => {
@@ -684,7 +684,7 @@ describe('RefreshTokenGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal('Invalid grant: refresh token is invalid');
         });
@@ -711,7 +711,7 @@ describe('RefreshTokenGrantType integration', () => {
 
       return grantType
         .revokeToken(token)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(() => {

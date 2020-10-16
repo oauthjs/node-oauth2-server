@@ -127,7 +127,7 @@ describe('ClientCredentialsGrantType integration', () => {
 
       return grantType
         .handle(request, {} as any)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(() => {

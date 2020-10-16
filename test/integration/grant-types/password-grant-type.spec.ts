@@ -123,7 +123,7 @@ describe('PasswordGrantType integration', () => {
 
       return grantType
         .handle(request, client)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(() => {

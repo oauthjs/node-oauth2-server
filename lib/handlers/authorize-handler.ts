@@ -1,5 +1,4 @@
 import * as url from 'url';
-import { AuthenticateHandler } from '.';
 import {
   AccessDeniedError,
   InvalidArgumentError,
@@ -17,6 +16,7 @@ import { Response } from '../response';
 import { CodeResponseType, TokenResponseType } from '../response-types';
 import { hasOwnProperty } from '../utils/fn';
 import * as is from '../validator/is';
+import { AuthenticateHandler } from './authenticate-handler';
 
 /**
  * Response types.

@@ -4,7 +4,7 @@
 
 should.Assertion.add(
   'sha1',
-  function() {
+  function () {
     this.params = { operator: 'to be a valid SHA-1 hash' };
     this.obj.should.match(/^[a-f0-9]{40}$/i);
   },

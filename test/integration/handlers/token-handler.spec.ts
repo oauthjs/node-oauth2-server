@@ -258,7 +258,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal('Invalid request: method must be POST');
         });
@@ -287,7 +287,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidRequestError);
           e.message.should.equal(
             'Invalid request: content must be application/x-www-form-urlencoded',
@@ -321,7 +321,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
             'Invalid client: cannot retrieve client credentials',
@@ -364,7 +364,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Unhandled exception');
           e.inner.should.be.an.instanceOf(Error);
@@ -660,7 +660,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: client is invalid');
         });
@@ -690,7 +690,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Server error: missing client `grants`');
         });
@@ -751,7 +751,7 @@ describe('TokenHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.code.should.equal(401);
           e.message.should.equal('Invalid client: client is invalid');
@@ -816,7 +816,7 @@ describe('TokenHandler integration', () => {
 
         return handler
           .getClient(request, undefined)
-          .then(data => {
+          .then((data) => {
             data.should.equal(client);
           })
           .catch(() => {
@@ -857,7 +857,7 @@ describe('TokenHandler integration', () => {
 
         return handler
           .getClient(request, undefined)
-          .then(data => {
+          .then((data) => {
             data.should.equal(client);
           })
           .catch(() => {
@@ -1254,7 +1254,7 @@ describe('TokenHandler integration', () => {
           query: {},
         });
 
-        return handler.handleGrantType(request, client).then(data => {
+        return handler.handleGrantType(request, client).then((data) => {
           data.should.equal(token);
         });
         // .catch(() => {
@@ -1296,7 +1296,7 @@ describe('TokenHandler integration', () => {
 
         return handler
           .handleGrantType(request, client)
-          .then(data => {
+          .then((data) => {
             data.should.equal(token);
           })
           .catch(() => {
@@ -1342,7 +1342,7 @@ describe('TokenHandler integration', () => {
 
         return handler
           .handleGrantType(request, client)
-          .then(data => {
+          .then((data) => {
             data.should.equal(token);
           })
           .catch(() => {
@@ -1394,7 +1394,7 @@ describe('TokenHandler integration', () => {
 
         return handler
           .handleGrantType(request, client)
-          .then(data => {
+          .then((data) => {
             data.should.equal(token);
           })
           .catch(() => {
@@ -1442,7 +1442,7 @@ describe('TokenHandler integration', () => {
 
         return handler
           .handleGrantType(request, client)
-          .then(data => {
+          .then((data) => {
             data.should.equal(token);
           })
           .catch(() => {

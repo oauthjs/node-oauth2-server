@@ -21,7 +21,7 @@ export class TokenModel implements Token {
   scope?: string;
   client: Client;
   user: User;
-  customAttributes: {};
+  customAttributes: any = {};
   accessTokenLifetime: number;
   constructor(data: any = {}, options: any = {}) {
     if (!data.accessToken) {

@@ -1,4 +1,3 @@
-import { AbstractGrantType } from '.';
 import {
   InvalidArgumentError,
   InvalidGrantError,
@@ -7,6 +6,7 @@ import {
 import { Client, Token, User } from '../interfaces';
 import { Request } from '../request';
 import * as is from '../validator/is';
+import { AbstractGrantType } from './abstract-grant-type';
 
 export class PasswordGrantType extends AbstractGrantType {
   constructor(options: any = {}) {

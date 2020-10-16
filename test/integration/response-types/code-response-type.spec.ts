@@ -222,7 +222,7 @@ describe('CodeResponseType integration', () => {
 
       return handler
         .saveAuthorizationCode('foo', 'bar', 'biz', 'baz')
-        .then(data => {
+        .then((data) => {
           data.should.equal(authorizationCode);
         })
         .catch(() => {
