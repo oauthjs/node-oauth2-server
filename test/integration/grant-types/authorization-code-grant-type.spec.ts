@@ -127,7 +127,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `getAuthorizationCode()` did not return a `client` object',
@@ -384,7 +384,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
             'Invalid grant: authorization code is invalid',
@@ -417,7 +417,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `getAuthorizationCode()` did not return a `client` object',
@@ -450,7 +450,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `expiresAt` must be a Date instance',
@@ -487,7 +487,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `getAuthorizationCode()` did not return a `user` object',
@@ -525,7 +525,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
             'Invalid grant: authorization code is invalid',
@@ -564,7 +564,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
             'Invalid grant: authorization code has expired',
@@ -604,7 +604,7 @@ describe('AuthorizationCodeGrantType integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
             'Invalid grant: `redirect_uri` is not a valid URI',
@@ -640,7 +640,7 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .getAuthorizationCode(request, client)
-        .then(data => {
+        .then((data) => {
           data.should.equal(authorizationCode);
         })
         .catch(() => {
@@ -866,10 +866,10 @@ describe('AuthorizationCodeGrantType integration', () => {
 
       return grantType
         .revokeAuthorizationCode(authorizationCode)
-        .then(data => {
+        .then((data) => {
           data.should.equal(authorizationCode);
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidGrantError);
           e.message.should.equal(
             'Invalid grant: authorization code is invalid',

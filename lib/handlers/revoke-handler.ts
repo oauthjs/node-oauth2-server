@@ -1,4 +1,6 @@
 import * as auth from 'basic-auth';
+import 'core-js/features/aggregate-error';
+import 'core-js/features/promise/any';
 import {
   InvalidArgumentError,
   InvalidClientError,
@@ -7,10 +9,9 @@ import {
   OAuthError,
   ServerError,
 } from '../errors';
-import { Client, Model } from '../interfaces';
+import { Client, Model, Token } from '../interfaces';
 import { Request } from '../request';
 import { Response } from '../response';
-import { oneSuccess } from '../utils/fn';
 import * as is from '../validator/is';
 
 export class RevokeHandler {
@@ -113,10 +114,10 @@ export class RevokeHandler {
   async handleRevokeToken(request: Request, client: Client) {
     try {
       let token = await this.getTokenFromRequest(request);
-      token = await oneSuccess([
+      token = await Promise.any([
         this.getAccessToken(token, client),
         this.getRefreshToken(token, client),
-      ]);
+      ] as Promise<Token>[]);
 
       return this.revokeToken(token);
     } catch (errors) {

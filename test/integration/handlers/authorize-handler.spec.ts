@@ -212,7 +212,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(AccessDeniedError);
           e.message.should.equal(
             'Access denied: user denied access to application',
@@ -614,7 +614,7 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(data => {
+        .then((data) => {
           data.should.eql({
             authorizationCode: 12345,
             client,
@@ -817,7 +817,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
             'Invalid client: client credentials are invalid',
@@ -849,7 +849,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal('Invalid client: missing client `grants`');
         });
@@ -879,7 +879,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(UnauthorizedClientError);
           e.message.should.equal(
             'Unauthorized client: `grant_type` is invalid',
@@ -911,7 +911,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
             'Invalid client: missing client `redirectUri`',
@@ -950,7 +950,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidClientError);
           e.message.should.equal(
             'Invalid client: `redirect_uri` does not match client value',
@@ -1063,7 +1063,7 @@ describe('AuthorizeHandler integration', () => {
 
         return handler
           .getClient(request)
-          .then(data => {
+          .then((data) => {
             data.should.equal(client);
           })
           .catch(() => {
@@ -1272,7 +1272,7 @@ describe('AuthorizeHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `handle()` did not return a `user` object',
@@ -1306,7 +1306,7 @@ describe('AuthorizeHandler integration', () => {
 
       return handler
         .getUser(request, response)
-        .then(data => {
+        .then((data) => {
           data.should.equal(user);
         })
         .catch(() => {

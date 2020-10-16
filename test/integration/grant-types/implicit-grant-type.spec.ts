@@ -120,7 +120,7 @@ describe('ImplicitGrantType integration', () => {
 
       return grantType
         .handle(request, client)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(should.fail);
@@ -212,7 +212,7 @@ describe('ImplicitGrantType integration', () => {
 
       return grantType
         .saveToken(token)
-        .then(data => {
+        .then((data) => {
           data.should.equal(token);
         })
         .catch(should.fail);

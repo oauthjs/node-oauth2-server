@@ -179,7 +179,7 @@ describe('AuthenticateHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(AccessDeniedError);
           e.message.should.equal('Cannot request this access token');
         });
@@ -205,7 +205,7 @@ describe('AuthenticateHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal('Unhandled exception');
         });
@@ -240,7 +240,7 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .handle(request, response)
-        .then(data => {
+        .then((data) => {
           data.should.equal(accessToken);
         })
         .catch(() => {
@@ -444,7 +444,7 @@ describe('AuthenticateHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InvalidTokenError);
           e.message.should.equal('Invalid token: access token is invalid');
         });
@@ -463,7 +463,7 @@ describe('AuthenticateHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(ServerError);
           e.message.should.equal(
             'Server error: `getAccessToken()` did not return a `user` object',
@@ -482,7 +482,7 @@ describe('AuthenticateHandler integration', () => {
 
       return handler
         .getAccessToken('foo')
-        .then(data => {
+        .then((data) => {
           data.should.equal(accessToken);
         })
         .catch(() => {
@@ -576,7 +576,7 @@ describe('AuthenticateHandler integration', () => {
         .then(() => {
           should.fail('should.fail', '');
         })
-        .catch(e => {
+        .catch((e) => {
           e.should.be.an.instanceOf(InsufficientScopeError);
           e.message.should.equal(
             'Insufficient scope: authorized scope is insufficient',

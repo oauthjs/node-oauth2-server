@@ -87,7 +87,7 @@ export class TokenResponseType {
       throw new InvalidArgumentError('Missing parameter: `key`');
     }
 
-    redirectUri.hash = redirectUri.hash || '';
+    redirectUri.hash ||= '';
     redirectUri.hash += `${
       redirectUri.hash ? '&' : ''
     }${key}=${encodeURIComponent(value)}`;

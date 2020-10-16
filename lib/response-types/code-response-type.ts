@@ -157,7 +157,7 @@ export class CodeResponseType {
       throw new InvalidArgumentError('Missing parameter: `key`');
     }
 
-    redirectUri.query = redirectUri.query || {};
+    redirectUri.query ||= {};
     redirectUri.query[key] = value;
 
     return redirectUri;
