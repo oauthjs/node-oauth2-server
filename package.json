@@ -26,7 +26,7 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
-    "jshint": "2.9.4",
+    "jshint": "^2.12.0",
     "mocha": "3.3.0",
     "should": "11.2.1",
     "sinon": "2.3.2"
