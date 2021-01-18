@@ -1,7 +1,7 @@
 {
   "name": "@vista/oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "keywords": [
     "oauth",
     "oauth2"
