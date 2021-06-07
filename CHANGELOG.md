@@ -1,5 +1,11 @@
 ## Changelog
 
+### 4.0.0
+ * Bump jshint from 2.12.0 to 2.13.0
+ * Bump jshint from 2.12.0 to 2.13.0
+ * Upgrade to GitHub-native Dependabot
+ * [Security] Bump lodash from 4.17.19 to 4.17.21
+
 ### 3.1.0
 * new: .npmignore tests
 * fix: validate requested scope on authorize request
