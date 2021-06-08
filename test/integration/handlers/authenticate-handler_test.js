@@ -132,6 +132,57 @@ describe('AuthenticateHandler integration', function() {
         });
     });
 
+    it('should set the `WWW-Authenticate` header if an InvalidRequestError is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          throw new InvalidRequestError();
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('WWW-Authenticate').should.equal('Bearer realm="Service",error="invalid_request"');
+        });
+    });
+    
+    it('should set the `WWW-Authenticate` header if an InvalidTokenError is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          throw new InvalidTokenError();
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('WWW-Authenticate').should.equal('Bearer realm="Service",error="invalid_token"');
+        });
+    });
+
+    it('should set the `WWW-Authenticate` header if an InsufficientScopeError is thrown', function() {
+      var model = {
+        getAccessToken: function() {
+          throw new InsufficientScopeError();
+        }
+      };
+      var handler = new AuthenticateHandler({ model: model });
+      var request = new Request({ body: {}, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('WWW-Authenticate').should.equal('Bearer realm="Service",error="insufficient_scope"');
+        });
+    });
+
     it('should throw the error if an oauth error is thrown', function() {
       var model = {
         getAccessToken: function() {
