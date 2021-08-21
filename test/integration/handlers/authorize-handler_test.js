@@ -532,6 +532,45 @@ describe('AuthorizeHandler integration', function() {
         });
     });
 
+    it('should not include redirectUri in model.saveAuthorizationCode() when its not in request', function() {
+      var model = {
+        getAccessToken: function() {
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+        },
+        saveAuthorizationCode: function(code) {
+          code.should.have.property('redirectUri').which.is.undefined();
+          return { authorizationCode: 12345, client: this.getClient() };
+        }
+      };
+      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      var request = new Request({
+        body: {
+          client_id: 12345,
+          response_type: 'code'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          state: 'foobar'
+        }
+      });
+      var response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function() {
+          response.get('location').should.equal('http://example.com/cb?code=12345&state=foobar');
+        });
+    });
+
     it('should return the `code` if successful', function() {
       var client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
       var model = {
