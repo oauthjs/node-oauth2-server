@@ -1,13 +1,9 @@
 
 # oauth2-server2
 
-[![npm Version][npm-image]][npm-url]
-[![npm Downloads][downloads-image]][downloads-url]
-[![MIT Licensed][license-image]][license-url]
-
 Complete, compliant and well tested module for implementing an OAuth2 server in [Node.js](https://nodejs.org).
 
-NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) and is a continuition due to the project appearing to be abandoned. Please see [this issue](https://github.com/node-oauth/node-oauth2-server/issues/1) to talk about next steps and the future of this project.
+NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) and is a continuition due to the project appearing to be abandoned. Please see [this issue](https://github.com/node-oauth/node-oauth2-server/issues/2) to talk about next steps and the future of this project.
 
 ## Installation
 
@@ -53,12 +49,3 @@ To run the test suite, install dependencies, then run `npm test`:
 npm install
 npm test
 ```
-
-
-[npm-image]: https://img.shields.io/npm/v/oauth2-server2.svg
-[npm-url]: https://npmjs.org/package/oauth2-server2
-[downloads-image]: https://img.shields.io/npm/dm/oauth2-server2.svg
-[downloads-url]: https://npmjs.org/package/oauth2-server2
-[license-image]: https://img.shields.io/badge/license-MIT-blue.svg
-[license-url]: https://raw.githubusercontent.com/node-oauth/node-oauth2-server/master/LICENSE
-
