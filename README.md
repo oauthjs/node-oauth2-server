@@ -1,5 +1,5 @@
 
-# oauth2-server2
+# @node-oauth/oauth2-server
 
 Complete, compliant and well tested module for implementing an OAuth2 server in [Node.js](https://nodejs.org).
 
@@ -8,10 +8,10 @@ NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://git
 ## Installation
 
 ```bash
-npm install oauth2-server2
+npm install @node-oauth/oauth2-server
 ```
 
-The *oauth2-server2* module is framework-agnostic but there are several officially supported wrappers available for popular HTTP server frameworks such as [Express](https://npmjs.org/package/express-oauth-server) and [Koa](https://npmjs.org/package/koa-oauth-server). If you're using one of those frameworks it is strongly recommended to use the respective wrapper module instead of rolling your own.
+The *@node-oauth/oauth2-server* module is framework-agnostic but there are several officially supported wrappers available for popular HTTP server frameworks such as [Express](https://npmjs.org/package/express-oauth-server) and [Koa](https://npmjs.org/package/koa-oauth-server). If you're using one of those frameworks it is strongly recommended to use the respective wrapper module instead of rolling your own.
 
 
 ## Features
