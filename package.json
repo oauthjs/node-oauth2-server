@@ -1,7 +1,7 @@
 {
   "name": "oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
-  "version": "4.0.0-dev.3",
+  "version": "4.0.0",
   "keywords": [
     "oauth",
     "oauth2"
@@ -32,6 +32,9 @@
     },
     {
       "name": "Max Truxa"
+    },
+    {
+      "name": "Daniel Reguero"
     }
   ],
   "main": "index.js",
@@ -60,6 +63,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oauthjs/node-oauth2-server.git"
+    "url": "https://github.com/node-oauth/node-oauth2-server.git"
   }
 }
