@@ -40,12 +40,8 @@ This module has been rewritten using a promise-based approach, introducing chang
 
 Please refer to our [3.0 migration guide](https://oauth2-server.readthedocs.io/en/latest/misc/migrating-v2-to-v3.html) for more information.
 
+## Contributing to this project
 
-## Tests
-
-To run the test suite, install dependencies, then run `npm test`:
-
-```bash
-npm install
-npm test
-```
+Please read our [contribution guide](./CONTRIBUTING.md) before taking actions.
+In any case, please open an issue before opening a pull request to find out,
+whether your intend to contribute will actually have a chance to be merged.
