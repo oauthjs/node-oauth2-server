@@ -58,7 +58,7 @@ jobs:
     - run: npm ci
     - run: npm run test
     # uncomment when coverage is added
-    - run: npm run test:coverage
+    # - run: npm run test:coverage
 
     # ----------------------------------
     # uncomment when a linter is added
