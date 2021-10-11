@@ -22,13 +22,13 @@
     "bluebird": "3.7.2",
     "lodash": "4.17.21",
     "promisify-any": "2.0.1",
-    "statuses": "1.5.0",
     "type-is": "1.6.18"
   },
   "devDependencies": {
     "eslint": "^8.0.0",
     "jshint": "2.13.0",
     "mocha": "5.2.0",
+    "nyc": "^15.1.0",
     "should": "13.2.3",
     "sinon": "7.5.0"
   },
@@ -39,7 +39,8 @@
   "scripts": {
     "pretest": "./node_modules/.bin/eslint lib test index.js",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'",
-    "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'"
+    "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'",
+    "test:coverage": "NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/.bin/mocha 'test/**/*_test.js'"
   },
   "repository": {
     "type": "git",

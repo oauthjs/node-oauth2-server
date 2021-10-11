@@ -34,3 +34,7 @@ tramp
 # Org-mode
 .org-id-locations
 *_archive
+
+# coverage
+coverage
+.nyc_output
