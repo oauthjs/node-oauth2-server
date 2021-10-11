@@ -26,6 +26,18 @@ This project aims full standard compliance. All improvements on functionality,
 as well as security implications, are done in a way that the standard remains
 as the highest reference of choice.
 
+If you are not familiar with the OAuth2 standards, please consult at least the 
+following documents:
+
+- [RFC 6749 - The OAuth 2.0 Authorization Framework](https://datatracker.ietf.org/doc/html/rfc6749)
+- [RFC 8252 - OAuth 2.0 for Native Apps](https://datatracker.ietf.org/doc/html/rfc8252)
+
+Extended readings:
+
+- [RFC 6819 - OAuth 2.0 Threat Model and Security Considerations](https://datatracker.ietf.org/doc/html/rfc6819)
+- [RFC 7636 - Proof Key for Code Exchange by OAuth Public Clients](https://datatracker.ietf.org/doc/html/rfc7636)
+- [RFC 7591 - OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591)
+
 ### Framework agnostic
 
 Design decisions and implementations are always done with keeping in mind, that
@@ -134,33 +146,4 @@ Finally your PR needs to pass the review process:
   the changes
 - Once all reviewers have approved your PR it will be merged by one of the
   maintainers :tada:
-
-
-
-## For maintainers
-
-Maintainers of this repository have an extended responsibility for security and
-integrity. Therefore you have to take extra care on preparing publishing.
-
-### When to release a new version?
-
-- on fixed vulnerabilities
-- on fixed dependency-vulnerabilites
-- on new added features
-- what else?
-
-### When to decide between major, minor and path release?
-
-- major = breaking
-- minor = features and security fixes
-- patch = general fixes and small improvements
-
-### How to release a new version?
-
-What's required to publish to npm, which branches are involved, what should not
-be done etc.
-
-## Become a maintainer
-
-What is required to become a maintainer?
  
