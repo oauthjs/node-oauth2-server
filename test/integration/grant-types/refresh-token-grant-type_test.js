@@ -11,7 +11,7 @@ var Promise = require('bluebird');
 var RefreshTokenGrantType = require('../../../lib/grant-types/refresh-token-grant-type');
 var Request = require('../../../lib/request');
 var ServerError = require('../../../lib/errors/server-error');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `RefreshTokenGrantType` integration.

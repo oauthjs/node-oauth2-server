@@ -1,5 +1,5 @@
 var TokenModel = require('../../../lib/models/token-model');
-
+var should = require('chai').should();
 /**
  * Test `Server`.
  */
@@ -18,7 +18,8 @@ describe('Model', function() {
       };
   
       var model = new TokenModel(data);
-      model.accessTokenLifetime.should.be.Number;
+	  should.exist(model.accessTokenLifetime);
+      model.accessTokenLifetime.should.a('number');
       model.accessTokenLifetime.should.be.approximately(3600, 2);
     });
   });

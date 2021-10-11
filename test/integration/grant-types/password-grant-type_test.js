@@ -10,7 +10,7 @@ var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 var PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `PasswordGrantType` integration.
