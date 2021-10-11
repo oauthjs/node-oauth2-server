@@ -13,6 +13,26 @@ improve security.
 **However, please read our [security policy](./SECURITY.md), before taking 
 actions.**
 
+
+
+## Guiding principles
+
+Before contributing to this project it is important to understand how this 
+project and it's collaborators views itself regarding it's scope and purpose.
+
+### OAuth2 standard compliance
+
+This project aims full standard compliance. All improvements on functionality, 
+as well as security implications, are done in a way that the standard remains
+as the highest reference of choice.
+
+### Framework agnostic
+
+Design decisions and implementations are always done with keeping in mind, that
+there are multiple frameworks out there that use this project.
+
+
+
 ## Development
 
 If you want to fix bugs or add new features, **please read this chapter and it's 
@@ -114,6 +134,8 @@ Finally your PR needs to pass the review process:
   the changes
 - Once all reviewers have approved your PR it will be merged by one of the
   maintainers :tada:
+
+
 
 ## For maintainers
 
