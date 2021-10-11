@@ -121,7 +121,6 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, extendedGrantTypes: extendedGrantTypes, model: model, refreshTokenLifetime: 120 });
-	  console.log(handler.grantTypes);
       handler.grantTypes.should.deep.include(extendedGrantTypes);
     });
 
@@ -997,7 +996,6 @@ describe('TokenHandler integration', function() {
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar', scope: 'foobar' });
-	  console.log(tokenType);
       tokenType.should.deep.include({ accessToken: 'foo', accessTokenLifetime: undefined, refreshToken: 'bar', scope: 'foobar' });
     });
   });
