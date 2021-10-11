@@ -32,7 +32,6 @@
         "always"
       ],
       "no-control-regex": "off",
-	  "no-prototype-builtins": "off",
       "no-console": "off",
       "no-unused-vars": [
         "error", 
