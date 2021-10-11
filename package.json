@@ -26,6 +26,7 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
+    "eslint": "^8.0.0",
     "jshint": "2.13.0",
     "mocha": "5.2.0",
     "should": "13.2.3",
@@ -36,7 +37,7 @@
     "node": ">=4.0"
   },
   "scripts": {
-    "pretest": "jshint --config ./.jshintrc lib test",
+    "pretest": "./node_modules/.bin/eslint lib test index.js",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'",
     "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'"
   },

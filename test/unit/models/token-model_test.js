@@ -11,10 +11,10 @@ describe('Model', function() {
       atExpiresAt.setHours(new Date().getHours() + 1);
   
       var data = {
-          accessToken: 'foo',
-          client: 'bar',
-          user: 'tar',
-          accessTokenExpiresAt: atExpiresAt
+        accessToken: 'foo',
+        client: 'bar',
+        user: 'tar',
+        accessTokenExpiresAt: atExpiresAt
       };
   
       var model = new TokenModel(data);
