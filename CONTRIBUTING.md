@@ -15,22 +15,44 @@ actions.**
 
 ## Development
 
-If you want to fix bugs or add new features, please clone the source via
-
-```bash
-$ npm run test
-```
+If you want to fix bugs or add new features, **please read this chapter and it's 
+sections carefully!**
 
 ### No PR without issue
 
 Please make sure your commitment will be appreciated by first opening an issue
 and discuss, whether this is a useful addition to the project.
 
+### Work on a bug or a new feature
 
-### Run the tests
+First, clone and install this project from source via
 
-Please always make sure your code is passing linter and tests **before** 
-committing. By doing so you help to make reviews much easier and don't pollute 
+```bash
+$ git clone git@github.com:node-oauth/node-oauth2-server.git
+$ cd node-oauth2-server
+$ git checkout developmemt # important! do not work on master!
+$ npm install
+```
+
+From here you can run several scripts for development purposes:
+
+```bash
+$ npm run lint           # runs the linter
+$ npm run tets           # runs the tests once
+$ npm run tests:coverage # runs the tests including coverage
+$ npm run docs           # generates the API docs
+```
+
+To work on a new feature or a fix please create a new branch:
+
+```bash
+$ git checkout -b feature-xyz # or fix-xyz
+```
+
+### Run the tests before committing
+
+Please always make sure your code is passing linter and tests **before
+committing**. By doing so you help to make reviews much easier and don't pollute 
 the history with commits, that are solely targeting lint fixes.
 
 You can run the tests via
@@ -94,6 +116,9 @@ Finally your PR needs to pass the review process:
   maintainers :tada:
 
 ## For maintainers
+
+Maintainers of this repository have an extended responsibility for security and
+integrity. Therefore you have to take extra care on preparing publishing.
 
 ### When to release a new version?
 
