@@ -81,6 +81,22 @@ To work on a new feature or a fix please create a new branch:
 $ git checkout -b feature-xyz # or fix-xyz
 ```
 
+### Coding rules
+
+- Unit-testing: all features or bug fixes must be tested by specs
+- Documentation: all public API methods must be documented
+
+### Commit message convention
+
+Commit title must meet [angular commit message format](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format)
+with ticket number at the end of summary:
+
+```
+<type>(<scope>): <short summary> #<issue nuber>
+```
+Summary in present tense. Not capitalized. No period at the end.
+The <type> and <summary> fields are mandatory, the (<scope>) and #<number> field is optional.
+
 ### Run the tests before committing
 
 Please always make sure your code is passing linter and tests **before
