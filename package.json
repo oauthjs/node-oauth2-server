@@ -25,9 +25,8 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
     "chai": "^4.3.4",
-    "jshint": "2.13.0",
+    "eslint": "^8.0.0",
     "mocha": "5.2.0",
     "nyc": "^15.1.0",
     "sinon": "7.5.0"
