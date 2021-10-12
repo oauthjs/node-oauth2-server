@@ -18,7 +18,7 @@ describe('Model', function() {
       };
   
       var model = new TokenModel(data);
-	  should.exist(model.accessTokenLifetime);
+      should.exist(model.accessTokenLifetime);
       model.accessTokenLifetime.should.a('number');
       model.accessTokenLifetime.should.be.approximately(3600, 2);
     });
