@@ -88,7 +88,7 @@ $ git checkout -b feature-xyz # or fix-xyz
 
 ### Commit message convention
 
-Commit title must meet [angular commit message format](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format)
+We use a commit convention, inspired by [angular commit message format](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format)
 with ticket number at the end of summary:
 
 ```
