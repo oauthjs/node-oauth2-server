@@ -8,8 +8,10 @@ function runRanges (ranges, fn, expected) {
 
     for (var i = lower; i <= upper; i++) {
       var unicodeChar =  String.fromCodePoint(i);
-      var nchar = fn(unicodeChar);
-      nchar.should.eql(expected, i + ' ' + unicodeChar);
+      // single char
+      fn(unicodeChar).should.eql(expected, i + ' ' + unicodeChar);
+      // multiple chars
+      fn(unicodeChar+unicodeChar).should.eql(expected, i + ' ' + unicodeChar);
     }
   });
 }
@@ -75,7 +77,7 @@ describe('Validator', function () {
       runRanges(invalidRanges, is.nqschar, false);
     });
     it('validates if a value matches a unicode character excluding the carriage return and linefeed characters (uchar)', function () {
-      this.timeout(10000);
+      this.timeout(15000);
       var validRanges = [
         [9, 9], // \u0009
         [32, 126], // \u0020-\u007E,
