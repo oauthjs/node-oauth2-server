@@ -31,7 +31,6 @@
         "error",
         "always"
       ],
-      "no-control-regex": "off",
       "no-console": "off",
       "no-unused-vars": [
         "error", 
