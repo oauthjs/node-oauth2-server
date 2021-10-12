@@ -6,7 +6,7 @@
 
 var CodeResponseType = require('../../../lib/response-types/code-response-type');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
-var should = require('should');
+var should = require('chai').should();
 var url = require('url');
 
 /**

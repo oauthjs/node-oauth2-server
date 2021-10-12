@@ -6,7 +6,7 @@
 
 var AbstractGrantType = require('../../../lib/grant-types/abstract-grant-type');
 var sinon = require('sinon');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `AbstractGrantType`.

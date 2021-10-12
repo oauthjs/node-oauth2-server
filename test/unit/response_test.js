@@ -5,7 +5,7 @@
  */
 
 var Response = require('../../lib/response');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `Request`.

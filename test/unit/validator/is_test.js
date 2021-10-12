@@ -1,5 +1,5 @@
 var is = require('../../../lib/validator/is');
-require('should');
+require('chai').should();
 
 function runRanges (ranges, fn, expected) {
   ranges.forEach(function (range) {

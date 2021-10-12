@@ -18,7 +18,7 @@ var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
 var ServerError = require('../../../lib/errors/server-error');
 var UnauthorizedClientError = require('../../../lib/errors/unauthorized-client-error');
-var should = require('should');
+var should = require('chai').should();
 var url = require('url');
 
 /**

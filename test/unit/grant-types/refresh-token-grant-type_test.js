@@ -7,7 +7,7 @@
 var RefreshTokenGrantType = require('../../../lib/grant-types/refresh-token-grant-type');
 var Request = require('../../../lib/request');
 var sinon = require('sinon');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `RefreshTokenGrantType`.
