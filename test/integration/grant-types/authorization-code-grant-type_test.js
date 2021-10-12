@@ -11,7 +11,7 @@ var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
 var ServerError = require('../../../lib/errors/server-error');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `AuthorizationCodeGrantType` integration.

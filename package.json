@@ -25,10 +25,10 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
     "jshint": "2.13.0",
     "mocha": "5.2.0",
     "nyc": "^15.1.0",
-    "should": "13.2.3",
     "sinon": "7.5.0"
   },
   "license": "MIT",

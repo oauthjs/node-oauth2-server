@@ -15,7 +15,7 @@ var Request = require('../../../lib/request');
 var Response = require('../../../lib/response');
 var ServerError = require('../../../lib/errors/server-error');
 var UnauthorizedRequestError = require('../../../lib/errors/unauthorized-request-error');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `AuthenticateHandler` integration.

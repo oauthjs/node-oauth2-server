@@ -6,7 +6,7 @@
 
 var BearerTokenType = require('../../../lib/token-types/bearer-token-type');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `BearerTokenType` integration.

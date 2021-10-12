@@ -5,7 +5,7 @@
  */
 
 var TokenUtil = require('../../../lib/utils/token-util');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `TokenUtil` integration.
