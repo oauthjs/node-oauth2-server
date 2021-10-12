@@ -77,7 +77,7 @@ describe('Validator', function () {
       runRanges(invalidRanges, is.nqschar, false);
     });
     it('validates if a value matches a unicode character excluding the carriage return and linefeed characters (uchar)', function () {
-      this.timeout(15000);
+      this.timeout(60000);
       var validRanges = [
         [9, 9], // \u0009
         [32, 126], // \u0020-\u007E,
