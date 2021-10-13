@@ -225,7 +225,7 @@ describe('Server integration', function() {
           return { accessToken: 1234, client: {}, user: {} };
         },
         validateScope: function() {
-            return 'foo';
+          return 'foo';
         }
       };
       var server = new Server({ model: model });

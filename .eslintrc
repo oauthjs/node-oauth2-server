@@ -1,0 +1,47 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module",
+    "ecmaFeatures" : {
+      "globalReturn": false,
+      "impliedStrict": true,
+      "jsx": false
+    }
+  },
+  "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-console": [
+      "error"
+    ],
+    "no-unused-vars": [
+      "error", 
+      { 
+        "vars": "all",
+        "args": "none",
+        "ignoreRestSiblings": false 
+      }
+    ]
+  }
+}
+  

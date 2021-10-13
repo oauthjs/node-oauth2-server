@@ -541,7 +541,7 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-       });
+        });
         var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
 
         return handler.getClient(request)
@@ -568,13 +568,13 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-	});
+        });
         var request = new Request({
-	  body: { grant_type: 'password'},
-	  headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
-	  method: {},
-	  query: {}
-	});
+          body: { grant_type: 'password'},
+          headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
+          method: {},
+          query: {}
+        });
 
         return handler.getClient(request)
           .then(function(data) {

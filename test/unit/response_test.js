@@ -107,14 +107,14 @@ describe('Request', function() {
     response.headers.newheader.should.eql('newvalue');
   });
 
- it('should process redirect', function() {
-   var originalResponse = generateBaseResponse();
+  it('should process redirect', function() {
+    var originalResponse = generateBaseResponse();
 
-   var response = new Response(originalResponse);
-   response.headers.should.eql(originalResponse.headers);
-   response.status.should.eql(200);
-   response.redirect('http://foo.bar');
-   response.headers.location.should.eql('http://foo.bar');
-   response.status.should.eql(302);
- });
+    var response = new Response(originalResponse);
+    response.headers.should.eql(originalResponse.headers);
+    response.status.should.eql(200);
+    response.redirect('http://foo.bar');
+    response.headers.location.should.eql('http://foo.bar');
+    response.status.should.eql(302);
+  });
 });

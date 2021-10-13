@@ -30,6 +30,7 @@ npm-debug.log*~
 auto-save-list
 tramp
 .\#*
+.vscode
 
 # Org-mode
 .org-id-locations
