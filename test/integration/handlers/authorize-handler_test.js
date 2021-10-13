@@ -1124,10 +1124,10 @@ describe('AuthorizeHandler integration', function() {
     describe('with `response_type` in the request body', function() {
       it('should return a response type', function() {
         var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthorizationCode: function() {}
-      };
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: function() {}
+        };
         var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
         var request = new Request({ body: { response_type: 'code' }, headers: {}, method: {}, query: {} });
         var ResponseType = handler.getResponseType(request);
@@ -1139,10 +1139,10 @@ describe('AuthorizeHandler integration', function() {
     describe('with `response_type` in the request query', function() {
       it('should return a response type', function() {
         var model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthorizationCode: function() {}
-      };
+          getAccessToken: function() {},
+          getClient: function() {},
+          saveAuthorizationCode: function() {}
+        };
         var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
         var request = new Request({ body: {}, headers: {}, method: {}, query: { response_type: 'code' } });
         var ResponseType = handler.getResponseType(request);
