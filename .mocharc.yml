@@ -4,6 +4,5 @@ retries: 1
 slow: 20
 timeout: 2000
 ui: "bdd"
-# some additional files that could be loaded. e.g.: env.js
-# file:
-#   - '/path/to/some/file'
+require: test/assertions
+# for more options see here https://github.com/mochajs/mocha/blob/master/example/config/.mocharc.yml
