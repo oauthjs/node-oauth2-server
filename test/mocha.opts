@@ -1,3 +1,0 @@
---require test/assertions
---ui bdd
---reporter spec
