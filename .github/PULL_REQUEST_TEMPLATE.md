@@ -7,8 +7,8 @@ We highly appreciate your time and effort to this project!
 
 ⚠ PLEASE READ THIS FIRST ⚠
 
-1. If this is a fix for a security vulnerability you discorvered please don't 
-just open this PR until we have privatey discussed the vulnerability. Disclosing 
+1. If this is a fix for a security vulnerability you discovered please don't 
+just open this PR until we have privately discussed the vulnerability. Disclosing 
 it without contacting us can lead to severe implications for many applications 
 that run on this project.
 
