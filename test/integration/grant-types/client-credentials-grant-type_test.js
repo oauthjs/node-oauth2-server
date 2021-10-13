@@ -9,7 +9,7 @@ var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error')
 var InvalidGrantError = require('../../../lib/errors/invalid-grant-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `ClientCredentialsGrantType` integration.

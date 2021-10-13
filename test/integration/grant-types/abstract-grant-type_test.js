@@ -8,7 +8,7 @@ var AbstractGrantType = require('../../../lib/grant-types/abstract-grant-type');
 var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
 var Promise = require('bluebird');
 var Request = require('../../../lib/request');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `AbstractGrantType` integration.
