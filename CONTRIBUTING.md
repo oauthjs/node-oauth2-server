@@ -69,9 +69,8 @@ $ npm install
 From here you can run several scripts for development purposes:
 
 ```bash
-$ npm run lint           # runs the linter
-$ npm run tets           # runs the tests once
-$ npm run tests:coverage # runs the tests including coverage
+$ npm run test           # runs the tests once
+$ npm run test:coverage  # runs the tests including coverage
 $ npm run docs           # generates the API docs
 ```
 
@@ -163,3 +162,6 @@ Finally your PR needs to pass the review process:
 - Once all reviewers have approved your PR it will be merged by one of the
   maintainers :tada:
  
+#### After merge
+
+Please delete your branch after merge.
