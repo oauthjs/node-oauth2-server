@@ -40,6 +40,15 @@ This module has been rewritten using a promise-based approach, introducing chang
 
 Please refer to our [3.0 migration guide](https://oauth2-server.readthedocs.io/en/latest/misc/migrating-v2-to-v3.html) for more information.
 
+## Supported NodeJs versions
+
+This project supports the node versions along the
+[NodeJS LTS releases](https://nodejs.org/en/about/releases/), focusing on
+
+- Maintenance LTS
+- Active LTS
+- Current
+
 ## Contributing to this project
 
 Please read our [contribution guide](./CONTRIBUTING.md) before taking actions.
