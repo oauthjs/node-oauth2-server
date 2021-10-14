@@ -7,13 +7,12 @@
 var chai = require('chai');
 
 /**
- * SHA-1 assertion.
+ * SHA-256 assertion.
  */
-chai.use(function (_chai, utils) {
 
-  utils.addMethod(chai.Assertion.prototype, 'sha1', function () {
+chai.use(function (_chai, utils) {
+  chai.Assertion.addMethod('sha256', function (...args) {
     var obj = utils.flag(this, 'object');
-    new chai.Assertion(obj).match(/^[a-f0-9]{40}$/i);
+    new chai.Assertion(obj).match(/^[a-f0-9]{64}$/i);
   });
-  
 });

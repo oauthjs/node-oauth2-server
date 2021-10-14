@@ -64,7 +64,7 @@ describe('AbstractGrantType integration', function() {
 
       return handler.generateAccessToken()
         .then(function(data) {
-          data.should.be.a.sha1;
+          data.should.be.a.sha256();
         })
         .catch(should.fail);
     });
@@ -98,7 +98,7 @@ describe('AbstractGrantType integration', function() {
 
       return handler.generateRefreshToken()
         .then(function(data) {
-          data.should.be.a.sha1;
+          data.should.be.a.sha256();
         })
         .catch(should.fail);
     });
