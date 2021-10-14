@@ -20,7 +20,6 @@
   "dependencies": {
     "basic-auth": "2.0.1",
     "bluebird": "3.7.2",
-    "lodash": "4.17.21",
     "promisify-any": "2.0.1",
     "type-is": "1.6.18"
   },

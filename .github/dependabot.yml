@@ -1,20 +1,17 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: sinon
-    versions:
-    - 10.0.0
-    - 9.2.4
-  - dependency-name: mocha
-    versions:
-    - 8.2.1
-    - 8.3.0
-    - 8.3.1
-  - dependency-name: lodash
-    versions:
-    - 4.17.20
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: sinon
+        versions:
+          - 10.0.0
+          - 9.2.4
+      - dependency-name: mocha
+        versions:
+          - 8.2.1
+          - 8.3.0
+          - 8.3.1
