@@ -62,7 +62,7 @@ First, clone and install this project from source via
 ```bash
 $ git clone git@github.com:node-oauth/node-oauth2-server.git
 $ cd node-oauth2-server
-$ git checkout developmemt # important! do not work on master!
+$ git checkout development # important! do not work on master!
 $ npm install
 ```
 
@@ -91,7 +91,7 @@ We use a commit convention, inspired by [angular commit message format](https://
 with ticket number at the end of summary:
 
 ```
-<type>(<scope>): <short summary> #<issue nuber>
+<type>(<scope>): <short summary> #<issue number>
 ```
 Summary in present tense. Not capitalized. No period at the end.
 The <type> and <summary> fields are mandatory, the (<scope>) and #<number> field is optional.
