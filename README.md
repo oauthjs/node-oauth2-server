@@ -3,7 +3,7 @@
 
 Complete, compliant and well tested module for implementing an OAuth2 server in [Node.js](https://nodejs.org).
 
-NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) and is a continuition due to the project appearing to be abandoned. Please see [this issue](https://github.com/node-oauth/node-oauth2-server/issues/2) to talk about next steps and the future of this project.
+NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) and is a continuation due to the project appearing to be abandoned. Please see [our issue board](https://github.com/node-oauth/node-oauth2-server/issues) to talk about next steps and the future of this project.
 
 ## Installation
 
@@ -52,5 +52,4 @@ This project supports the node versions along the
 ## Contributing to this project
 
 Please read our [contribution guide](./CONTRIBUTING.md) before taking actions.
-In any case, please open an issue before opening a pull request to find out,
-whether your intend to contribute will actually have a chance to be merged.
+In any case, please open an issue before opening a pull request to find out whether your intended contribution will actually have a chance to be merged.

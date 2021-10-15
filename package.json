@@ -52,6 +52,5 @@
     "doc": "docs",
     "lib": "lib",
     "test": "test"
-  },
-  "author": ""
+  }
 }
