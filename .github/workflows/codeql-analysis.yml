@@ -12,8 +12,7 @@
 name: "CodeQL Semantic Analysis"
 
 on:
-  push:
-    branches: [ master, development ]
+  push: # all pushes
   pull_request: # all PR
   schedule:
     - cron: '0 2 * * *' # every night at 2am
