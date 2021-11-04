@@ -1,5 +1,18 @@
 ## Changelog
 
+## 4.1.0
+### Changed 
+* Bump dev dependencies to resolve vulnerabilities
+* Replaced jshint with eslint along with should and chai
+* Use sha256 when generating tokens
+
+### Added
+* Added markdown files to discuss coding rules, commit conventions, contributing guidelines, etc.
+
+### Removed
+* Removed lodash dependency
+* Removed statuses package and use built in http.STATUS_CODES instead.
+
 ### 4.0.0
  * Bump jshint from 2.12.0 to 2.13.0
  * Bump jshint from 2.12.0 to 2.13.0
