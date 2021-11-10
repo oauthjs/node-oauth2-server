@@ -5,7 +5,7 @@
  */
 
 var TokenUtil = require('../../../lib/utils/token-util');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `TokenUtil` integration.
@@ -13,10 +13,10 @@ var should = require('should');
 
 describe('TokenUtil integration', function() {
   describe('generateRandomToken()', function() {
-    it('should return a sha-1 token', function() {
+    it('should return a sha-256 token', function() {
       return TokenUtil.generateRandomToken()
         .then(function(token) {
-          token.should.be.a.sha1;
+          token.should.be.a.sha256();
         })
         .catch(should.fail);
     });

@@ -13,12 +13,13 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Report security vulnerabilities to info[at]jankuester[dot]com
+Report security vulnerabilities to info@jankuester.com
 
-Please specify exactly how the vulnerability is to be exploited so we can estime how severe the consequences can be (unless you also can specifiy them, too).
-Note, that we need to reproduce the vulnerability (as like with bugs) in order to safely fix it.
+Please specify exactly how the vulnerability is to be exploited so we can estimate how severe the consequences can be (unless you also can specify them, too).
+
+Please note that we need to reproduce the vulnerability (as like with bugs) in order to safely fix it.
 
 A fix will be implemented in private until we can ensure the vulnerability is closed. A new release will immediately be published.
-If you want to provide a fix please let us know in the Email so we can setup a completely private repository to work on it together.
+If you want to provide a fix please let us know in the e-mail so we can setup a completely private repository to work on it together.
 
-Note, that security fixes will also require to pass all tests and audits.
+Finally, all security fixes will also require to pass all tests and audits.

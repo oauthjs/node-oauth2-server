@@ -4,14 +4,15 @@
  * Module dependencies.
  */
 
-var should = require('should');
+var chai = require('chai');
 
 /**
- * SHA-1 assertion.
+ * SHA-256 assertion.
  */
 
-should.Assertion.add('sha1', function() {
-  this.params = { operator: 'to be a valid SHA-1 hash' };
-
-  this.obj.should.match(/^[a-f0-9]{40}$/i);
-}, true);
+chai.use(function (_chai, utils) {
+  chai.Assertion.addMethod('sha256', function (...args) {
+    var obj = utils.flag(this, 'object');
+    new chai.Assertion(obj).match(/^[a-f0-9]{64}$/i);
+  });
+});

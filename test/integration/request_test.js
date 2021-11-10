@@ -6,7 +6,7 @@
 
 var Request = require('../../lib/request');
 var InvalidArgumentError = require('../../lib/errors/invalid-argument-error');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `Request` integration.

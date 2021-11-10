@@ -9,7 +9,7 @@ var Promise = require('bluebird');
 var Request = require('../../lib/request');
 var Response = require('../../lib/response');
 var Server = require('../../lib/server');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `Server` integration.
@@ -225,7 +225,7 @@ describe('Server integration', function() {
           return { accessToken: 1234, client: {}, user: {} };
         },
         validateScope: function() {
-            return 'foo';
+          return 'foo';
         }
       };
       var server = new Server({ model: model });

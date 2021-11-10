@@ -1,0 +1,75 @@
+name: Test suite
+
+on:
+  push:
+    branches:
+      - master # allthough  master is push protected we still keep it
+      - development
+  pull_request: # runs on all PR
+
+jobs:
+  # ----------------------------------
+  # uncomment when a linter is added
+  # ----------------------------------
+  
+  # lintjs:
+  #   name: Javascript lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: checkout
+  #     uses: actions/checkout@v2
+  # 
+  #   - name: setup node
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: '12.x'
+  # 
+  #   - name: cache dependencies
+  #     uses: actions/cache@v1
+  #     with:
+  #       path: ~/.npm
+  #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+  #       restore-keys: |
+  #         ${{ runner.os }}-node-
+  #   - run: npm ci
+  #   - run: npm run lint
+
+  unittest:
+    name: unit tests
+    runs-on: ubuntu-latest
+    # uncomment when a linter is added
+    # needs: [lintjs]
+    strategy:
+      matrix:
+        node: [12, 14, 16]
+    steps:
+    - name: Checkout ${{ matrix.node }}
+      uses: actions/checkout@v2
+
+    - name: Setup node ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cache dependencies ${{ matrix.node }}
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node }}
+    - run: npm ci
+    - run: npm run test:coverage
+
+    # ----------------------------------
+    # uncomment when a linter is added
+    # ----------------------------------
+  
+    # - name: check coverage
+    #   uses: devmasx/coverage-check-action@v1.2.0
+    #   with:
+    #     type: lcov
+    #     result_path: coverage/lcov.info
+    #     min_coverage: 90
+    #     token: ${{github.token}}
+    

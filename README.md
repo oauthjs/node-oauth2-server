@@ -3,7 +3,7 @@
 
 Complete, compliant and well tested module for implementing an OAuth2 server in [Node.js](https://nodejs.org).
 
-NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) and is a continuition due to the project appearing to be abandoned. Please see [this issue](https://github.com/node-oauth/node-oauth2-server/issues/2) to talk about next steps and the future of this project.
+NOTE: This project has been forked from [oauthjs/node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) and is a continuation due to the project appearing to be abandoned. Please see [our issue board](https://github.com/node-oauth/node-oauth2-server/issues) to talk about next steps and the future of this project.
 
 ## Installation
 
@@ -40,12 +40,16 @@ This module has been rewritten using a promise-based approach, introducing chang
 
 Please refer to our [3.0 migration guide](https://oauth2-server.readthedocs.io/en/latest/misc/migrating-v2-to-v3.html) for more information.
 
+## Supported NodeJs versions
 
-## Tests
+This project supports the node versions along the
+[NodeJS LTS releases](https://nodejs.org/en/about/releases/), focusing on
 
-To run the test suite, install dependencies, then run `npm test`:
+- Maintenance LTS
+- Active LTS
+- Current
 
-```bash
-npm install
-npm test
-```
+## Contributing to this project
+
+Please read our [contribution guide](./CONTRIBUTING.md) before taking actions.
+In any case, please open an issue before opening a pull request to find out whether your intended contribution will actually have a chance to be merged.

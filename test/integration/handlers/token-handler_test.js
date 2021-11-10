@@ -18,7 +18,7 @@ var ServerError = require('../../../lib/errors/server-error');
 var TokenHandler = require('../../../lib/handlers/token-handler');
 var UnauthorizedClientError = require('../../../lib/errors/unauthorized-client-error');
 var UnsupportedGrantTypeError = require('../../../lib/errors/unsupported-grant-type-error');
-var should = require('should');
+var should = require('chai').should();
 var util = require('util');
 
 /**
@@ -121,8 +121,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, extendedGrantTypes: extendedGrantTypes, model: model, refreshTokenLifetime: 120 });
-
-      handler.grantTypes.should.containEql(extendedGrantTypes);
+      handler.grantTypes.should.deep.include(extendedGrantTypes);
     });
 
     it('should set the `model`', function() {
@@ -493,7 +492,7 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({
         body: {},
-        headers: { 'authorization': util.format('Basic %s', new Buffer('foo:bar').toString('base64')) },
+        headers: { 'authorization': util.format('Basic %s', Buffer.from('foo:bar').toString('base64')) },
         method: {},
         query: {}
       });
@@ -542,7 +541,7 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-       });
+        });
         var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
 
         return handler.getClient(request)
@@ -569,13 +568,13 @@ describe('TokenHandler integration', function() {
           requireClientAuthentication: {
             password: false
           }
-	});
+        });
         var request = new Request({
-	  body: { grant_type: 'password'},
-	  headers: { 'authorization': util.format('Basic %s', new Buffer('blah:').toString('base64')) },
-	  method: {},
-	  query: {}
-	});
+          body: { grant_type: 'password'},
+          headers: { 'authorization': util.format('Basic %s', Buffer.from('blah:').toString('base64')) },
+          method: {},
+          query: {}
+        });
 
         return handler.getClient(request)
           .then(function(data) {
@@ -680,7 +679,7 @@ describe('TokenHandler integration', function() {
         var request = new Request({
           body: {},
           headers: {
-            'authorization': util.format('Basic %s', new Buffer('foo:bar').toString('base64'))
+            'authorization': util.format('Basic %s', Buffer.from('foo:bar').toString('base64'))
           },
           method: {},
           query: {}
@@ -997,8 +996,7 @@ describe('TokenHandler integration', function() {
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar', scope: 'foobar' });
-
-      tokenType.should.containEql({ accessToken: 'foo', accessTokenLifetime: undefined, refreshToken: 'bar', scope: 'foobar' });
+      tokenType.should.deep.include({ accessToken: 'foo', accessTokenLifetime: undefined, refreshToken: 'bar', scope: 'foobar' });
     });
   });
 

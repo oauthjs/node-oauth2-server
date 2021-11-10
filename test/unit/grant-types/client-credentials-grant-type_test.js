@@ -6,7 +6,7 @@
 
 var ClientCredentialsGrantType = require('../../../lib/grant-types/client-credentials-grant-type');
 var sinon = require('sinon');
-var should = require('should');
+var should = require('chai').should();
 
 /**
  * Test `ClientCredentialsGrantType`.
