@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-var BearerTokenType = require('../../../lib/token-types/bearer-token-type');
-var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
-var should = require('chai').should();
+const BearerTokenType = require('../../../lib/token-types/bearer-token-type');
+const InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
+const should = require('chai').should();
 
 /**
  * Test `BearerTokenType` integration.
@@ -26,19 +26,19 @@ describe('BearerTokenType integration', function() {
     });
 
     it('should set the `accessToken`', function() {
-      var responseType = new BearerTokenType('foo', 'bar');
+      const responseType = new BearerTokenType('foo', 'bar');
 
       responseType.accessToken.should.equal('foo');
     });
 
     it('should set the `accessTokenLifetime`', function() {
-      var responseType = new BearerTokenType('foo', 'bar');
+      const responseType = new BearerTokenType('foo', 'bar');
 
       responseType.accessTokenLifetime.should.equal('bar');
     });
 
     it('should set the `refreshToken`', function() {
-      var responseType = new BearerTokenType('foo', 'bar', 'biz');
+      const responseType = new BearerTokenType('foo', 'bar', 'biz');
 
       responseType.refreshToken.should.equal('biz');
     });
@@ -46,8 +46,8 @@ describe('BearerTokenType integration', function() {
 
   describe('valueOf()', function() {
     it('should return the value representation', function() {
-      var responseType = new BearerTokenType('foo', 'bar');
-      var value = responseType.valueOf();
+      const responseType = new BearerTokenType('foo', 'bar');
+      const value = responseType.valueOf();
 
       value.should.eql({
         access_token: 'foo',
@@ -57,8 +57,8 @@ describe('BearerTokenType integration', function() {
     });
 
     it('should not include the `expires_in` if not given', function() {
-      var responseType = new BearerTokenType('foo');
-      var value = responseType.valueOf();
+      const responseType = new BearerTokenType('foo');
+      const value = responseType.valueOf();
 
       value.should.eql({
         access_token: 'foo',
@@ -67,8 +67,8 @@ describe('BearerTokenType integration', function() {
     });
 
     it('should set `refresh_token` if `refreshToken` is defined', function() {
-      var responseType = new BearerTokenType('foo', 'bar', 'biz');
-      var value = responseType.valueOf();
+      const responseType = new BearerTokenType('foo', 'bar', 'biz');
+      const value = responseType.valueOf();
 
       value.should.eql({
         access_token: 'foo',
@@ -79,8 +79,8 @@ describe('BearerTokenType integration', function() {
     });
 
     it('should set `expires_in` if `accessTokenLifetime` is defined', function() {
-      var responseType = new BearerTokenType('foo', 'bar', 'biz');
-      var value = responseType.valueOf();
+      const responseType = new BearerTokenType('foo', 'bar', 'biz');
+      const value = responseType.valueOf();
 
       value.should.eql({
         access_token: 'foo',
