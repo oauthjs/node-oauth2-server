@@ -4,12 +4,12 @@
  * Module dependencies.
  */
 
-var AuthenticateHandler = require('../../lib/handlers/authenticate-handler');
-var AuthorizeHandler = require('../../lib/handlers/authorize-handler');
-var Promise = require('bluebird');
-var Server = require('../../lib/server');
-var TokenHandler = require('../../lib/handlers/token-handler');
-var sinon = require('sinon');
+const AuthenticateHandler = require('../../lib/handlers/authenticate-handler');
+const AuthorizeHandler = require('../../lib/handlers/authorize-handler');
+const Promise = require('bluebird');
+const Server = require('../../lib/server');
+const TokenHandler = require('../../lib/handlers/token-handler');
+const sinon = require('sinon');
 
 /**
  * Test `Server`.
@@ -18,10 +18,10 @@ var sinon = require('sinon');
 describe('Server', function() {
   describe('authenticate()', function() {
     it('should call `handle`', function() {
-      var model = {
+      const model = {
         getAccessToken: function() {}
       };
-      var server = new Server({ model: model });
+      const server = new Server({ model: model });
 
       sinon.stub(AuthenticateHandler.prototype, 'handle').returns(Promise.resolve());
 
@@ -33,11 +33,11 @@ describe('Server', function() {
     });
 
     it('should map string passed as `options` to `options.scope`', function() {
-      var model = {
+      const model = {
         getAccessToken: function() {},
         verifyScope: function() {}
       };
-      var server = new Server({ model: model });
+      const server = new Server({ model: model });
 
       sinon.stub(AuthenticateHandler.prototype, 'handle').returns(Promise.resolve());
 
@@ -53,12 +53,12 @@ describe('Server', function() {
 
   describe('authorize()', function() {
     it('should call `handle`', function() {
-      var model = {
+      const model = {
         getAccessToken: function() {},
         getClient: function() {},
         saveAuthorizationCode: function() {}
       };
-      var server = new Server({ model: model });
+      const server = new Server({ model: model });
 
       sinon.stub(AuthorizeHandler.prototype, 'handle').returns(Promise.resolve());
 
@@ -72,11 +72,11 @@ describe('Server', function() {
 
   describe('token()', function() {
     it('should call `handle`', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var server = new Server({ model: model });
+      const server = new Server({ model: model });
 
       sinon.stub(TokenHandler.prototype, 'handle').returns(Promise.resolve());
 

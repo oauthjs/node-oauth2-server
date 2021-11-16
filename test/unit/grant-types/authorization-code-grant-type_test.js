@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 
-var AuthorizationCodeGrantType = require('../../../lib/grant-types/authorization-code-grant-type');
-var Promise = require('bluebird');
-var Request = require('../../../lib/request');
-var sinon = require('sinon');
-var should = require('chai').should();
+const AuthorizationCodeGrantType = require('../../../lib/grant-types/authorization-code-grant-type');
+const Promise = require('bluebird');
+const Request = require('../../../lib/request');
+const sinon = require('sinon');
+const should = require('chai').should();
 
 /**
  * Test `AuthorizationCodeGrantType`.
@@ -17,14 +17,14 @@ var should = require('chai').should();
 describe('AuthorizationCodeGrantType', function() {
   describe('getAuthorizationCode()', function() {
     it('should call `model.getAuthorizationCode()`', function() {
-      var model = {
+      const model = {
         getAuthorizationCode: sinon.stub().returns({ authorizationCode: 12345, client: {}, expiresAt: new Date(new Date() * 2), user: {} }),
         revokeAuthorizationCode: function() {},
         saveToken: function() {}
       };
-      var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
-      var request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
-      var client = {};
+      const handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
+      const request = new Request({ body: { code: 12345 }, headers: {}, method: {}, query: {} });
+      const client = {};
 
       return handler.getAuthorizationCode(request, client)
         .then(function() {
@@ -39,13 +39,13 @@ describe('AuthorizationCodeGrantType', function() {
 
   describe('revokeAuthorizationCode()', function() {
     it('should call `model.revokeAuthorizationCode()`', function() {
-      var model = {
+      const model = {
         getAuthorizationCode: function() {},
         revokeAuthorizationCode: sinon.stub().returns(true),
         saveToken: function() {}
       };
-      var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
-      var authorizationCode = {};
+      const handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
+      const authorizationCode = {};
 
       return handler.revokeAuthorizationCode(authorizationCode)
         .then(function() {
@@ -60,14 +60,14 @@ describe('AuthorizationCodeGrantType', function() {
 
   describe('saveToken()', function() {
     it('should call `model.saveToken()`', function() {
-      var client = {};
-      var user = {};
-      var model = {
+      const client = {};
+      const user = {};
+      const model = {
         getAuthorizationCode: function() {},
         revokeAuthorizationCode: function() {},
         saveToken: sinon.stub().returns(true)
       };
-      var handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
+      const handler = new AuthorizationCodeGrantType({ accessTokenLifetime: 120, model: model });
 
       sinon.stub(handler, 'validateScope').returns('foobiz');
       sinon.stub(handler, 'generateAccessToken').returns(Promise.resolve('foo'));

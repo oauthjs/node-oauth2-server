@@ -4,12 +4,12 @@
  * Module dependencies.
  */
 
-var AuthorizeHandler = require('../../../lib/handlers/authorize-handler');
-var Request = require('../../../lib/request');
-var Response = require('../../../lib/response');
-var Promise = require('bluebird');
-var sinon = require('sinon');
-var should = require('chai').should();
+const AuthorizeHandler = require('../../../lib/handlers/authorize-handler');
+const Request = require('../../../lib/request');
+const Response = require('../../../lib/response');
+const Promise = require('bluebird');
+const sinon = require('sinon');
+const should = require('chai').should();
 
 /**
  * Test `AuthorizeHandler`.
@@ -18,13 +18,13 @@ var should = require('chai').should();
 describe('AuthorizeHandler', function() {
   describe('generateAuthorizationCode()', function() {
     it('should call `model.generateAuthorizationCode()`', function() {
-      var model = {
+      const model = {
         generateAuthorizationCode: sinon.stub().returns({}),
         getAccessToken: function() {},
         getClient: function() {},
         saveAuthorizationCode: function() {}
       };
-      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
 
       return handler.generateAuthorizationCode()
         .then(function() {
@@ -37,13 +37,13 @@ describe('AuthorizeHandler', function() {
 
   describe('getClient()', function() {
     it('should call `model.getClient()`', function() {
-      var model = {
+      const model = {
         getAccessToken: function() {},
         getClient: sinon.stub().returns({ grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] }),
         saveAuthorizationCode: function() {}
       };
-      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(function() {
@@ -58,14 +58,14 @@ describe('AuthorizeHandler', function() {
 
   describe('getUser()', function() {
     it('should call `authenticateHandler.getUser()`', function() {
-      var authenticateHandler = { handle: sinon.stub().returns(Promise.resolve({})) };
-      var model = {
+      const authenticateHandler = { handle: sinon.stub().returns(Promise.resolve({})) };
+      const model = {
         getClient: function() {},
         saveAuthorizationCode: function() {}
       };
-      var handler = new AuthorizeHandler({ authenticateHandler: authenticateHandler, authorizationCodeLifetime: 120, model: model });
-      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
-      var response = new Response();
+      const handler = new AuthorizeHandler({ authenticateHandler: authenticateHandler, authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      const response = new Response();
 
       return handler.getUser(request, response)
         .then(function() {
@@ -80,12 +80,12 @@ describe('AuthorizeHandler', function() {
 
   describe('saveAuthorizationCode()', function() {
     it('should call `model.saveAuthorizationCode()`', function() {
-      var model = {
+      const model = {
         getAccessToken: function() {},
         getClient: function() {},
         saveAuthorizationCode: sinon.stub().returns({})
       };
-      var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
 
       return handler.saveAuthorizationCode('foo', 'bar', 'qux', 'biz', 'baz', 'boz')
         .then(function() {

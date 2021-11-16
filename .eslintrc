@@ -34,6 +34,13 @@
     "no-console": [
       "error"
     ],
+    "no-var": [
+      "error"
+    ],
+    "prefer-const": ["error", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }],
     "no-unused-vars": [
       "error", 
       { 

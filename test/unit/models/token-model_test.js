@@ -1,5 +1,5 @@
-var TokenModel = require('../../../lib/models/token-model');
-var should = require('chai').should();
+const TokenModel = require('../../../lib/models/token-model');
+const should = require('chai').should();
 /**
  * Test `Server`.
  */
@@ -7,17 +7,17 @@ var should = require('chai').should();
 describe('Model', function() {
   describe('constructor()', function() {
     it('should calculate `accessTokenLifetime` if `accessTokenExpiresAt` is set', function() {
-      var atExpiresAt = new Date();
+      const atExpiresAt = new Date();
       atExpiresAt.setHours(new Date().getHours() + 1);
   
-      var data = {
+      const data = {
         accessToken: 'foo',
         client: 'bar',
         user: 'tar',
         accessTokenExpiresAt: atExpiresAt
       };
   
-      var model = new TokenModel(data);
+      const model = new TokenModel(data);
       should.exist(model.accessTokenLifetime);
       model.accessTokenLifetime.should.a('number');
       model.accessTokenLifetime.should.be.approximately(3600, 2);

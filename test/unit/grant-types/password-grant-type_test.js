@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
-var PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
-var Request = require('../../../lib/request');
-var sinon = require('sinon');
-var should = require('chai').should();
+const PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
+const Request = require('../../../lib/request');
+const sinon = require('sinon');
+const should = require('chai').should();
 
 /**
  * Test `PasswordGrantType`.
@@ -16,12 +16,12 @@ var should = require('chai').should();
 describe('PasswordGrantType', function() {
   describe('getUser()', function() {
     it('should call `model.getUser()`', function() {
-      var model = {
+      const model = {
         getUser: sinon.stub().returns(true),
         saveToken: function() {}
       };
-      var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
-      var request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+      const handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
+      const request = new Request({ body: { username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
       return handler.getUser(request)
         .then(function() {
@@ -37,13 +37,13 @@ describe('PasswordGrantType', function() {
 
   describe('saveToken()', function() {
     it('should call `model.saveToken()`', function() {
-      var client = {};
-      var user = {};
-      var model = {
+      const client = {};
+      const user = {};
+      const model = {
         getUser: function() {},
         saveToken: sinon.stub().returns(true)
       };
-      var handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
+      const handler = new PasswordGrantType({ accessTokenLifetime: 120, model: model });
 
       sinon.stub(handler, 'validateScope').returns('foobar');
       sinon.stub(handler, 'generateAccessToken').returns('foo');
