@@ -18,6 +18,11 @@
   ],
   "main": "index.js",
   "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "lib"
+  ],
   "dependencies": {
     "basic-auth": "2.0.1",
     "bluebird": "3.7.2",
