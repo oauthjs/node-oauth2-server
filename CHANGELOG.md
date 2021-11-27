@@ -1,5 +1,12 @@
 ## Changelog
 
+## 4.1.1
+
+### Added
+- Added TypeScript types
+### Changed
+- Removed extra files when someone npm installs.
+
 ## 4.1.0
 ### Changed 
 * Bump dev dependencies to resolve vulnerabilities
