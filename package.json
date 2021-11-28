@@ -1,7 +1,7 @@
 {
   "name": "@node-oauth/oauth2-server",
   "description": "Complete, framework-agnostic, compliant and well tested module for implementing an OAuth2 Server in node.js",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "keywords": [
     "oauth",
     "oauth2"
@@ -17,6 +17,12 @@
     "Daniel Reguero"
   ],
   "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "lib"
+  ],
   "dependencies": {
     "basic-auth": "2.0.1",
     "bluebird": "3.7.2",
@@ -28,7 +34,7 @@
     "eslint": "^8.0.0",
     "mocha": "^9.1.2",
     "nyc": "^15.1.0",
-    "sinon": "^11.1.2"
+    "sinon": "^12.0.1"
   },
   "license": "MIT",
   "engines": {
@@ -38,7 +44,9 @@
     "pretest": "./node_modules/.bin/eslint lib test index.js",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'",
     "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'",
-    "test:coverage": "NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/.bin/mocha 'test/**/*_test.js'"
+    "test:coverage": "NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/.bin/mocha 'test/**/*_test.js'",
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix"
   },
   "repository": {
     "type": "git",
