@@ -932,6 +932,18 @@ describe('AuthorizeHandler integration', function() {
       }
     });
 
+    it('should allow missing `state` if `allowEmptyState` is valid', function () {
+      const model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthorizationCode: function() {}
+      };
+      const handler = new AuthorizeHandler({ allowEmptyState: true, authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      const state = handler.getState(request);
+      should.equal(state, undefined);
+    });
+
     it('should throw an error if `state` is invalid', function() {
       const model = {
         getAccessToken: function() {},
