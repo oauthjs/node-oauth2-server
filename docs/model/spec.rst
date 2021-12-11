@@ -985,3 +985,40 @@ Returns ``true`` if the access token passes, ``false`` otherwise.
     return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
   }
 
+--------
+
+.. _Model#validateRedirectUri:
+
+``validateRedirectUri(redirect_uri, redirect_uris, [callback])``
+================================================================
+
+Invoked to check if the provided ``redirect_uri`` is valid for a particular ``client``.
+
+This model function is **optional**. If not implemented, the redirect_uri should be included in the provided redirect_uris of the client.
+
+**Invoked during:**
+
+- ``authorization_code`` grant
+
+**Arguments:**
+
++-----------------+----------+---------------------------------------------------------------------+
+| Name            | Type     | Description                                                         |
++=================+==========+=====================================================================+
+| redirect_uri    | String   | The redirect URI to validate.                                       |
++-----------------+----------+---------------------------------------------------------------------+
+| redirect_uris   | Array    | The list of redirect URIs configured for the client.               |
++-----------------+----------+---------------------------------------------------------------------+
+
+**Return value:**
+
+Returns ``true`` if the ``redirect_uri`` is valid, ``false`` otherwise.
+
+**Remarks:**
+
+::
+
+  function validateRedirectUri(redirect_uri, redirect_uris) {
+    return redirect_uris.includes(redirect_uri);
+  }
+
