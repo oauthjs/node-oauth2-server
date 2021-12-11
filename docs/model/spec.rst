@@ -989,12 +989,12 @@ Returns ``true`` if the access token passes, ``false`` otherwise.
 
 .. _Model#validateRedirectUri:
 
-``validateRedirectUri(redirect_uri, redirect_uris, [callback])``
+``validateRedirectUri(redirectUri, client, [callback])``
 ================================================================
 
-Invoked to check if the provided ``redirect_uri`` is valid for a particular ``client``.
+Invoked to check if the provided ``redirectUri`` is valid for a particular ``client``.
 
-This model function is **optional**. If not implemented, the redirect_uri should be included in the provided redirect_uris of the client.
+This model function is **optional**. If not implemented, the ``redirectUri`` should be included in the provided ``redirectUris`` of the client.
 
 **Invoked during:**
 
@@ -1007,18 +1007,18 @@ This model function is **optional**. If not implemented, the redirect_uri should
 +=================+==========+=====================================================================+
 | redirect_uri    | String   | The redirect URI to validate.                                       |
 +-----------------+----------+---------------------------------------------------------------------+
-| redirect_uris   | Array    | The list of redirect URIs configured for the client.               |
+| client          | Object   | The associated client.                                              |
 +-----------------+----------+---------------------------------------------------------------------+
 
 **Return value:**
 
-Returns ``true`` if the ``redirect_uri`` is valid, ``false`` otherwise.
+Returns ``true`` if the ``redirectUri`` is valid, ``false`` otherwise.
 
 **Remarks:**
 
 ::
 
-  function validateRedirectUri(redirect_uri, redirect_uris) {
-    return redirect_uris.includes(redirect_uri);
+  function validateRedirectUri(redirectUri, client) {
+    return client.redirectUris.includes(redirectUri);
   }
 
