@@ -214,7 +214,7 @@ An ``Object`` representing the access token and associated data.
 
   function getAccessToken(accessToken) {
     // imaginary DB queries
-    db.queryAccessToken({access_token: accessToken})
+    return db.queryAccessToken({access_token: accessToken})
       .then(function(token) {
         return Promise.all([
           token,
@@ -288,7 +288,7 @@ An ``Object`` representing the refresh token and associated data.
 
   function getRefreshToken(refreshToken) {
     // imaginary DB queries
-    db.queryRefreshToken({refresh_token: refreshToken})
+    return db.queryRefreshToken({refresh_token: refreshToken})
       .then(function(token) {
         return Promise.all([
           token,
@@ -364,7 +364,7 @@ An ``Object`` representing the authorization code and associated data.
 
   function getAuthorizationCode(authorizationCode) {
     // imaginary DB queries
-    db.queryAuthorizationCode({authorization_code: authorizationCode})
+    return db.queryAuthorizationCode({authorization_code: authorizationCode})
       .then(function(code) {
         return Promise.all([
           code,
@@ -446,7 +446,7 @@ The return value (``client``) can carry additional properties that will be ignor
     if (clientSecret) {
       params.client_secret = clientSecret;
     }
-    db.queryClient(params)
+    return db.queryClient(params)
       .then(function(client) {
         return {
           id: client.id,
@@ -984,4 +984,3 @@ Returns ``true`` if the access token passes, ``false`` otherwise.
     let authorizedScopes = token.scope.split(' ');
     return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
   }
-
