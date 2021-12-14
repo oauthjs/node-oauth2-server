@@ -24,6 +24,7 @@
     "lib"
   ],
   "dependencies": {
+    "@node-oauth/formats": "^1.0.0",
     "basic-auth": "2.0.1",
     "bluebird": "3.7.2",
     "promisify-any": "2.0.1",
@@ -44,6 +45,7 @@
     "pretest": "./node_modules/.bin/eslint lib test index.js",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'",
     "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'",
+    "test:watch": "NODE_ENV=test ./node_modules/.bin/mocha --watch 'test/**/*_test.js'",
     "test:coverage": "NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/.bin/mocha 'test/**/*_test.js'",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix"
