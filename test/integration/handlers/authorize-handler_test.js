@@ -161,12 +161,33 @@ describe('AuthorizeHandler integration', function() {
 
     it('should throw an error if `allowed` is `false`', function() {
       const model = {
-        getAccessToken: function() {},
-        getClient: function() {},
-        saveAuthorizationCode: function() {}
+        getAccessToken: function() {
+          return {
+            user: {},
+            accessTokenExpiresAt: new Date(new Date().getTime() + 10000)
+          };
+        },
+        getClient: function() {
+          return { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+        },
+        saveAuthorizationCode: function() {
+          throw new Error('Unhandled exception');
+        }
       };
       const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
-      const request = new Request({ body: {}, headers: {}, method: {}, query: { allowed: 'false' } });
+      const request = new Request({
+        body: {
+          client_id: 'test'
+        },
+        headers: {
+          'Authorization': 'Bearer foo'
+        },
+        method: {},
+        query: {
+          allowed: 'false',
+          state: 'foobar'
+        }
+      });
       const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
@@ -328,7 +349,7 @@ describe('AuthorizeHandler integration', function() {
       return handler.handle(request, response)
         .then(should.fail)
         .catch(function() {
-          response.get('location').should.equal('http://example.com/cb?error=invalid_scope&error_description=Invalid%20parameter%3A%20%60scope%60');
+          response.get('location').should.equal('http://example.com/cb?error=invalid_scope&error_description=Invalid%20parameter%3A%20%60scope%60&state=foobar');
         });
     });
 
@@ -416,7 +437,7 @@ describe('AuthorizeHandler integration', function() {
       return handler.handle(request, response)
         .then(should.fail)
         .catch(function() {
-          response.get('location').should.equal('http://example.com/cb?error=invalid_scope&error_description=Invalid%20scope%3A%20Requested%20scope%20is%20invalid');
+          response.get('location').should.equal('http://example.com/cb?error=invalid_scope&error_description=Invalid%20scope%3A%20Requested%20scope%20is%20invalid&state=foobar');
         });
     });
 
@@ -989,6 +1010,18 @@ describe('AuthorizeHandler integration', function() {
         e.should.be.an.instanceOf(InvalidRequestError);
         e.message.should.equal('Missing parameter: `state`');
       }
+    });
+
+    it('should allow missing `state` if `allowEmptyState` is valid', function () {
+      const model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthorizationCode: function() {}
+      };
+      const handler = new AuthorizeHandler({ allowEmptyState: true, authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      const state = handler.getState(request);
+      should.equal(state, undefined);
     });
 
     it('should throw an error if `state` is invalid', function() {
