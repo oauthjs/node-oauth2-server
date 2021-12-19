@@ -635,7 +635,7 @@ describe('AuthorizeHandler integration', function() {
   });
 
   describe('validateRedirectUri()', function() {
-    it('should support empty model', function() {
+    it('should support empty method', function() {
       const model = {
         getAccessToken: function() {},
         getClient: function() {},

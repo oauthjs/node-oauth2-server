@@ -1015,6 +1015,11 @@ This model function is **optional**. If not implemented, the ``redirectUri`` sho
 Returns ``true`` if the ``redirectUri`` is valid, ``false`` otherwise.
 
 **Remarks:**
+When implementing this method you should take care of possible security risks related to ``redirectUri``.
+.. _rfc6819: https://datatracker.ietf.org/doc/html/rfc6819
+
+Section-5.2.3.5 is implemented by default.
+.. _Section-5.2.3.5: https://datatracker.ietf.org/doc/html/rfc6819#section-5.2.3.5
 
 ::
 
