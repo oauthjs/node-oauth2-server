@@ -99,4 +99,80 @@ describe('AuthorizeHandler', function() {
         .catch(should.fail);
     });
   });
+
+  describe('validateRedirectUri()', function() {
+    it('should call `model.validateRedirectUri()`', function() {
+      const client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+      const redirect_uri = 'http://example.com/cb/2';
+      const model = {
+        getAccessToken: function() {},
+        getClient: sinon.stub().returns(client),
+        saveAuthorizationCode: function() {},
+        validateRedirectUri: sinon.stub().returns(true)
+      };
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret', redirect_uri }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(function() {
+          model.getClient.callCount.should.equal(1);
+          model.getClient.firstCall.args.should.have.length(2);
+          model.getClient.firstCall.args[0].should.equal(12345);
+          model.getClient.firstCall.thisValue.should.equal(model);
+
+          model.validateRedirectUri.callCount.should.equal(1);
+          model.validateRedirectUri.firstCall.args.should.have.length(2);
+          model.validateRedirectUri.firstCall.args[0].should.equal(redirect_uri);
+          model.validateRedirectUri.firstCall.args[1].should.equal(client);
+          model.validateRedirectUri.firstCall.thisValue.should.equal(model);
+        })
+        .catch(should.fail);
+    });
+
+    it('should be successful validation', function () {
+      const client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+      const redirect_uri = 'http://example.com/cb';
+      const model = {
+        getAccessToken: function() {},
+        getClient: sinon.stub().returns(client),
+        saveAuthorizationCode: function() {},
+        validateRedirectUri: function (redirectUri, client) {
+          return client.redirectUris.includes(redirectUri);
+        }
+      };
+
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret', redirect_uri }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then((client) => {
+          client.should.equal(client);
+        });
+    });
+
+    it('should be unsuccessful validation', function () {
+      const client = { grants: ['authorization_code'], redirectUris: ['http://example.com/cb'] };
+      const redirect_uri = 'http://example.com/callback';
+      const model = {
+        getAccessToken: function() {},
+        getClient: sinon.stub().returns(client),
+        saveAuthorizationCode: function() {},
+        validateRedirectUri: function (redirectUri, client) {
+          return client.redirectUris.includes(redirectUri);
+        }
+      };
+
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret', redirect_uri }, headers: {}, method: {}, query: {} });
+
+      return handler.getClient(request)
+        .then(() => {
+          throw Error('should not resolve');
+        })
+        .catch((err) => {
+          err.name.should.equal('invalid_client');
+          err.message.should.equal('Invalid client: `redirect_uri` does not match client value');
+        });
+    });
+  });
 });

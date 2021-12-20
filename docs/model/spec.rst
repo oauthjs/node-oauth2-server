@@ -984,3 +984,45 @@ Returns ``true`` if the access token passes, ``false`` otherwise.
     let authorizedScopes = token.scope.split(' ');
     return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
   }
+
+--------
+
+.. _Model#validateRedirectUri:
+
+``validateRedirectUri(redirectUri, client, [callback])``
+================================================================
+
+Invoked to check if the provided ``redirectUri`` is valid for a particular ``client``.
+
+This model function is **optional**. If not implemented, the ``redirectUri`` should be included in the provided ``redirectUris`` of the client.
+
+**Invoked during:**
+
+- ``authorization_code`` grant
+
+**Arguments:**
+
++-----------------+----------+---------------------------------------------------------------------+
+| Name            | Type     | Description                                                         |
++=================+==========+=====================================================================+
+| redirect_uri    | String   | The redirect URI to validate.                                       |
++-----------------+----------+---------------------------------------------------------------------+
+| client          | Object   | The associated client.                                              |
++-----------------+----------+---------------------------------------------------------------------+
+
+**Return value:**
+
+Returns ``true`` if the ``redirectUri`` is valid, ``false`` otherwise.
+
+**Remarks:**
+When implementing this method you should take care of possible security risks related to ``redirectUri``.
+.. _rfc6819: https://datatracker.ietf.org/doc/html/rfc6819
+
+Section-5.2.3.5 is implemented by default.
+.. _Section-5.2.3.5: https://datatracker.ietf.org/doc/html/rfc6819#section-5.2.3.5
+
+::
+
+  function validateRedirectUri(redirectUri, client) {
+    return client.redirectUris.includes(redirectUri);
+  }
