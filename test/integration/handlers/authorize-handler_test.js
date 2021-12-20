@@ -198,6 +198,24 @@ describe('AuthorizeHandler integration', function() {
         });
     });
 
+    it('should throw an error if `allowed` is `false` body', function() {
+      const model = {
+        getAccessToken: function() {},
+        getClient: function() {},
+        saveAuthorizationCode: function() {}
+      };
+      const handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
+      const request = new Request({ body: { allowed: 'false' }, headers: {}, method: {}, query: {} });
+      const response = new Response({ body: {}, headers: {} });
+
+      return handler.handle(request, response)
+        .then(should.fail)
+        .catch(function(e) {
+          e.should.be.an.instanceOf(AccessDeniedError);
+          e.message.should.equal('Access denied: user denied access to application');
+        });
+    });
+
     it('should redirect to an error response if a non-oauth error is thrown', function() {
       const model = {
         getAccessToken: function() {
