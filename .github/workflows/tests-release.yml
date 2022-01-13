@@ -89,7 +89,7 @@ jobs:
     - name: Checkout express-adapter ${{ matrix.node }}
       uses: actions/checkout@v2
       with:
-        repository: node-oauth/express-adapter
+        repository:  oauthjs/express-oauth-server
         path: github/testing
 
     # place checkout for other adapters here
@@ -108,9 +108,12 @@ jobs:
 
     # in order to test the adapter we need to use the current state
     # we just cloned and install it as local dependency
-    - run: cd github/testing/express-adapter && npm ci
-    - run: cd github/testing/express-adapter && npm install ./
-    - run: cd github/testing/express-adapter && npm run tests
+    - run: |
+        PROJECT_PATH=$(pwd)
+        cd github/testing/express-adapter
+        npm ci
+        npm install $PROJECT_PATH
+        npm run test
 
     # todo repeat with other adapters
 
