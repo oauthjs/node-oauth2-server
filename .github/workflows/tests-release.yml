@@ -120,18 +120,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [integrationtests]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Setup node 12
-      uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm install
-      - run: npm publish --dry-run
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm install --production
+    - run: npm publish --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 
   ghpubdry:
     needs: [integrationtests]
@@ -140,13 +138,13 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          # we always publish targeting the lowest supported node version
-          node-version: 12
-          registry-url: $registry-url(npm)
-      - run: npm ci
-      - run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        # we always publish targeting the lowest supported node version
+        node-version: 12
+        registry-url: $registry-url(npm)
+    - run: npm install --prudction
+    - run: npm publish --dry-run
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
