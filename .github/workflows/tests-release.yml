@@ -5,8 +5,10 @@ on:
     branches:
       - release-* # all release-<version> branches
   pull_request:
+    types: [review_requested, ready_for_review] # only non-draft PR
     branches:
       - release-* # all release-<version> branches
+
 
 jobs:
   # STEP 1 - NPM Audit
@@ -27,7 +29,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12
-    - run: npm audit
+    - run: npm audit --production # no audit for dev dependencies
 
   # STEP 2 - basic unit tests
 
