@@ -115,23 +115,21 @@ jobs:
 
     # todo repeat with other adapters
 
-  npmpubdry:
-    name: NPM Publish Dry-run
+  publish-npm-dry:
     runs-on: ubuntu-latest
     needs: [integrationtests]
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12'
-        registry-url: 'https://registry.npmjs.org'
-    - run: npm install --production
-    - run: npm publish --dry-run
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish --dry-run
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
-
-  ghpubdry:
+  publish-github-dry:
     needs: [integrationtests]
     runs-on: ubuntu-latest
     permissions:
@@ -144,7 +142,7 @@ jobs:
         # we always publish targeting the lowest supported node version
         node-version: 12
         registry-url: $registry-url(npm)
-    - run: npm install --prudction
+    - run: npm ci
     - run: npm publish --dry-run
       env:
         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
