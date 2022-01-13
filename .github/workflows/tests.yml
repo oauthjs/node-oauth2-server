@@ -41,9 +41,7 @@ jobs:
     # with the following action we enforce PRs to have a high coverage
     # and ensure, changes are tested well enough so that coverage won't fail
     - name: check coverage
-      uses: devmasx/coverage-check-action@v1.2.0
+      uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
       with:
-        type: lcov
-        result_path: coverage/lcov.info
+        path: './coverage/lcov.info'
         min_coverage: 95
-        token: ${{github.token}}
