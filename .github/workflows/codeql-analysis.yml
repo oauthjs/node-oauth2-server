@@ -14,6 +14,7 @@ name: "CodeQL Semantic Analysis"
 on:
   push: # all pushes
   pull_request: # all PR
+    types: [review_requested, ready_for_review] # only non-draft PR
   schedule:
     - cron: '0 2 * * *' # every night at 2am
 
