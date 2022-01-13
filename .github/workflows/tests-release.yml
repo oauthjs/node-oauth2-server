@@ -79,7 +79,7 @@ jobs:
     needs: [unittest]
     strategy:
       matrix:
-        node: [12, 14, 16]
+        node: [12, 14] # TODO get running for node 16
     steps:
     # checkout this repo
     - name: Checkout ${{ matrix.node }}
