@@ -4,22 +4,22 @@
  * Module dependencies.
  */
 
-var AccessDeniedError = require('../../../lib/errors/access-denied-error');
-var BearerTokenType = require('../../../lib/token-types/bearer-token-type');
-var InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
-var InvalidClientError = require('../../../lib/errors/invalid-client-error');
-var InvalidGrantError = require('../../../lib/errors/invalid-grant-error');
-var InvalidRequestError = require('../../../lib/errors/invalid-request-error');
-var PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
-var Promise = require('bluebird');
-var Request = require('../../../lib/request');
-var Response = require('../../../lib/response');
-var ServerError = require('../../../lib/errors/server-error');
-var TokenHandler = require('../../../lib/handlers/token-handler');
-var UnauthorizedClientError = require('../../../lib/errors/unauthorized-client-error');
-var UnsupportedGrantTypeError = require('../../../lib/errors/unsupported-grant-type-error');
-var should = require('chai').should();
-var util = require('util');
+const AccessDeniedError = require('../../../lib/errors/access-denied-error');
+const BearerTokenType = require('../../../lib/token-types/bearer-token-type');
+const InvalidArgumentError = require('../../../lib/errors/invalid-argument-error');
+const InvalidClientError = require('../../../lib/errors/invalid-client-error');
+const InvalidGrantError = require('../../../lib/errors/invalid-grant-error');
+const InvalidRequestError = require('../../../lib/errors/invalid-request-error');
+const PasswordGrantType = require('../../../lib/grant-types/password-grant-type');
+const Promise = require('bluebird');
+const Request = require('../../../lib/request');
+const Response = require('../../../lib/response');
+const ServerError = require('../../../lib/errors/server-error');
+const TokenHandler = require('../../../lib/handlers/token-handler');
+const UnauthorizedClientError = require('../../../lib/errors/unauthorized-client-error');
+const UnsupportedGrantTypeError = require('../../../lib/errors/unsupported-grant-type-error');
+const should = require('chai').should();
+const util = require('util');
 
 /**
  * Test `TokenHandler` integration.
@@ -72,75 +72,75 @@ describe('TokenHandler integration', function() {
     });
 
     it('should set the `accessTokenLifetime`', function() {
-      var accessTokenLifetime = {};
-      var model = {
+      const accessTokenLifetime = {};
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: accessTokenLifetime, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: accessTokenLifetime, model: model, refreshTokenLifetime: 120 });
 
       handler.accessTokenLifetime.should.equal(accessTokenLifetime);
     });
 
     it('should set the `alwaysIssueNewRefreshToken`', function() {
-      var alwaysIssueNewRefreshToken = true;
-      var model = {
+      const alwaysIssueNewRefreshToken = true;
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, alwaysIssueNewRefreshToken: alwaysIssueNewRefreshToken });
+      const handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, alwaysIssueNewRefreshToken: alwaysIssueNewRefreshToken });
 
       handler.alwaysIssueNewRefreshToken.should.equal(alwaysIssueNewRefreshToken);
     });
 
     it('should set the `alwaysIssueNewRefreshToken` to false', function() {
-      var alwaysIssueNewRefreshToken = false;
-      var model = {
+      const alwaysIssueNewRefreshToken = false;
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, alwaysIssueNewRefreshToken: alwaysIssueNewRefreshToken });
+      const handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120, alwaysIssueNewRefreshToken: alwaysIssueNewRefreshToken });
 
       handler.alwaysIssueNewRefreshToken.should.equal(alwaysIssueNewRefreshToken);
     });
 
     it('should return the default `alwaysIssueNewRefreshToken` value', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 123, model: model, refreshTokenLifetime: 120 });
 
       handler.alwaysIssueNewRefreshToken.should.equal(true);
     });
 
     it('should set the `extendedGrantTypes`', function() {
-      var extendedGrantTypes = { foo: 'bar' };
-      var model = {
+      const extendedGrantTypes = { foo: 'bar' };
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, extendedGrantTypes: extendedGrantTypes, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, extendedGrantTypes: extendedGrantTypes, model: model, refreshTokenLifetime: 120 });
       handler.grantTypes.should.deep.include(extendedGrantTypes);
     });
 
     it('should set the `model`', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
       handler.model.should.equal(model);
     });
 
     it('should set the `refreshTokenLifetime`', function() {
-      var refreshTokenLifetime = {};
-      var model = {
+      const refreshTokenLifetime = {};
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: refreshTokenLifetime });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: refreshTokenLifetime });
 
       handler.refreshTokenLifetime.should.equal(refreshTokenLifetime);
     });
@@ -148,11 +148,11 @@ describe('TokenHandler integration', function() {
 
   describe('handle()', function() {
     it('should throw an error if `request` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
       try {
         handler.handle();
@@ -165,12 +165,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `response` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
       try {
         handler.handle(request);
@@ -183,13 +183,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if the method is not `POST`', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: {}, headers: {}, method: 'GET', query: {} });
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: {}, headers: {}, method: 'GET', query: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(should.fail)
@@ -200,13 +200,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if the media type is not `application/x-www-form-urlencoded`', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: {}, headers: {}, method: 'POST', query: {} });
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: {}, headers: {}, method: 'POST', query: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(should.fail)
@@ -217,13 +217,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw the error if an oauth error is thrown', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: {}, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: {}, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(should.fail)
@@ -234,15 +234,15 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw a server error if a non-oauth error is thrown', function() {
-      var model = {
+      const model = {
         getClient: function() {
           throw new Error('Unhandled exception');
         },
         getUser: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({
         body: {
           client_id: 12345,
           client_secret: 'secret',
@@ -254,7 +254,7 @@ describe('TokenHandler integration', function() {
         method: 'POST',
         query: {}
       });
-      var response = new Response({ body: {}, headers: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(should.fail)
@@ -266,15 +266,15 @@ describe('TokenHandler integration', function() {
     });
 
     it('should update the response if an error is thrown', function() {
-      var model = {
+      const model = {
         getClient: function() {
           throw new Error('Unhandled exception');
         },
         getUser: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({
         body: {
           client_id: 12345,
           client_secret: 'secret',
@@ -286,7 +286,7 @@ describe('TokenHandler integration', function() {
         method: 'POST',
         query: {}
       });
-      var response = new Response({ body: {}, headers: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(should.fail)
@@ -297,15 +297,15 @@ describe('TokenHandler integration', function() {
     });
 
     it('should return a bearer token if successful', function() {
-      var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {} };
-      var model = {
+      const token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {} };
+      const model = {
         getClient: function() { return { grants: ['password'] }; },
         getUser: function() { return {}; },
         saveToken: function() { return token; },
         validateScope: function() { return 'baz'; }
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({
         body: {
           client_id: 12345,
           client_secret: 'secret',
@@ -318,7 +318,7 @@ describe('TokenHandler integration', function() {
         method: 'POST',
         query: {}
       });
-      var response = new Response({ body: {}, headers: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(function(data) {
@@ -328,15 +328,15 @@ describe('TokenHandler integration', function() {
     });
 
     it('should not return custom attributes in a bearer token if the allowExtendedTokenAttributes is not set', function() {
-      var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {}, foo: 'bar' };
-      var model = {
+      const token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {}, foo: 'bar' };
+      const model = {
         getClient: function() { return { grants: ['password'] }; },
         getUser: function() { return {}; },
         saveToken: function() { return token; },
         validateScope: function() { return 'baz'; }
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({
         body: {
           client_id: 12345,
           client_secret: 'secret',
@@ -349,7 +349,7 @@ describe('TokenHandler integration', function() {
         method: 'POST',
         query: {}
       });
-      var response = new Response({ body: {}, headers: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(function() {
@@ -363,15 +363,15 @@ describe('TokenHandler integration', function() {
     });
 
     it('should return custom attributes in a bearer token if the allowExtendedTokenAttributes is set', function() {
-      var token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {}, foo: 'bar' };
-      var model = {
+      const token = { accessToken: 'foo', client: {}, refreshToken: 'bar', scope: 'foobar', user: {}, foo: 'bar' };
+      const model = {
         getClient: function() { return { grants: ['password'] }; },
         getUser: function() { return {}; },
         saveToken: function() { return token; },
         validateScope: function() { return 'baz'; }
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, allowExtendedTokenAttributes: true });
-      var request = new Request({
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, allowExtendedTokenAttributes: true });
+      const request = new Request({
         body: {
           client_id: 12345,
           client_secret: 'secret',
@@ -384,7 +384,7 @@ describe('TokenHandler integration', function() {
         method: 'POST',
         query: {}
       });
-      var response = new Response({ body: {}, headers: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.handle(request, response)
         .then(function() {
@@ -401,12 +401,12 @@ describe('TokenHandler integration', function() {
 
   describe('getClient()', function() {
     it('should throw an error if `clientId` is invalid', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 'øå€£‰', client_secret: 'foo' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 'øå€£‰', client_secret: 'foo' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClient(request);
@@ -419,12 +419,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `clientSecret` is invalid', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 'foo', client_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 'foo', client_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClient(request);
@@ -437,12 +437,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `client` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
@@ -453,12 +453,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `client.grants` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() { return {}; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
@@ -469,12 +469,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `client.grants` is invalid', function() {
-      var model = {
+      const model = {
         getClient: function() { return { grants: 'foobar' }; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
@@ -485,18 +485,18 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw a 401 error if the client is invalid and the request contains an authorization header', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({
         body: {},
         headers: { 'authorization': util.format('Basic %s', Buffer.from('foo:bar').toString('base64')) },
         method: {},
         query: {}
       });
-      var response = new Response({ body: {}, headers: {} });
+      const response = new Response({ body: {}, headers: {} });
 
       return handler.getClient(request, response)
         .then(should.fail)
@@ -510,13 +510,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should return a client', function() {
-      var client = { id: 12345, grants: [] };
-      var model = {
+      const client = { id: 12345, grants: [] };
+      const model = {
         getClient: function() { return client; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(function(data) {
@@ -528,13 +528,13 @@ describe('TokenHandler integration', function() {
     describe('with `password` grant type and `requireClientAuthentication` is false', function() {
 
       it('should return a client ', function() {
-        var client = { id: 12345, grants: [] };
-        var model = {
+        const client = { id: 12345, grants: [] };
+        const model = {
           getClient: function() { return client; },
           saveToken: function() {}
         };
 
-        var handler = new TokenHandler({
+        const handler = new TokenHandler({
           accessTokenLifetime: 120,
           model: model,
           refreshTokenLifetime: 120,
@@ -542,7 +542,7 @@ describe('TokenHandler integration', function() {
             password: false
           }
         });
-        var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
+        const request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
 
         return handler.getClient(request)
           .then(function(data) {
@@ -555,13 +555,13 @@ describe('TokenHandler integration', function() {
     describe('with `password` grant type and `requireClientAuthentication` is false and Authorization header', function() {
 
       it('should return a client ', function() {
-        var client = { id: 12345, grants: [] };
-        var model = {
+        const client = { id: 12345, grants: [] };
+        const model = {
           getClient: function() { return client; },
           saveToken: function() {}
         };
 
-        var handler = new TokenHandler({
+        const handler = new TokenHandler({
           accessTokenLifetime: 120,
           model: model,
           refreshTokenLifetime: 120,
@@ -569,7 +569,7 @@ describe('TokenHandler integration', function() {
             password: false
           }
         });
-        var request = new Request({
+        const request = new Request({
           body: { grant_type: 'password'},
           headers: { 'authorization': util.format('Basic %s', Buffer.from('blah:').toString('base64')) },
           method: {},
@@ -585,34 +585,34 @@ describe('TokenHandler integration', function() {
     });
 
     it('should support promises', function() {
-      var model = {
+      const model = {
         getClient: function() { return Promise.resolve({ grants: [] }); },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
 
     it('should support non-promises', function() {
-      var model = {
+      const model = {
         getClient: function() { return { grants: [] }; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
 
     it('should support callbacks', function() {
-      var model = {
+      const model = {
         getClient: function(clientId, clientSecret, callback) { callback(null, { grants: [] }); },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
@@ -620,12 +620,12 @@ describe('TokenHandler integration', function() {
 
   describe('getClientCredentials()', function() {
     it('should throw an error if `client_id` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_secret: 'foo' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_secret: 'foo' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClientCredentials(request);
@@ -638,12 +638,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `client_secret` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 'foo' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { client_id: 'foo' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClientCredentials(request);
@@ -657,13 +657,13 @@ describe('TokenHandler integration', function() {
 
     describe('with `client_id` and grant type is `password` and `requireClientAuthentication` is false', function() {
       it('should return a client', function() {
-        var model = {
+        const model = {
           getClient: function() {},
           saveToken: function() {}
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, requireClientAuthentication: { password: false} });
-        var request = new Request({ body: { client_id: 'foo', grant_type: 'password' }, headers: {}, method: {}, query: {} });
-        var credentials = handler.getClientCredentials(request);
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, requireClientAuthentication: { password: false} });
+        const request = new Request({ body: { client_id: 'foo', grant_type: 'password' }, headers: {}, method: {}, query: {} });
+        const credentials = handler.getClientCredentials(request);
 
         credentials.should.eql({ clientId: 'foo' });
       });
@@ -671,12 +671,12 @@ describe('TokenHandler integration', function() {
 
     describe('with `client_id` and `client_secret` in the request header as basic auth', function() {
       it('should return a client', function() {
-        var model = {
+        const model = {
           getClient: function() {},
           saveToken: function() {}
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+        const request = new Request({
           body: {},
           headers: {
             'authorization': util.format('Basic %s', Buffer.from('foo:bar').toString('base64'))
@@ -684,7 +684,7 @@ describe('TokenHandler integration', function() {
           method: {},
           query: {}
         });
-        var credentials = handler.getClientCredentials(request);
+        const credentials = handler.getClientCredentials(request);
 
         credentials.should.eql({ clientId: 'foo', clientSecret: 'bar' });
       });
@@ -692,13 +692,13 @@ describe('TokenHandler integration', function() {
 
     describe('with `client_id` and `client_secret` in the request body', function() {
       it('should return a client', function() {
-        var model = {
+        const model = {
           getClient: function() {},
           saveToken: function() {}
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({ body: { client_id: 'foo', client_secret: 'bar' }, headers: {}, method: {}, query: {} });
-        var credentials = handler.getClientCredentials(request);
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+        const request = new Request({ body: { client_id: 'foo', client_secret: 'bar' }, headers: {}, method: {}, query: {} });
+        const credentials = handler.getClientCredentials(request);
 
         credentials.should.eql({ clientId: 'foo', clientSecret: 'bar' });
       });
@@ -707,12 +707,12 @@ describe('TokenHandler integration', function() {
 
   describe('handleGrantType()', function() {
     it('should throw an error if `grant_type` is missing', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: {}, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: {}, headers: {}, method: {}, query: {} });
 
       try {
         handler.handleGrantType(request);
@@ -725,12 +725,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `grant_type` is invalid', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { grant_type: '~foo~' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { grant_type: '~foo~' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.handleGrantType(request);
@@ -743,12 +743,12 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `grant_type` is unsupported', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { grant_type: 'foobar' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { grant_type: 'foobar' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.handleGrantType(request);
@@ -761,13 +761,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an error if `grant_type` is unauthorized', function() {
-      var client = { grants: ['client_credentials'] };
-      var model = {
+      const client = { grants: ['client_credentials'] };
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { grant_type: 'password' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { grant_type: 'password' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.handleGrantType(request, client);
@@ -780,14 +780,14 @@ describe('TokenHandler integration', function() {
     });
 
     it('should throw an invalid grant error if a non-oauth error is thrown', function() {
-      var client = { grants: ['password'] };
-      var model = {
+      const client = { grants: ['password'] };
+      const model = {
         getClient: function(clientId, password, callback) { callback(null, client); },
         getUser: function(uid, pwd, callback) { callback(); },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { grant_type: 'password', username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const request = new Request({ body: { grant_type: 'password', username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
       return handler.handleGrantType(request, client)
         .then(should.fail)
@@ -799,17 +799,17 @@ describe('TokenHandler integration', function() {
 
     describe('with grant_type `authorization_code`', function() {
       it('should return a token', function() {
-        var client = { id: 'foobar', grants: ['authorization_code'] };
-        var token = {};
-        var model = {
+        const client = { id: 'foobar', grants: ['authorization_code'] };
+        const token = {};
+        const model = {
           getAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() * 2), user: {} }; },
           getClient: function() {},
           saveToken: function() { return token; },
           validateScope: function() { return 'foo'; },
           revokeAuthorizationCode: function() { return { authorizationCode: 12345, client: { id: 'foobar' }, expiresAt: new Date(new Date() / 2), user: {} }; }
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+        const request = new Request({
           body: {
             code: 12345,
             grant_type: 'authorization_code'
@@ -829,16 +829,16 @@ describe('TokenHandler integration', function() {
 
     describe('with grant_type `client_credentials`', function() {
       it('should return a token', function() {
-        var client = { grants: ['client_credentials'] };
-        var token = {};
-        var model = {
+        const client = { grants: ['client_credentials'] };
+        const token = {};
+        const model = {
           getClient: function() {},
           getUserFromClient: function() { return {}; },
           saveToken: function() { return token; },
           validateScope: function() { return 'foo'; }
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+        const request = new Request({
           body: {
             grant_type: 'client_credentials',
             scope: 'foo'
@@ -858,16 +858,16 @@ describe('TokenHandler integration', function() {
 
     describe('with grant_type `password`', function() {
       it('should return a token', function() {
-        var client = { grants: ['password'] };
-        var token = {};
-        var model = {
+        const client = { grants: ['password'] };
+        const token = {};
+        const model = {
           getClient: function() {},
           getUser: function() { return {}; },
           saveToken: function() { return token; },
           validateScope: function() { return 'baz'; }
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+        const request = new Request({
           body: {
             client_id: 12345,
             client_secret: 'secret',
@@ -891,16 +891,16 @@ describe('TokenHandler integration', function() {
 
     describe('with grant_type `refresh_token`', function() {
       it('should return a token', function() {
-        var client = { grants: ['refresh_token'] };
-        var token = { accessToken: 'foo', client: {}, user: {} };
-        var model = {
+        const client = { grants: ['refresh_token'] };
+        const token = { accessToken: 'foo', client: {}, user: {} };
+        const model = {
           getClient: function() {},
           getRefreshToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() * 2), user: {} }; },
           saveToken: function() { return token; },
           revokeToken: function() { return { accessToken: 'foo', client: {}, refreshTokenExpiresAt: new Date(new Date() / 2), user: {} }; }
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+        const request = new Request({
           body: {
             grant_type: 'refresh_token',
             refresh_token: 12345
@@ -920,16 +920,16 @@ describe('TokenHandler integration', function() {
 
     describe('with custom grant_type', function() {
       it('should return a token', function() {
-        var client = { grants: ['urn:ietf:params:oauth:grant-type:saml2-bearer'] };
-        var token = {};
-        var model = {
+        const client = { grants: ['urn:ietf:params:oauth:grant-type:saml2-bearer'] };
+        const token = {};
+        const model = {
           getClient: function() {},
           getUser: function() { return {}; },
           saveToken: function() { return token; },
           validateScope: function() { return 'foo'; }
         };
-        var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, extendedGrantTypes: { 'urn:ietf:params:oauth:grant-type:saml2-bearer': PasswordGrantType } });
-        var request = new Request({ body: { grant_type: 'urn:ietf:params:oauth:grant-type:saml2-bearer', username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
+        const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, extendedGrantTypes: { 'urn:ietf:params:oauth:grant-type:saml2-bearer': PasswordGrantType } });
+        const request = new Request({ body: { grant_type: 'urn:ietf:params:oauth:grant-type:saml2-bearer', username: 'foo', password: 'bar' }, headers: {}, method: {}, query: {} });
 
         return handler.handleGrantType(request, client)
           .then(function(data) {
@@ -942,23 +942,23 @@ describe('TokenHandler integration', function() {
 
   describe('getAccessTokenLifetime()', function() {
     it('should return the client access token lifetime', function() {
-      var client = { accessTokenLifetime: 60 };
-      var model = {
+      const client = { accessTokenLifetime: 60 };
+      const model = {
         getClient: function() { return client; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
       handler.getAccessTokenLifetime(client).should.equal(60);
     });
 
     it('should return the default access token lifetime', function() {
-      var client = {};
-      var model = {
+      const client = {};
+      const model = {
         getClient: function() { return client; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
       handler.getAccessTokenLifetime(client).should.equal(120);
     });
@@ -966,23 +966,23 @@ describe('TokenHandler integration', function() {
 
   describe('getRefreshTokenLifetime()', function() {
     it('should return the client access token lifetime', function() {
-      var client = { refreshTokenLifetime: 60 };
-      var model = {
+      const client = { refreshTokenLifetime: 60 };
+      const model = {
         getClient: function() { return client; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
       handler.getRefreshTokenLifetime(client).should.equal(60);
     });
 
     it('should return the default access token lifetime', function() {
-      var client = {};
-      var model = {
+      const client = {};
+      const model = {
         getClient: function() { return client; },
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
 
       handler.getRefreshTokenLifetime(client).should.equal(120);
     });
@@ -990,25 +990,25 @@ describe('TokenHandler integration', function() {
 
   describe('getTokenType()', function() {
     it('should return a token type', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar', scope: 'foobar' });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const tokenType = handler.getTokenType({ accessToken: 'foo', refreshToken: 'bar', scope: 'foobar' });
       tokenType.should.deep.include({ accessToken: 'foo', accessTokenLifetime: undefined, refreshToken: 'bar', scope: 'foobar' });
     });
   });
 
   describe('updateSuccessResponse()', function() {
     it('should set the `body`', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var tokenType = new BearerTokenType('foo', 'bar', 'biz');
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const tokenType = new BearerTokenType('foo', 'bar', 'biz');
+      const response = new Response({ body: {}, headers: {} });
 
       handler.updateSuccessResponse(response, tokenType);
 
@@ -1016,13 +1016,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should set the `Cache-Control` header', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var tokenType = new BearerTokenType('foo', 'bar', 'biz');
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const tokenType = new BearerTokenType('foo', 'bar', 'biz');
+      const response = new Response({ body: {}, headers: {} });
 
       handler.updateSuccessResponse(response, tokenType);
 
@@ -1030,13 +1030,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should set the `Pragma` header', function() {
-      var model = {
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var tokenType = new BearerTokenType('foo', 'bar', 'biz');
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const tokenType = new BearerTokenType('foo', 'bar', 'biz');
+      const response = new Response({ body: {}, headers: {} });
 
       handler.updateSuccessResponse(response, tokenType);
 
@@ -1046,13 +1046,13 @@ describe('TokenHandler integration', function() {
 
   describe('updateErrorResponse()', function() {
     it('should set the `body`', function() {
-      var error = new AccessDeniedError('Cannot request a token');
-      var model = {
+      const error = new AccessDeniedError('Cannot request a token');
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const response = new Response({ body: {}, headers: {} });
 
       handler.updateErrorResponse(response, error);
 
@@ -1061,13 +1061,13 @@ describe('TokenHandler integration', function() {
     });
 
     it('should set the `status`', function() {
-      var error = new AccessDeniedError('Cannot request a token');
-      var model = {
+      const error = new AccessDeniedError('Cannot request a token');
+      const model = {
         getClient: function() {},
         saveToken: function() {}
       };
-      var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var response = new Response({ body: {}, headers: {} });
+      const handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
+      const response = new Response({ body: {}, headers: {} });
 
       handler.updateErrorResponse(response, error);
 

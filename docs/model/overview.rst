@@ -37,6 +37,7 @@ Model functions used by the authorization code grant:
 - :ref:`Model#saveAuthorizationCode`
 - :ref:`Model#revokeAuthorizationCode`
 - :ref:`Model#validateScope`
+- :ref:`Model#validateRedirectUri`
 
 --------
 

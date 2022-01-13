@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var chai = require('chai');
+const chai = require('chai');
 
 /**
  * SHA-256 assertion.
@@ -12,7 +12,7 @@ var chai = require('chai');
 
 chai.use(function (_chai, utils) {
   chai.Assertion.addMethod('sha256', function (...args) {
-    var obj = utils.flag(this, 'object');
+    const obj = utils.flag(this, 'object');
     new chai.Assertion(obj).match(/^[a-f0-9]{64}$/i);
   });
 });
