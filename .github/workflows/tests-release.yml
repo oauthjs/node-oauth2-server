@@ -90,7 +90,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository:  oauthjs/express-oauth-server
-        path: github/testing
+        path: github/testing/express
 
     - name: Setup node ${{ matrix.node }}
       uses: actions/setup-node@v2
@@ -101,14 +101,14 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-node-${{ matrix.node }}-oauthjs/express-oauth-server-${{ hashFiles('github/testing/**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ matrix.node }}-oauthjs/express-oauth-server-${{ hashFiles('github/testing/express/**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node }}-oauthjs/express-oauth-server
 
     # in order to test the adapter we need to use the current state
     # we just cloned and install it as local dependency
     - run: |
-        cd github/testing/express-adapter
+        cd github/testing/express
         npm ci
         npm install ../../../
         npm run test
