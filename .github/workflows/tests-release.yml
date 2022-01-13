@@ -26,7 +26,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup node 12
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: 12
     - run: npm audit --production # no audit for dev dependencies
@@ -46,7 +46,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup node ${{ matrix.node }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node }}
 
