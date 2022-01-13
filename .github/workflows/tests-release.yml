@@ -109,8 +109,6 @@ jobs:
     # we just cloned and install it as local dependency
     - run: |
         cd github/testing/express
-        ls -la
-        npm ci
         npm install ../../../
         npm run test
 
