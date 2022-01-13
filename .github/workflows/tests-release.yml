@@ -109,10 +109,9 @@ jobs:
     # in order to test the adapter we need to use the current state
     # we just cloned and install it as local dependency
     - run: |
-        PROJECT_PATH=$(pwd)
         cd github/testing/express-adapter
         npm ci
-        npm install $PROJECT_PATH
+        npm install ../../../
         npm run test
 
     # todo repeat with other adapters
