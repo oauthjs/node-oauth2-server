@@ -105,12 +105,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node }}-node-oauth/express-oauth-server
 
-    # in order to test the adapter we need to use the current state
+    # in order to test the adapter we need to use the current checkout
+    # and install it as local dependency
     # we just cloned and install it as local dependency
     - run: |
         cd github/testing/express
+        npm ci
         npm install ../../../
-        npm install
         npm run test
 
     # todo repeat with other adapters
