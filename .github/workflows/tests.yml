@@ -8,6 +8,8 @@ on:
     branches:
       - master    # allthough  master is push protected we still keep it
       - development
+    branches-ignore:
+      - release-* # on release we run an extended workflow so no need for this
   pull_request:   # runs on all PR
     branches-ignore:
       - release-* # on release we run an extended workflow so no need for this
