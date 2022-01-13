@@ -110,7 +110,6 @@ jobs:
     - run: |
         cd github/testing/express
         npm install ../../../
-        cd ../../../
         npm run test
 
     # todo repeat with other adapters
