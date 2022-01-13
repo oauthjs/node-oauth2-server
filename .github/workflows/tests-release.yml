@@ -2,11 +2,11 @@ name: Tests for Release
 
 on:
   push:
-    types: [review_requested, ready_for_review] # only non-draft PR
     branches:
       - release-* # all release-<version> branches
   pull_request:
-    types: [review_requested, ready_for_review] # only non-draft PR
+    # only non-draft PR and when there are "pushes" to the open PR
+    types: [review_requested, ready_for_review, synchronize]
     branches:
       - release-* # all release-<version> branches
 
