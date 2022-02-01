@@ -5,6 +5,7 @@
  */
 
 const AuthenticateHandler = require('../../../lib/handlers/authenticate-handler');
+const InvalidRequestError = require('../../../lib/errors/invalid-request-error');
 const Request = require('../../../lib/request');
 const sinon = require('sinon');
 const should = require('chai').should();
@@ -16,6 +17,33 @@ const ServerError = require('../../../lib/errors/server-error');
 
 describe('AuthenticateHandler', function() {
   describe('getTokenFromRequest()', function() {
+    describe('with bearer token in the request authorization header', function() {
+      it('should throw an error if the token is malformed', () => {
+        const handler = new AuthenticateHandler({
+          model: { getAccessToken() {} },
+        });
+        const request = new Request({
+          body: {},
+          headers: {
+            Authorization: 'foo Bearer bar',
+          },
+          method: 'ANY',
+          query: {},
+        });
+
+        try {
+          handler.getTokenFromRequestHeader(request);
+
+          should.fail('should.fail', '');
+        } catch (e) {
+          e.should.be.an.instanceOf(InvalidRequestError);
+          e.message.should.equal(
+            'Invalid request: malformed authorization header',
+          );
+        }
+      });
+    });
+
     describe('with bearer token in the request authorization header', function() {
       it('should call `getTokenFromRequestHeader()`', function() {
         const handler = new AuthenticateHandler({ model: { getAccessToken: function() {} } });
