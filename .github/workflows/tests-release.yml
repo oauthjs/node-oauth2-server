@@ -1,0 +1,149 @@
+name: Tests for Release
+
+on:
+  push:
+    branches:
+      - release-* # all release-<version> branches
+  pull_request:
+    # only non-draft PR and when there are "pushes" to the open PR
+    types: [review_requested, ready_for_review, synchronize]
+    branches:
+      - release-* # all release-<version> branches
+
+
+jobs:
+  # STEP 1 - NPM Audit
+
+  # Before we even test a thing we want to have a clean audit! Since this is
+  # sufficient to be done using the lowest node version, we can easily use
+  # a fixed one:
+
+  audit:
+    name: NPM Audit
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+    - run: npm audit --production # no audit for dev dependencies
+
+  # STEP 2 - basic unit tests
+
+  # This is the standard unit tests as we do in the basic tests for every PR
+  unittest:
+    name: Basic unit tests
+    runs-on: ubuntu-latest
+    needs: [audit]
+    strategy:
+      matrix:
+        node: [12, 14, 16]
+    steps:
+    - name: Checkout ${{ matrix.node }}
+      uses: actions/checkout@v2
+
+    - name: Setup node ${{ matrix.node }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cache dependencies ${{ matrix.node }}
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node }}
+
+    # for this workflow we also require npm audit to pass
+    - run: npm ci
+    - run: npm run test:coverage
+
+    # with the following action we enforce PRs to have a high coverage
+    # and ensure, changes are tested well enough so that coverage won't fail
+    - name: check coverage
+      uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
+      with:
+        path: './coverage/lcov.info'
+        min_coverage: 95
+
+  # STEP 3 - Integration tests
+
+  # Since our release may affect several packages that depend on it we need to
+  # cover the closest ones, like adapters and examples.
+
+  integrationtests:
+    name: Extended integration tests
+    runs-on: ubuntu-latest
+    needs: [unittest]
+    strategy:
+      matrix:
+        node: [12, 14] # TODO get running for node 16
+    steps:
+    # checkout this repo
+    - name: Checkout ${{ matrix.node }}
+      uses: actions/checkout@v2
+
+    # checkout express-adapter repo
+    - name: Checkout express-adapter ${{ matrix.node }}
+      uses: actions/checkout@v2
+      with:
+        repository:  node-oauth/express-oauth-server
+        path: github/testing/express
+
+    - name: Setup node ${{ matrix.node }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cache dependencies ${{ matrix.node }}
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ matrix.node }}-node-oauth/express-oauth-server-${{ hashFiles('github/testing/express/**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node }}-node-oauth/express-oauth-server
+
+    # in order to test the adapter we need to use the current checkout
+    # and install it as local dependency
+    # we just cloned and install it as local dependency
+    - run: |
+        cd github/testing/express
+        npm ci
+        npm install ../../../
+        npm run test
+
+    # todo repeat with other adapters
+
+  publish-npm-dry:
+    runs-on: ubuntu-latest
+    needs: [integrationtests]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+  publish-github-dry:
+    needs: [integrationtests]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        # we always publish targeting the lowest supported node version
+        node-version: 12
+        registry-url: $registry-url(npm)
+    - run: npm ci
+    - run: npm publish --dry-run
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
