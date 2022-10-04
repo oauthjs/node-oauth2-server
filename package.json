@@ -47,7 +47,7 @@
     "jshint": "2.13.0",
     "mocha": "5.2.0",
     "should": "13.2.3",
-    "sinon": "7.5.0"
+    "sinon": "14.0.1"
   },
   "license": "MIT",
   "engines": {
