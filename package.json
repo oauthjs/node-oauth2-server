@@ -44,7 +44,7 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
-    "jshint": "2.13.0",
+    "jshint": "2.13.6",
     "mocha": "5.2.0",
     "should": "13.2.3",
     "sinon": "7.5.0"
@@ -56,7 +56,8 @@
   "scripts": {
     "pretest": "./node_modules/.bin/jshint --config ./.jshintrc lib test",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha 'test/**/*_test.js'",
-    "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'"
+    "test-debug": "NODE_ENV=test ./node_modules/.bin/mocha  --inspect --debug-brk 'test/**/*_test.js'",
+    "deps:update": "npx npm-check-updates --deep -i -t minor -x '/@openphone/' && npx npm-check-updates --deep -i -f '/@openphone/'"
   },
   "repository": {
     "type": "git",
